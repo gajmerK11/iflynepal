@@ -1,0 +1,15 @@
+{
+  "name": "iflynepal",
+  "version": "1.0.0",
+  "description": "Build tooling for the iFly Nepal theme: Tailwind for the stylesheet.",
+  "private": true,
+  "license": "GPL-2.0-or-later",
+  "scripts": {
+    "build:css": "tailwindcss -i ./assets/css/input.css -o ./assets/css/main.css --minify",
+    "watch:css": "tailwindcss -i ./assets/css/input.css -o ./assets/css/main.css --watch",
+    "build": "npm run build:css"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

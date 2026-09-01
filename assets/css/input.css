@@ -1,0 +1,914 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Typefaces
+   Self-hosted Latin subsets, not a font CDN. Poppins carries the page; the
+   headline's accent word is Cormorant Garamond italic, the one place the
+   design leaves the sans. Navigation deliberately stays on the system stack,
+   matching the live site's chrome.
+   ========================================================================== */
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/poppins-400.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/poppins-500.woff2') format('woff2');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/poppins-700.woff2') format('woff2');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/poppins-800.woff2') format('woff2');
+	font-weight: 800;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Caveat';
+	src: url('../fonts/caveat-600.woff2') format('woff2');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Cormorant Garamond';
+	src: url('../fonts/cormorant-garamond-italic-600.woff2') format('woff2');
+	font-weight: 600;
+	font-style: italic;
+	font-display: swap;
+}
+
+/* ==========================================================================
+   Tokens
+   Kept as custom properties (rather than only Tailwind theme values) so the
+   values are reachable from the handful of rules Tailwind cannot express —
+   the layered hero scrim and the tiled gradient on the headline accent.
+   ========================================================================== */
+@layer base {
+	:root {
+		--iflynepal-ink: #212529;
+		--iflynepal-muted: #6d757e;
+		--iflynepal-navy: #0545a7;
+		--iflynepal-navy-deep: #04347d;
+		--iflynepal-accent: #a9c8f5;
+
+		/*
+		 * The one warm note on the page: the headline accent, the trust
+		 * bullets and the hero's primary action. Pale blue was tried first and
+		 * disappeared against a bright snow-and-sky photograph.
+		 */
+		--iflynepal-gold: #f2c879;
+		--iflynepal-gold-soft: #ffdc9a;
+
+		--iflynepal-line: rgba(5, 69, 167, 0.16);
+		--iflynepal-shadow: 0 22px 70px rgba(4, 26, 64, 0.16);
+		--iflynepal-ease: cubic-bezier(0.22, 0.7, 0.24, 1);
+		--iflynepal-shell: 1240px;
+
+		/* The navigation keeps the system stack the live site's chrome uses. */
+		--iflynepal-ui-font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+			'Noto Sans', 'Liberation Sans', sans-serif;
+
+		/*
+		 * The hand-inked underline under one word of the section heading. A
+		 * pseudo-element rather than a child node, so it cannot be deleted out
+		 * of the heading by a client editing the text around it.
+		 */
+		--iflynepal-underline: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20220%2014%22%20preserveAspectRatio%3D%22none%22%3E%20%3Cpath%20d%3D%22M4%209.4c36-4.6%2068-6.2%20106-5%2033%201%2066%203.8%20106%201.6%22%20fill%3D%22none%22%20stroke%3D%22%230545A7%22%20stroke-width%3D%224.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M18%2012.4c34-2.6%2064-3.4%2098-2.6%22%20fill%3D%22none%22%20stroke%3D%22%230545A7%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.5%22%2F%3E%3C%2Fsvg%3E");
+
+		/* Drawn here, not inlined, so the client cannot delete it out of the block. */
+		--iflynepal-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E");
+	}
+
+	body {
+		@apply bg-paper font-sans text-ink;
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	:focus-visible {
+		outline: 3px solid rgba(11, 88, 213, 0.7);
+		outline-offset: 3px;
+	}
+
+	/* On the blue bar and over the photographic hero the ring flips to white. */
+	.site-header :focus-visible,
+	.iflynepal-hero :focus-visible {
+		outline-color: rgba(255, 255, 255, 0.92);
+	}
+}
+
+@layer components {
+
+	/* ---------------------------------------------------------------- shell */
+	.iflynepal-container {
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		@apply mx-auto;
+	}
+
+	.iflynepal-skip {
+		@apply absolute top-[10px] z-[100] rounded-sm bg-white px-4 py-2 font-bold text-navy;
+		left: -999px;
+	}
+
+	.iflynepal-skip:focus {
+		left: 10px;
+	}
+
+	/* -------------------------------------------------------------- buttons */
+	.iflynepal-button {
+		@apply inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-full border border-transparent px-5 text-sm font-extrabold;
+		transition:
+			transform 0.35s var(--iflynepal-ease),
+			background 0.3s ease,
+			border-color 0.3s ease,
+			box-shadow 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-button:hover {
+		transform: translateY(-2px);
+	}
+
+	.iflynepal-button--dark {
+		@apply bg-navy text-white;
+		box-shadow: 0 10px 26px rgba(4, 26, 64, 0.22);
+	}
+
+	.iflynepal-button--dark:hover {
+		box-shadow: 0 16px 34px rgba(4, 26, 64, 0.3);
+	}
+
+	.iflynepal-button--light {
+		@apply bg-white text-navy;
+	}
+
+	.iflynepal-button--light:hover {
+		box-shadow: 0 14px 30px rgba(4, 26, 64, 0.28);
+	}
+
+	.iflynepal-ico {
+		@apply inline-block h-[15px] w-[15px] shrink-0 fill-none stroke-current stroke-[1.6];
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		transition: transform 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-button:hover .iflynepal-ico-arr {
+		transform: translateX(4px);
+	}
+
+	/* --------------------------------------------------------------- header */
+
+	/*
+	 * Fixed from the first pixel, transparent over the hero, docking to a solid
+	 * primary bar once the page moves. Three columns: wordmark left, links
+	 * centred, one action pill right.
+	 */
+	.iflynepal-nav {
+		@apply grid items-center gap-6;
+		grid-template-columns: 1fr auto 1fr;
+		min-height: 92px;
+		transition: min-height 0.35s var(--iflynepal-ease);
+	}
+
+	.site-header.is-docked {
+		background: var(--iflynepal-navy);
+		box-shadow: 0 12px 32px rgba(4, 26, 64, 0.32);
+	}
+
+	.site-header.is-docked .iflynepal-nav {
+		min-height: 70px;
+	}
+
+	/*
+	 * The hero renders behind the fixed bar by design. Every other template
+	 * starts below it instead of under it.
+	 */
+	body:not(.has-iflynepal-hero) .site-main {
+		padding-top: 92px;
+	}
+
+	.iflynepal-brand {
+		@apply flex items-center;
+		min-width: max-content;
+	}
+
+	.iflynepal-brand .custom-logo {
+		@apply block w-auto object-contain;
+		height: 68px;
+		transition: height 0.35s var(--iflynepal-ease);
+	}
+
+	.site-header.is-docked .iflynepal-brand .custom-logo {
+		height: 50px;
+	}
+
+	.iflynepal-nav-links {
+		@apply justify-self-center;
+	}
+
+	.iflynepal-menu {
+		@apply flex list-none items-center gap-[26px] p-0 text-xs font-semibold uppercase tracking-[.1em];
+		font-family: var(--iflynepal-ui-font);
+	}
+
+	.iflynepal-menu-item--hidden {
+		@apply hidden;
+	}
+
+	.iflynepal-menu a {
+		@apply relative no-underline opacity-[.88];
+		transition: opacity 0.25s ease;
+	}
+
+	.iflynepal-menu a:hover {
+		@apply opacity-100;
+	}
+
+	.iflynepal-menu a::after {
+		content: '';
+		@apply absolute inset-x-0 -bottom-2 h-0.5 origin-left scale-x-0 bg-current;
+		transition: transform 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-menu a:hover::after {
+		@apply scale-x-100;
+	}
+
+	.iflynepal-nav-side {
+		@apply flex items-center justify-self-end gap-3;
+	}
+
+	.iflynepal-nav-cta {
+		@apply min-h-[44px] px-[26px] text-[11px] font-semibold uppercase tracking-[.12em];
+		font-family: var(--iflynepal-ui-font);
+	}
+
+	.iflynepal-menu-btn {
+		@apply hidden h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/[.08] text-white;
+	}
+
+	.iflynepal-menu-btn .iflynepal-ico {
+		@apply m-auto h-[18px] w-[18px];
+	}
+
+	.iflynepal-menu-btn .iflynepal-ico-close,
+	.iflynepal-menu-btn[aria-expanded="true"] .iflynepal-ico-menu {
+		@apply hidden;
+	}
+
+	.iflynepal-menu-btn[aria-expanded="true"] .iflynepal-ico-close {
+		@apply block;
+	}
+
+	/* ----------------------------------------------------------------- hero */
+
+	/*
+	 * The hero section carries the .iflynepal-hero class and reuses the
+	 * `wp-block-cover` layout classes from the design's original block-based
+	 * build. The design needs four stacked layers — still, video and two
+	 * scrims — so the still is rendered by template-parts/home/hero-section.php
+	 * and the scrim is drawn here. It fills the screen before the visitor scrolls.
+	 */
+	.iflynepal-hero.wp-block-cover {
+		@apply relative isolate flex items-center overflow-hidden p-0 text-white;
+		min-height: 100vh;
+		min-height: 100dvh;
+		background: var(--iflynepal-navy-deep);
+	}
+
+	/*
+	 * Taller than the hero so the parallax has somewhere to travel.
+	 *
+	 * Each layer gets its own level — still, then video, then scrim. Sharing a
+	 * z-index leaves paint order to the DOM, and core does not emit the Cover's
+	 * children in a stable order, so the still could end up painting over the
+	 * video it is meant to sit under.
+	 */
+	.iflynepal-hero__media,
+	.iflynepal-hero .wp-block-cover__video-background {
+		@apply absolute inset-x-0;
+		top: -15%;
+		height: 130%;
+	}
+
+	.iflynepal-hero__media {
+		z-index: -3;
+	}
+
+	.iflynepal-hero .wp-block-cover__video-background {
+		z-index: -2;
+	}
+
+	.iflynepal-hero__still,
+	.iflynepal-hero .wp-block-cover__video-background {
+		@apply h-full w-full max-w-none object-cover;
+		object-position: center 42%;
+	}
+
+	.iflynepal-hero__still {
+		will-change: transform;
+	}
+
+	/* Fades in only once the file is playable; if it 404s the still stays put. */
+	.iflynepal-hero .wp-block-cover__video-background {
+		@apply opacity-0;
+		transition: opacity 1.4s ease;
+	}
+
+	.iflynepal-hero .wp-block-cover__video-background.is-live {
+		@apply opacity-100;
+	}
+
+	/* Core's own dim layer is unused — the scrim below replaces it. */
+	.iflynepal-hero .wp-block-cover__background {
+		@apply hidden;
+	}
+
+	/*
+	 * Centred copy needs a centre-weighted scrim: the radial holds the middle
+	 * of the frame down so white type stays legible over snow, and the linear
+	 * keeps the top and bottom edges from washing out under the fixed header.
+	 */
+	.iflynepal-hero.wp-block-cover::before {
+		content: '';
+		@apply absolute inset-0;
+		z-index: -1;
+		background:
+			radial-gradient(118% 86% at 50% 50%, rgba(4, 26, 64, 0.24) 0%, rgba(4, 26, 64, 0.6) 72%),
+			linear-gradient(180deg, rgba(4, 26, 64, 0.4), rgba(4, 26, 64, 0.24) 42%, rgba(4, 26, 64, 0.52));
+	}
+
+	.iflynepal-hero .wp-block-cover__inner-container {
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		@apply relative mx-auto;
+		padding: 150px 0 90px;
+	}
+
+	/*
+	 * The first headline row measures 12.89x its font size in Poppins, so at
+	 * the 88px cap it needs 1134px. Anything narrower forces a wrap between
+	 * "&" and "Retreats".
+	 */
+	.iflynepal-hero__copy {
+		@apply mx-auto max-w-[1180px] text-center;
+	}
+
+	.iflynepal-hero__title {
+		@apply m-0 max-w-none font-display font-medium;
+		font-size: clamp(48px, 6.8vw, 88px);
+		line-height: 1.04;
+		letter-spacing: -0.02em;
+	}
+
+	/* Split into words by assets/js/hero.js so they can stagger in. */
+	.iflynepal-hero__title .iflynepal-w {
+		@apply inline-block;
+	}
+
+	/*
+	 * The accent word. The gradient is tiled rather than stretched and travels
+	 * exactly one tile per pass, so the loop point cannot be seen and the word
+	 * is fully painted at every frame.
+	 */
+	.iflynepal-hero__title em,
+	.iflynepal-explore__card-title em {
+		@apply inline-block font-accent font-semibold italic;
+		background-image: linear-gradient(
+			100deg,
+			#f2c879 0%,
+			#f2c879 30%,
+			#fff6e2 42%,
+			#ffffff 50%,
+			#ffdc9a 58%,
+			#f2c879 70%,
+			#f2c879 100%
+		);
+		background-size: 5em 100%;
+		background-repeat: repeat;
+		background-position: 0 0;
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+		-webkit-text-fill-color: transparent;
+		animation: iflynepal-hero-shine 7s linear infinite;
+	}
+
+	.iflynepal-hero__actions {
+		@apply mt-9 flex flex-wrap justify-center gap-3;
+	}
+
+	.iflynepal-hero__actions .wp-block-button__link {
+		@apply inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-full border border-transparent px-5 text-sm font-extrabold no-underline;
+		transition:
+			transform 0.35s var(--iflynepal-ease),
+			background 0.3s ease,
+			border-color 0.3s ease,
+			box-shadow 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-hero__actions .wp-block-button__link:hover {
+		transform: translateY(-2px);
+	}
+
+	/* The hero's call to action is the page's one gold surface. */
+	.iflynepal-btn--primary .wp-block-button__link {
+		background: var(--iflynepal-gold);
+		border-color: var(--iflynepal-gold);
+		@apply text-white;
+		box-shadow: 0 10px 26px rgba(4, 26, 64, 0.24);
+	}
+
+	.iflynepal-btn--primary .wp-block-button__link:hover {
+		background: var(--iflynepal-gold-soft);
+		border-color: var(--iflynepal-gold-soft);
+		box-shadow: 0 16px 34px rgba(4, 26, 64, 0.32);
+	}
+
+	/*
+	 * The design puts an arrow after the primary label. A core Button block
+	 * holds text only, so the glyph is drawn here as a masked shape tinted with
+	 * currentColor rather than as inline SVG the client could delete.
+	 */
+	.iflynepal-btn--primary .wp-block-button__link::after {
+		content: '';
+		@apply inline-block h-[15px] w-[15px] shrink-0;
+		background-color: currentColor;
+		-webkit-mask: var(--iflynepal-arrow) center / contain no-repeat;
+		mask: var(--iflynepal-arrow) center / contain no-repeat;
+		transition: transform 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-btn--primary .wp-block-button__link:hover::after {
+		transform: translateX(4px);
+	}
+
+	.iflynepal-btn--ghost .wp-block-button__link {
+		@apply border-white/[.45] bg-white/[.06] text-white backdrop-blur-[8px];
+	}
+
+	.iflynepal-hero__proof {
+		@apply mt-[30px] flex flex-wrap justify-center gap-x-[18px] gap-y-2.5 text-xs font-bold;
+		color: rgba(255, 255, 255, 0.72);
+	}
+
+	.iflynepal-hero__proof p {
+		@apply m-0 flex items-center gap-[7px];
+		transition: color 0.25s ease;
+	}
+
+	.iflynepal-hero__proof p:hover {
+		@apply text-white;
+	}
+
+	.iflynepal-hero__proof p::before {
+		content: '';
+		@apply block h-1.5 w-1.5 shrink-0 rounded-full;
+		background: var(--iflynepal-gold);
+	}
+
+	/*
+	 * Reveal gate. inc/enqueue.php adds .iflynepal-anim to <html> before the
+	 * hero paints and assets/js/hero.js removes it once GSAP owns these
+	 * elements, so a visitor without JavaScript — or with reduced motion on —
+	 * never gets hidden copy.
+	 */
+	@media (prefers-reduced-motion: no-preference) {
+		.iflynepal-anim .iflynepal-hero__title,
+		.iflynepal-anim .iflynepal-hero__actions,
+		.iflynepal-anim .iflynepal-hero__proof p,
+		.iflynepal-anim .iflynepal-trip-search {
+			@apply opacity-0;
+		}
+	}
+
+	/* --------------------------------------------------------- trip planner */
+	.iflynepal-trip-search {
+		@apply mx-auto mt-[46px] grid max-w-[1030px] gap-2.5 rounded-md p-3 text-left text-ink;
+		grid-template-columns: 1.2fr 0.8fr 0.8fr auto;
+		background: rgba(255, 255, 255, 0.94);
+		box-shadow: var(--iflynepal-shadow);
+	}
+
+	.iflynepal-search-field {
+		@apply min-w-0 px-3.5 py-[5px];
+		border-right: 1px solid var(--iflynepal-line);
+	}
+
+	.iflynepal-search-field:last-of-type {
+		@apply border-r-0;
+	}
+
+	.iflynepal-search-field label {
+		@apply mb-0.5 block text-[10px] font-extrabold uppercase tracking-[.12em];
+		color: var(--iflynepal-muted);
+	}
+
+	.iflynepal-search-field select {
+		@apply w-full appearance-none border-0 bg-transparent py-1 outline-none;
+		color: var(--iflynepal-ink);
+		font-weight: 750;
+	}
+
+	/* ------------------------------------------------------- explore cards */
+
+	/*
+	 * The gateway section. Two photographic Cover blocks side by side, each
+	 * with its copy sitting on the floor of the card over a gradient scrim.
+	 *
+	 * Several selectors here are deliberately two classes deep. Core prints its
+	 * layout and Cover rules as inline block-support styles whose position in
+	 * the cascade relative to this file is not guaranteed, so anything that has
+	 * to beat them wins on specificity rather than on source order.
+	 */
+	.iflynepal-explore {
+		@apply mx-auto;
+		padding: 96px 20px;
+	}
+
+	.iflynepal-explore .iflynepal-explore__intro {
+		@apply relative mx-auto mb-[38px] max-w-[900px] text-center;
+	}
+
+	/* The note and its arrow stay left inside the block; the heading centres. */
+	.iflynepal-explore .iflynepal-explore__kicker {
+		@apply pointer-events-none relative z-[4] mb-4 flex w-max max-w-full items-center justify-start gap-3;
+		margin-inline: 0;
+		color: var(--iflynepal-navy);
+	}
+
+	/*
+	 * Core's flow layout puts a 24px block margin between siblings. In a flex
+	 * row that margin is part of the item's box, so it drops the note below the
+	 * centre line of the arrow beside it.
+	 */
+	.iflynepal-explore .iflynepal-explore__kicker > * {
+		margin-block: 0;
+	}
+
+	.iflynepal-explore__arrow {
+		@apply m-0 block shrink-0;
+	}
+
+	/*
+	 * The arrow is drawn rotated inside its own viewBox rather than turned with
+	 * a CSS transform, so the layout box is the shape you actually see: tall and
+	 * narrow, pointing down at the heading beside it.
+	 */
+	.iflynepal-explore__arrow img {
+		@apply block h-[118px] w-11 max-w-none opacity-[.85];
+	}
+
+	.iflynepal-explore__kicker-text {
+		@apply m-0 whitespace-nowrap font-hand font-semibold;
+		font-size: 27px;
+		line-height: 1.05;
+		letter-spacing: 0.01em;
+		transform: rotate(-2.5deg);
+	}
+
+	/*
+	 * Poppins runs wide: the string measures 17.61x its font size, so 50px puts
+	 * it at 880px inside the 900px box. Below 1100px it is allowed to wrap.
+	 */
+	.iflynepal-explore__title {
+		@apply m-0 whitespace-nowrap;
+		font-size: 50px;
+	}
+
+	.iflynepal-explore__underline {
+		@apply relative inline-block whitespace-nowrap;
+	}
+
+	/*
+	 * Drawn at full width by default, so a visitor without JavaScript gets the
+	 * finished mark. assets/js/reveal.js adds .is-armed to wind it back, then
+	 * .is-drawn to stroke it in as the heading arrives.
+	 */
+	.iflynepal-explore__underline::after {
+		content: '';
+		@apply pointer-events-none absolute block origin-left opacity-[.85];
+		left: -2%;
+		right: -2%;
+		bottom: -0.12em;
+		height: 0.22em;
+		background: var(--iflynepal-underline) no-repeat;
+		background-size: 100% 100%;
+		transform: scaleX(1);
+		transition: transform 0.75s cubic-bezier(0.645, 0.045, 0.355, 1);
+	}
+
+	.iflynepal-explore__underline.is-armed::after {
+		transform: scaleX(0);
+	}
+
+	.iflynepal-explore__underline.is-armed.is-drawn::after {
+		transform: scaleX(1);
+	}
+
+	.iflynepal-explore .iflynepal-explore__cards {
+		@apply mt-0;
+		gap: 20px;
+	}
+
+	.iflynepal-explore__card.wp-block-cover {
+		@apply relative isolate overflow-hidden rounded-lg text-white;
+		min-height: 560px;
+		padding: 34px;
+	}
+
+	/*
+	 * Core's dim layer is a flat wash over the whole frame, which greys out the
+	 * mountain tops the photograph is chosen for. The design darkens only the
+	 * floor of the card, where the copy sits.
+	 *
+	 * So core's own layer is repainted as that gradient rather than replaced by
+	 * a pseudo-element. It already sits exactly where the scrim belongs — after
+	 * the image, before the inner container — and every layer here resolves on
+	 * document order, so a pseudo-element would have to fight for a z-index
+	 * that core does not hand out in this markup shape. The shorthand also
+	 * clears the black background-color core gives a dim layer.
+	 */
+	.iflynepal-explore__card.wp-block-cover .wp-block-cover__background {
+		@apply opacity-100;
+		background: linear-gradient(180deg, transparent 32%, rgba(4, 26, 64, 0.88) 100%);
+	}
+
+	.iflynepal-explore__card .wp-block-cover__image-background {
+		transition: transform 0.5s ease;
+	}
+
+	.iflynepal-explore__card:hover .wp-block-cover__image-background {
+		transform: scale(1.035);
+	}
+
+	.iflynepal-explore__card-content {
+		@apply w-full;
+	}
+
+	.iflynepal-explore__eyebrow {
+		@apply m-0 text-[11px] font-extrabold uppercase tracking-[.14em];
+		color: #dce8fb;
+	}
+
+	.iflynepal-explore__card-title {
+		@apply text-white;
+		margin: 8px 0 12px;
+		font-size: clamp(34px, 4vw, 52px);
+	}
+
+	/* Cormorant sits smaller than Poppins at the same pixel size. */
+	.iflynepal-explore__card-title em {
+		font-size: 1.3em;
+		line-height: 0.9;
+	}
+
+	/*
+	 * The description and links wait for hover or keyboard focus. The card is
+	 * bottom-aligned inside a fixed min-height, so the panel grows upward into
+	 * space the card already owns and nothing on the page reflows. Devices
+	 * without a pointer get everything up front.
+	 */
+	.iflynepal-explore__reveal {
+		@apply m-0 grid opacity-0;
+		grid-template-rows: 0fr;
+		transition:
+			grid-template-rows 0.55s var(--iflynepal-ease),
+			opacity 0.4s ease;
+	}
+
+	.iflynepal-explore__reveal-inner {
+		@apply min-h-0 overflow-hidden;
+	}
+
+	.iflynepal-explore__card:hover .iflynepal-explore__reveal,
+	.iflynepal-explore__card:focus-within .iflynepal-explore__reveal {
+		@apply opacity-100;
+		grid-template-rows: 1fr;
+	}
+
+	@media (hover: none) {
+		.iflynepal-explore__reveal {
+			@apply opacity-100;
+			grid-template-rows: 1fr;
+		}
+	}
+
+	.iflynepal-explore__card-desc {
+		@apply m-0 max-w-[500px] text-[15px];
+		color: rgba(255, 255, 255, 0.78);
+	}
+
+	.iflynepal-explore__links {
+		@apply mt-[22px] flex flex-wrap;
+		gap: 10px 18px;
+	}
+
+	/*
+	 * These are text links, not the filled pills the hero uses, so the default
+	 * `wp-element-button` styling is unwound rather than adjusted.
+	 */
+	.iflynepal-explore__links .wp-block-button__link {
+		@apply inline-flex items-center gap-2 rounded-none border-0 bg-transparent p-0 text-[13px] font-extrabold text-white no-underline;
+		padding-bottom: 2px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.36);
+		transition: border-color 0.3s ease;
+	}
+
+	.iflynepal-explore__links .wp-block-button__link:hover {
+		border-bottom-color: rgba(255, 255, 255, 0.8);
+	}
+
+	.iflynepal-explore__links .wp-block-button__link::after {
+		content: '';
+		@apply inline-block h-[15px] w-[15px] shrink-0;
+		background-color: currentColor;
+		-webkit-mask: var(--iflynepal-arrow) center / contain no-repeat;
+		mask: var(--iflynepal-arrow) center / contain no-repeat;
+		transition: transform 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-explore__links .wp-block-button__link:hover::after {
+		transform: translateX(4px);
+	}
+
+	@media (max-width: 1100px) {
+		.iflynepal-explore__title {
+			@apply whitespace-normal;
+			font-size: clamp(32px, 5.6vw, 54px);
+		}
+	}
+
+	/*
+	 * Core stacks columns at 781px. These cards are tall and text-heavy, so
+	 * they need the room a good deal earlier than that.
+	 */
+	@media (max-width: 1080px) {
+		.iflynepal-explore {
+			padding: 72px 20px;
+		}
+
+		.iflynepal-explore .iflynepal-explore__cards.wp-block-columns > .wp-block-column {
+			flex-basis: 100%;
+		}
+
+		.iflynepal-explore__card.wp-block-cover {
+			min-height: 470px;
+			padding: 25px;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-explore {
+			padding: 72px 14px;
+		}
+
+		.iflynepal-explore__card.wp-block-cover {
+			min-height: 430px;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.iflynepal-explore__arrow img {
+			@apply h-[88px];
+			width: 34px;
+		}
+
+		.iflynepal-explore__kicker-text {
+			font-size: 23px;
+		}
+	}
+
+	/* ------------------------------------------------------------ responsive */
+	@media (max-width: 1080px) {
+		.iflynepal-nav {
+			grid-template-columns: 1fr auto;
+			min-height: 82px;
+		}
+
+		.site-header.is-docked .iflynepal-nav {
+			min-height: 66px;
+		}
+
+		.iflynepal-nav-links {
+			@apply absolute left-5 right-5 hidden flex-col items-start rounded-[18px] p-5;
+			top: calc(100% + 8px);
+			background: var(--iflynepal-navy);
+			box-shadow: var(--iflynepal-shadow);
+		}
+
+		.iflynepal-nav-links.is-open {
+			@apply flex;
+		}
+
+		.iflynepal-menu {
+			@apply flex-col items-start gap-[18px] text-[15px] normal-case tracking-[.02em];
+		}
+
+		.iflynepal-menu-btn {
+			@apply grid;
+		}
+
+		.iflynepal-trip-search {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.iflynepal-search-field {
+			@apply border-r-0;
+			border-bottom: 1px solid var(--iflynepal-line);
+		}
+
+		.iflynepal-search-field:nth-child(3) {
+			@apply border-b-0;
+		}
+
+		.iflynepal-trip-search .iflynepal-button {
+			@apply self-stretch;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-container,
+		.iflynepal-hero .wp-block-cover__inner-container {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		.iflynepal-hero .wp-block-cover__inner-container {
+			padding: 124px 0 80px;
+		}
+
+		.iflynepal-trip-search {
+			@apply mt-[34px];
+			grid-template-columns: 1fr;
+		}
+
+		.iflynepal-search-field {
+			border-bottom: 1px solid var(--iflynepal-line);
+		}
+
+		.iflynepal-search-field:nth-child(3) {
+			@apply border-b-0;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.iflynepal-brand .custom-logo,
+		.site-header.is-docked .iflynepal-brand .custom-logo {
+			height: 48px;
+		}
+
+		.iflynepal-nav-cta {
+			@apply px-[15px] text-[10px] tracking-[.07em];
+		}
+	}
+
+	@media (max-width: 480px) {
+		.iflynepal-hero__title {
+			font-size: 46px;
+		}
+	}
+}
+
+@keyframes iflynepal-hero-shine {
+	from {
+		background-position: 0 0;
+	}
+
+	to {
+		background-position: -5em 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.iflynepal-hero__title em,
+	.iflynepal-explore__card-title em {
+		background-image: none;
+		color: var(--iflynepal-gold);
+		-webkit-text-fill-color: var(--iflynepal-gold);
+		animation: none;
+	}
+
+	.iflynepal-button:hover,
+	.iflynepal-hero__actions .wp-block-button__link:hover {
+		transform: none;
+	}
+}
