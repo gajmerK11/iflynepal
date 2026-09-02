@@ -19,14 +19,14 @@
 			return;
 		}
 
-		var settings = [];
+		var slots = [];
 
 		for ( var i = 1; i <= config.max; i++ ) {
-			settings.push( 'iflynepal_hero_trust_' + i );
+			slots.push( 'iflynepal_hero_trust_' + i );
 		}
 
 		window.iflynepalCustomizer.repeater( {
-			settings: settings,
+			slots: slots,
 			// The bullets sit under the second button's link in the panel.
 			anchor: 'iflynepal_hero_button_2_url',
 			addLabel: config.addLabel,

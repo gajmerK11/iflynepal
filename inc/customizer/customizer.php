@@ -13,6 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/hero.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/explore.php';
 
 /**
  * Registers the theme's panels and sections.
@@ -32,7 +33,15 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 		)
 	);
 
+	/*
+	 * Control classes extend WP_Customize_Control, which only exists once the
+	 * Customizer is being registered — so they load here rather than at the top
+	 * of the file.
+	 */
+	require_once IFLYNEPAL_DIR . '/inc/customizer/controls/class-ifly-nepal-customize-heading-control.php';
+
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/hero.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/explore.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
 
@@ -80,6 +89,31 @@ function iflynepal_customizer_controls_assets() {
 	);
 
 	wp_enqueue_script(
+		'iflynepal-customizer-explore-links',
+		IFLYNEPAL_URI . '/assets/js/homepage/hero/explore/links.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/homepage/hero/explore/links.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'iflynepal-customizer-explore-links',
+		'iflynepalExploreLinks',
+		array(
+			'cards'       => range( 1, IFLYNEPAL_EXPLORE_CARDS ),
+			'max'         => IFLYNEPAL_EXPLORE_LINK_MAX,
+			'addLabel'    => __( 'Add link', 'iflynepal' ),
+			'maxMessage'  => sprintf(
+				/* translators: %d: maximum number of links per card. */
+				__( 'Maximum %d links allowed.', 'iflynepal' ),
+				IFLYNEPAL_EXPLORE_LINK_MAX
+			),
+			/* translators: %d: link number. */
+			'removeLabel' => __( 'Remove link %d', 'iflynepal' ),
+		)
+	);
+
+	wp_enqueue_script(
 		'iflynepal-customizer-hero-background-image',
 		IFLYNEPAL_URI . '/assets/js/homepage/hero/background-image.js',
 		array( 'jquery', 'customize-controls', 'media-views' ),
@@ -99,3 +133,34 @@ function iflynepal_customizer_controls_assets() {
 	);
 }
 add_action( 'customize_controls_enqueue_scripts', 'iflynepal_customizer_controls_assets' );
+
+/**
+ * Styles the group headings inside a section.
+ *
+ * A rule apiece, printed inline rather than shipped as a stylesheet: it is a
+ * handful of declarations that only ever apply inside the Customizer panel, and
+ * a separate file would be another request for them.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_customizer_controls_styles() {
+	?>
+	<style id="iflynepal-customizer-controls">
+		.customize-control-iflynepal-heading {
+			margin-bottom: 4px;
+			padding-top: 16px;
+			border-top: 1px solid #dcdcde;
+		}
+
+		.customize-control-iflynepal-heading .iflynepal-customize-heading {
+			margin-bottom: 0;
+			color: #1d2327;
+			font-size: 14px;
+			font-weight: 600;
+		}
+	</style>
+	<?php
+}
+add_action( 'customize_controls_print_styles', 'iflynepal_customizer_controls_styles' );

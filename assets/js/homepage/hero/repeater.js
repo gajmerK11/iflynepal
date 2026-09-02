@@ -25,13 +25,15 @@
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param {Object}   config             Configuration.
-	 * @param {string[]} config.settings    Setting IDs, in display order.
-	 * @param {string}   config.anchor      Setting ID of the control the Add button sits under.
-	 * @param {string}   config.addLabel    Text for the Add button.
-	 * @param {string}   config.maxMessage  Text shown once every slot is in use.
-	 * @param {string}   config.removeLabel Text for a Remove button. %d is the slot number.
-	 * @param {number}   [config.minVisible] Slots always shown, even when empty. Defaults to 0.
+	 * @param {Object} config             Configuration.
+	 * @param {Array}  config.slots       One entry per slot, in display order. An entry is
+	 *                                    either a setting ID, or an array of setting IDs when
+	 *                                    the slot is a group — a link's label and URL, say.
+	 * @param {string} config.anchor      Setting ID of the control the Add button sits under.
+	 * @param {string} config.addLabel    Text for the Add button.
+	 * @param {string} config.maxMessage  Text shown once every slot is in use.
+	 * @param {string} config.removeLabel Text for a Remove button. %d is the slot number.
+	 * @param {number} [config.minVisible] Slots always shown, even when empty. Defaults to 0.
 	 * @return {void}
 	 */
 	window.iflynepalCustomizer.repeater = function ( config ) {
@@ -39,14 +41,27 @@
 		var minVisible = config.minVisible || 0;
 		var anchorControl = api.control( config.anchor );
 
-		config.settings.forEach( function ( id, index ) {
-			var control = api.control( id );
+		config.slots.forEach( function ( entry, index ) {
+			var ids = Array.isArray( entry ) ? entry : [ entry ];
+			var $containers = [];
 
-			if ( control ) {
+			ids.forEach( function ( id ) {
+				var control = api.control( id );
+
+				if ( control ) {
+					$containers.push( control.container );
+				}
+			} );
+
+			if ( $containers.length ) {
 				slots.push( {
 					number: index + 1,
-					id: id,
-					$container: control.container
+					ids: ids,
+					$containers: $containers,
+
+					// The last field in the group carries the Remove button and
+					// anchors the Add button, so both sit below the whole slot.
+					$container: $containers[ $containers.length - 1 ]
 				} );
 			}
 		} );
@@ -73,13 +88,19 @@
 		/**
 		 * Whether a slot currently holds anything.
 		 *
+		 * Any field in the group counts: a link with a URL but no label yet is
+		 * still a slot the editor is part-way through filling in, and hiding it
+		 * would lose their work.
+		 *
 		 * @param {Object} slot Slot.
-		 * @return {boolean} True when the setting has a value.
+		 * @return {boolean} True when any setting in the slot has a value.
 		 */
 		function isFilled( slot ) {
-			var setting = api( slot.id );
+			return slot.ids.some( function ( id ) {
+				var setting = api( id );
 
-			return !! setting && String( setting.get() ).trim() !== '';
+				return !! setting && String( setting.get() ).trim() !== '';
+			} );
 		}
 
 		/**
@@ -144,26 +165,48 @@
 			slot.$container.append( $remove );
 
 			$remove.on( 'click', function () {
-				api( slot.id ).set( '' );
-				slot.$container.hide();
+				slot.ids.forEach( function ( id ) {
+					var setting = api( id );
+
+					if ( setting ) {
+						setting.set( '' );
+					}
+				} );
+
+				hide( slot );
 				reposition();
 				syncLimit();
 			} );
 		}
 
 		/**
-		 * Shows a slot and wires its Remove button.
+		 * Shows every field in a slot and wires its Remove button.
 		 *
 		 * @param {Object} slot Slot.
 		 * @return {void}
 		 */
 		function show( slot ) {
-			slot.$container.show();
+			slot.$containers.forEach( function ( $container ) {
+				$container.show();
+			} );
+
 			addRemoveButton( slot );
 		}
 
+		/**
+		 * Hides every field in a slot.
+		 *
+		 * @param {Object} slot Slot.
+		 * @return {void}
+		 */
+		function hide( slot ) {
+			slot.$containers.forEach( function ( $container ) {
+				$container.hide();
+			} );
+		}
+
 		slots.forEach( function ( slot ) {
-			slot.$container.hide();
+			hide( slot );
 		} );
 
 		/*

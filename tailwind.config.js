@@ -13,7 +13,7 @@ module.exports = {
 		'./template-parts/**/*.php',
 		'./assets/js/**/*.js',
 	],
-	safelist: [ 'is-docked', 'is-open', 'is-live', 'is-armed', 'is-drawn' ],
+	safelist: [ 'is-docked', 'is-open', 'is-live' ],
 	theme: {
 		extend: {
 			colors: {

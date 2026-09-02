@@ -39,6 +39,12 @@
 				<element value="iflynepal_render_hero_title"/>
 				<element value="iflynepal_render_hero_actions"/>
 				<element value="iflynepal_render_hero_trust_points"/>
+				<element value="iflynepal_render_explore_kicker"/>
+				<element value="iflynepal_render_explore_title"/>
+				<element value="iflynepal_render_explore_card_eyebrow"/>
+				<element value="iflynepal_render_explore_card_title"/>
+				<element value="iflynepal_render_explore_card_description"/>
+				<element value="iflynepal_render_explore_card_links"/>
 			</property>
 		</properties>
 	</rule>

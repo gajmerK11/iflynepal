@@ -616,9 +616,16 @@
 	 * Several selectors here are deliberately two classes deep, so specificity
 	 * wins over any conflicting rule regardless of source order.
 	 */
+	/*
+	 * Held to the same shell as the rest of the page, as .container does in the
+	 * approved mockup — the section is not full-bleed. The gutter lives in the
+	 * width calculation rather than in padding, so the two cards divide the
+	 * shell exactly and line up with every other section's edges.
+	 */
 	.iflynepal-explore {
 		@apply mx-auto;
-		padding: 96px 20px;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		padding: 96px 0;
 	}
 
 	.iflynepal-explore .iflynepal-explore__intro {
@@ -666,20 +673,44 @@
 	 * it at 880px inside the 900px box. Below 1100px it is allowed to wrap.
 	 */
 	.iflynepal-explore__title {
-		@apply m-0 whitespace-nowrap;
+		@apply m-0 whitespace-nowrap font-display font-medium;
 		font-size: 50px;
-	}
-
-	.iflynepal-explore__underline {
-		@apply relative inline-block whitespace-nowrap;
+		line-height: 1.04;
+		letter-spacing: -0.025em;
 	}
 
 	/*
-	 * Drawn at full width by default, so a visitor without JavaScript gets the
-	 * finished mark. assets/js/homepage/hero/explore/reveal.js adds .is-armed to wind it back, then
-	 * .is-drawn to stroke it in as the heading arrives.
+	 * `underline` is the class editors are given in the Customizer to mark a
+	 * word in the heading; `iflynepal-explore__underline` does the same and is
+	 * kept for markup written before that was documented.
+	 *
+	 * text-decoration is reset because Tailwind ships its own `.underline`
+	 * utility, which would otherwise draw a plain rule under the word on top of
+	 * the inked mark. Two classes deep, so it wins on specificity.
 	 */
-	.iflynepal-explore__underline::after {
+	.iflynepal-explore__underline,
+	.iflynepal-explore__title .underline {
+		@apply relative inline-block whitespace-nowrap;
+		text-decoration-line: none;
+	}
+
+	/*
+	 * The mark strokes itself across the word as the heading is scrolled to.
+	 *
+	 * GSAP cannot tween a pseudo-element, so the scale is held in a custom
+	 * property that assets/js/homepage/hero/explore/reveal.js animates from 0 to
+	 * 1 — a real tween, matching the approved mockup's `.ink-line`, rather than
+	 * a CSS transition driven by class toggles. Class toggles were skipped
+	 * outright whenever the heading was already in view on load: both classes
+	 * landed in the same tick, so the browser never painted the wound-back state
+	 * and there was nothing to transition from.
+	 *
+	 * The fallback is 1, so with JavaScript off — or under reduced motion, where
+	 * reveal.js returns before it touches anything — the finished mark is what
+	 * renders.
+	 */
+	.iflynepal-explore__underline::after,
+	.iflynepal-explore__title .underline::after {
 		content: '';
 		@apply pointer-events-none absolute block origin-left opacity-[.85];
 		left: -2%;
@@ -688,47 +719,49 @@
 		height: 0.22em;
 		background: var(--iflynepal-underline) no-repeat;
 		background-size: 100% 100%;
-		transform: scaleX(1);
-		transition: transform 0.75s cubic-bezier(0.645, 0.045, 0.355, 1);
+		transform: scaleX(var(--iflynepal-underline-scale, 1));
 	}
 
-	.iflynepal-explore__underline.is-armed::after {
-		transform: scaleX(0);
-	}
-
-	.iflynepal-explore__underline.is-armed.is-drawn::after {
-		transform: scaleX(1);
-	}
-
+	/*
+	 * The two cards sit side by side, as .gateway does in the approved mockup.
+	 *
+	 * The layout is declared here rather than inherited: the `wp-block-columns`
+	 * and `wp-block-cover` classes on this markup are CSS hooks only, and the
+	 * core stylesheet that normally gives them their flex/absolute behaviour is
+	 * not loaded — this theme has no block editor. Everything those classes
+	 * would have brought has to be spelled out.
+	 */
 	.iflynepal-explore .iflynepal-explore__cards {
-		@apply mt-0;
+		@apply mt-0 grid;
+		grid-template-columns: 1fr 1fr;
 		gap: 20px;
 	}
 
 	.iflynepal-explore__card.wp-block-cover {
-		@apply relative isolate overflow-hidden rounded-lg text-white;
+		@apply relative isolate flex items-end overflow-hidden rounded-lg text-white;
 		min-height: 560px;
 		padding: 34px;
 	}
 
+	/* Each layer gets its own level, as in the hero: photo, then scrim, then copy. */
+	.iflynepal-explore__card .wp-block-cover__inner-container {
+		@apply relative w-full;
+	}
+
 	/*
-	 * Core's dim layer is a flat wash over the whole frame, which greys out the
-	 * mountain tops the photograph is chosen for. The design darkens only the
-	 * floor of the card, where the copy sits.
-	 *
-	 * So core's own layer is repainted as that gradient rather than replaced by
-	 * a pseudo-element. It already sits exactly where the scrim belongs — after
-	 * the image, before the inner container — and every layer here resolves on
-	 * document order, so a pseudo-element would have to fight for a z-index
-	 * that core does not hand out in this markup shape. The shorthand also
-	 * clears the black background-color core gives a dim layer.
+	 * The scrim darkens only the floor of the card, where the copy sits — a flat
+	 * wash over the whole frame would grey out the mountain tops the photograph
+	 * is chosen for.
 	 */
 	.iflynepal-explore__card.wp-block-cover .wp-block-cover__background {
-		@apply opacity-100;
+		@apply absolute inset-0 opacity-100;
+		z-index: -1;
 		background: linear-gradient(180deg, transparent 32%, rgba(4, 26, 64, 0.88) 100%);
 	}
 
 	.iflynepal-explore__card .wp-block-cover__image-background {
+		@apply absolute inset-0 h-full w-full max-w-none object-cover;
+		z-index: -2;
 		transition: transform 0.5s ease;
 	}
 
@@ -834,16 +867,16 @@
 	}
 
 	/*
-	 * Core stacks columns at 781px. These cards are tall and text-heavy, so
-	 * they need the room a good deal earlier than that.
+	 * These cards are tall and text-heavy, so they go one-up early — well before
+	 * the width at which two columns would technically still fit.
 	 */
 	@media (max-width: 1080px) {
 		.iflynepal-explore {
-			padding: 72px 20px;
+			padding: 72px 0;
 		}
 
-		.iflynepal-explore .iflynepal-explore__cards.wp-block-columns > .wp-block-column {
-			flex-basis: 100%;
+		.iflynepal-explore .iflynepal-explore__cards {
+			grid-template-columns: 1fr;
 		}
 
 		.iflynepal-explore__card.wp-block-cover {
@@ -853,8 +886,9 @@
 	}
 
 	@media (max-width: 760px) {
+		/* The mockup narrows the gutter here, from 20px a side to 14px. */
 		.iflynepal-explore {
-			padding: 72px 14px;
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
 		}
 
 		.iflynepal-explore__card.wp-block-cover {
