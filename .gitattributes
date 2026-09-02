@@ -1,0 +1,7 @@
+# Force LF regardless of the checking-out machine's core.autocrlf.
+#
+# This machine's global core.autocrlf is `true`, which rewrites LF to CRLF on
+# checkout for anything git treats as text. WordPress Coding Standards'
+# Generic.Files.LineEndings sniff requires LF, so without this override every
+# file freshly written or edited here fails PHPCS until manually converted.
+* text=auto eol=lf
