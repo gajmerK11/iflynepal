@@ -1,10 +1,10 @@
 /**
  * Hero motion and background video control.
  *
- * Mirrors the approved mockup: the headline reveals word by word, the actions,
- * trust bullets and planner follow, the still drifts, the media parallaxes on
- * scroll, and the header swaps from transparent to the solid bar once the hero
- * is left behind.
+ * Mirrors the approved mockup: the headline reveals word by word, the actions
+ * and trust bullets follow, the still drifts, the media parallaxes on scroll,
+ * and the header swaps from transparent to the solid bar once the hero is left
+ * behind.
  *
  * Everything here is enhancement. With JavaScript off, the gate class is never
  * added, nothing is hidden, and the hero renders complete and static.
@@ -37,19 +37,16 @@
 	 * Whether this visit should pay for the background clip at all.
 	 *
 	 * template-parts/home/hero-section.php ships the video with preload="none"
-	 * and no autoplay, so nothing is downloaded until this says so. On a phone the still already
-	 * carries the whole design and the clip is a megabyte-plus of cellular
-	 * data for a decoration behind a scrim; on Data Saver it is worse. Both get
-	 * the still, which is the same picture the poster frame would have shown.
+	 * and no autoplay, so nothing is downloaded until this says so. The clip
+	 * plays on every screen size, phones included. Two visitors still opt out:
+	 * reduced motion is a stated preference against exactly this kind of
+	 * looping decoration, and Data Saver is a stated preference against paying
+	 * for it. Both fall back to the background image.
 	 *
 	 * @return {boolean} Whether to load the clip.
 	 */
 	function shouldLoadVideo() {
 		if ( reduced ) {
-			return false;
-		}
-
-		if ( window.matchMedia( '(max-width: 760px)' ).matches ) {
 			return false;
 		}
 
@@ -59,16 +56,36 @@
 	}
 
 	/*
-	 * The still underneath is what visitors see first and is the LCP element.
-	 * The video only fades over it once it is genuinely playable, so a missing
-	 * or slow file never leaves a blank hero — it simply stays a still image.
+	 * The background image underneath is what visitors see first and is the LCP
+	 * element. The video only fades over it once it is genuinely playable, so a
+	 * missing or slow file never leaves a blank hero.
 	 */
 	if ( video && shouldLoadVideo() ) {
+		// Whether the hero is on screen. The clip only runs while it is.
+		var heroInView = true;
+
+		// Set once the file has been asked for, so it is fetched a single time.
+		var requested = false;
+
+		/**
+		 * Starts playback, ignoring the rejection a browser returns when it
+		 * declines to autoplay.
+		 *
+		 * @return {void}
+		 */
+		function playVideo() {
+			video.play().catch( function () {} );
+		}
+
 		video.addEventListener(
 			'canplay',
 			function () {
 				video.classList.add( 'is-live' );
-				video.play().catch( function () {} );
+
+				// Could have scrolled past while the file was downloading.
+				if ( heroInView ) {
+					playVideo();
+				}
 			},
 			{ once: true }
 		);
@@ -81,11 +98,73 @@
 		// run out, restart rather than freezing on the last frame.
 		video.addEventListener( 'ended', function () {
 			video.currentTime = 0;
-			video.play().catch( function () {} );
+			playVideo();
 		} );
 
-		// Nothing is fetched before this call.
-		video.load();
+		/**
+		 * Fetches the clip, once. Nothing is downloaded before this runs.
+		 *
+		 * @return {void}
+		 */
+		function requestVideo() {
+			if ( requested ) {
+				return;
+			}
+
+			requested = true;
+			video.load();
+		}
+
+		/*
+		 * Decoding a looping clip costs battery and CPU for as long as it runs,
+		 * and none of it is worth paying once the hero has been scrolled past.
+		 * The observer both defers the download until the hero is actually in
+		 * view and stops playback whenever it leaves.
+		 */
+		if ( 'IntersectionObserver' in window ) {
+			new window.IntersectionObserver(
+				function ( entries ) {
+					entries.forEach( function ( entry ) {
+						heroInView = entry.isIntersecting;
+
+						if ( ! heroInView ) {
+							if ( ! video.paused ) {
+								video.pause();
+							}
+
+							return;
+						}
+
+						requestVideo();
+
+						if ( video.paused ) {
+							playVideo();
+						}
+					} );
+				},
+				{ threshold: 0 }
+			).observe( hero );
+		} else {
+			requestVideo();
+		}
+
+		/*
+		 * A background tab keeps a playing video decoding in some browsers, so
+		 * hand the frames back when the page is not being looked at.
+		 */
+		document.addEventListener( 'visibilitychange', function () {
+			if ( document.hidden ) {
+				if ( ! video.paused ) {
+					video.pause();
+				}
+
+				return;
+			}
+
+			if ( heroInView && requested ) {
+				playVideo();
+			}
+		} );
 	}
 
 	/* ------------------------------------------------------------- headline */
@@ -143,7 +222,6 @@
 	var words = splitHeadline();
 	var actions = hero.querySelector( '.iflynepal-hero__actions' );
 	var proof = hero.querySelectorAll( '.iflynepal-hero__proof p' );
-	var planner = hero.querySelector( '.iflynepal-trip-search' );
 
 	// No GSAP, or motion is unwelcome: show everything and stop.
 	if ( ! hasGsap || reduced ) {
@@ -159,7 +237,7 @@
 
 	gsap.defaults( { duration: 0.8, ease: 'power2.out' } );
 
-	var staged = [ actions, planner ].filter( Boolean );
+	var staged = [ actions ].filter( Boolean );
 
 	gsap.set( words, { opacity: 0, y: 42 } );
 	gsap.set( staged, { opacity: 0, y: 22 } );
@@ -184,10 +262,6 @@
 
 	if ( proof.length ) {
 		timeline.to( proof, { opacity: 1, y: 0, duration: 0.5, stagger: 0.07 }, '-=0.35' );
-	}
-
-	if ( planner ) {
-		timeline.to( planner, { opacity: 1, y: 0, duration: 0.8 }, '-=0.3' );
 	}
 
 	/* --------------------------------------------------------------- drift */

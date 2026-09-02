@@ -35,7 +35,7 @@ $iflynepal_cta = iflynepal_get_nav_cta_item();
 <div class="iflynepal-nav-side">
 
 	<?php if ( $iflynepal_cta ) : ?>
-		<a class="iflynepal-button iflynepal-button--light iflynepal-nav-cta" href="<?php echo esc_url( $iflynepal_cta['url'] ); ?>">
+		<a class="iflynepal-button iflynepal-button--outline iflynepal-nav-cta" href="<?php echo esc_url( $iflynepal_cta['url'] ); ?>">
 			<?php echo esc_html( $iflynepal_cta['title'] ); ?>
 		</a>
 	<?php endif; ?>

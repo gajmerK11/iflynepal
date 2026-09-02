@@ -26,6 +26,23 @@
 		</properties>
 	</rule>
 
+	<!--
+		Selective-refresh render callbacks return finished markup: every value
+		inside them has already been through esc_html/esc_url/esc_attr or
+		iflynepal_kses_text(). Declaring them here rather than repeating an
+		ignore comment at each call site, since every section added from now on
+		brings another one.
+	-->
+	<rule ref="WordPress.Security.EscapeOutput">
+		<properties>
+			<property name="customAutoEscapedFunctions" type="array">
+				<element value="iflynepal_render_hero_title"/>
+				<element value="iflynepal_render_hero_actions"/>
+				<element value="iflynepal_render_hero_trust_points"/>
+			</property>
+		</properties>
+	</rule>
+
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">

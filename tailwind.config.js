@@ -11,7 +11,7 @@ module.exports = {
 		'./*.php',
 		'./inc/**/*.php',
 		'./template-parts/**/*.php',
-		'./assets/js/*.js',
+		'./assets/js/**/*.js',
 	],
 	safelist: [ 'is-docked', 'is-open', 'is-live', 'is-armed', 'is-drawn' ],
 	theme: {

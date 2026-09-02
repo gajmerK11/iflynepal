@@ -4,9 +4,9 @@
  * with an inked underline, and two photographic cards leading into tours and
  * retreats.
  *
- * Markup uses the `wp-block-cover`/`wp-block-columns`-family classes so
- * main.css and assets/js/reveal.js can target them directly — plain CSS/JS
- * hooks.
+ * Markup uses the `wp-block-cover`/`wp-block-columns`-family classes so main.css
+ * and assets/js/homepage/hero/explore/reveal.js can target them directly — plain
+ * CSS/JS hooks.
  *
  * @package IFly_Nepal
  * @since   1.0.0

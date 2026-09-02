@@ -76,8 +76,8 @@
 		 * bullets and the hero's primary action. Pale blue was tried first and
 		 * disappeared against a bright snow-and-sky photograph.
 		 */
-		--iflynepal-gold: #f2c879;
-		--iflynepal-gold-soft: #ffdc9a;
+		--iflynepal-gold: #e3b463;
+		--iflynepal-gold-soft: #f2c879;
 
 		--iflynepal-line: rgba(5, 69, 167, 0.16);
 		--iflynepal-shadow: 0 22px 70px rgba(4, 26, 64, 0.16);
@@ -214,12 +214,12 @@
 
 	.iflynepal-brand .custom-logo {
 		@apply block w-auto object-contain;
-		height: 68px;
+		height: 78px;
 		transition: height 0.35s var(--iflynepal-ease);
 	}
 
 	.site-header.is-docked .iflynepal-brand .custom-logo {
-		height: 50px;
+		height: 56px;
 	}
 
 	.iflynepal-nav-links {
@@ -227,7 +227,7 @@
 	}
 
 	.iflynepal-menu {
-		@apply flex list-none items-center gap-[26px] p-0 text-xs font-semibold uppercase tracking-[.1em];
+		@apply flex list-none items-center gap-[34px] p-0 text-[13px] font-semibold uppercase tracking-[.1em];
 		font-family: var(--iflynepal-ui-font);
 	}
 
@@ -258,10 +258,16 @@
 		@apply flex items-center justify-self-end gap-3;
 	}
 
+	/*
+	 * The one action in the header, so it carries the heaviest weight on the
+	 * bar. Wide tracking at 11px was reading as thin rather than as considered,
+	 * so the letter-spacing comes in as the weight goes up.
+	 */
 	.iflynepal-nav-cta {
-		@apply min-h-[44px] px-[26px] text-[11px] font-semibold uppercase tracking-[.12em];
+		@apply min-h-[44px] whitespace-nowrap px-[26px] text-[12px] font-extrabold uppercase tracking-[.08em];
 		font-family: var(--iflynepal-ui-font);
 	}
+
 
 	.iflynepal-menu-btn {
 		@apply hidden h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/[.08] text-white;
@@ -319,14 +325,22 @@
 		z-index: -2;
 	}
 
-	.iflynepal-hero__still,
-	.iflynepal-hero .wp-block-cover__video-background {
+	/*
+	 * Both layers cover their own box, but they arrive at it differently. The
+	 * still fills .iflynepal-hero__media, which already carries the 130% travel
+	 * height; the video is a layer in its own right, so it keeps the 130% set
+	 * above. Giving it h-full instead would reset it to the hero's own height
+	 * and leave its bottom edge 15% short, exposing a band of the still beneath.
+	 */
+	.iflynepal-hero__still {
 		@apply h-full w-full max-w-none object-cover;
 		object-position: center 42%;
+		will-change: transform;
 	}
 
-	.iflynepal-hero__still {
-		will-change: transform;
+	.iflynepal-hero .wp-block-cover__video-background {
+		@apply w-full max-w-none object-cover;
+		object-position: center 42%;
 	}
 
 	/* Fades in only once the file is playable; if it 404s the still stays put. */
@@ -380,17 +394,31 @@
 		letter-spacing: -0.02em;
 	}
 
-	/* Split into words by assets/js/hero.js so they can stagger in. */
+	/* Split into words by assets/js/homepage/hero/hero.js so they can stagger in. */
 	.iflynepal-hero__title .iflynepal-w {
 		@apply inline-block;
 	}
 
 	/*
-	 * The accent word. The gradient is tiled rather than stretched and travels
-	 * exactly one tile per pass, so the loop point cannot be seen and the word
-	 * is fully painted at every frame.
+	 * The headline's accent word, in the same gold as the hero's primary button
+	 * so the page's one warm note is a single flat colour rather than two
+	 * near-misses.
+	 *
+	 * `hero-text-style` is the class editors are given in the Customizer to mark
+	 * a word for this treatment; `em` does the same and is kept for copy written
+	 * before that class was documented.
 	 */
-	.iflynepal-hero__title em,
+	.iflynepal-hero__title .hero-text-style,
+	.iflynepal-hero__title em {
+		@apply inline-block font-accent font-semibold italic;
+		color: var(--iflynepal-gold);
+	}
+
+	/*
+	 * The Explore card's accent keeps the travelling shine. The gradient is
+	 * tiled rather than stretched and travels exactly one tile per pass, so the
+	 * loop point cannot be seen and the word is fully painted at every frame.
+	 */
 	.iflynepal-explore__card-title em {
 		@apply inline-block font-accent font-semibold italic;
 		background-image: linear-gradient(
@@ -430,14 +458,23 @@
 		transform: translateY(-2px);
 	}
 
-	/* The hero's call to action is the page's one gold surface. */
+	/*
+	 * The gold action, shared by the hero's primary call to action and the
+	 * header's "Plan My Trip" pill so the two read as the same button.
+	 *
+	 * The label is navy rather than white: white on this gold measures about
+	 * 1.9:1, well under the 4.5:1 WCAG AA wants, and these are the page's
+	 * primary click targets. Navy on the same gold measures 6.1:1.
+	 */
+	.iflynepal-button--gold,
 	.iflynepal-btn--primary .wp-block-button__link {
 		background: var(--iflynepal-gold);
 		border-color: var(--iflynepal-gold);
-		@apply text-white;
+		color: var(--iflynepal-navy-deep);
 		box-shadow: 0 10px 26px rgba(4, 26, 64, 0.24);
 	}
 
+	.iflynepal-button--gold:hover,
 	.iflynepal-btn--primary .wp-block-button__link:hover {
 		background: var(--iflynepal-gold-soft);
 		border-color: var(--iflynepal-gold-soft);
@@ -445,10 +482,26 @@
 	}
 
 	/*
-	 * The design puts an arrow after the primary label. A core Button block
-	 * holds text only, so the glyph is drawn here as a masked shape tinted with
+	 * The outlined pill in the header. Deliberately carries no gold: the warm
+	 * note is reserved for the hero's own call to action, so this stays a plain
+	 * white outline that reads against both the photograph and the docked bar.
+	 */
+	.iflynepal-button--outline {
+		background: transparent;
+		@apply border-white/[.45] text-white;
+	}
+
+	.iflynepal-button--outline:hover {
+		@apply border-white/[.7] bg-white/[.12];
+	}
+
+	/*
+	 * The design puts an arrow after the gold label. A core Button block holds
+	 * text only, so the glyph is drawn here as a masked shape tinted with
 	 * currentColor rather than as inline SVG the client could delete.
 	 */
+	.iflynepal-button--gold::after,
+	.iflynepal-button--outline::after,
 	.iflynepal-btn--primary .wp-block-button__link::after {
 		content: '';
 		@apply inline-block h-[15px] w-[15px] shrink-0;
@@ -456,6 +509,11 @@
 		-webkit-mask: var(--iflynepal-arrow) center / contain no-repeat;
 		mask: var(--iflynepal-arrow) center / contain no-repeat;
 		transition: transform 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-button--gold:hover::after,
+	.iflynepal-button--outline:hover::after {
+		transform: translateX(4px);
 	}
 
 	.iflynepal-btn--primary .wp-block-button__link:hover::after {
@@ -466,13 +524,62 @@
 		@apply border-white/[.45] bg-white/[.06] text-white backdrop-blur-[8px];
 	}
 
+	/*
+	 * The ambient sound toggle. Sits in the corner of the hero rather than in
+	 * the copy: it is an option, not part of the pitch. Ships hidden and is
+	 * revealed by assets/js/homepage/hero/audio.js, so it never appears as a
+	 * dead control when scripting is off.
+	 */
+	.iflynepal-hero__audio {
+		@apply absolute grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/[.08] text-white backdrop-blur-[8px];
+		right: 28px;
+		bottom: 28px;
+		z-index: 3;
+		transition:
+			background 0.3s ease,
+			border-color 0.3s ease,
+			transform 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-hero__audio:hover {
+		@apply border-white/60 bg-white/20;
+		transform: translateY(-2px);
+	}
+
+	.iflynepal-hero__audio.is-on {
+		border-color: var(--iflynepal-gold);
+		color: var(--iflynepal-gold);
+	}
+
+	.iflynepal-hero__audio .iflynepal-ico {
+		@apply m-auto h-[18px] w-[18px];
+	}
+
+	/* One glyph at a time: crossed-out when off, waves when on. */
+	.iflynepal-hero__audio .iflynepal-ico-sound-on,
+	.iflynepal-hero__audio.is-on .iflynepal-ico-sound-off {
+		@apply hidden;
+	}
+
+	.iflynepal-hero__audio.is-on .iflynepal-ico-sound-on {
+		@apply block;
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-hero__audio {
+			right: 16px;
+			bottom: 16px;
+		}
+	}
+
 	.iflynepal-hero__proof {
-		@apply mt-[30px] flex flex-wrap justify-center gap-x-[18px] gap-y-2.5 text-xs font-bold;
-		color: rgba(255, 255, 255, 0.72);
+		@apply mt-[38px] flex flex-wrap justify-center gap-x-7 gap-y-3.5 text-sm font-semibold;
+		color: rgba(255, 255, 255, 0.8);
+		letter-spacing: 0.01em;
 	}
 
 	.iflynepal-hero__proof p {
-		@apply m-0 flex items-center gap-[7px];
+		@apply m-0 flex items-center gap-2.5;
 		transition: color 0.25s ease;
 	}
 
@@ -482,51 +589,22 @@
 
 	.iflynepal-hero__proof p::before {
 		content: '';
-		@apply block h-1.5 w-1.5 shrink-0 rounded-full;
+		@apply block h-[7px] w-[7px] shrink-0 rounded-full;
 		background: var(--iflynepal-gold);
 	}
 
 	/*
 	 * Reveal gate. inc/enqueue.php adds .iflynepal-anim to <html> before the
-	 * hero paints and assets/js/hero.js removes it once GSAP owns these
+	 * hero paints and assets/js/homepage/hero/hero.js removes it once GSAP owns these
 	 * elements, so a visitor without JavaScript — or with reduced motion on —
 	 * never gets hidden copy.
 	 */
 	@media (prefers-reduced-motion: no-preference) {
 		.iflynepal-anim .iflynepal-hero__title,
 		.iflynepal-anim .iflynepal-hero__actions,
-		.iflynepal-anim .iflynepal-hero__proof p,
-		.iflynepal-anim .iflynepal-trip-search {
+		.iflynepal-anim .iflynepal-hero__proof p {
 			@apply opacity-0;
 		}
-	}
-
-	/* --------------------------------------------------------- trip planner */
-	.iflynepal-trip-search {
-		@apply mx-auto mt-[46px] grid max-w-[1030px] gap-2.5 rounded-md p-3 text-left text-ink;
-		grid-template-columns: 1.2fr 0.8fr 0.8fr auto;
-		background: rgba(255, 255, 255, 0.94);
-		box-shadow: var(--iflynepal-shadow);
-	}
-
-	.iflynepal-search-field {
-		@apply min-w-0 px-3.5 py-[5px];
-		border-right: 1px solid var(--iflynepal-line);
-	}
-
-	.iflynepal-search-field:last-of-type {
-		@apply border-r-0;
-	}
-
-	.iflynepal-search-field label {
-		@apply mb-0.5 block text-[10px] font-extrabold uppercase tracking-[.12em];
-		color: var(--iflynepal-muted);
-	}
-
-	.iflynepal-search-field select {
-		@apply w-full appearance-none border-0 bg-transparent py-1 outline-none;
-		color: var(--iflynepal-ink);
-		font-weight: 750;
 	}
 
 	/* ------------------------------------------------------- explore cards */
@@ -598,7 +676,7 @@
 
 	/*
 	 * Drawn at full width by default, so a visitor without JavaScript gets the
-	 * finished mark. assets/js/reveal.js adds .is-armed to wind it back, then
+	 * finished mark. assets/js/homepage/hero/explore/reveal.js adds .is-armed to wind it back, then
 	 * .is-drawn to stroke it in as the heading arrives.
 	 */
 	.iflynepal-explore__underline::after {
@@ -824,23 +902,6 @@
 		.iflynepal-menu-btn {
 			@apply grid;
 		}
-
-		.iflynepal-trip-search {
-			grid-template-columns: 1fr 1fr;
-		}
-
-		.iflynepal-search-field {
-			@apply border-r-0;
-			border-bottom: 1px solid var(--iflynepal-line);
-		}
-
-		.iflynepal-search-field:nth-child(3) {
-			@apply border-b-0;
-		}
-
-		.iflynepal-trip-search .iflynepal-button {
-			@apply self-stretch;
-		}
 	}
 
 	@media (max-width: 760px) {
@@ -851,19 +912,6 @@
 
 		.iflynepal-hero .wp-block-cover__inner-container {
 			padding: 124px 0 80px;
-		}
-
-		.iflynepal-trip-search {
-			@apply mt-[34px];
-			grid-template-columns: 1fr;
-		}
-
-		.iflynepal-search-field {
-			border-bottom: 1px solid var(--iflynepal-line);
-		}
-
-		.iflynepal-search-field:nth-child(3) {
-			@apply border-b-0;
 		}
 	}
 
@@ -896,7 +944,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.iflynepal-hero__title em,
+	/* The headline accent is already flat gold, so only the card needs undoing. */
 	.iflynepal-explore__card-title em {
 		background-image: none;
 		color: var(--iflynepal-gold);

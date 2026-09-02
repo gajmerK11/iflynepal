@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  *
- * @param string $relative_path Path under the theme root, e.g. 'assets/js/hero.js'.
+ * @param string $relative_path Path under the theme root, e.g. 'assets/js/homepage/hero/hero.js'.
  * @return string File mtime, or the theme version when the file is missing.
  */
 function iflynepal_asset_version( $relative_path ) {
@@ -101,9 +101,9 @@ function iflynepal_enqueue_assets() {
 	if ( $has_hero ) {
 		wp_enqueue_script(
 			'iflynepal-hero',
-			IFLYNEPAL_URI . '/assets/js/hero.js',
+			IFLYNEPAL_URI . '/assets/js/homepage/hero/hero.js',
 			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
-			iflynepal_asset_version( 'assets/js/hero.js' ),
+			iflynepal_asset_version( 'assets/js/homepage/hero/hero.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,
@@ -114,9 +114,9 @@ function iflynepal_enqueue_assets() {
 	if ( $has_explore ) {
 		wp_enqueue_script(
 			'iflynepal-reveal',
-			IFLYNEPAL_URI . '/assets/js/reveal.js',
+			IFLYNEPAL_URI . '/assets/js/homepage/hero/explore/reveal.js',
 			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
-			iflynepal_asset_version( 'assets/js/reveal.js' ),
+			iflynepal_asset_version( 'assets/js/homepage/hero/explore/reveal.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,
@@ -143,9 +143,9 @@ function iflynepal_enqueue_navigation() {
 
 	wp_enqueue_script(
 		'iflynepal-navigation',
-		IFLYNEPAL_URI . '/assets/js/navigation.js',
+		IFLYNEPAL_URI . '/assets/js/header/navigation.js',
 		array(),
-		iflynepal_asset_version( 'assets/js/navigation.js' ),
+		iflynepal_asset_version( 'assets/js/header/navigation.js' ),
 		array(
 			'strategy'  => 'defer',
 			'in_footer' => true,
@@ -153,6 +153,35 @@ function iflynepal_enqueue_navigation() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_navigation' );
+
+/**
+ * Enqueues the hero's ambient sound toggle, when a track has been uploaded.
+ *
+ * Kept out of the hero bundle because it needs no GSAP, and skipped entirely
+ * when there is no audio to play — the button is not rendered either, so there
+ * would be nothing for it to bind to.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_enqueue_hero_audio() {
+	if ( ! iflynepal_has_hero() || '' === iflynepal_hero_audio_url() ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'iflynepal-hero-audio',
+		IFLYNEPAL_URI . '/assets/js/homepage/hero/audio.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/homepage/hero/audio.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_hero_audio' );
 
 /**
  * Preloads the faces that paint the headline.
@@ -178,8 +207,7 @@ function iflynepal_preload_fonts() {
 		}
 
 		printf(
-			'<link rel="preload" as="font" type="font/woff2" href="%s" crossorigin>' . "
-",
+			'<link rel="preload" as="font" type="font/woff2" href="%s" crossorigin>' . "\n",
 			esc_url( IFLYNEPAL_URI . '/' . $font )
 		);
 	}
@@ -204,7 +232,7 @@ function iflynepal_resource_hints( $hints, $relation_type ) {
 		return $hints;
 	}
 
-	$origin = iflynepal_hero_still_origin();
+	$origin = iflynepal_hero_background_image_origin();
 
 	if ( '' !== $origin ) {
 		$hints[] = array(
@@ -218,21 +246,22 @@ function iflynepal_resource_hints( $hints, $relation_type ) {
 add_filter( 'wp_resource_hints', 'iflynepal_resource_hints', 10, 2 );
 
 /**
- * Preloads the hero still so the LCP element starts downloading immediately.
+ * Preloads the hero background image so the LCP element starts downloading
+ * immediately.
  *
- * The still sits well down the document inside the hero template part, which
- * puts it too far down for the preload scanner to find it early on its own.
+ * It sits well down the document inside the hero template part, which puts it
+ * too far down for the preload scanner to find it early on its own.
  *
  * @since 1.0.0
  *
  * @return void
  */
-function iflynepal_preload_hero_still() {
+function iflynepal_preload_hero_image() {
 	if ( ! iflynepal_has_hero() ) {
 		return;
 	}
 
-	$url = iflynepal_hero_still_url();
+	$url = iflynepal_hero_background_image_url();
 
 	if ( '' === $url ) {
 		return;
@@ -243,4 +272,4 @@ function iflynepal_preload_hero_still() {
 		esc_url( $url )
 	);
 }
-add_action( 'wp_head', 'iflynepal_preload_hero_still', 2 );
+add_action( 'wp_head', 'iflynepal_preload_hero_image', 2 );

@@ -1,15 +1,15 @@
 <?php
 /**
- * Front page hero: background video over a still, headline, two calls to
- * action, four trust bullets and the trip planner search bar.
+ * Front page hero: background video over an image, headline, two calls to
+ * action and the trust bullets.
  *
- * Video, still, poster and fallback source are all Customizer settings
- * (inc/customizer.php) — Appearance > Customize > Hero Background. The still
- * is the LCP element, so it renders eager and high priority while the video
- * loads behind it (assets/js/hero.js gates the actual download).
+ * Everything editable here lives in Appearance > Customize > Homepage > Hero.
+ * The background image is the LCP element, so it renders eager and at high
+ * priority while the video loads behind it (assets/js/homepage/hero/hero.js gates the actual
+ * download, and doubles the image as the video's poster frame).
  *
  * Markup uses the `wp-block-cover`-family classes so main.css and
- * assets/js/hero.js can target them directly — plain CSS/JS hooks.
+ * assets/js/homepage/hero/hero.js can target them directly — plain CSS/JS hooks.
  *
  * @package IFly_Nepal
  * @since   1.0.0
@@ -17,40 +17,41 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_video    = iflynepal_hero_video_url();
-$iflynepal_fallback = iflynepal_hero_video_fallback_url();
-$iflynepal_poster   = iflynepal_hero_poster_url();
-$iflynepal_still    = iflynepal_hero_still_url();
+$iflynepal_image      = iflynepal_hero_background_image_url();
+$iflynepal_image_size = iflynepal_hero_background_image_size();
+$iflynepal_video      = iflynepal_hero_background_video_url();
+$iflynepal_video_mime = iflynepal_hero_background_video_mime();
+$iflynepal_audio      = iflynepal_hero_audio_url();
+$iflynepal_audio_mime = iflynepal_hero_audio_mime();
 ?>
 <section class="wp-block-cover iflynepal-hero">
 
-	<video
-		class="wp-block-cover__video-background intrinsic-ignore"
-		id="iflynepal-hero-video"
-		muted
-		loop
-		playsinline
-		preload="none"
-		aria-hidden="true"
-		data-object-fit="cover"
-		<?php echo $iflynepal_poster ? 'poster="' . esc_url( $iflynepal_poster ) . '"' : ''; ?>
-	>
-		<?php if ( $iflynepal_video ) : ?>
-			<source src="<?php echo esc_url( $iflynepal_video ); ?>" type="video/mp4">
-		<?php endif; ?>
-		<?php if ( $iflynepal_fallback ) : ?>
-			<source src="<?php echo esc_url( $iflynepal_fallback ); ?>" type="video/mp4">
-		<?php endif; ?>
-	</video>
+	<?php if ( $iflynepal_video ) : ?>
+		<video
+			class="wp-block-cover__video-background intrinsic-ignore"
+			id="iflynepal-hero-video"
+			muted
+			loop
+			playsinline
+			preload="none"
+			aria-hidden="true"
+			data-object-fit="cover"
+			<?php echo $iflynepal_image ? 'poster="' . esc_url( $iflynepal_image ) . '"' : ''; ?>
+		>
+			<source src="<?php echo esc_url( $iflynepal_video ); ?>" type="<?php echo esc_attr( $iflynepal_video_mime ); ?>">
+		</video>
+	<?php endif; ?>
 
-	<?php if ( $iflynepal_still ) : ?>
+	<?php if ( $iflynepal_image ) : ?>
 		<div class="iflynepal-hero__media" aria-hidden="true">
 			<img
 				class="iflynepal-hero__still"
-				src="<?php echo esc_url( $iflynepal_still ); ?>"
+				src="<?php echo esc_url( $iflynepal_image ); ?>"
 				alt=""
-				width="2200"
-				height="1467"
+				<?php if ( $iflynepal_image_size['width'] && $iflynepal_image_size['height'] ) : ?>
+					width="<?php echo esc_attr( $iflynepal_image_size['width'] ); ?>"
+					height="<?php echo esc_attr( $iflynepal_image_size['height'] ); ?>"
+				<?php endif; ?>
 				fetchpriority="high"
 				loading="eager"
 				decoding="sync"
@@ -61,30 +62,54 @@ $iflynepal_still    = iflynepal_hero_still_url();
 	<div class="wp-block-cover__inner-container">
 		<div class="wp-block-group iflynepal-hero__copy">
 
-			<h1 class="wp-block-heading iflynepal-hero__title">
-				<?php esc_html_e( 'Nepal Tours, Treks &', 'iflynepal' ); ?> <em><?php esc_html_e( 'Retreats', 'iflynepal' ); ?></em><br>
-				<?php esc_html_e( 'With Local Experts', 'iflynepal' ); ?>
+			<h1 class="wp-block-heading iflynepal-hero__title" id="iflynepal-hero-title">
+				<?php
+				// Sanitized by iflynepal_kses_text() on save and again on read.
+				echo iflynepal_render_hero_title();
+				?>
 			</h1>
 
-			<div class="wp-block-buttons iflynepal-hero__actions">
-				<div class="wp-block-button iflynepal-btn--primary">
-					<a class="wp-block-button__link wp-element-button" href="#explore"><?php esc_html_e( 'Explore Nepal', 'iflynepal' ); ?></a>
-				</div>
-				<div class="wp-block-button iflynepal-btn--ghost">
-					<a class="wp-block-button__link wp-element-button" href="https://iflynepal.com/trip_category/retreats-in-nepal"><?php esc_html_e( 'Find a Retreat', 'iflynepal' ); ?></a>
-				</div>
+			<div class="wp-block-buttons iflynepal-hero__actions" id="iflynepal-hero-actions">
+				<?php
+				// Labels and URLs are escaped inside the render callback.
+				echo iflynepal_render_hero_actions();
+				?>
 			</div>
 
-			<div class="wp-block-group iflynepal-hero__proof">
-				<p><?php esc_html_e( 'Local Nepal team', 'iflynepal' ); ?></p>
-				<p><?php esc_html_e( 'Experienced guides', 'iflynepal' ); ?></p>
-				<p><?php esc_html_e( 'Private & small-group options', 'iflynepal' ); ?></p>
-				<p><?php esc_html_e( 'Support from arrival to departure', 'iflynepal' ); ?></p>
+			<div class="wp-block-group iflynepal-hero__proof" id="iflynepal-hero-proof">
+				<?php
+				// Bullet text is escaped inside the render callback.
+				echo iflynepal_render_hero_trust_points();
+				?>
 			</div>
-
-			<?php get_template_part( 'template-parts/home/trip-planner' ); ?>
 
 		</div>
 	</div>
+
+	<?php if ( $iflynepal_audio ) : ?>
+		<?php
+		/*
+		 * preload="none" and no autoplay: nothing is fetched until the visitor
+		 * asks for sound. assets/js/homepage/hero/audio.js owns playback.
+		 */
+		?>
+		<audio id="iflynepal-hero-audio" loop preload="none">
+			<source src="<?php echo esc_url( $iflynepal_audio ); ?>" type="<?php echo esc_attr( $iflynepal_audio_mime ); ?>">
+		</audio>
+
+		<button
+			id="iflynepal-hero-audio-toggle"
+			class="iflynepal-hero__audio"
+			type="button"
+			hidden
+			aria-pressed="false"
+			aria-label="<?php esc_attr_e( 'Turn on ambient sound', 'iflynepal' ); ?>"
+			data-label-on="<?php esc_attr_e( 'Turn off ambient sound', 'iflynepal' ); ?>"
+			data-label-off="<?php esc_attr_e( 'Turn on ambient sound', 'iflynepal' ); ?>"
+		>
+			<svg class="iflynepal-ico iflynepal-ico-sound-off" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="m17 9 4 6M21 9l-4 6"/></svg>
+			<svg class="iflynepal-ico iflynepal-ico-sound-on" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+		</button>
+	<?php endif; ?>
 
 </section>
