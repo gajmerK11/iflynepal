@@ -2,9 +2,7 @@
 /**
  * Front page.
  *
- * The homepage is built from fixed template parts, not editor content — there
- * is no block editor in this theme, so the sections below are the only source
- * of the page's markup.
+ * The homepage is built from fixed template parts.
  *
  * @package IFly_Nepal
  * @since   1.0.0

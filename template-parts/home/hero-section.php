@@ -8,10 +8,8 @@
  * is the LCP element, so it renders eager and high priority while the video
  * loads behind it (assets/js/hero.js gates the actual download).
  *
- * Markup keeps the `wp-block-cover`-family classes from the design's original
- * block-based build so main.css and assets/js/hero.js need no changes — this
- * theme no longer uses the block editor, but the classes are just CSS/JS
- * hooks now, not evidence of one.
+ * Markup uses the `wp-block-cover`-family classes so main.css and
+ * assets/js/hero.js can target them directly — plain CSS/JS hooks.
  *
  * @package IFly_Nepal
  * @since   1.0.0

@@ -283,11 +283,11 @@
 	/* ----------------------------------------------------------------- hero */
 
 	/*
-	 * The hero section carries the .iflynepal-hero class and reuses the
-	 * `wp-block-cover` layout classes from the design's original block-based
-	 * build. The design needs four stacked layers — still, video and two
-	 * scrims — so the still is rendered by template-parts/home/hero-section.php
-	 * and the scrim is drawn here. It fills the screen before the visitor scrolls.
+	 * The hero section carries the .iflynepal-hero class alongside the
+	 * `wp-block-cover` layout classes used as CSS hooks. The design needs four
+	 * stacked layers — still, video and two scrims — so the still is rendered
+	 * by template-parts/home/hero-section.php and the scrim is drawn here. It
+	 * fills the screen before the visitor scrolls.
 	 */
 	.iflynepal-hero.wp-block-cover {
 		@apply relative isolate flex items-center overflow-hidden p-0 text-white;
@@ -532,13 +532,11 @@
 	/* ------------------------------------------------------- explore cards */
 
 	/*
-	 * The gateway section. Two photographic Cover blocks side by side, each
-	 * with its copy sitting on the floor of the card over a gradient scrim.
+	 * The gateway section. Two photographic cards side by side, each with its
+	 * copy sitting on the floor of the card over a gradient scrim.
 	 *
-	 * Several selectors here are deliberately two classes deep. Core prints its
-	 * layout and Cover rules as inline block-support styles whose position in
-	 * the cascade relative to this file is not guaranteed, so anything that has
-	 * to beat them wins on specificity rather than on source order.
+	 * Several selectors here are deliberately two classes deep, so specificity
+	 * wins over any conflicting rule regardless of source order.
 	 */
 	.iflynepal-explore {
 		@apply mx-auto;
@@ -557,9 +555,8 @@
 	}
 
 	/*
-	 * Core's flow layout puts a 24px block margin between siblings. In a flex
-	 * row that margin is part of the item's box, so it drops the note below the
-	 * centre line of the arrow beside it.
+	 * The note and arrow sit in a flex row; a default block margin on either
+	 * child would drop it below the centre line of the other, so it's zeroed.
 	 */
 	.iflynepal-explore .iflynepal-explore__kicker > * {
 		margin-block: 0;

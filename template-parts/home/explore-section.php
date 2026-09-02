@@ -4,10 +4,9 @@
  * with an inked underline, and two photographic cards leading into tours and
  * retreats.
  *
- * Markup keeps the `wp-block-cover`/`wp-block-columns`-family classes from the
- * design's original block-based build so main.css and assets/js/reveal.js
- * need no changes — this theme no longer uses the block editor, but the
- * classes are just CSS/JS hooks now, not evidence of one.
+ * Markup uses the `wp-block-cover`/`wp-block-columns`-family classes so
+ * main.css and assets/js/reveal.js can target them directly — plain CSS/JS
+ * hooks.
  *
  * @package IFly_Nepal
  * @since   1.0.0

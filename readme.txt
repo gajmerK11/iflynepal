@@ -12,10 +12,10 @@ Custom theme for iFly Nepal — Nepal tours, treks and retreats.
 
 == Description ==
 
-A classic theme: plain PHP templates and template-parts, no block editor, no
-theme.json. Front-page sections (hero, Explore Cards) are fixed markup in
-template-parts/home/, editable copy lives in Appearance > Customize, and the
-trip planner search bar is its own template-part.
+A classic theme: plain PHP templates and template-parts. Front-page sections
+(hero, Explore Cards) are fixed markup in template-parts/home/, editable copy
+lives in Appearance > Customize, and the trip planner search bar is its own
+template-part.
 
 Companion plugin (not built yet): once built, iFly Nepal Trips will register
 the trip post type and the three taxonomies the hero's trip planner searches.
@@ -38,14 +38,12 @@ its submit button, since its taxonomies don't exist.
 == Front-page sections ==
 
 template-parts/home/hero-section.php and explore-section.php are plain PHP —
-editing them updates every page immediately, unlike a block pattern that would
-need re-inserting. Markup keeps the `wp-block-cover`/`wp-block-columns`-family
-CSS classes from the theme's original block-based build so assets/css/main.css
-and assets/js/{hero,reveal}.js needed no changes when the block editor was
-removed — those classes are just CSS/JS hooks now, not evidence of one.
+editing them updates every page immediately. Markup uses the
+`wp-block-cover`/`wp-block-columns`-family CSS classes as plain CSS/JS hooks
+for assets/css/main.css and assets/js/{hero,reveal}.js.
 
 Motion: GSAP loads only on pages that animate. inc/enqueue.php checks
-ifn_has_hero()/ifn_has_explore() (both true on the front page only) and loads
+iflynepal_has_hero()/iflynepal_has_explore() (both true on the front page only) and loads
 the library plus assets/js/hero.js and assets/js/reveal.js accordingly. Both
 scripts are pure enhancement — nothing is hidden in the stylesheet, so each
 section renders finished with JavaScript off or reduced motion on.

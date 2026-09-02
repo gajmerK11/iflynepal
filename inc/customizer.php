@@ -3,9 +3,8 @@
  * Customizer settings.
  *
  * The hero's background media all lives here — the still shown first, the
- * video that plays over it, its poster frame, and a fallback source. There is
- * no block editor to hold any of this, so all four are plain Customizer
- * settings under one section.
+ * video that plays over it, its poster frame, and a fallback source. All four
+ * are plain Customizer settings under one section.
  *
  * @package IFly_Nepal
  * @since   1.0.0
