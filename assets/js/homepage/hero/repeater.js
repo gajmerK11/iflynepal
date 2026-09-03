@@ -6,10 +6,10 @@
  * panel shows only as many fields as there is content. Removing a slot clears
  * its setting, which is what the render side reads as "skip this one".
  *
- * The code itself is panel-agnostic; it lives under hero/ because the hero's
- * trust points are the only list using it so far. Move it up a level the first
- * time a second section needs one. Which settings form a list is decided by the
- * caller, e.g. trust-points.js alongside this file.
+ * The code itself is panel-agnostic and is shared across the homepage: the
+ * hero's trust points, the Explore cards' links and the Why-trust logo bands
+ * all run on it. Which settings form a list, and what an empty slot holds, are
+ * decided by the caller — see trust-points.js alongside this file.
  *
  * @package IFly_Nepal
  * @since   1.0.0
@@ -34,11 +34,15 @@
 	 * @param {string} config.maxMessage  Text shown once every slot is in use.
 	 * @param {string} config.removeLabel Text for a Remove button. %d is the slot number.
 	 * @param {number} [config.minVisible] Slots always shown, even when empty. Defaults to 0.
+	 * @param {*}      [config.emptyValue] What an empty slot holds. Defaults to the empty
+	 *                                    string; media controls store an attachment ID and
+	 *                                    hold 0, which would otherwise read as a value.
 	 * @return {void}
 	 */
 	window.iflynepalCustomizer.repeater = function ( config ) {
 		var slots = [];
 		var minVisible = config.minVisible || 0;
+		var emptyValue = config.hasOwnProperty( 'emptyValue' ) ? config.emptyValue : '';
 		var anchorControl = api.control( config.anchor );
 
 		config.slots.forEach( function ( entry, index ) {
@@ -99,7 +103,13 @@
 			return slot.ids.some( function ( id ) {
 				var setting = api( id );
 
-				return !! setting && String( setting.get() ).trim() !== '';
+				if ( ! setting ) {
+					return false;
+				}
+
+				var value = String( setting.get() ).trim();
+
+				return '' !== value && String( emptyValue ) !== value;
 			} );
 		}
 
@@ -169,7 +179,7 @@
 					var setting = api( id );
 
 					if ( setting ) {
-						setting.set( '' );
+						setting.set( emptyValue );
 					}
 				} );
 

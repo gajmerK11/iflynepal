@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/hero.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/explore.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/trust.php';
 
 /**
  * Registers the theme's panels and sections.
@@ -42,6 +43,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/hero.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/explore.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/trust.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
 
@@ -110,6 +112,31 @@ function iflynepal_customizer_controls_assets() {
 			),
 			/* translators: %d: link number. */
 			'removeLabel' => __( 'Remove link %d', 'iflynepal' ),
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-customizer-trust-logos',
+		IFLYNEPAL_URI . '/assets/js/homepage/trust/logos.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/homepage/trust/logos.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'iflynepal-customizer-trust-logos',
+		'iflynepalTrustLogos',
+		array(
+			'groups'      => array( 'partner', 'association' ),
+			'max'         => IFLYNEPAL_TRUST_LOGO_MAX,
+			'addLabel'    => __( 'Add logo', 'iflynepal' ),
+			'maxMessage'  => sprintf(
+				/* translators: %d: maximum number of logos per band. */
+				__( 'Maximum %d logos allowed.', 'iflynepal' ),
+				IFLYNEPAL_TRUST_LOGO_MAX
+			),
+			/* translators: %d: logo number. */
+			'removeLabel' => __( 'Remove logo %d', 'iflynepal' ),
 		)
 	);
 

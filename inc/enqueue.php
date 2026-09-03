@@ -47,13 +47,14 @@ function iflynepal_enqueue_assets() {
 
 	/*
 	 * GSAP is the theme's one heavy dependency, so it is loaded only on pages
-	 * that actually animate — currently the hero and the Explore Cards section.
-	 * A template with neither pays nothing.
+	 * that actually animate — currently the hero, the Explore Cards and the
+	 * Why-trust section. A template with none of them pays nothing.
 	 */
 	$has_hero    = iflynepal_has_hero();
 	$has_explore = iflynepal_has_explore();
+	$has_trust   = iflynepal_has_trust();
 
-	if ( ! $has_hero && ! $has_explore ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust ) {
 		return;
 	}
 
@@ -117,6 +118,19 @@ function iflynepal_enqueue_assets() {
 			IFLYNEPAL_URI . '/assets/js/homepage/hero/explore/reveal.js',
 			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
 			iflynepal_asset_version( 'assets/js/homepage/hero/explore/reveal.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	if ( $has_trust ) {
+		wp_enqueue_script(
+			'iflynepal-trust-reveal',
+			IFLYNEPAL_URI . '/assets/js/homepage/trust/reveal.js',
+			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
+			iflynepal_asset_version( 'assets/js/homepage/trust/reveal.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,

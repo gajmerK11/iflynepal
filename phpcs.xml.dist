@@ -45,6 +45,16 @@
 				<element value="iflynepal_render_explore_card_title"/>
 				<element value="iflynepal_render_explore_card_description"/>
 				<element value="iflynepal_render_explore_card_links"/>
+				<element value="iflynepal_render_trust_kicker"/>
+				<element value="iflynepal_render_trust_title"/>
+				<element value="iflynepal_render_trust_feature_icon"/>
+				<element value="iflynepal_render_trust_feature_title"/>
+				<element value="iflynepal_render_trust_feature_description"/>
+				<element value="iflynepal_render_trust_promo_kicker"/>
+				<element value="iflynepal_render_trust_promo_title"/>
+				<element value="iflynepal_render_trust_promo_description"/>
+				<element value="iflynepal_render_trust_promo_button"/>
+				<element value="iflynepal_render_trust_logos"/>
 			</property>
 		</properties>
 	</rule>

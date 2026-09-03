@@ -833,17 +833,37 @@
 
 	/*
 	 * These are text links, not the filled pills the hero uses, so the default
-	 * `wp-element-button` styling is unwound rather than adjusted.
+	 * `wp-element-button` styling is unwound rather than adjusted. At rest the
+	 * arrow is the only mark; the rule beneath strokes in from the left on hover.
+	 *
+	 * The rule is a pseudo-element rather than a border because a border can only
+	 * fade, not draw. It is taken out of flow, so it adds no height and the row of
+	 * links never shifts under the cursor.
 	 */
 	.iflynepal-explore__links .wp-block-button__link {
-		@apply inline-flex items-center gap-2 rounded-none border-0 bg-transparent p-0 text-[13px] font-extrabold text-white no-underline;
+		@apply relative inline-flex items-center gap-2 rounded-none border-0 bg-transparent p-0 text-[13px] font-extrabold text-white no-underline;
 		padding-bottom: 2px;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.36);
-		transition: border-color 0.3s ease;
 	}
 
-	.iflynepal-explore__links .wp-block-button__link:hover {
-		border-bottom-color: rgba(255, 255, 255, 0.8);
+	.iflynepal-explore__links .wp-block-button__link::before {
+		content: '';
+		@apply absolute bottom-0 left-0 right-0 h-px;
+		background-color: rgba(255, 255, 255, 0.8);
+		transform: scaleX(0);
+		transform-origin: left center;
+		transition: transform 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-explore__links .wp-block-button__link:hover::before,
+	.iflynepal-explore__links .wp-block-button__link:focus-visible::before {
+		transform: scaleX(1);
+	}
+
+	/* Reduced motion still gets the rule, it just arrives rather than draws. */
+	@media (prefers-reduced-motion: reduce) {
+		.iflynepal-explore__links .wp-block-button__link::before {
+			transition: none;
+		}
 	}
 
 	.iflynepal-explore__links .wp-block-button__link::after {
@@ -907,6 +927,279 @@
 		}
 	}
 
+
+	/* --------------------------------------------------------- why we trust */
+
+	/*
+	 * The proof section. A centred heading, four bullets in a two-by-two grid,
+	 * a photographic planning card beside them, and the logo bands beneath.
+	 *
+	 * Held to the same shell as the rest of the page, with the gutter inside
+	 * the width calculation so its edges line up with every other section.
+	 */
+	.iflynepal-trust {
+		@apply mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		padding: 96px 0;
+	}
+
+	.iflynepal-trust__head {
+		@apply mx-auto max-w-[720px] text-center;
+		margin-bottom: 66px;
+	}
+
+	/*
+	 * The section kickers elsewhere carry a short rule before the text. This one
+	 * is centred over the heading, where a rule on one side only would read as
+	 * off-centre, so it stands alone and a little larger.
+	 */
+	.iflynepal-trust__kicker {
+		@apply m-0 inline-flex items-center justify-center font-extrabold uppercase;
+		margin-bottom: 16px;
+		color: var(--iflynepal-navy);
+		font-size: 17px;
+		letter-spacing: 0.14em;
+	}
+
+	.iflynepal-trust__title {
+		@apply m-0 font-display font-medium;
+		font-size: clamp(36px, 4.4vw, 60px);
+		line-height: 1.04;
+		letter-spacing: -0.025em;
+	}
+
+	/* Two equal columns, both stretched so the card matches the bullets. */
+	.iflynepal-trust__grid {
+		@apply grid items-stretch;
+		grid-template-columns: 1fr 1fr;
+		gap: 48px;
+	}
+
+	.iflynepal-trust__features {
+		@apply grid self-center;
+		grid-template-columns: 1fr 1fr;
+		gap: 96px 26px;
+	}
+
+	.iflynepal-trust__feature {
+		@apply flex items-start;
+		gap: 14px;
+	}
+
+	.iflynepal-trust__icon {
+		@apply grid h-11 w-11 shrink-0 place-items-center bg-mist;
+		border-radius: 13px;
+		color: var(--iflynepal-navy);
+		transition: background 0.25s ease;
+	}
+
+	.iflynepal-trust__feature:hover .iflynepal-trust__icon {
+		@apply bg-sand;
+	}
+
+	/*
+	 * Icons come from the theme's registry in two kinds: the solid ones are
+	 * painted, the rest drawn as strokes. Both take their colour from the tile.
+	 */
+	.iflynepal-trust__glyph {
+		@apply block h-[23px] w-[23px] shrink-0 fill-none stroke-current;
+		stroke-width: 1.7;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.iflynepal-trust__glyph--fill {
+		@apply fill-current stroke-none;
+	}
+
+	.iflynepal-trust__feature-title {
+		@apply block text-[15px] font-extrabold;
+		letter-spacing: 0;
+	}
+
+	.iflynepal-trust__feature-desc {
+		@apply block text-[13px];
+		margin-top: 5px;
+		color: var(--iflynepal-muted);
+		line-height: 1.55;
+	}
+
+	/* -------------------------------------------------------- planning card */
+
+	.iflynepal-trust__promo {
+		@apply relative flex items-end overflow-hidden text-white;
+		isolation: isolate;
+		border-radius: 30px;
+		min-height: 430px;
+		padding: 38px;
+	}
+
+	.iflynepal-trust__promo-image {
+		@apply absolute inset-0 h-full w-full max-w-none object-cover;
+		z-index: -2;
+		transition: transform 0.6s var(--iflynepal-ease);
+	}
+
+	.iflynepal-trust__promo:hover .iflynepal-trust__promo-image {
+		transform: scale(1.05);
+	}
+
+	/* The scrim the copy sits on: light at the top, heavy under the text. */
+	.iflynepal-trust__promo::after {
+		content: '';
+		@apply absolute inset-0;
+		z-index: -1;
+		background: linear-gradient(180deg, rgba(4, 26, 64, 0.12), rgba(4, 26, 64, 0.78));
+	}
+
+	.iflynepal-trust__promo-kicker {
+		@apply m-0 inline-flex items-center text-xs font-extrabold uppercase text-white;
+		margin-bottom: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	.iflynepal-trust__promo-title {
+		@apply m-0 max-w-[340px] font-display font-medium;
+		font-size: clamp(26px, 2.4vw, 34px);
+		line-height: 1.04;
+		letter-spacing: -0.025em;
+	}
+
+	.iflynepal-trust__promo-desc {
+		@apply max-w-[360px] text-[15px];
+		margin: 14px 0 22px;
+		color: rgba(255, 255, 255, 0.84);
+	}
+
+	.iflynepal-trust__promo-action {
+		@apply flex;
+	}
+
+	/* ----------------------------------------------------------- logo bands */
+
+	.iflynepal-trust__logos {
+		@apply grid;
+		margin-top: 44px;
+		gap: 48px;
+	}
+
+	.iflynepal-trust__band {
+		@apply grid items-center;
+		grid-template-columns: 120px 1fr;
+		gap: 24px;
+	}
+
+	.iflynepal-trust__band-label {
+		@apply text-xs font-extrabold uppercase;
+		color: var(--iflynepal-navy);
+		letter-spacing: 0.14em;
+	}
+
+	/*
+	 * The track runs wider than the band, so both ends are faded out rather than
+	 * cut and a logo entering or leaving does not pop.
+	 */
+	.iflynepal-trust__marquee {
+		@apply relative overflow-hidden;
+		-webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+		mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+	}
+
+	/*
+	 * Each track holds its logos twice over, so scrolling it to -50% lands the
+	 * second copy exactly where the first started and the loop is seamless.
+	 */
+	.iflynepal-trust__track {
+		@apply flex;
+		width: max-content;
+		animation: iflynepal-trust-scroll 40s linear infinite;
+	}
+
+	/* The shorter band gets a shorter cycle, so the two never march in step. */
+	.iflynepal-trust__band:nth-child(2) .iflynepal-trust__track {
+		animation-duration: 32s;
+	}
+
+	.iflynepal-trust__marquee:hover .iflynepal-trust__track {
+		animation-play-state: paused;
+	}
+
+	.iflynepal-trust__logo {
+		@apply inline-flex shrink-0 items-center grayscale;
+		height: 92px;
+		margin-right: 64px;
+		opacity: 0.72;
+		transition:
+			filter 0.35s ease,
+			opacity 0.35s ease;
+	}
+
+	.iflynepal-trust__logo:hover {
+		@apply grayscale-0;
+		opacity: 1;
+	}
+
+	.iflynepal-trust__logo-image {
+		@apply block h-[84px] w-auto max-w-none;
+		object-fit: contain;
+	}
+
+	@media (max-width: 1080px) {
+		.iflynepal-trust {
+			padding: 72px 0;
+		}
+
+		.iflynepal-trust__head {
+			margin-bottom: 44px;
+		}
+
+		/* The card drops below the bullets, and the bullets go one-up. */
+		.iflynepal-trust .iflynepal-trust__grid {
+			grid-template-columns: 1fr;
+			gap: 36px;
+		}
+
+		.iflynepal-trust .iflynepal-trust__features {
+			grid-template-columns: 1fr;
+			gap: 32px;
+		}
+
+		.iflynepal-trust__promo {
+			min-height: 380px;
+			padding: 28px;
+		}
+	}
+
+	@media (max-width: 760px) {
+		/* The mockup narrows the gutter here, from 20px a side to 14px. */
+		.iflynepal-trust {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		.iflynepal-trust__kicker {
+			font-size: 14px;
+		}
+
+		/* The band label moves above its row once 120px is too much to spare. */
+		.iflynepal-trust .iflynepal-trust__band {
+			grid-template-columns: 1fr;
+			gap: 12px;
+		}
+
+		.iflynepal-trust__logos {
+			gap: 34px;
+		}
+
+		.iflynepal-trust__logo {
+			height: 68px;
+			margin-right: 44px;
+		}
+
+		.iflynepal-trust__logo-image {
+			@apply h-[60px];
+		}
+	}
+
 	/* ------------------------------------------------------------ responsive */
 	@media (max-width: 1080px) {
 		.iflynepal-nav {
@@ -967,6 +1260,16 @@
 	}
 }
 
+@keyframes iflynepal-trust-scroll {
+	from {
+		transform: translateX(0);
+	}
+
+	to {
+		transform: translateX(-50%);
+	}
+}
+
 @keyframes iflynepal-hero-shine {
 	from {
 		background-position: 0 0;
@@ -988,6 +1291,15 @@
 
 	.iflynepal-button:hover,
 	.iflynepal-hero__actions .wp-block-button__link:hover {
+		transform: none;
+	}
+
+	/* The logo bands stop rather than crawl; every logo is still readable. */
+	.iflynepal-trust__track {
+		animation: none;
+	}
+
+	.iflynepal-trust__promo:hover .iflynepal-trust__promo-image {
 		transform: none;
 	}
 }

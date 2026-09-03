@@ -86,3 +86,14 @@ function iflynepal_has_hero() {
 function iflynepal_has_explore() {
 	return is_front_page();
 }
+
+/**
+ * Whether the current request renders the Why-trust section.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_trust() {
+	return is_front_page();
+}
