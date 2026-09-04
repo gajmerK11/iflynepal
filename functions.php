@@ -19,4 +19,6 @@ require_once IFLYNEPAL_DIR . '/inc/setup.php';
 require_once IFLYNEPAL_DIR . '/inc/enqueue.php';
 require_once IFLYNEPAL_DIR . '/inc/template-tags.php';
 require_once IFLYNEPAL_DIR . '/inc/template-functions.php';
+require_once IFLYNEPAL_DIR . '/inc/cpts/testimonial-cpt.php';
+require_once IFLYNEPAL_DIR . '/inc/meta-boxes/class-ifly-nepal-testimonial-meta-box.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/customizer.php';

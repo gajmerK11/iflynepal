@@ -1200,6 +1200,609 @@
 		}
 	}
 
+	/* -------------------------------------------- people behind the journey */
+
+	/*
+	 * The first section to sit on a tinted band rather than the page's own
+	 * white, so it is the first that cannot be its own shell: the wash runs
+	 * edge to edge while the content stays inside the same 1240px column as
+	 * everything above it. The modifier is written to be reused by whichever
+	 * section alternates onto mist next.
+	 */
+	.iflynepal-section--mist {
+		@apply relative bg-mist;
+		isolation: isolate;
+	}
+
+	/*
+	 * The contour drawing behind the wash, faded out top and bottom so it never
+	 * meets the join with the white sections either side. Held in its own file
+	 * rather than inlined: it is ten kilobytes of path data that would
+	 * otherwise be parsed on every page the stylesheet touches.
+	 */
+	.iflynepal-section--mist::before {
+		content: '';
+		@apply absolute inset-0;
+		z-index: -1;
+		opacity: 0.55;
+		background-image: url('../images/section-topography.svg');
+		background-size: 760px 760px;
+		-webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
+		mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
+	}
+
+	.iflynepal-people {
+		padding: 96px 0;
+	}
+
+	.iflynepal-people__inner {
+		@apply mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+	}
+
+	/* The copy on the left, the two rail buttons sitting on its baseline. */
+	.iflynepal-people__head {
+		@apply relative flex items-end justify-between;
+		gap: 30px;
+		margin-bottom: 34px;
+	}
+
+	.iflynepal-people__copy {
+		@apply max-w-[780px];
+	}
+
+	.iflynepal-people__kicker {
+		@apply inline-flex items-center font-extrabold uppercase;
+		margin: 0 0 16px;
+		color: var(--iflynepal-navy);
+		font-size: 17px;
+		letter-spacing: 0.14em;
+	}
+
+	.iflynepal-people__title {
+		@apply font-display font-medium;
+		margin: 0 0 16px;
+		font-size: clamp(36px, 4.4vw, 60px);
+		line-height: 1.04;
+		letter-spacing: -0.025em;
+	}
+
+	.iflynepal-people__lead {
+		@apply max-w-[690px] text-[18px];
+		margin: 12px 0 0;
+		color: var(--iflynepal-muted);
+	}
+
+	/* ------------------------------------------------------- contact pill */
+
+	/*
+	 * A pill rather than a button: it carries two lines of copy and a status
+	 * dot, which the theme's buttons are not shaped to hold.
+	 */
+	.iflynepal-people__cta {
+		@apply inline-flex items-center bg-white no-underline;
+		gap: 14px;
+		margin-top: 24px;
+		padding: 11px 20px 11px 11px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 999px;
+		box-shadow: 0 6px 20px rgba(4, 26, 64, 0.06);
+		color: var(--iflynepal-navy);
+		transition:
+			transform 0.22s ease,
+			box-shadow 0.22s ease,
+			border-color 0.22s ease;
+	}
+
+	.iflynepal-people__cta:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 14px 32px rgba(4, 26, 64, 0.12);
+		border-color: rgba(5, 69, 167, 0.35);
+	}
+
+	.iflynepal-people__cta-icon {
+		@apply relative grid h-11 w-11 shrink-0 place-items-center rounded-full bg-mist;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-people__cta-icon .iflynepal-ico {
+		@apply h-[22px] w-[22px];
+	}
+
+	/* The office is open: a dot with a ring pushing out of it, once a second. */
+	.iflynepal-people__cta-dot {
+		@apply absolute h-3 w-3 rounded-full;
+		top: 1px;
+		right: 1px;
+		background: var(--iflynepal-navy);
+		border: 2px solid #fff;
+	}
+
+	.iflynepal-people__cta-dot::after {
+		content: '';
+		@apply absolute rounded-full;
+		inset: -2px;
+		border: 2px solid var(--iflynepal-navy);
+		animation: iflynepal-people-pulse 1.9s ease-out infinite;
+	}
+
+	.iflynepal-people__cta-text {
+		@apply flex flex-col text-left;
+		line-height: 1.2;
+	}
+
+	.iflynepal-people__cta-text strong {
+		@apply text-sm;
+		font-weight: 850;
+	}
+
+	.iflynepal-people__cta-text em {
+		@apply font-semibold not-italic;
+		margin-top: 3px;
+		color: var(--iflynepal-muted);
+		font-size: 11.5px;
+	}
+
+	.iflynepal-people__cta .iflynepal-ico-arr {
+		margin-left: 2px;
+	}
+
+	.iflynepal-people__cta:hover .iflynepal-ico-arr {
+		transform: translateX(4px);
+	}
+
+	/* --------------------------------------------------------- rail buttons */
+
+	.iflynepal-people__nav {
+		@apply flex shrink-0;
+		gap: 12px;
+		margin-top: 26px;
+	}
+
+	.iflynepal-people__nav button {
+		@apply grid h-[52px] w-[52px] shrink-0 cursor-pointer place-items-center rounded-full bg-transparent;
+		border: 1px solid var(--iflynepal-line);
+		color: var(--iflynepal-navy);
+		transition:
+			background 0.2s ease,
+			color 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.iflynepal-people__nav button:hover:not(:disabled) {
+		@apply text-white;
+		background: var(--iflynepal-navy);
+		border-color: var(--iflynepal-navy);
+	}
+
+	/* Disabled means the rail has nothing left that way, not that it is broken. */
+	.iflynepal-people__nav button:disabled {
+		@apply cursor-default;
+		opacity: 0.35;
+	}
+
+	.iflynepal-people__nav .iflynepal-ico {
+		@apply h-4 w-4;
+	}
+
+	/* ---------------------------------------------------------------- rail */
+
+	/*
+	 * The scrollbar is hidden because the two buttons are the visible control,
+	 * but the rail is still a real scrolling region: touch, trackpad and
+	 * keyboard scrolling all reach it.
+	 *
+	 * The glide is asked for on each button press instead of being set here,
+	 * because the rail also has to be repositioned instantly when it comes
+	 * round the loop — a `scroll-behavior` of `smooth` would animate that jump
+	 * and make it the one thing it must never be, visible.
+	 */
+	.iflynepal-people__rail {
+		@apply flex min-w-0;
+		gap: 22px;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		padding-bottom: 4px;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	.iflynepal-people__rail::-webkit-scrollbar {
+		display: none;
+	}
+
+	.iflynepal-people__card {
+		@apply shrink-0 grow-0 overflow-hidden bg-white;
+		flex-basis: 314px;
+		scroll-snap-align: start;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 20px;
+		transition:
+			transform 0.24s ease,
+			box-shadow 0.24s ease;
+	}
+
+	.iflynepal-people__card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 18px 42px rgba(4, 26, 64, 0.11);
+	}
+
+	.iflynepal-people__photo {
+		@apply relative overflow-hidden;
+		height: 340px;
+	}
+
+	.iflynepal-people__photo-image {
+		@apply block h-full w-full object-cover;
+		transition: transform 0.6s var(--iflynepal-ease);
+	}
+
+	.iflynepal-people__card:hover .iflynepal-people__photo-image {
+		transform: scale(1.04);
+	}
+
+	/*
+	 * Drawn in place of a photograph that has not been uploaded yet. A stock
+	 * portrait would read as a claim about a named colleague; this reads as
+	 * what it is.
+	 */
+	.iflynepal-people__avatar {
+		@apply absolute inset-0 grid place-items-center bg-sand;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-people__avatar svg {
+		@apply block h-[104px] w-[104px] fill-none stroke-current;
+		stroke-width: 2;
+	}
+
+	.iflynepal-people__role {
+		@apply absolute font-black uppercase;
+		left: 14px;
+		bottom: 14px;
+		padding: 7px 10px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.94);
+		color: var(--iflynepal-navy);
+		font-size: 10px;
+		letter-spacing: 0.07em;
+	}
+
+	.iflynepal-people__body {
+		padding: 20px 22px 24px;
+	}
+
+	.iflynepal-people__name {
+		@apply font-display font-medium;
+		margin: 0;
+		font-size: 26px;
+		line-height: 1.04;
+		letter-spacing: -0.025em;
+	}
+
+	.iflynepal-people__country {
+		@apply text-sm;
+		margin: 6px 0 0;
+		color: var(--iflynepal-muted);
+	}
+
+	@media (max-width: 1080px) {
+		.iflynepal-people {
+			padding: 72px 0;
+		}
+	}
+
+	@media (max-width: 760px) {
+		/* The mockup narrows the gutter here, from 20px a side to 14px. */
+		.iflynepal-people__inner {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		/*
+		 * The buttons drop under the copy rather than beside it, the same move
+		 * the mockup makes on the departures head at this width.
+		 */
+		.iflynepal-people .iflynepal-people__head {
+			@apply flex-col items-start;
+		}
+
+		.iflynepal-people__kicker {
+			font-size: 14px;
+		}
+
+		.iflynepal-people__photo {
+			height: 330px;
+		}
+	}
+
+	/* ------------------------------------------------ traveller proof cards */
+
+	/*
+	 * The reusable testimonial section. The track is scaled up past the shell
+	 * so the cards either side bleed off the page, which is what makes the
+	 * middle one read as the one being shown.
+	 *
+	 * `overflow-x: clip` rather than `hidden`: hidden on one axis makes the
+	 * other axis a scroll container, which would break the page's own sticky
+	 * header.
+	 */
+	.iflynepal-testimonials {
+		overflow-x: clip;
+		padding: 76px 0 56px;
+	}
+
+	.iflynepal-testimonials__inner {
+		@apply mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+	}
+
+	.iflynepal-testimonials__head {
+		@apply text-center;
+	}
+
+	.iflynepal-testimonials__kicker {
+		@apply inline-flex items-center justify-center font-extrabold uppercase;
+		margin: 0 0 16px;
+		color: var(--iflynepal-navy);
+		font-size: 17px;
+		letter-spacing: 0.14em;
+	}
+
+	.iflynepal-testimonials__carousel {
+		@apply relative;
+		outline-offset: -4px;
+	}
+
+	/*
+	 * The card padding is what separates the rows, and the 1.2 scale magnifies
+	 * it, so the section pads much less than it looks like it should.
+	 */
+	.iflynepal-testimonials__scale {
+		transform: scale3d(1.2, 1.2, 1);
+	}
+
+	.iflynepal-testimonials__viewport {
+		@apply overflow-hidden;
+	}
+
+	.iflynepal-testimonials__track {
+		@apply m-0 flex list-none p-0;
+		cursor: grab;
+		will-change: transform;
+		transition: transform 0.45s var(--iflynepal-ease);
+
+		/* Vertical scrolling still passes through; horizontal belongs to us. */
+		touch-action: pan-y;
+	}
+
+	.iflynepal-testimonials__track.is-dragging {
+		@apply select-none;
+		cursor: grabbing;
+		transition: none;
+	}
+
+	/*
+	 * The silent rewind at the end of a loop. The cards have to stop
+	 * transitioning too, or the first paint and every rewind flicker.
+	 */
+	.iflynepal-testimonials__track.is-jumping,
+	.iflynepal-testimonials__track.is-jumping .iflynepal-testimonials__item {
+		transition: none;
+	}
+
+	/*
+	 * Three across. The track is a block-level flex box, so the percentage
+	 * resolves against the viewport and the script never has to size a card.
+	 */
+	.iflynepal-testimonials__item {
+		@apply shrink-0 grow-0;
+		flex-basis: 33.3333%;
+
+		/* Padding rather than margin keeps the drag maths on whole card widths. */
+		padding: 80px 0;
+		transition:
+			opacity 0.3s ease-in-out,
+			transform 0.3s ease-in-out;
+	}
+
+	/*
+	 * Dimming the cards either side is the script's doing, not the
+	 * stylesheet's: without JavaScript there is no carousel to be off-centre
+	 * of, and every review stays fully legible.
+	 */
+	.iflynepal-testimonials__carousel.is-ready .iflynepal-testimonials__item {
+		opacity: 0.2;
+		transform: scale3d(0.9, 0.9, 1);
+	}
+
+	.iflynepal-testimonials__carousel.is-ready .iflynepal-testimonials__item.is-center {
+		opacity: 1;
+		transform: none;
+	}
+
+	.iflynepal-testimonials__card {
+		@apply m-0 bg-white text-center;
+		padding: 40px;
+		border: 1px solid #fff;
+		border-radius: 10px;
+		box-shadow: 0 35px 60px rgba(0, 0, 0, 0.1);
+	}
+
+	.iflynepal-testimonials__headline {
+		@apply font-accent font-semibold italic;
+		margin: 0 0 20px;
+		color: #000;
+		font-size: 30px;
+		line-height: 1.15;
+		letter-spacing: 0;
+	}
+
+	/* A body paragraph that happens to be a quotation, not a display quote. */
+	.iflynepal-testimonials__quote {
+		@apply font-sans font-normal not-italic;
+		margin: 0 0 20px;
+		border: 0;
+		padding: 0;
+		color: #000;
+		font-size: 15px;
+		line-height: 1.7;
+		letter-spacing: normal;
+	}
+
+	.iflynepal-testimonials__by {
+		@apply flex items-center justify-center;
+	}
+
+	/* Stands in for a photograph, which a review from a platform never carries. */
+	.iflynepal-testimonials__avatar {
+		@apply grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sand;
+		margin-right: 10px;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-testimonials__avatar svg {
+		@apply block h-6 w-6 fill-none stroke-current;
+		stroke-width: 2;
+	}
+
+	.iflynepal-testimonials__name {
+		@apply text-sm font-semibold;
+		color: #000;
+	}
+
+	/* ------------------------------------------------------ where to check it */
+
+	/*
+	 * The strip sits low on the right of the section, so the note reads as a
+	 * margin aside under the cards rather than as a divider. It is pulled out
+	 * through the shell's gutter so it ends about 58px off the viewport edge on
+	 * wide screens, and never past it on narrow ones.
+	 */
+	.iflynepal-testimonials__verify {
+		@apply flex flex-row flex-wrap items-center justify-end;
+		margin: 38px 0 0;
+		margin-right: min(0px, calc(58px - (100vw - min(100vw - 40px, var(--iflynepal-shell))) / 2));
+	}
+
+	.iflynepal-testimonials__note {
+		@apply flex w-max max-w-full flex-none items-center;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-testimonials__note b {
+		@apply font-hand font-semibold;
+		max-width: 24ch;
+		font-size: 23px;
+		line-height: 1.2;
+		letter-spacing: 0.01em;
+		transform: rotate(-2.5deg);
+	}
+
+	/* The right margin clears the arrow's tip from the button beside it. */
+	.iflynepal-testimonials__note svg {
+		@apply block overflow-hidden;
+		width: 104px;
+		height: 42px;
+		margin: 0 18px 0 -52px;
+		opacity: 0.9;
+	}
+
+	.iflynepal-testimonials__sources {
+		@apply flex flex-wrap justify-end;
+		gap: 10px;
+	}
+
+	.iflynepal-testimonials__source {
+		@apply inline-flex items-center bg-white font-extrabold no-underline;
+		gap: 8px;
+		padding: 10px 16px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 999px;
+		color: var(--iflynepal-navy);
+		font-size: 12px;
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.iflynepal-testimonials__source:hover {
+		transform: translateY(-2px);
+		border-color: rgba(5, 69, 167, 0.4);
+		box-shadow: 0 8px 20px rgba(4, 26, 64, 0.08);
+	}
+
+	.iflynepal-testimonials__brand {
+		@apply block h-[17px] w-[17px] shrink-0;
+	}
+
+	.iflynepal-testimonials__source:hover .iflynepal-ico-ext {
+		transform: translate(3px, -3px);
+	}
+
+	@media (max-width: 1169px) {
+		.iflynepal-testimonials__item {
+			flex-basis: 50%;
+		}
+
+		.iflynepal-testimonials__headline {
+			font-size: 28px;
+		}
+
+		.iflynepal-testimonials__quote {
+			font-size: 14px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.iflynepal-testimonials__item {
+			flex-basis: 100%;
+			padding: 60px 0;
+		}
+
+		/* One card fills the screen, so there is nothing left to bleed into. */
+		.iflynepal-testimonials__scale {
+			transform: none;
+		}
+
+		.iflynepal-testimonials__card {
+			padding: 28px;
+		}
+
+		.iflynepal-testimonials__headline {
+			font-size: 26px;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-testimonials__inner {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		.iflynepal-testimonials__verify {
+			@apply flex-col items-end;
+			gap: 16px;
+		}
+
+		.iflynepal-testimonials__note {
+			@apply flex-col items-end;
+		}
+
+		.iflynepal-testimonials__note b {
+			@apply text-right;
+			max-width: 30ch;
+			font-size: 21px;
+		}
+
+		.iflynepal-testimonials__note svg {
+			width: 64px;
+			height: 38px;
+			margin: 4px 18px 0 0;
+			transform: rotate(58deg);
+		}
+	}
+
 	/* ------------------------------------------------------------ responsive */
 	@media (max-width: 1080px) {
 		.iflynepal-nav {
@@ -1270,6 +1873,18 @@
 	}
 }
 
+@keyframes iflynepal-people-pulse {
+	from {
+		transform: scale(0.55);
+		opacity: 0.7;
+	}
+
+	to {
+		transform: scale(1.9);
+		opacity: 0;
+	}
+}
+
 @keyframes iflynepal-hero-shine {
 	from {
 		background-position: 0 0;
@@ -1300,6 +1915,31 @@
 	}
 
 	.iflynepal-trust__promo:hover .iflynepal-trust__promo-image {
+		transform: none;
+	}
+
+	/* The ring stops pushing out of the contact dot; the dot itself stays. */
+	.iflynepal-people__cta-dot::after {
+		animation: none;
+		opacity: 0;
+	}
+
+	.iflynepal-people__cta:hover,
+	.iflynepal-people__card:hover {
+		transform: none;
+	}
+
+	.iflynepal-people__card:hover .iflynepal-people__photo-image {
+		transform: none;
+	}
+
+	/* The carousel steps rather than slides. The move itself still happens. */
+	.iflynepal-testimonials__track,
+	.iflynepal-testimonials__item {
+		transition: none;
+	}
+
+	.iflynepal-testimonials__source:hover {
 		transform: none;
 	}
 }

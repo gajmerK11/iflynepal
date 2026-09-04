@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || exit;
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/hero.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/explore.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/trust.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/people.php';
 
 /**
  * Registers the theme's panels and sections.
@@ -44,6 +45,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/hero.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/explore.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/trust.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/people.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
 
@@ -137,6 +139,30 @@ function iflynepal_customizer_controls_assets() {
 			),
 			/* translators: %d: logo number. */
 			'removeLabel' => __( 'Remove logo %d', 'iflynepal' ),
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-customizer-people-cards',
+		IFLYNEPAL_URI . '/assets/js/homepage/people/cards.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/homepage/people/cards.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'iflynepal-customizer-people-cards',
+		'iflynepalPeopleCards',
+		array(
+			'max'         => IFLYNEPAL_PEOPLE_CARD_MAX,
+			'addLabel'    => __( 'Add person', 'iflynepal' ),
+			'maxMessage'  => sprintf(
+				/* translators: %d: maximum number of people in the rail. */
+				__( 'Maximum %d people allowed.', 'iflynepal' ),
+				IFLYNEPAL_PEOPLE_CARD_MAX
+			),
+			/* translators: %d: person number. */
+			'removeLabel' => __( 'Remove person %d', 'iflynepal' ),
 		)
 	);
 

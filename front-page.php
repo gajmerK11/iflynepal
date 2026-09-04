@@ -18,6 +18,8 @@ get_header();
 	get_template_part( 'template-parts/home/hero-section' );
 	get_template_part( 'template-parts/home/explore-section' );
 	get_template_part( 'template-parts/home/trust-section' );
+	get_template_part( 'template-parts/home/people-section' );
+	get_template_part( 'template-parts/sections/testimonials' );
 	?>
 </main><!-- #primary -->
 

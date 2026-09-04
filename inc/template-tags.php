@@ -97,3 +97,34 @@ function iflynepal_has_explore() {
 function iflynepal_has_trust() {
 	return is_front_page();
 }
+
+/**
+ * Whether the current request renders the People section.
+ *
+ * Unlike the sections above it, this one can legitimately be absent: the rail
+ * is the section, and an editor who removes every person removes it. The
+ * template returns early in that case, so the check has to look at the content
+ * as well as the template.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_people() {
+	return is_front_page() && iflynepal_people_has_cards();
+}
+
+/**
+ * Whether the current request renders a testimonial section.
+ *
+ * The section is reusable and can appear on any template, so this asks whether
+ * there is anything to show rather than which page is being viewed. Anything
+ * that renders it needs the carousel script.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_testimonials() {
+	return (bool) iflynepal_get_testimonials( array( 'limit' => 1 ) );
+}

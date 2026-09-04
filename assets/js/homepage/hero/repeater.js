@@ -7,9 +7,10 @@
  * its setting, which is what the render side reads as "skip this one".
  *
  * The code itself is panel-agnostic and is shared across the homepage: the
- * hero's trust points, the Explore cards' links and the Why-trust logo bands
- * all run on it. Which settings form a list, and what an empty slot holds, are
- * decided by the caller — see trust-points.js alongside this file.
+ * hero's trust points, the Explore cards' links, the Why-trust logo bands and
+ * the People rail all run on it. Which settings form a list, and what an empty
+ * slot holds, are decided by the caller — see trust-points.js alongside this
+ * file.
  *
  * @package IFly_Nepal
  * @since   1.0.0
@@ -36,7 +37,9 @@
 	 * @param {number} [config.minVisible] Slots always shown, even when empty. Defaults to 0.
 	 * @param {*}      [config.emptyValue] What an empty slot holds. Defaults to the empty
 	 *                                    string; media controls store an attachment ID and
-	 *                                    hold 0, which would otherwise read as a value.
+	 *                                    hold 0, which would otherwise read as a value. Pass
+	 *                                    a function taking a setting ID when one slot mixes
+	 *                                    the two — a person's name beside their photograph.
 	 * @return {void}
 	 */
 	window.iflynepalCustomizer.repeater = function ( config ) {
@@ -44,6 +47,16 @@
 		var minVisible = config.minVisible || 0;
 		var emptyValue = config.hasOwnProperty( 'emptyValue' ) ? config.emptyValue : '';
 		var anchorControl = api.control( config.anchor );
+
+		/**
+		 * What counts as empty for one setting.
+		 *
+		 * @param {string} id Setting ID.
+		 * @return {*} The empty value for that setting.
+		 */
+		function emptyValueFor( id ) {
+			return 'function' === typeof emptyValue ? emptyValue( id ) : emptyValue;
+		}
 
 		config.slots.forEach( function ( entry, index ) {
 			var ids = Array.isArray( entry ) ? entry : [ entry ];
@@ -109,7 +122,7 @@
 
 				var value = String( setting.get() ).trim();
 
-				return '' !== value && String( emptyValue ) !== value;
+				return '' !== value && String( emptyValueFor( id ) ) !== value;
 			} );
 		}
 
@@ -179,7 +192,7 @@
 					var setting = api( id );
 
 					if ( setting ) {
-						setting.set( emptyValue );
+						setting.set( emptyValueFor( id ) );
 					}
 				} );
 

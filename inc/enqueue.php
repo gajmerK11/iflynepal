@@ -47,14 +47,17 @@ function iflynepal_enqueue_assets() {
 
 	/*
 	 * GSAP is the theme's one heavy dependency, so it is loaded only on pages
-	 * that actually animate — currently the hero, the Explore Cards and the
-	 * Why-trust section. A template with none of them pays nothing.
+	 * that actually animate — currently the hero, the Explore Cards, the
+	 * Why-trust section, the People rail and the testimonial section. A template
+	 * with none of them pays nothing.
 	 */
-	$has_hero    = iflynepal_has_hero();
-	$has_explore = iflynepal_has_explore();
-	$has_trust   = iflynepal_has_trust();
+	$has_hero         = iflynepal_has_hero();
+	$has_explore      = iflynepal_has_explore();
+	$has_trust        = iflynepal_has_trust();
+	$has_people       = iflynepal_has_people();
+	$has_testimonials = iflynepal_has_testimonials();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials ) {
 		return;
 	}
 
@@ -137,8 +140,91 @@ function iflynepal_enqueue_assets() {
 			)
 		);
 	}
+
+	if ( $has_people ) {
+		wp_enqueue_script(
+			'iflynepal-people-reveal',
+			IFLYNEPAL_URI . '/assets/js/homepage/people/reveal.js',
+			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
+			iflynepal_asset_version( 'assets/js/homepage/people/reveal.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	if ( $has_testimonials ) {
+		wp_enqueue_script(
+			'iflynepal-sections-reveal',
+			IFLYNEPAL_URI . '/assets/js/sections/reveal.js',
+			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
+			iflynepal_asset_version( 'assets/js/sections/reveal.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_assets' );
+
+/**
+ * Enqueues the People rail's previous and next buttons.
+ *
+ * Kept out of the animation bundle because it needs no GSAP: the rail is a
+ * plain scrolling row, and the buttons work whether or not anything animates.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_enqueue_people_rail() {
+	if ( ! iflynepal_has_people() ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'iflynepal-people-rail',
+		IFLYNEPAL_URI . '/assets/js/homepage/people/rail.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/homepage/people/rail.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_people_rail' );
+
+/**
+ * Enqueues the testimonial carousel.
+ *
+ * Kept out of the animation bundle because it needs no GSAP, and enqueued on
+ * whatever template renders the section rather than on the front page alone —
+ * the template part is reusable.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_enqueue_testimonials() {
+	if ( ! iflynepal_has_testimonials() ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'iflynepal-testimonials',
+		IFLYNEPAL_URI . '/assets/js/sections/testimonials.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/sections/testimonials.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_testimonials' );
 
 /**
  * Enqueues the navigation toggle on every template that renders a menu.

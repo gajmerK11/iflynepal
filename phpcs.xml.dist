@@ -55,6 +55,14 @@
 				<element value="iflynepal_render_trust_promo_description"/>
 				<element value="iflynepal_render_trust_promo_button"/>
 				<element value="iflynepal_render_trust_logos"/>
+				<element value="iflynepal_render_people_kicker"/>
+				<element value="iflynepal_render_people_title"/>
+				<element value="iflynepal_render_people_lead"/>
+				<element value="iflynepal_render_people_cta"/>
+				<element value="iflynepal_render_people_card_photo"/>
+				<element value="iflynepal_render_people_card_title"/>
+				<element value="iflynepal_render_people_card_name"/>
+				<element value="iflynepal_render_people_card_country"/>
 			</property>
 		</properties>
 	</rule>
