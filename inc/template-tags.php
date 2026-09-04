@@ -128,3 +128,14 @@ function iflynepal_has_people() {
 function iflynepal_has_testimonials() {
 	return (bool) iflynepal_get_testimonials( array( 'limit' => 1 ) );
 }
+
+/**
+ * Whether the current request renders the FAQ / Travel Guide section.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_guides() {
+	return is_front_page();
+}

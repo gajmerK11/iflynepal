@@ -56,8 +56,9 @@ function iflynepal_enqueue_assets() {
 	$has_trust        = iflynepal_has_trust();
 	$has_people       = iflynepal_has_people();
 	$has_testimonials = iflynepal_has_testimonials();
+	$has_guides       = iflynepal_has_guides();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides ) {
 		return;
 	}
 
@@ -147,6 +148,34 @@ function iflynepal_enqueue_assets() {
 			IFLYNEPAL_URI . '/assets/js/homepage/people/reveal.js',
 			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
 			iflynepal_asset_version( 'assets/js/homepage/people/reveal.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	if ( $has_guides ) {
+		wp_enqueue_script(
+			'iflynepal-guides-reveal',
+			IFLYNEPAL_URI . '/assets/js/homepage/guides/reveal.js',
+			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
+			iflynepal_asset_version( 'assets/js/homepage/guides/reveal.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+
+		/*
+		 * The accordion is listed after GSAP but does not require it: with GSAP
+		 * absent it toggles without the height tween.
+		 */
+		wp_enqueue_script(
+			'iflynepal-guides-faq',
+			IFLYNEPAL_URI . '/assets/js/homepage/guides/faq.js',
+			array( 'iflynepal-gsap' ),
+			iflynepal_asset_version( 'assets/js/homepage/guides/faq.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,

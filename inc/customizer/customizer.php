@@ -16,6 +16,8 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/hero.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/explore.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/trust.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/people.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/faq.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/travel-guide.php';
 
 /**
  * Registers the theme's panels and sections.
@@ -36,16 +38,32 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	);
 
 	/*
+	 * A panel of its own rather than another Homepage section: the two columns
+	 * are edited separately and each needs a section, and a section cannot hold
+	 * sections. It sits beside Homepage in the list, not inside it — panels
+	 * cannot nest.
+	 */
+	$wp_customize->add_panel(
+		'iflynepal_guides',
+		array(
+			'title'       => __( 'FAQ / Travel Guide', 'iflynepal' ),
+			'description' => __( 'The planning section near the foot of the front page: questions on the left, travel guides on the right.', 'iflynepal' ),
+			'priority'    => 31,
+		)
+	);
+
+	/*
 	 * Control classes extend WP_Customize_Control, which only exists once the
 	 * Customizer is being registered — so they load here rather than at the top
 	 * of the file.
 	 */
 	require_once IFLYNEPAL_DIR . '/inc/customizer/controls/class-ifly-nepal-customize-heading-control.php';
-
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/hero.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/explore.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/trust.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/people.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/faq.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/travel-guide.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
 
@@ -143,6 +161,30 @@ function iflynepal_customizer_controls_assets() {
 	);
 
 	wp_enqueue_script(
+		'iflynepal-customizer-faq-items',
+		IFLYNEPAL_URI . '/assets/js/homepage/guides/faq-items.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/homepage/guides/faq-items.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'iflynepal-customizer-faq-items',
+		'iflynepalFaqItems',
+		array(
+			'max'         => IFLYNEPAL_FAQ_MAX,
+			'addLabel'    => __( 'Add question', 'iflynepal' ),
+			'maxMessage'  => sprintf(
+				/* translators: %d: maximum number of questions. */
+				__( 'Maximum %d questions allowed.', 'iflynepal' ),
+				IFLYNEPAL_FAQ_MAX
+			),
+			/* translators: %d: question number. */
+			'removeLabel' => __( 'Remove question %d', 'iflynepal' ),
+		)
+	);
+
+	wp_enqueue_script(
 		'iflynepal-customizer-people-cards',
 		IFLYNEPAL_URI . '/assets/js/homepage/people/cards.js',
 		array( 'iflynepal-customizer-repeater' ),
@@ -213,6 +255,7 @@ function iflynepal_customizer_controls_styles() {
 			font-size: 14px;
 			font-weight: 600;
 		}
+
 	</style>
 	<?php
 }

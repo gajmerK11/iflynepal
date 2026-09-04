@@ -64,6 +64,14 @@
 				<element value="iflynepal_render_people_card_name"/>
 				<element value="iflynepal_render_people_card_country"/>
 				<element value="iflynepal_render_testimonial_platform_icon"/>
+				<element value="iflynepal_render_faq_kicker"/>
+				<element value="iflynepal_render_faq_title"/>
+				<element value="iflynepal_render_faq_items"/>
+				<element value="iflynepal_render_faq_cta"/>
+				<element value="iflynepal_render_guide_kicker"/>
+				<element value="iflynepal_render_guide_title"/>
+				<element value="iflynepal_render_guide_posts"/>
+				<element value="iflynepal_render_guide_cta"/>
 
 				<!-- Core builds and escapes this markup itself; it is captured with 'echo' => 0 and printed. -->
 				<element value="wp_dropdown_pages"/>
