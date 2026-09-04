@@ -26,11 +26,15 @@
  *
  *     @type string  $id           Section id, used as the anchor. Default 'proof'.
  *     @type string  $kicker       Small line above the cards. Default 'Traveller proof'.
+ *     @type int|string $page      Page whose reviews to show. 'current' (the default)
+ *                                reads the page being viewed; 0 shows every review.
  *     @type int     $limit        Most reviews to show. -1 for all. Default -1.
  *     @type int[]   $include      Specific testimonial IDs, in the order given.
- *     @type string  $note         Handwritten note beside the platform links.
+ *     @type string  $note         Handwritten note. Defaults to the one saved on
+ *                                Testimonials > Add External Testimonial Links.
  *     @type bool    $show_sources Whether to draw the platform strip. Default true.
- *     @type array[] $sources      Platform links, each with 'key', 'label' and 'url'.
+ *     @type array[] $sources      Platform links, each with 'slug', 'label' and 'url'.
+ *                                Defaults to the links saved on that same screen.
  * }
  */
 
@@ -39,29 +43,20 @@ defined( 'ABSPATH' ) || exit;
 $iflynepal_args = wp_parse_args(
 	isset( $args ) ? $args : array(),
 	array(
+		'page'         => 'current',
 		'id'           => 'proof',
 		'kicker'       => __( 'Traveller proof', 'iflynepal' ),
 		'limit'        => -1,
 		'include'      => array(),
-		'note'         => __( 'Others have shared theirs too, right here', 'iflynepal' ),
+		'note'         => iflynepal_testimonial_links_note(),
 		'show_sources' => true,
-		'sources'      => array(
-			array(
-				'key'   => 'google',
-				'label' => __( 'Google Reviews', 'iflynepal' ),
-				'url'   => 'https://www.google.com/search?q=iFly+Nepal+reviews',
-			),
-			array(
-				'key'   => 'tripadvisor',
-				'label' => __( 'Tripadvisor', 'iflynepal' ),
-				'url'   => 'https://www.tripadvisor.com/Search?q=iFly%20Nepal',
-			),
-		),
+		'sources'      => iflynepal_testimonial_links(),
 	)
 );
 
 $iflynepal_testimonials = iflynepal_get_testimonials(
 	array(
+		'page'    => $iflynepal_args['page'],
 		'limit'   => $iflynepal_args['limit'],
 		'include' => $iflynepal_args['include'],
 	)
@@ -123,9 +118,25 @@ if ( ! $iflynepal_testimonials ) {
 
 								<?php if ( '' !== $iflynepal_byline ) : ?>
 									<figcaption class="iflynepal-testimonials__by">
-										<span class="iflynepal-testimonials__avatar" aria-hidden="true">
-											<svg viewBox="0 0 40 40" focusable="false"><circle cx="20" cy="16" r="5.5"/><path d="M9.5 32.5c1.6-5 5.6-7.5 10.5-7.5s8.9 2.5 10.5 7.5"/></svg>
-										</span>
+										<?php if ( $iflynepal_testimonial['photo'] ) : ?>
+											<?php
+											// Built by wp_get_attachment_image(), which escapes its own output.
+											echo wp_get_attachment_image(
+												$iflynepal_testimonial['photo'],
+												array( 80, 80 ),
+												false,
+												array(
+													'class' => 'iflynepal-testimonials__photo',
+													'alt' => '',
+													'loading' => 'lazy',
+												)
+											); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+											?>
+										<?php else : ?>
+											<span class="iflynepal-testimonials__avatar" aria-hidden="true">
+												<svg viewBox="0 0 40 40" focusable="false"><circle cx="20" cy="16" r="5.5"/><path d="M9.5 32.5c1.6-5 5.6-7.5 10.5-7.5s8.9 2.5 10.5 7.5"/></svg>
+											</span>
+										<?php endif; ?>
 										<span class="iflynepal-testimonials__name"><?php echo esc_html( $iflynepal_byline ); ?></span>
 									</figcaption>
 								<?php endif; ?>
@@ -139,7 +150,15 @@ if ( ! $iflynepal_testimonials ) {
 
 	<?php if ( $iflynepal_args['show_sources'] && $iflynepal_args['sources'] ) : ?>
 		<div class="iflynepal-testimonials__inner">
-			<div class="iflynepal-testimonials__verify" data-iflynepal-reveal>
+			<?php
+			/*
+			 * No reveal hook on this block, deliberately. The platform buttons and
+			 * the note beside them are simply present from the first paint and stay
+			 * that way; they are not scrolled into being like the heading and the
+			 * cards above them.
+			 */
+			?>
+			<div class="iflynepal-testimonials__verify">
 
 				<?php if ( '' !== $iflynepal_args['note'] ) : ?>
 					<span class="iflynepal-testimonials__note">
@@ -158,39 +177,17 @@ if ( ! $iflynepal_testimonials ) {
 							continue;
 						}
 
-						$iflynepal_source_key = isset( $iflynepal_source['key'] ) ? $iflynepal_source['key'] : '';
+						$iflynepal_slug = isset( $iflynepal_source['slug'] ) ? $iflynepal_source['slug'] : '';
 						?>
 						<a class="iflynepal-testimonials__source" href="<?php echo esc_url( $iflynepal_source['url'] ); ?>" rel="noopener">
 							<?php
 							/*
-							 * The brand marks are printed literally rather than
-							 * built from data: they are multi-coloured logos, so
-							 * they cannot take their colour from the button, and
-							 * an editor has no business editing a trademark.
+							 * The brand mark comes from the theme's own platform registry
+							 * as literal markup: these are multi-coloured logos, so they
+							 * cannot take their colour from the button around them, and a
+							 * trademark is not an editor's to edit.
 							 */
-							switch ( $iflynepal_source_key ) {
-								case 'google':
-									?>
-									<svg class="iflynepal-testimonials__brand" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-										<path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.46a5.52 5.52 0 0 1-2.4 3.62v3h3.88c2.27-2.09 3.58-5.17 3.58-8.81z"/>
-										<path fill="#34A853" d="M12 24c3.24 0 5.96-1.08 7.94-2.92l-3.88-3c-1.08.72-2.45 1.15-4.06 1.15-3.13 0-5.78-2.11-6.73-4.96H1.26v3.09A11.99 11.99 0 0 0 12 24z"/>
-										<path fill="#FBBC05" d="M5.27 14.27a7.2 7.2 0 0 1 0-4.54V6.64H1.26a12 12 0 0 0 0 10.72l4.01-3.09z"/>
-										<path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.44-3.44C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.69 1.26 6.64l4.01 3.09C6.22 6.86 8.87 4.75 12 4.75z"/>
-									</svg>
-									<?php
-									break;
-
-								case 'tripadvisor':
-									?>
-									<svg class="iflynepal-testimonials__brand" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-										<circle cx="12" cy="12" r="11.5" fill="#34E0A1"/>
-										<path fill="#000" d="M12 5.6c2.6 0 5 .63 7 1.72h3.4l-1.9 2.07c.5.83.79 1.8.79 2.85a5.5 5.5 0 0 1-9.29 3.99A5.5 5.5 0 0 1 2.71 12.24c0-1.04.29-2.02.79-2.85L1.6 7.32H5c2-1.09 4.4-1.72 7-1.72z"/>
-										<circle cx="7.5" cy="12.3" r="3.1" fill="#fff"/><circle cx="7.5" cy="12.3" r="1.4" fill="#000"/>
-										<circle cx="16.5" cy="12.3" r="3.1" fill="#fff"/><circle cx="16.5" cy="12.3" r="1.4" fill="#000"/>
-									</svg>
-									<?php
-									break;
-							}
+							echo iflynepal_render_testimonial_platform_icon( $iflynepal_slug );
 							?>
 							<?php echo esc_html( $iflynepal_source['label'] ); ?>
 							<svg class="iflynepal-ico iflynepal-ico-ext" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg>

@@ -227,6 +227,49 @@ function iflynepal_enqueue_testimonials() {
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_testimonials' );
 
 /**
+ * Enqueues the media library on the Testimonials editor screen.
+ *
+ * Only there: wp_enqueue_media() is not small, and no other screen this theme
+ * owns needs a media frame in a meta box.
+ *
+ * @since 1.0.0
+ *
+ * @param string $hook_suffix Admin screen the request is for.
+ * @return void
+ */
+function iflynepal_enqueue_testimonial_admin( $hook_suffix ) {
+	if ( ! in_array( $hook_suffix, array( 'post.php', 'post-new.php' ), true ) ) {
+		return;
+	}
+
+	$screen = get_current_screen();
+
+	if ( ! $screen || IFLYNEPAL_TESTIMONIAL_POST_TYPE !== $screen->post_type ) {
+		return;
+	}
+
+	wp_enqueue_media();
+
+	wp_enqueue_script(
+		'iflynepal-testimonial-photo',
+		IFLYNEPAL_URI . '/assets/js/admin/testimonial-photo.js',
+		array( 'jquery' ),
+		iflynepal_asset_version( 'assets/js/admin/testimonial-photo.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'iflynepal-testimonial-photo',
+		'iflynepalTestimonialPhoto',
+		array(
+			'title'  => __( 'Reviewer photo', 'iflynepal' ),
+			'button' => __( 'Use this photo', 'iflynepal' ),
+		)
+	);
+}
+add_action( 'admin_enqueue_scripts', 'iflynepal_enqueue_testimonial_admin' );
+
+/**
  * Enqueues the navigation toggle on every template that renders a menu.
  *
  * Kept separate from the hero bundle so pages without a hero still get a

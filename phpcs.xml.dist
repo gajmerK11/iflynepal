@@ -63,6 +63,10 @@
 				<element value="iflynepal_render_people_card_title"/>
 				<element value="iflynepal_render_people_card_name"/>
 				<element value="iflynepal_render_people_card_country"/>
+				<element value="iflynepal_render_testimonial_platform_icon"/>
+
+				<!-- Core builds and escapes this markup itself; it is captured with 'echo' => 0 and printed. -->
+				<element value="wp_dropdown_pages"/>
 			</property>
 		</properties>
 	</rule>

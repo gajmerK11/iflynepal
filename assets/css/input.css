@@ -1654,6 +1654,12 @@
 		@apply flex items-center justify-center;
 	}
 
+	/* The reviewer's own photograph, when one has been uploaded. */
+	.iflynepal-testimonials__photo {
+		@apply block h-10 w-10 shrink-0 rounded-full object-cover;
+		margin-right: 10px;
+	}
+
 	/* Stands in for a photograph, which a review from a platform never carries. */
 	.iflynepal-testimonials__avatar {
 		@apply grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sand;
@@ -1708,13 +1714,20 @@
 		opacity: 0.9;
 	}
 
+	/*
+	 * Two buttons to a row, a third starting a second row. The strip itself
+	 * is centred on the cross axis, so a second row pushes the handwritten
+	 * note down to sit level with the middle of the block rather than with
+	 * the first row.
+	 */
 	.iflynepal-testimonials__sources {
-		@apply flex flex-wrap justify-end;
+		@apply grid justify-end;
+		grid-template-columns: repeat(2, minmax(0, max-content));
 		gap: 10px;
 	}
 
 	.iflynepal-testimonials__source {
-		@apply inline-flex items-center bg-white font-extrabold no-underline;
+		@apply inline-flex w-max items-center bg-white font-extrabold no-underline;
 		gap: 8px;
 		padding: 10px 16px;
 		border: 1px solid var(--iflynepal-line);

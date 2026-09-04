@@ -2,10 +2,11 @@
 /**
  * Testimonials post type.
  *
- * One traveller review per post. The four fields an editor fills in live in a
- * meta box (inc/meta-boxes/class-ifly-nepal-testimonial-meta-box.php); the post
- * title is only an internal label, so a review can be found in the admin list
- * without reading its whole quote.
+ * One traveller review per post. Everything an editor fills in lives in a meta
+ * box (inc/meta-boxes/class-ifly-nepal-testimonial-meta-box.php). There is no
+ * title field: the title is generated from the page the review is assigned to,
+ * as "Home Testimonial 1", so the admin list reads as an ordered set per page
+ * without anyone having to name anything.
  *
  * The type is registered by the theme at the developer's instruction. The
  * consequence is worth knowing: theme_mods and post types registered in a theme
@@ -86,45 +87,27 @@ function iflynepal_register_testimonial_cpt() {
 			'map_meta_cap'        => true,
 
 			/*
-			 * The editor is not supported: the review body is a meta field, so a
-			 * second free-form content area would only be somewhere for copy to
-			 * get lost. Page attributes carry menu_order, which is how the
+			 * Neither the editor nor the title is supported. The review body is a
+			 * meta field, so a second free-form content area would only be
+			 * somewhere for copy to get lost; the title is generated on save from
+			 * the assigned page, so a box for it would only invite a value that
+			 * gets overwritten. Page attributes carry menu_order, which is how the
 			 * running order of the cards is set.
 			 */
-			'supports'            => array( 'title', 'page-attributes' ),
+			'supports'            => array( 'page-attributes' ),
 		)
 	);
 }
 add_action( 'init', 'iflynepal_register_testimonial_cpt' );
-
-/**
- * Renames the title field, which holds an internal label rather than a heading.
- *
- * Nothing on the front end prints the post title, so without this an editor has
- * no way of knowing what belongs in it.
- *
- * @since 1.0.0
- *
- * @param string  $text Placeholder text.
- * @param WP_Post $post Post being edited.
- * @return string Filtered placeholder.
- */
-function iflynepal_testimonial_title_placeholder( $text, $post ) {
-	if ( IFLYNEPAL_TESTIMONIAL_POST_TYPE === $post->post_type ) {
-		return __( 'Internal label, e.g. Marcus — Everest Base Camp', 'iflynepal' );
-	}
-
-	return $text;
-}
-add_filter( 'enter_title_here', 'iflynepal_testimonial_title_placeholder', 10, 2 );
 
 /* --------------------------------------------------------------- admin list */
 
 /**
  * Puts the review's own fields in the Testimonials list table.
  *
- * The post title is an internal label, so a list of titles alone would not show
- * an editor which review is which.
+ * The generated title says which page a review belongs to and its place in that
+ * page's set, but not what it says, so the review's own fields are shown beside
+ * it.
  *
  * @since 1.0.0
  *
@@ -134,10 +117,11 @@ add_filter( 'enter_title_here', 'iflynepal_testimonial_title_placeholder', 10, 2
 function iflynepal_testimonial_columns( $columns ) {
 	return array(
 		'cb'               => isset( $columns['cb'] ) ? $columns['cb'] : '',
-		'title'            => __( 'Label', 'iflynepal' ),
+		'title'            => __( 'Testimonial', 'iflynepal' ),
 		'review_headline'  => __( 'Headline', 'iflynepal' ),
 		'reviewer_name'    => __( 'Reviewer', 'iflynepal' ),
 		'reviewer_country' => __( 'Country', 'iflynepal' ),
+		'display_page'     => __( 'Shown on', 'iflynepal' ),
 		'date'             => isset( $columns['date'] ) ? $columns['date'] : __( 'Date', 'iflynepal' ),
 	);
 }
@@ -159,6 +143,15 @@ function iflynepal_testimonial_column_content( $column, $post_id ) {
 		'reviewer_country' => '_iflynepal_reviewer_country',
 	);
 
+	if ( 'display_page' === $column ) {
+		$page_id = (int) get_post_meta( $post_id, '_iflynepal_display_page', true );
+		$title   = $page_id ? get_the_title( $page_id ) : '';
+
+		echo '' === $title ? '—' : esc_html( $title );
+
+		return;
+	}
+
 	if ( ! isset( $keys[ $column ] ) ) {
 		return;
 	}
@@ -168,6 +161,90 @@ function iflynepal_testimonial_column_content( $column, $post_id ) {
 	echo '' === $value ? '—' : esc_html( $value );
 }
 add_action( 'manage_' . IFLYNEPAL_TESTIMONIAL_POST_TYPE . '_posts_custom_column', 'iflynepal_testimonial_column_content', 10, 2 );
+
+/* ------------------------------------------------------------------- title */
+
+/**
+ * The naming stem for reviews assigned to a page.
+ *
+ * @since 1.0.0
+ *
+ * @param int $page_id Assigned page, 0 when there is none.
+ * @return string Stem, without a number.
+ */
+function iflynepal_testimonial_title_stem( $page_id ) {
+	$page_title = $page_id ? trim( (string) get_the_title( $page_id ) ) : '';
+
+	if ( '' === $page_title ) {
+		return __( 'Unassigned Testimonial', 'iflynepal' );
+	}
+
+	return sprintf(
+		/* translators: %s: the page the review is shown on. */
+		__( '%s Testimonial', 'iflynepal' ),
+		$page_title
+	);
+}
+
+/**
+ * The title a review should carry, given the page it is assigned to.
+ *
+ * Numbered per page — "Home Testimonial 1", "Home Testimonial 2" — so the admin
+ * list reads as an ordered set for each page it serves.
+ *
+ * A review already numbered under its current page keeps the number it has, so
+ * re-saving does not renumber it. Moving one to another page renames it into
+ * that page's sequence instead. The next number is one past the **highest** in
+ * use rather than one past the count, so deleting a review from the middle of a
+ * page's set cannot make the next one collide with a title already taken.
+ *
+ * @since 1.0.0
+ *
+ * @param int $post_id Review being saved.
+ * @return string Title.
+ */
+function iflynepal_testimonial_generated_title( $post_id ) {
+	$page_id = (int) get_post_meta( $post_id, '_iflynepal_display_page', true );
+	$stem    = iflynepal_testimonial_title_stem( $page_id );
+	$pattern = '/^' . preg_quote( $stem, '/' ) . ' (\d+)$/';
+	$current = (string) get_post_field( 'post_title', $post_id );
+
+	// Already numbered under this page: leave the number alone.
+	if ( preg_match( $pattern, $current ) ) {
+		return $current;
+	}
+
+	/*
+	 * Every other review is read rather than queried by meta: the set is a
+	 * handful of posts, and an unassigned review has no meta row to match on,
+	 * which a meta query would have to special-case.
+	 */
+	$siblings = get_posts(
+		array(
+			'post_type'              => IFLYNEPAL_TESTIMONIAL_POST_TYPE,
+			'post_status'            => 'any',
+			'numberposts'            => -1,
+			'post__not_in'           => array( $post_id ),
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_post_term_cache' => false,
+		)
+	);
+
+	$highest = 0;
+
+	foreach ( $siblings as $sibling_id ) {
+		if ( (int) get_post_meta( $sibling_id, '_iflynepal_display_page', true ) !== $page_id ) {
+			continue;
+		}
+
+		if ( preg_match( $pattern, (string) get_post_field( 'post_title', $sibling_id ), $matches ) ) {
+			$highest = max( $highest, (int) $matches[1] );
+		}
+	}
+
+	return $stem . ' ' . ( $highest + 1 );
+}
 
 /* -------------------------------------------------------------------- query */
 
@@ -183,15 +260,19 @@ add_action( 'manage_' . IFLYNEPAL_TESTIMONIAL_POST_TYPE . '_posts_custom_column'
  * @param array $args {
  *     Optional. Selection arguments.
  *
- *     @type int   $limit   Maximum to return. -1 for all. Default -1.
- *     @type int[] $include Specific post IDs, in the order given. Default empty.
+ *     @type int|string $page    Page the reviews are assigned to. 'current' (the
+ *                               default) reads the page being viewed; 0 drops the
+ *                               filter and returns every review.
+ *     @type int        $limit   Maximum to return. -1 for all. Default -1.
+ *     @type int[]      $include Specific post IDs, in the order given. Default empty.
  * }
- * @return array[] Testimonials, each with 'id', 'headline', 'body', 'name' and 'country'.
+ * @return array[] Testimonials, each with 'id', 'headline', 'body', 'name', 'country' and 'photo'.
  */
 function iflynepal_get_testimonials( $args = array() ) {
 	$args = wp_parse_args(
 		$args,
 		array(
+			'page'    => 'current',
 			'limit'   => -1,
 			'include' => array(),
 		)
@@ -208,6 +289,24 @@ function iflynepal_get_testimonials( $args = array() ) {
 		'no_found_rows'          => true,
 		'update_post_term_cache' => false,
 	);
+
+	/*
+	 * A review belongs to one page, so the section shows the reviews assigned
+	 * to the page being viewed and nothing else. An explicit 0 turns that off,
+	 * for a caller that wants the whole set.
+	 */
+	$page = 'current' === $args['page'] ? get_queried_object_id() : (int) $args['page'];
+
+	if ( $page ) {
+		$query_args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- The set is small and the alternative is fetching every review on every page.
+			array(
+				'key'     => '_iflynepal_display_page',
+				'value'   => $page,
+				'compare' => '=',
+				'type'    => 'NUMERIC',
+			),
+		);
+	}
 
 	if ( $args['include'] ) {
 		$query_args['post__in'] = array_map( 'absint', (array) $args['include'] );
@@ -231,6 +330,7 @@ function iflynepal_get_testimonials( $args = array() ) {
 			'body'     => $body,
 			'name'     => (string) get_post_meta( $post->ID, '_iflynepal_reviewer_name', true ),
 			'country'  => (string) get_post_meta( $post->ID, '_iflynepal_reviewer_country', true ),
+			'photo'    => (int) get_post_meta( $post->ID, '_iflynepal_reviewer_photo', true ),
 		);
 	}
 
