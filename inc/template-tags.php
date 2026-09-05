@@ -139,3 +139,14 @@ function iflynepal_has_testimonials() {
 function iflynepal_has_guides() {
 	return is_front_page();
 }
+
+/**
+ * Whether the current request renders the closing call to action.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_cta() {
+	return is_front_page();
+}

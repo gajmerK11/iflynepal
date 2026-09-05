@@ -18,6 +18,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/trust.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/people.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/faq.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/travel-guide.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/cta.php';
 
 /**
  * Registers the theme's panels and sections.
@@ -64,6 +65,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/people.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/faq.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/travel-guide.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/cta.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
 

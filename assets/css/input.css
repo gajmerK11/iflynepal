@@ -95,6 +95,15 @@
 		 */
 		--iflynepal-underline: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20220%2014%22%20preserveAspectRatio%3D%22none%22%3E%20%3Cpath%20d%3D%22M4%209.4c36-4.6%2068-6.2%20106-5%2033%201%2066%203.8%20106%201.6%22%20fill%3D%22none%22%20stroke%3D%22%230545A7%22%20stroke-width%3D%224.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M18%2012.4c34-2.6%2064-3.4%2098-2.6%22%20fill%3D%22none%22%20stroke%3D%22%230545A7%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.5%22%2F%3E%3C%2Fsvg%3E");
 
+		/*
+		 * The same mark in gold, for the one heading that sits on a
+		 * photograph. The navy stroke above is drawn for white paper and all
+		 * but disappears against the darkened image behind the closing card;
+		 * gold is the colour this theme already uses to lift a word onto a
+		 * dark surface, and the shape, weight and animation are unchanged.
+		 */
+		--iflynepal-underline-light: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20220%2014%22%20preserveAspectRatio%3D%22none%22%3E%20%3Cpath%20d%3D%22M4%209.4c36-4.6%2068-6.2%20106-5%2033%201%2066%203.8%20106%201.6%22%20fill%3D%22none%22%20stroke%3D%22%23E3B463%22%20stroke-width%3D%224.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M18%2012.4c34-2.6%2064-3.4%2098-2.6%22%20fill%3D%22none%22%20stroke%3D%22%23E3B463%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.5%22%2F%3E%3C%2Fsvg%3E");
+
 		/* Drawn here, not inlined, so the client cannot delete it out of the block. */
 		--iflynepal-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15M13 6l6 6-6 6'/%3E%3C/svg%3E");
 	}
@@ -689,7 +698,8 @@
 	 * the inked mark. Two classes deep, so it wins on specificity.
 	 */
 	.iflynepal-explore__underline,
-	.iflynepal-explore__title .underline {
+	.iflynepal-explore__title .underline,
+	.iflynepal-cta__title .underline {
 		@apply relative inline-block whitespace-nowrap;
 		text-decoration-line: none;
 	}
@@ -710,7 +720,8 @@
 	 * renders.
 	 */
 	.iflynepal-explore__underline::after,
-	.iflynepal-explore__title .underline::after {
+	.iflynepal-explore__title .underline::after,
+	.iflynepal-cta__title .underline::after {
 		content: '';
 		@apply pointer-events-none absolute block origin-left opacity-[.85];
 		left: -2%;
@@ -2009,6 +2020,127 @@
 
 		.iflynepal-guides .iflynepal-guides__card {
 			grid-template-columns: 90px 1fr;
+		}
+	}
+
+	/* ==========================================================================
+	   Closing call to action
+	   ========================================================================== */
+
+	/*
+	 * Tight against the section above it and generous below: this is the last
+	 * thing on the page before the footer, and the mockup lets it breathe on
+	 * the way out rather than on the way in.
+	 */
+	.iflynepal-cta {
+		padding: 28px 0 76px;
+	}
+
+	/*
+	 * The card is the shell, not a band inside one — it stops at the same
+	 * gutters every other section's content does, and the photograph is
+	 * clipped to its corners.
+	 *
+	 * The layout is declared here rather than inherited: the `wp-block-cover`
+	 * classes on this markup are CSS hooks only, and the core stylesheet that
+	 * normally gives them their grid/absolute behaviour is not loaded — this
+	 * theme has no block editor.
+	 */
+	.iflynepal-cta__card.wp-block-cover {
+		@apply relative isolate mx-auto grid place-items-center overflow-hidden text-center text-white;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		min-height: 520px;
+		border-radius: 34px;
+		padding: 44px;
+	}
+
+	/* Photo, then scrim, then copy — each on its own level, as in the hero. */
+	.iflynepal-cta__card .wp-block-cover__image-background {
+		@apply absolute inset-0 h-full w-full max-w-none object-cover;
+		z-index: -2;
+	}
+
+	/*
+	 * A wash over the whole frame rather than only its floor: the copy is
+	 * centred on the card, so there is no quiet corner for it to sit in and
+	 * the entire photograph has to be darkened under it.
+	 */
+	.iflynepal-cta__card.wp-block-cover .wp-block-cover__background {
+		@apply absolute inset-0 opacity-100;
+		z-index: -1;
+		background: linear-gradient(rgba(4, 26, 64, 0.3), rgba(4, 26, 64, 0.7));
+	}
+
+	.iflynepal-cta__content {
+		@apply relative w-full;
+	}
+
+	/*
+	 * White rather than navy, and no rule before the text — matching the other
+	 * kickers on this page, which carry none either.
+	 */
+	.iflynepal-cta__kicker {
+		@apply inline-flex items-center font-extrabold uppercase text-white;
+		margin: 0 0 14px;
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	.iflynepal-cta__title {
+		@apply mx-auto font-display font-medium;
+		margin-top: 0;
+		margin-bottom: 0;
+		max-width: 780px;
+		font-size: clamp(36px, 4.4vw, 60px);
+		line-height: 1.04;
+		letter-spacing: -0.025em;
+	}
+
+	/* The gold mark, so the stroke reads against the photograph behind it. */
+	.iflynepal-cta__title .underline::after {
+		background-image: var(--iflynepal-underline-light);
+	}
+
+	.iflynepal-cta__description {
+		@apply mx-auto;
+		margin-top: 18px;
+		margin-bottom: 0;
+		max-width: 620px;
+		color: rgba(255, 255, 255, 0.78);
+	}
+
+	.iflynepal-cta__actions {
+		@apply mt-9 flex flex-wrap justify-center gap-3;
+	}
+
+	/*
+	 * The same pill as the hero's actions. Repeated rather than shared with a
+	 * common class: the two sets sit in different sections and the hero's rule
+	 * is scoped to its own.
+	 */
+	.iflynepal-cta__actions .wp-block-button__link {
+		@apply inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-full border border-transparent px-5 text-sm font-extrabold no-underline;
+		transition:
+			transform 0.35s var(--iflynepal-ease),
+			background 0.3s ease,
+			border-color 0.3s ease,
+			box-shadow 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-cta__actions .wp-block-button__link:hover {
+		transform: translateY(-2px);
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-cta__card.wp-block-cover {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+	}
+
+	@media (max-width: 480px) {
+		.iflynepal-cta__card.wp-block-cover {
+			min-height: 450px;
+			padding: 26px;
 		}
 	}
 

@@ -72,6 +72,10 @@
 				<element value="iflynepal_render_guide_title"/>
 				<element value="iflynepal_render_guide_posts"/>
 				<element value="iflynepal_render_guide_cta"/>
+				<element value="iflynepal_render_cta_kicker"/>
+				<element value="iflynepal_render_cta_title"/>
+				<element value="iflynepal_render_cta_description"/>
+				<element value="iflynepal_render_cta_actions"/>
 
 				<!-- Core builds and escapes this markup itself; it is captured with 'echo' => 0 and printed. -->
 				<element value="wp_dropdown_pages"/>

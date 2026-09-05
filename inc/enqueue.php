@@ -48,8 +48,9 @@ function iflynepal_enqueue_assets() {
 	/*
 	 * GSAP is the theme's one heavy dependency, so it is loaded only on pages
 	 * that actually animate — currently the hero, the Explore Cards, the
-	 * Why-trust section, the People rail and the testimonial section. A template
-	 * with none of them pays nothing.
+	 * Why-trust section, the People rail, the testimonial section, the FAQ /
+	 * Travel Guide columns and the closing call to action. A template with none
+	 * of them pays nothing.
 	 */
 	$has_hero         = iflynepal_has_hero();
 	$has_explore      = iflynepal_has_explore();
@@ -57,8 +58,9 @@ function iflynepal_enqueue_assets() {
 	$has_people       = iflynepal_has_people();
 	$has_testimonials = iflynepal_has_testimonials();
 	$has_guides       = iflynepal_has_guides();
+	$has_cta          = iflynepal_has_cta();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta ) {
 		return;
 	}
 
@@ -176,6 +178,19 @@ function iflynepal_enqueue_assets() {
 			IFLYNEPAL_URI . '/assets/js/homepage/guides/faq.js',
 			array( 'iflynepal-gsap' ),
 			iflynepal_asset_version( 'assets/js/homepage/guides/faq.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	if ( $has_cta ) {
+		wp_enqueue_script(
+			'iflynepal-cta-reveal',
+			IFLYNEPAL_URI . '/assets/js/homepage/cta/reveal.js',
+			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
+			iflynepal_asset_version( 'assets/js/homepage/cta/reveal.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,
