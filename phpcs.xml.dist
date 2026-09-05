@@ -92,6 +92,12 @@
 				<element value="iflynepal_render_about_offer_title"/>
 				<element value="iflynepal_render_about_offer_lead"/>
 				<element value="iflynepal_render_about_offers"/>
+				<element value="iflynepal_render_footer_blurb"/>
+				<element value="iflynepal_render_footer_office"/>
+				<element value="iflynepal_render_footer_office_heading"/>
+				<element value="iflynepal_render_footer_reviews"/>
+				<element value="iflynepal_render_footer_socials"/>
+				<element value="iflynepal_render_footer_copyright"/>
 
 				<!-- Core builds and escapes this markup itself; it is captured with 'echo' => 0 and printed. -->
 				<element value="wp_dropdown_pages"/>

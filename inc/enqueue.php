@@ -360,6 +360,30 @@ function iflynepal_enqueue_navigation() {
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_navigation' );
 
 /**
+ * Enqueues the back-to-top button.
+ *
+ * On every template, because the footer is. Needs no GSAP: the scroll is
+ * window.scrollTo, and the reveal is a hidden attribute toggle.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_enqueue_back_to_top() {
+	wp_enqueue_script(
+		'iflynepal-back-to-top',
+		IFLYNEPAL_URI . '/assets/js/footer/back-to-top.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/footer/back-to-top.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_back_to_top' );
+
+/**
  * Enqueues the hero's ambient sound toggle, when a track has been uploaded.
  *
  * Kept out of the hero bundle because it needs no GSAP, and skipped entirely

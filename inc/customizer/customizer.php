@@ -20,6 +20,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/faq.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/travel-guide.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/cta.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/about.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 
 /**
  * Registers the theme's panels and sections.
@@ -69,6 +70,20 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	);
 
 	/*
+	 * The footer appears on every template, so it is a panel of its own
+	 * rather than anything under Homepage. Its three link columns are not
+	 * here — those are nav menus (inc/setup.php).
+	 */
+	$wp_customize->add_panel(
+		'iflynepal_footer',
+		array(
+			'title'       => __( 'Footer', 'iflynepal' ),
+			'description' => __( 'The navy band at the foot of every page. The link columns above it are menus — see Appearance > Menus.', 'iflynepal' ),
+			'priority'    => 33,
+		)
+	);
+
+	/*
 	 * Control classes extend WP_Customize_Control, which only exists once the
 	 * Customizer is being registered — so they load here rather than at the top
 	 * of the file.
@@ -82,6 +97,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/travel-guide.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/cta.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/about-company.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
 

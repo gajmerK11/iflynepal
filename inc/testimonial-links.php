@@ -64,6 +64,30 @@ function iflynepal_testimonial_platforms() {
 }
 
 /**
+ * The links that stand in before the screen has ever been saved.
+ *
+ * The two platforms the approved design shipped with, so the strip does not
+ * vanish from a page that was already showing it. Saving with every field
+ * empty is how it is deliberately turned off.
+ *
+ * Its own function because the Customizer's Footer panel edits the same
+ * option and has to offer these as its control defaults, or a link the front
+ * end is rendering would show as an empty box.
+ *
+ * @since 1.0.0
+ *
+ * @return string[] URLs keyed by platform slug.
+ */
+function iflynepal_testimonial_link_defaults() {
+	$platforms = iflynepal_testimonial_platforms();
+
+	return array(
+		'google'      => $platforms['google']['placeholder'],
+		'tripadvisor' => $platforms['tripadvisor']['placeholder'],
+	);
+}
+
+/**
  * Every saved link, with the empty ones dropped.
  *
  * Order follows the registry, not the order they were filled in, so the row
@@ -83,11 +107,7 @@ function iflynepal_testimonial_links() {
 	$saved = get_option( IFLYNEPAL_TESTIMONIAL_LINKS_OPTION, null );
 
 	if ( null === $saved ) {
-		$platforms = iflynepal_testimonial_platforms();
-		$saved     = array(
-			'google'      => $platforms['google']['placeholder'],
-			'tripadvisor' => $platforms['tripadvisor']['placeholder'],
-		);
+		$saved = iflynepal_testimonial_link_defaults();
 	}
 
 	if ( ! is_array( $saved ) ) {
@@ -136,11 +156,14 @@ function iflynepal_testimonial_links_note() {
  *
  * @since 1.0.0
  *
- * @param string $slug Platform slug.
+ * @param string $slug      Platform slug.
+ * @param string $css_class Optional. Class for the SVG, so the same mark can be
+ *                          sized by the testimonial strip and by the footer chips.
+ *                          Default 'iflynepal-testimonials__brand'.
  * @return string SVG markup, or an empty string for an unknown slug.
  */
-function iflynepal_render_testimonial_platform_icon( $slug ) {
-	$open  = '<svg class="iflynepal-testimonials__brand" viewBox="0 0 24 24" aria-hidden="true" focusable="false">';
+function iflynepal_render_testimonial_platform_icon( $slug, $css_class = 'iflynepal-testimonials__brand' ) {
+	$open  = '<svg class="' . esc_attr( $css_class ) . '" viewBox="0 0 24 24" aria-hidden="true" focusable="false">';
 	$close = '</svg>';
 
 	switch ( $slug ) {

@@ -1,15 +1,14 @@
 <?php
 /**
- * Footer: closes the document.
- *
- * The site footer design is not part of this build — this file exists so the
- * template hierarchy is complete and wp_footer() always fires.
+ * Footer: the site footer, then closes the document.
  *
  * @package IFly_Nepal
  * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
+
+get_template_part( 'template-parts/footer/footer-core' );
 ?>
 
 <?php wp_footer(); ?>

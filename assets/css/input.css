@@ -2526,6 +2526,341 @@
 		}
 	}
 
+	/* ==========================================================================
+	   Site footer
+	   The navy band: three menu columns and the head office, the brand line with
+	   its review chips, the follow row, and the legal bar.
+	   ========================================================================== */
+
+	.iflynepal-footer {
+		@apply relative overflow-hidden text-white;
+		background: #0b356f;
+		padding-top: 34px;
+	}
+
+	.iflynepal-footer__inner {
+		@apply mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+	}
+
+	/* ------------------------------------------------------------ columns */
+
+	.iflynepal-footer__primary {
+		@apply grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 56px;
+		padding: 44px 0 50px;
+	}
+
+	.iflynepal-footer__col-title {
+		@apply m-0 font-extrabold uppercase;
+		margin-bottom: 18px;
+		color: rgba(255, 255, 255, 0.9);
+		font-size: 15px;
+		letter-spacing: 0.04em;
+	}
+
+	/*
+	 * The links are laid out by the column itself — the walker writes bare
+	 * anchors, so there is no list to strip down. `display: table` keeps the
+	 * underline the width of the text rather than the width of the column.
+	 */
+	.iflynepal-footer__col a {
+		@apply relative table no-underline;
+		margin: 10px 0;
+		color: rgba(255, 255, 255, 0.72);
+		font-size: 16px;
+		transition:
+			color 0.25s ease,
+			transform 0.25s ease;
+	}
+
+	.iflynepal-footer__col a::before {
+		content: '';
+		@apply absolute left-0 w-full origin-left;
+		bottom: -2px;
+		height: 1px;
+		background: var(--iflynepal-accent);
+		transform: scaleX(0);
+		transition: transform 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-footer__col a:hover {
+		@apply text-white;
+		transform: translateX(3px);
+	}
+
+	.iflynepal-footer__col a:hover::before {
+		transform: scaleX(1);
+	}
+
+	.iflynepal-footer__office address {
+		@apply m-0 not-italic;
+	}
+
+	.iflynepal-footer__office-address {
+		@apply m-0 text-white;
+		margin-bottom: 18px;
+		font-size: 19px;
+		line-height: 1.35;
+	}
+
+	.iflynepal-footer__contact {
+		@apply flex items-start;
+		gap: 10px;
+		margin: 12px 0;
+		color: rgba(255, 255, 255, 0.68);
+		font-size: 15px;
+	}
+
+	.iflynepal-footer__contact .iflynepal-ico {
+		@apply mt-px shrink-0;
+		width: 20px;
+		height: 20px;
+		color: #b8d2fa;
+		stroke-width: 2.1;
+	}
+
+	.iflynepal-footer__contact a {
+		@apply no-underline;
+		transition: color 0.25s ease;
+	}
+
+	.iflynepal-footer__contact a:hover {
+		@apply text-white;
+	}
+
+	/* ---------------------------------------------------------- brand row */
+
+	.iflynepal-footer__brand-row {
+		@apply grid items-center;
+		grid-template-columns: minmax(0, 1.15fr) minmax(380px, 0.85fr);
+		gap: 48px;
+		padding: 30px 0;
+	}
+
+	.iflynepal-footer__brand {
+		@apply flex min-w-0 items-center;
+		gap: 24px;
+	}
+
+	/*
+	 * The logo is the one uploaded under Site Identity, the same file the header
+	 * uses — knocked out to white here, because it is drawn for a light bar and
+	 * this band is navy.
+	 */
+	.iflynepal-footer__brand .custom-logo-link {
+		@apply block shrink-0;
+	}
+
+	.iflynepal-footer__brand .custom-logo {
+		@apply block h-auto w-[94px] max-w-none;
+		filter: brightness(0) invert(1);
+	}
+
+	.iflynepal-footer__blurb {
+		@apply m-0 max-w-[470px];
+		color: rgba(255, 255, 255, 0.6);
+		font-size: 15px;
+	}
+
+	.iflynepal-footer__reviews {
+		@apply flex items-center justify-end;
+		gap: 16px;
+	}
+
+	.iflynepal-footer__row-label {
+		@apply shrink-0 font-extrabold uppercase;
+		color: rgba(255, 255, 255, 0.58);
+		font-size: 13px;
+		letter-spacing: 0.12em;
+	}
+
+	.iflynepal-footer__review-list {
+		@apply flex flex-nowrap;
+		gap: 9px;
+	}
+
+	.iflynepal-footer__chip {
+		@apply inline-flex items-center font-bold text-white no-underline;
+		min-height: 44px;
+		gap: 9px;
+		padding: 7px 14px 7px 8px;
+		border: 1px solid rgba(255, 255, 255, 0.24);
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.075);
+		font-size: 14px;
+		transition:
+			background 0.25s ease,
+			transform 0.25s var(--iflynepal-ease);
+	}
+
+	.iflynepal-footer__chip:hover {
+		background: rgba(255, 255, 255, 0.12);
+		transform: translateY(-2px);
+	}
+
+	/* The marks are the platforms' own colours, so they sit on white. */
+	.iflynepal-footer__chip-icon {
+		@apply grid shrink-0 place-items-center rounded-full bg-white;
+		width: 29px;
+		height: 29px;
+	}
+
+	.iflynepal-footer__chip-mark {
+		@apply block;
+		width: 19px;
+		height: 19px;
+	}
+
+	/* --------------------------------------------------------- follow row */
+
+	.iflynepal-footer__follow {
+		@apply flex items-center;
+		gap: 20px;
+		padding: 28px 0;
+	}
+
+	.iflynepal-footer__social-list {
+		@apply flex flex-wrap;
+		gap: 10px;
+	}
+
+	.iflynepal-footer__social {
+		@apply grid h-10 w-10 place-items-center rounded-full text-white no-underline;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		background: rgba(255, 255, 255, 0.065);
+		transition:
+			transform 0.3s var(--iflynepal-ease),
+			background 0.25s ease,
+			border-color 0.25s ease;
+	}
+
+	.iflynepal-footer__social svg {
+		@apply block h-[18px] w-[18px];
+	}
+
+	/*
+	 * Each button fills with its own network's colour on hover, from the inline
+	 * custom property the render callback writes. The navy fallback covers a
+	 * network added to the registry without one.
+	 */
+	.iflynepal-footer__social:hover {
+		background: var(--iflynepal-brand, var(--iflynepal-navy));
+		border-color: rgba(255, 255, 255, 0.6);
+		transform: translateY(-3px);
+	}
+
+	/* --------------------------------------------------------- legal bar */
+
+	.iflynepal-footer__bottom {
+		@apply flex items-center justify-between;
+		gap: 24px;
+		padding: 25px 0 42px;
+		color: rgba(255, 255, 255, 0.46);
+		font-size: 13px;
+	}
+
+	.iflynepal-footer__bottom strong {
+		color: rgba(255, 255, 255, 0.76);
+	}
+
+	.iflynepal-footer__legal {
+		@apply flex flex-wrap justify-end;
+		gap: 24px;
+	}
+
+	.iflynepal-footer__legal a {
+		@apply no-underline;
+		color: inherit;
+		transition: color 0.2s ease;
+	}
+
+	.iflynepal-footer__legal a:hover {
+		@apply text-white;
+	}
+
+	/* ------------------------------------------------------ back to top */
+
+	.iflynepal-back-to-top {
+		@apply fixed grid h-[50px] w-[50px] place-items-center rounded-full text-white;
+		right: 16px;
+		bottom: 32px;
+		z-index: 30;
+		border: 1px solid var(--iflynepal-navy);
+		background: var(--iflynepal-navy);
+		box-shadow: 0 10px 26px rgba(4, 26, 64, 0.24);
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			transform 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-back-to-top:hover {
+		background: var(--iflynepal-navy-deep);
+		border-color: var(--iflynepal-navy-deep);
+		transform: translateY(-2px);
+	}
+
+	.iflynepal-back-to-top .iflynepal-ico {
+		@apply h-5 w-5;
+		stroke-width: 2;
+	}
+
+	@media (min-width: 1024px) {
+		.iflynepal-back-to-top {
+			right: 80px;
+		}
+	}
+
+	@media (max-width: 1020px) {
+		.iflynepal-footer__primary {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 42px 34px;
+		}
+
+		.iflynepal-footer__brand-row {
+			grid-template-columns: 1fr;
+			gap: 24px;
+		}
+
+		.iflynepal-footer__reviews {
+			@apply justify-start;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-footer__inner {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		.iflynepal-footer__primary {
+			gap: 38px 28px;
+		}
+
+		.iflynepal-footer__brand,
+		.iflynepal-footer__reviews,
+		.iflynepal-footer__follow,
+		.iflynepal-footer__bottom {
+			@apply flex-col items-start;
+		}
+
+		.iflynepal-footer__legal {
+			@apply justify-start;
+			gap: 14px 22px;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.iflynepal-footer__primary {
+			grid-template-columns: 1fr;
+		}
+
+		.iflynepal-footer__review-list {
+			@apply flex-wrap;
+		}
+	}
+
 	/* ------------------------------------------------------------ responsive */
 	@media (max-width: 1080px) {
 		.iflynepal-nav {
