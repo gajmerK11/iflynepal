@@ -26,38 +26,48 @@ const IFLYNEPAL_TESTIMONIAL_LINKS_OPTION = 'iflynepal_testimonial_links';
  * section grows a button, with nothing else to change. Slugs are stored, so
  * reordering this list is safe and renaming a slug is not.
  *
+ * `label` names the field on the settings screen; `name` is the brand on its
+ * own, which is what the footer chips show — "Google Reviews" is the right
+ * question to ask an editor and the wrong thing to print on a button.
+ *
  * The marks for Google and Tripadvisor are the platforms' own. The rest are
  * deliberately simplified single-colour glyphs — close enough to be recognised
  * beside a label, without shipping a half-remembered trademark.
  *
  * @since 1.0.0
  *
- * @return array[] Platforms keyed by slug, each with 'label' and 'placeholder'.
+ * @return array[] Platforms keyed by slug, each with 'label', 'name' and 'placeholder'.
  */
 function iflynepal_testimonial_platforms() {
 	return array(
 		'google'      => array(
 			'label'       => __( 'Google Reviews', 'iflynepal' ),
+			'name'        => __( 'Google', 'iflynepal' ),
 			'placeholder' => 'https://www.google.com/search?q=iFly+Nepal+reviews',
 		),
 		'tripadvisor' => array(
 			'label'       => __( 'Tripadvisor', 'iflynepal' ),
+			'name'        => __( 'Tripadvisor', 'iflynepal' ),
 			'placeholder' => 'https://www.tripadvisor.com/Search?q=iFly%20Nepal',
 		),
 		'trustpilot'  => array(
 			'label'       => __( 'Trustpilot', 'iflynepal' ),
+			'name'        => __( 'Trustpilot', 'iflynepal' ),
 			'placeholder' => 'https://www.trustpilot.com/review/iflynepal.com',
 		),
 		'facebook'    => array(
 			'label'       => __( 'Facebook', 'iflynepal' ),
+			'name'        => __( 'Facebook', 'iflynepal' ),
 			'placeholder' => 'https://www.facebook.com/iflynepal/reviews',
 		),
 		'booking'     => array(
 			'label'       => __( 'Booking.com', 'iflynepal' ),
+			'name'        => __( 'Booking.com', 'iflynepal' ),
 			'placeholder' => 'https://www.booking.com/',
 		),
 		'yelp'        => array(
 			'label'       => __( 'Yelp', 'iflynepal' ),
+			'name'        => __( 'Yelp', 'iflynepal' ),
 			'placeholder' => 'https://www.yelp.com/biz/ifly-nepal',
 		),
 	);
@@ -95,7 +105,7 @@ function iflynepal_testimonial_link_defaults() {
  *
  * @since 1.0.0
  *
- * @return array[] Links, each with 'slug', 'label' and 'url'.
+ * @return array[] Links, each with 'slug', 'label', 'name' and 'url'.
  */
 function iflynepal_testimonial_links() {
 	/*
@@ -126,6 +136,7 @@ function iflynepal_testimonial_links() {
 		$links[] = array(
 			'slug'  => $slug,
 			'label' => $platform['label'],
+			'name'  => isset( $platform['name'] ) ? $platform['name'] : $platform['label'],
 			'url'   => $url,
 		);
 	}

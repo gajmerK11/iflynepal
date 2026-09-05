@@ -144,6 +144,18 @@ $iflynepal_has_legal   = has_nav_menu( IFLYNEPAL_FOOTER_LEGAL_LOCATION );
 			<?php endif; ?>
 		</div>
 
+		<?php
+		/*
+		 * The oversized wordmark along the floor of the footer. Decorative, and
+		 * hidden from assistive technology: the site's name is already read out
+		 * of the copyright line a few pixels above it, and hearing it twice in a
+		 * row tells a screen-reader user nothing they did not just hear.
+		 */
+		?>
+		<div class="iflynepal-footer__wordmark" aria-hidden="true">
+			<span><?php echo esc_html( get_bloginfo( 'name' ) ); ?></span>
+		</div>
+
 	</div>
 </footer>
 
@@ -156,5 +168,7 @@ $iflynepal_has_legal   = has_nav_menu( IFLYNEPAL_FOOTER_LEGAL_LOCATION );
  */
 ?>
 <button type="button" id="iflynepal-back-to-top" class="iflynepal-back-to-top" hidden aria-label="<?php esc_attr_e( 'Back to top', 'iflynepal' ); ?>">
-	<svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+	<svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+		<path d="M7.5 17.5H12.5M7.5 15H12.5M7.49998 10H4.51164C4.34685 9.99997 4.18577 9.95107 4.04876 9.8595C3.91175 9.76793 3.80497 9.6378 3.74191 9.48555C3.67885 9.3333 3.66235 9.16577 3.69449 9.00414C3.72663 8.84251 3.80597 8.69404 3.92248 8.5775L9.41081 3.08917C9.56708 2.93294 9.77901 2.84518 9.99998 2.84518C10.2209 2.84518 10.4329 2.93294 10.5891 3.08917L16.0775 8.5775C16.194 8.69404 16.2733 8.84251 16.3055 9.00414C16.3376 9.16577 16.3211 9.3333 16.258 9.48555C16.195 9.6378 16.0882 9.76793 15.9512 9.8595C15.8142 9.95107 15.6531 9.99997 15.4883 10H12.5V12.5H7.49998V10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+	</svg>
 </button>

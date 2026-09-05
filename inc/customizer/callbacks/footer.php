@@ -177,7 +177,7 @@ function iflynepal_footer_copyright() {
  *
  * @since 1.0.0
  *
- * @return array[] Links, each with 'slug', 'label' and 'url'.
+ * @return array[] Links, each with 'slug', 'label', 'name' and 'url'.
  */
 function iflynepal_footer_reviews() {
 	$wanted = array_flip( iflynepal_footer_review_slugs() );
@@ -266,7 +266,7 @@ function iflynepal_render_footer_office() {
 	$markup = '';
 
 	if ( '' !== $address ) {
-		$markup .= '<h4 class="iflynepal-footer__office-address">' . iflynepal_kses_text( $address ) . '</h4>';
+		$markup .= '<p class="iflynepal-footer__office-address">' . iflynepal_kses_text( $address ) . '</p>';
 	}
 
 	if ( '' !== $phone ) {
@@ -311,7 +311,7 @@ function iflynepal_render_footer_reviews() {
 			esc_url( $review['url'] ),
 			// Built from a fixed registry of inline SVG, no editor input in it.
 			iflynepal_render_testimonial_platform_icon( $review['slug'], 'iflynepal-footer__chip-mark' ),
-			esc_html( $review['label'] )
+			esc_html( $review['name'] )
 		);
 	}
 

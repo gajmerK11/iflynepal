@@ -2,9 +2,9 @@
  * Back-to-top button.
  *
  * The button ships hidden and is only revealed once the page has been scrolled
- * far enough for it to have a job, so it never sits on screen as a control that
- * does nothing. With JavaScript off it stays hidden, which is the right answer:
- * nothing would be listening for the click.
+ * past the hero and a little way into the sections below it, so it never sits
+ * on screen as a control that does nothing. With JavaScript off it stays
+ * hidden, which is the right answer: nothing would be listening for the click.
  *
  * @package IFly_Nepal
  * @since   1.0.0
@@ -19,9 +19,21 @@
 		return;
 	}
 
-	// Roughly half a viewport: far enough that the top is genuinely out of
-	// reach, near enough that the button arrives before it is wanted.
-	var showAfter = 400;
+	/*
+	 * How far down the button appears, measured in viewports rather than in
+	 * pixels.
+	 *
+	 * CloudColleague uses a flat 400px, which does not travel to this theme:
+	 * the hero fills the whole viewport, so 400px is still inside it on every
+	 * screen, and the button arrived over the headline before the visitor had
+	 * reached any content. One and a half viewports clears the hero and lands a
+	 * little way into the sections below it.
+	 *
+	 * Read on each update rather than cached, so rotating a phone or resizing a
+	 * window re-measures without a listener of its own — innerHeight is cheap,
+	 * and this only runs on an animation frame.
+	 */
+	var showAfterViewports = 1.5;
 	var ticking = false;
 
 	/**
@@ -31,7 +43,7 @@
 	 */
 	function update() {
 		ticking = false;
-		button.hidden = window.scrollY <= showAfter;
+		button.hidden = window.scrollY <= window.innerHeight * showAfterViewports;
 	}
 
 	window.addEventListener(

@@ -2598,11 +2598,16 @@
 		@apply m-0 not-italic;
 	}
 
+	/*
+	 * Set like the link columns beside it rather than as the design's 19px
+	 * white heading: same 16px, same muted white, same line height, so the
+	 * four columns read as one row of text.
+	 */
 	.iflynepal-footer__office-address {
-		@apply m-0 text-white;
+		@apply m-0 font-normal;
 		margin-bottom: 18px;
-		font-size: 19px;
-		line-height: 1.35;
+		color: rgba(255, 255, 255, 0.72);
+		font-size: 16px;
 	}
 
 	.iflynepal-footer__contact {
@@ -2682,7 +2687,7 @@
 	}
 
 	.iflynepal-footer__chip {
-		@apply inline-flex items-center font-bold text-white no-underline;
+		@apply inline-flex items-center whitespace-nowrap font-bold text-white no-underline;
 		min-height: 44px;
 		gap: 9px;
 		padding: 7px 14px 7px 8px;
@@ -2756,7 +2761,8 @@
 	.iflynepal-footer__bottom {
 		@apply flex items-center justify-between;
 		gap: 24px;
-		padding: 25px 0 42px;
+		padding: 25px 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.12);
 		color: rgba(255, 255, 255, 0.46);
 		font-size: 13px;
 	}
@@ -2782,29 +2788,138 @@
 
 	/* ------------------------------------------------------ back to top */
 
+	/* ---------------------------------------------------------- wordmark */
+
+	/*
+	 * The site's name, set large enough to run the width of the shell and
+	 * standing whole on the footer's floor — the y and the p keep their
+	 * descenders, so the block is as tall as the letters actually are.
+	 *
+	 * overflow stays hidden even though nothing is being cropped vertically
+	 * any more: it is what stops a longer site name from opening a
+	 * horizontal scrollbar across the page.
+	 */
+	.iflynepal-footer__wordmark {
+		@apply overflow-hidden;
+		/* The measuring stick for the font-size below. */
+		container-type: inline-size;
+		border-top: 1px solid rgba(255, 255, 255, 0.12);
+		padding-top: 34px;
+	}
+
+	/*
+	 * Sized to fill the shell, from a measurement rather than a guess: at 216px
+	 * this string renders 967px wide in Poppins 800, so it takes 4.477px of
+	 * width per px of font-size — hence 1 / 4.477 = 22.3% of the container,
+	 * shaved to 22.1 so a hinting difference cannot push the last letter into
+	 * the crop.
+	 *
+	 * In cqw, not vw. The shell is a percentage of the body, which excludes the
+	 * scrollbar, while vw includes it — a ~15px gap that had the word 0.5% over
+	 * its box at 1000px wide. cqw measures the block itself, so it is exact at
+	 * every width and needs no cap: the shell already stops at 1240px. The vw
+	 * line above it is the fallback for browsers without container queries, set
+	 * to under-fill rather than overflow.
+	 *
+	 * ⚠️ The ratio is tied to this typeface and to the length of the site's
+	 * name. Rename the site and it wants re-measuring — the crop hides an
+	 * overflow, so it will look deliberate rather than broken.
+	 *
+	 * The fill is a gradient rather than a flat tint: flat, it reads as a
+	 * mistake in the background; graded from the band's own lighter blue down
+	 * into it, it reads as the name sinking into the floor.
+	 */
+	.iflynepal-footer__wordmark span {
+		@apply block whitespace-nowrap font-display font-extrabold;
+		/*
+		 * ⚠️ The padding is what makes the gradient reach the whole word, and
+		 * the negative margins undo its effect on layout.
+		 *
+		 * background-clip: text paints only inside the background positioning
+		 * area — the padding box. At line-height 0.78 that box is shorter than
+		 * the letters: the ink stands 0.088em above it and falls 0.242em below.
+		 * Anything outside was being painted by the *repeated* tile rather than
+		 * by the stop meant for it, which left the tittle of the i drawn in the
+		 * gradient's near-transparent tail and looking sliced off. Padding the
+		 * box out past the ink, and turning the repeat off, fixes it at every
+		 * font-size because both values are in em.
+		 *
+		 * The two margins then take back the space the padding added, so the
+		 * word ends where its letters end. The descenders reach 0.242em past
+		 * the line box and the padding runs to 0.3em, so -0.05em pulls the
+		 * floor up to within a couple of pixels of the ink: the page stops
+		 * where the y and the p stop, with no dead band to scroll past. The
+		 * remaining ~0.008em is deliberate — it is the rounding guard that
+		 * keeps a sub-pixel from shaving the tail off.
+		 *
+		 * ⚠️ Do not take the padding down instead of adding margin. The
+		 * padding is the gradient's painting area; trimming it to the ink puts
+		 * the descenders back outside it and slices them the way the tittle
+		 * was sliced.
+		 */
+		padding-top: 0.12em;
+		padding-bottom: 0.3em;
+		margin-top: -0.12em;
+		margin-bottom: -0.05em;
+		font-size: min(calc(21.5vw - 8.6px), 268px);
+		font-size: 22.1cqw;
+		line-height: 0.78;
+		letter-spacing: -0.045em;
+		background-image: linear-gradient(
+			180deg,
+			rgba(255, 255, 255, 0.14) 8%,
+			rgba(255, 255, 255, 0.05) 68%,
+			rgba(255, 255, 255, 0.02) 100%
+		);
+		background-repeat: no-repeat;
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+		-webkit-text-fill-color: transparent;
+	}
+
+	/*
+	 * Lifted from CloudColleague, values and all: its sky-blue primary rather
+	 * than this theme's navy, its glyph (an arrow rising out of a tray, not a
+	 * bare chevron), and its focus ring.
+	 *
+	 * ⚠️ The `hidden` attribute needs an explicit rule here. The browser's own
+	 * `[hidden] { display: none }` is a user-agent style, and the `display` this
+	 * class sets is an author style — author wins, so without the line below the
+	 * button ships visible at the top of every page and the attribute does
+	 * nothing at all.
+	 */
 	.iflynepal-back-to-top {
-		@apply fixed grid h-[50px] w-[50px] place-items-center rounded-full text-white;
+		@apply fixed flex h-[50px] w-[50px] items-center justify-center rounded-full p-0 text-white;
 		right: 16px;
 		bottom: 32px;
 		z-index: 30;
-		border: 1px solid var(--iflynepal-navy);
-		background: var(--iflynepal-navy);
-		box-shadow: 0 10px 26px rgba(4, 26, 64, 0.24);
+		border: 1px solid #0284c7;
+		background: #0284c7;
+		box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
 		transition:
-			background 0.2s ease,
-			border-color 0.2s ease,
-			transform 0.3s var(--iflynepal-ease);
+			color 0.15s ease,
+			background-color 0.15s ease,
+			border-color 0.15s ease,
+			box-shadow 0.15s ease;
+	}
+
+	.iflynepal-back-to-top[hidden] {
+		@apply hidden;
 	}
 
 	.iflynepal-back-to-top:hover {
-		background: var(--iflynepal-navy-deep);
-		border-color: var(--iflynepal-navy-deep);
-		transform: translateY(-2px);
+		background: #075985;
+		border-color: #075985;
 	}
 
-	.iflynepal-back-to-top .iflynepal-ico {
+	.iflynepal-back-to-top:focus {
+		@apply outline-none;
+		box-shadow: 0 0 0 2px #7dd3fc;
+	}
+
+	.iflynepal-back-to-top svg {
 		@apply h-5 w-5;
-		stroke-width: 2;
 	}
 
 	@media (min-width: 1024px) {
