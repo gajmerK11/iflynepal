@@ -82,6 +82,16 @@
 		--iflynepal-line: rgba(5, 69, 167, 0.16);
 		--iflynepal-shadow: 0 22px 70px rgba(4, 26, 64, 0.16);
 		--iflynepal-ease: cubic-bezier(0.22, 0.7, 0.24, 1);
+
+		/*
+		 * Card motion, from the approved designs. A card rises on a strong
+		 * decel with no overshoot, and settles back on a gentler curve at both
+		 * ends so nothing snaps into place.
+		 */
+		--iflynepal-ease-card: cubic-bezier(0.16, 0.84, 0.44, 1);
+		--iflynepal-ease-card-out: cubic-bezier(0.33, 0, 0.2, 1);
+		--iflynepal-card-lift: 0.44s;
+		--iflynepal-card-fall: 0.62s;
 		--iflynepal-shell: 1240px;
 
 		/* The navigation keeps the system stack the live site's chrome uses. */
@@ -699,7 +709,8 @@
 	 */
 	.iflynepal-explore__underline,
 	.iflynepal-explore__title .underline,
-	.iflynepal-cta__title .underline {
+	.iflynepal-cta__title .underline,
+	.iflynepal-about-offers__heading .underline {
 		@apply relative inline-block whitespace-nowrap;
 		text-decoration-line: none;
 	}
@@ -721,7 +732,8 @@
 	 */
 	.iflynepal-explore__underline::after,
 	.iflynepal-explore__title .underline::after,
-	.iflynepal-cta__title .underline::after {
+	.iflynepal-cta__title .underline::after,
+	.iflynepal-about-offers__heading .underline::after {
 		content: '';
 		@apply pointer-events-none absolute block origin-left opacity-[.85];
 		left: -2%;
@@ -2141,6 +2153,376 @@
 		.iflynepal-cta__card.wp-block-cover {
 			min-height: 450px;
 			padding: 26px;
+		}
+	}
+
+	/* ==========================================================================
+	   About page
+	   The hero, the Overview grid and its promo card are the front page's own
+	   components carrying different copy - see .iflynepal-hero and
+	   .iflynepal-trust__* above. Only what the About design adds is written
+	   here: the hero's sub-title, the story column, the vision panel and the
+	   offer rows.
+	   ========================================================================== */
+
+	/*
+	 * The page hero has no trust bullets under its actions, so the sub-title is
+	 * what fills that space. Centred with the rest of the copy, and narrower
+	 * than the headline so the two do not measure the same.
+	 */
+	.iflynepal-hero__lead {
+		@apply mx-auto max-w-[700px] text-[18px];
+		margin-top: 22px;
+		margin-bottom: 0;
+		color: rgba(255, 255, 255, 0.84);
+	}
+
+	/* --------------------------------------------------------------- overview */
+
+	/*
+	 * The story reads as body copy rather than as a lead-in, so it sits at the
+	 * muted colour - with the first paragraph a step larger and in full ink, to
+	 * give the eye somewhere to start.
+	 */
+	.iflynepal-about-overview__story {
+		@apply flex flex-col justify-center;
+	}
+
+	.iflynepal-about-overview__story p {
+		margin: 0;
+		color: var(--iflynepal-muted);
+		font-size: 15.5px;
+		line-height: 1.75;
+	}
+
+	.iflynepal-about-overview__story p + p {
+		margin-top: 18px;
+	}
+
+	.iflynepal-about-overview__story p:first-child {
+		color: var(--iflynepal-ink);
+		font-size: 17px;
+	}
+
+	/* ----------------------------------------------------------------- vision */
+
+	.iflynepal-about-vision {
+		padding: 72px 0;
+	}
+
+	/*
+	 * One statement on navy. The two rings are what tie this panel to the dark
+	 * cards elsewhere in the design system, so they are drawn even though there
+	 * is nothing else in the panel - they are the recognition, not decoration.
+	 */
+	.iflynepal-about-vision__panel {
+		@apply relative isolate mx-auto overflow-hidden text-center text-white;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		border-radius: 30px;
+		background: var(--iflynepal-navy);
+		padding-block: clamp(52px, 6vw, 84px);
+		padding-inline: clamp(26px, 4vw, 58px);
+	}
+
+	.iflynepal-about-vision__panel::before,
+	.iflynepal-about-vision__panel::after {
+		content: '';
+		@apply absolute rounded-full;
+		z-index: -1;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+	}
+
+	.iflynepal-about-vision__panel::before {
+		width: 420px;
+		height: 420px;
+		right: -190px;
+		top: -220px;
+		box-shadow:
+			0 0 0 46px rgba(255, 255, 255, 0.035),
+			0 0 0 94px rgba(255, 255, 255, 0.025);
+	}
+
+	.iflynepal-about-vision__panel::after {
+		width: 260px;
+		height: 260px;
+		left: -160px;
+		bottom: -180px;
+	}
+
+	/* Centred over the statement, so it carries no rule on one side only. */
+	.iflynepal-about-vision__kicker {
+		@apply m-0 inline-flex items-center justify-center text-xs font-extrabold uppercase;
+		color: #bbd4f7;
+		letter-spacing: 0.16em;
+	}
+
+	.iflynepal-about-vision__statement {
+		@apply mx-auto max-w-[1000px] font-medium;
+		margin-top: 22px;
+		margin-bottom: 0;
+		font-size: clamp(24px, 2.9vw, 38px);
+		line-height: 1.28;
+		letter-spacing: -0.02em;
+	}
+
+	/* The one warm note in the panel, on the phrase an editor marks. */
+	.iflynepal-about-vision__statement .accent {
+		color: var(--iflynepal-gold-soft);
+		font-size: 1.1em;
+	}
+
+	/* --------------------------------------------------------- what we offer */
+
+	.iflynepal-about-offers {
+		/*
+		 * The photographs run out past the text column, so the section clips its
+		 * own overflow - otherwise the bleed opens a horizontal scrollbar.
+		 */
+		@apply overflow-hidden;
+		padding: 96px 0;
+	}
+
+	.iflynepal-about-offers__inner {
+		@apply mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+	}
+
+	.iflynepal-about-offers__head {
+		@apply mx-auto max-w-[790px] text-center;
+		margin-bottom: 42px;
+	}
+
+	.iflynepal-about-offers__kicker {
+		@apply m-0 inline-flex items-center justify-center font-extrabold uppercase;
+		margin-bottom: 14px;
+		color: var(--iflynepal-navy);
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	.iflynepal-about-offers__heading {
+		@apply m-0 font-display font-medium;
+		font-size: clamp(36px, 4.4vw, 60px);
+		line-height: 1.04;
+		letter-spacing: -0.025em;
+	}
+
+	.iflynepal-about-offers__lead {
+		@apply mx-auto text-[18px];
+		margin-top: 16px;
+		margin-bottom: 0;
+		max-width: 690px;
+		color: var(--iflynepal-muted);
+	}
+
+	/*
+	 * Each offering is a photograph and a card laid over the same twelve-column
+	 * row, overlapping by one column so the pair reads as one object, and the
+	 * two alternate sides down the page. Whichever of the two is the lower one
+	 * takes the step, so no two rows begin on the same line and the eye walks a
+	 * staircase rather than a ladder.
+	 */
+	.iflynepal-about-offers__rows {
+		/*
+		 * How far the photograph runs out past the copy - a share of the gutter
+		 * between the shell and the viewport, never the whole of it. 30px of that
+		 * gutter is reserved so the picture always lands on the page rather than
+		 * against the screen edge.
+		 *
+		 * max()/min() rather than clamp(): the reserve sends the low end
+		 * negative, and clamp() with a lower bound above its upper bound returns
+		 * the lower one - which would pin the bleed at 0 exactly where it should
+		 * be easing in. Below about 1290px the gutter is smaller than the
+		 * reserve, so the bleed resolves to 0 and the photograph squares up with
+		 * the shell.
+		 */
+		--iflynepal-offer-bleed: max(
+			0px,
+			min(calc((100vw - min(100vw - 40px, var(--iflynepal-shell))) / 2 - 30px), 110px)
+		);
+
+		/*
+		 * The step comes down with the column width, or a narrow desktop spends
+		 * most of the row on the offset rather than on the picture.
+		 */
+		--iflynepal-offer-step: clamp(52px, 6.6vw, 96px);
+
+		@apply grid;
+		margin-top: 10px;
+		gap: clamp(48px, 5.5vw, 88px);
+	}
+
+	/*
+	 * items-start deliberately: with centring, a margin on a grid item is
+	 * halved by the alignment and the step stops being the number written here.
+	 */
+	.iflynepal-about-offers__rows .iflynepal-about-offer {
+		@apply grid items-start overflow-visible;
+		grid-template-columns: repeat(12, 1fr);
+		padding: 0;
+	}
+
+	.iflynepal-about-offer__photo {
+		@apply relative isolate overflow-hidden;
+		grid-row: 1;
+		grid-column: 1 / span 7;
+		/*
+		 * 3:2 rather than 4:3 - at seven columns plus the bleed, the taller crop
+		 * stands some 200px below the card beside it and the row reads as a
+		 * picture with a caption stuck to it rather than as one object.
+		 */
+		aspect-ratio: 3 / 2;
+		border-radius: 30px;
+		margin-left: calc(var(--iflynepal-offer-bleed) * -1);
+		box-shadow: 0 24px 56px rgba(4, 26, 64, 0.13);
+	}
+
+	.iflynepal-about-offer__photo img {
+		@apply h-full w-full max-w-none object-cover;
+		backface-visibility: hidden;
+		transform: scale(1.001);
+		transition: transform 1.05s var(--iflynepal-ease-card-out);
+	}
+
+	/*
+	 * The same curve the cards elsewhere use, so every photograph on the site
+	 * grows and settles the same way.
+	 */
+	.iflynepal-about-offer:hover .iflynepal-about-offer__photo img,
+	.iflynepal-about-offer:focus-within .iflynepal-about-offer__photo img {
+		transform: scale(1.06);
+		transition-duration: 0.85s;
+		transition-timing-function: var(--iflynepal-ease-card);
+	}
+
+	.iflynepal-about-offer__copy {
+		@apply relative bg-white;
+		grid-row: 1;
+		grid-column: 7 / -1;
+		z-index: 2;
+		margin-top: var(--iflynepal-offer-step);
+		padding: clamp(28px, 2.7vw, 38px) clamp(26px, 2.9vw, 40px) clamp(30px, 2.9vw, 40px);
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 20px;
+		box-shadow: 0 2px 10px rgba(4, 26, 64, 0.05);
+		transform: translate3d(0, 0, 0);
+		transition:
+			transform var(--iflynepal-card-fall) var(--iflynepal-ease-card-out),
+			box-shadow var(--iflynepal-card-fall) var(--iflynepal-ease-card-out);
+	}
+
+	.iflynepal-about-offer:hover .iflynepal-about-offer__copy,
+	.iflynepal-about-offer:focus-within .iflynepal-about-offer__copy {
+		transform: translate3d(0, -6px, 0);
+		box-shadow: 0 26px 56px rgba(4, 26, 64, 0.14);
+		transition-duration: var(--iflynepal-card-lift);
+		transition-timing-function: var(--iflynepal-ease-card);
+	}
+
+	/*
+	 * The mirror: photo to the right, card to the left, and the step moves from
+	 * the card to the photo so the row starts on the other side.
+	 */
+	.iflynepal-about-offer:nth-child(even) .iflynepal-about-offer__photo {
+		grid-column: 6 / -1;
+		margin-left: 0;
+		margin-right: calc(var(--iflynepal-offer-bleed) * -1);
+		margin-top: var(--iflynepal-offer-step);
+	}
+
+	.iflynepal-about-offer:nth-child(even) .iflynepal-about-offer__copy {
+		grid-column: 1 / span 6;
+		margin-top: 0;
+	}
+
+	/*
+	 * The numeral is the page's serif accent at display size - the same
+	 * Cormorant italic the headline accents use, no longer whispering.
+	 */
+	.iflynepal-about-offer__num {
+		@apply block font-accent font-semibold italic;
+		font-size: clamp(44px, 4.4vw, 62px);
+		line-height: 0.86;
+		letter-spacing: -0.03em;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-about-offer__title {
+		@apply font-display font-medium;
+		margin: 16px 0 0;
+		padding-top: 17px;
+		border-top: 1px solid var(--iflynepal-line);
+		font-size: clamp(22px, 2.1vw, 29px);
+		line-height: 1.04;
+		letter-spacing: -0.025em;
+	}
+
+	.iflynepal-about-offer__desc {
+		margin: 13px 0 0;
+		color: var(--iflynepal-muted);
+		font-size: 14.5px;
+		line-height: 1.72;
+	}
+
+	@media (max-width: 1020px) {
+		/*
+		 * The overlap stops being legible once the columns are this narrow, so
+		 * the pair stacks - the card still lands on the photograph's lower edge,
+		 * which is the part of the idea worth keeping.
+		 */
+		.iflynepal-about-offers__rows .iflynepal-about-offer {
+			grid-template-columns: 1fr;
+		}
+
+		.iflynepal-about-offer__photo,
+		.iflynepal-about-offer:nth-child(even) .iflynepal-about-offer__photo {
+			grid-row: 1;
+			grid-column: 1;
+			margin: 0 calc(var(--iflynepal-offer-bleed) * -1);
+			aspect-ratio: 16 / 10;
+		}
+
+		.iflynepal-about-offer__copy,
+		.iflynepal-about-offer:nth-child(even) .iflynepal-about-offer__copy {
+			grid-row: 2;
+			grid-column: 1;
+			width: min(100%, 620px);
+			margin: -58px auto 0;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-about-offers {
+			padding: 72px 0;
+		}
+
+		.iflynepal-about-offers__inner,
+		.iflynepal-about-vision__panel {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+	}
+
+	@media (max-width: 720px) {
+		.iflynepal-about-offers__rows {
+			gap: 44px;
+		}
+
+		.iflynepal-about-offer__photo,
+		.iflynepal-about-offer:nth-child(even) .iflynepal-about-offer__photo {
+			aspect-ratio: 4 / 3;
+		}
+
+		.iflynepal-about-offer__copy,
+		.iflynepal-about-offer:nth-child(even) .iflynepal-about-offer__copy {
+			margin-top: -36px;
+			padding: 26px 24px 28px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.iflynepal-about-offer__photo img,
+		.iflynepal-about-offer__copy {
+			transition: none;
 		}
 	}
 

@@ -76,6 +76,22 @@
 				<element value="iflynepal_render_cta_title"/>
 				<element value="iflynepal_render_cta_description"/>
 				<element value="iflynepal_render_cta_actions"/>
+				<element value="iflynepal_render_about_hero_title"/>
+				<element value="iflynepal_render_about_hero_lead"/>
+				<element value="iflynepal_render_about_hero_actions"/>
+				<element value="iflynepal_render_about_overview_kicker"/>
+				<element value="iflynepal_render_about_overview_title"/>
+				<element value="iflynepal_render_about_story"/>
+				<element value="iflynepal_render_about_promo_kicker"/>
+				<element value="iflynepal_render_about_promo_title"/>
+				<element value="iflynepal_render_about_promo_description"/>
+				<element value="iflynepal_render_about_promo_button"/>
+				<element value="iflynepal_render_about_vision_title"/>
+				<element value="iflynepal_render_about_vision_content"/>
+				<element value="iflynepal_render_about_offer_kicker"/>
+				<element value="iflynepal_render_about_offer_title"/>
+				<element value="iflynepal_render_about_offer_lead"/>
+				<element value="iflynepal_render_about_offers"/>
 
 				<!-- Core builds and escapes this markup itself; it is captured with 'echo' => 0 and printed. -->
 				<element value="wp_dropdown_pages"/>

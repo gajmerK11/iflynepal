@@ -19,6 +19,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/people.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/faq.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/travel-guide.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/cta.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/about.php';
 
 /**
  * Registers the theme's panels and sections.
@@ -54,6 +55,20 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	);
 
 	/*
+	 * The About page template's own panel. A panel rather than another
+	 * Homepage section because none of it is on the homepage — it appears
+	 * only where the About template is assigned.
+	 */
+	$wp_customize->add_panel(
+		'iflynepal_about',
+		array(
+			'title'       => __( 'About', 'iflynepal' ),
+			'description' => __( 'Content for the About page template. Assign it to a page under Page Attributes > Template.', 'iflynepal' ),
+			'priority'    => 32,
+		)
+	);
+
+	/*
 	 * Control classes extend WP_Customize_Control, which only exists once the
 	 * Customizer is being registered — so they load here rather than at the top
 	 * of the file.
@@ -66,6 +81,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/faq.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/travel-guide.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/cta.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/about-company.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
 
@@ -183,6 +199,54 @@ function iflynepal_customizer_controls_assets() {
 			),
 			/* translators: %d: question number. */
 			'removeLabel' => __( 'Remove question %d', 'iflynepal' ),
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-customizer-about-story',
+		IFLYNEPAL_URI . '/assets/js/about/story.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/about/story.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'iflynepal-customizer-about-story',
+		'iflynepalAboutStory',
+		array(
+			'max'         => IFLYNEPAL_ABOUT_STORY_MAX,
+			'addLabel'    => __( 'Add paragraph', 'iflynepal' ),
+			'maxMessage'  => sprintf(
+				/* translators: %d: maximum number of paragraphs. */
+				__( 'Maximum %d paragraphs allowed.', 'iflynepal' ),
+				IFLYNEPAL_ABOUT_STORY_MAX
+			),
+			/* translators: %d: paragraph number. */
+			'removeLabel' => __( 'Remove paragraph %d', 'iflynepal' ),
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-customizer-about-offers',
+		IFLYNEPAL_URI . '/assets/js/about/offers.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/about/offers.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'iflynepal-customizer-about-offers',
+		'iflynepalAboutOffers',
+		array(
+			'max'         => IFLYNEPAL_ABOUT_OFFER_MAX,
+			'addLabel'    => __( 'Add offering', 'iflynepal' ),
+			'maxMessage'  => sprintf(
+				/* translators: %d: maximum number of offerings. */
+				__( 'Maximum %d offerings allowed.', 'iflynepal' ),
+				IFLYNEPAL_ABOUT_OFFER_MAX
+			),
+			/* translators: %d: offering number. */
+			'removeLabel' => __( 'Remove offering %d', 'iflynepal' ),
 		)
 	);
 

@@ -59,8 +59,9 @@ function iflynepal_enqueue_assets() {
 	$has_testimonials = iflynepal_has_testimonials();
 	$has_guides       = iflynepal_has_guides();
 	$has_cta          = iflynepal_has_cta();
+	$has_about        = iflynepal_has_about();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about ) {
 		return;
 	}
 
@@ -178,6 +179,23 @@ function iflynepal_enqueue_assets() {
 			IFLYNEPAL_URI . '/assets/js/homepage/guides/faq.js',
 			array( 'iflynepal-gsap' ),
 			iflynepal_asset_version( 'assets/js/homepage/guides/faq.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	/*
+	 * The generic, markup-driven motion file. Sections opt in with
+	 * data-iflynepal-motion; only the About page's do so far.
+	 */
+	if ( $has_about ) {
+		wp_enqueue_script(
+			'iflynepal-sections-motion',
+			IFLYNEPAL_URI . '/assets/js/sections/motion.js',
+			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
+			iflynepal_asset_version( 'assets/js/sections/motion.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,
@@ -346,14 +364,15 @@ add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_navigation' );
  *
  * Kept out of the hero bundle because it needs no GSAP, and skipped entirely
  * when there is no audio to play — the button is not rendered either, so there
- * would be nothing for it to bind to.
+ * would be nothing for it to bind to. The front page is the only template that
+ * carries the toggle; the About page's hero is the same component without it.
  *
  * @since 1.0.0
  *
  * @return void
  */
 function iflynepal_enqueue_hero_audio() {
-	if ( ! iflynepal_has_hero() || '' === iflynepal_hero_audio_url() ) {
+	if ( ! is_front_page() || '' === iflynepal_hero_audio_url() ) {
 		return;
 	}
 
@@ -419,7 +438,7 @@ function iflynepal_resource_hints( $hints, $relation_type ) {
 		return $hints;
 	}
 
-	$origin = iflynepal_hero_background_image_origin();
+	$origin = iflynepal_current_hero_image_origin();
 
 	if ( '' !== $origin ) {
 		$hints[] = array(
@@ -448,7 +467,7 @@ function iflynepal_preload_hero_image() {
 		return;
 	}
 
-	$url = iflynepal_hero_background_image_url();
+	$url = iflynepal_current_hero_image_url();
 
 	if ( '' === $url ) {
 		return;

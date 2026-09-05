@@ -60,20 +60,24 @@ function iflynepal_get_nav_cta_item() {
 }
 
 /**
- * Whether the current request renders the hero section.
+ * Whether the current request renders a hero.
  *
- * The hero and Explore Cards are fixed sections of front-page.php, not
- * editor content, so "does this page have one" is just "is this the front
- * page" — no post-content sniffing needed. Kept as its own function because
- * inc/enqueue.php and inc/template-functions.php both condition on it and the
- * two sections could diverge onto different templates later.
+ * Two templates carry one: the front page and the About page. Both use the
+ * same component and the same script, so both answer yes here — that script
+ * is also what swaps the header from transparent to solid on scroll, and
+ * without it a hero template keeps white nav links over white content.
+ *
+ * Heroes are fixed sections of their templates, not editor content, so this
+ * is a template question rather than a post-content one. Kept as its own
+ * function because inc/enqueue.php and inc/template-functions.php both
+ * condition on it.
  *
  * @since 1.0.0
  *
  * @return bool
  */
 function iflynepal_has_hero() {
-	return is_front_page();
+	return is_front_page() || iflynepal_has_about();
 }
 
 /**
@@ -149,4 +153,66 @@ function iflynepal_has_guides() {
  */
 function iflynepal_has_cta() {
 	return is_front_page();
+}
+
+/**
+ * Whether the current request renders the About page template.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_about() {
+	return is_page_template( 'page-about.php' );
+}
+
+/**
+ * The background image of whichever hero this request renders.
+ *
+ * The front page and the About page each have their own, and both are the
+ * LCP element of their template — so the preconnect and the preload in
+ * inc/enqueue.php have to resolve the one actually on the page rather than
+ * always reaching for the front page's.
+ *
+ * @since 1.0.0
+ *
+ * @return string Image URL, or an empty string when this template has no hero.
+ */
+function iflynepal_current_hero_image_url() {
+	if ( iflynepal_has_about() ) {
+		return iflynepal_about_hero_image_url();
+	}
+
+	if ( is_front_page() ) {
+		return iflynepal_hero_background_image_url();
+	}
+
+	return '';
+}
+
+/**
+ * The origin serving that image, when it is served from another one.
+ *
+ * @since 1.0.0
+ *
+ * @return string Scheme and host, or an empty string when same-origin or unset.
+ */
+function iflynepal_current_hero_image_origin() {
+	$url = iflynepal_current_hero_image_url();
+
+	if ( '' === $url ) {
+		return '';
+	}
+
+	$parts = wp_parse_url( $url );
+
+	if ( empty( $parts['scheme'] ) || empty( $parts['host'] ) ) {
+		return '';
+	}
+
+	if ( wp_parse_url( home_url(), PHP_URL_HOST ) === $parts['host'] ) {
+		return '';
+	}
+
+	return $parts['scheme'] . '://' . $parts['host'];
 }
