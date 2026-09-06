@@ -622,7 +622,9 @@
 		.iflynepal-anim .iflynepal-hero__title,
 		.iflynepal-anim .iflynepal-hero__lead,
 		.iflynepal-anim .iflynepal-hero__actions,
-		.iflynepal-anim .iflynepal-hero__proof p {
+		.iflynepal-anim .iflynepal-hero__proof p,
+		.iflynepal-anim .iflynepal-team-hero__kicker,
+		.iflynepal-anim .iflynepal-team-portrait {
 			@apply opacity-0;
 		}
 	}
@@ -711,7 +713,8 @@
 	.iflynepal-explore__underline,
 	.iflynepal-explore__title .underline,
 	.iflynepal-cta__title .underline,
-	.iflynepal-about-offers__heading .underline {
+	.iflynepal-about-offers__heading .underline,
+	.iflynepal-team-section__heading .underline {
 		@apply relative inline-block whitespace-nowrap;
 		text-decoration-line: none;
 	}
@@ -734,7 +737,8 @@
 	.iflynepal-explore__underline::after,
 	.iflynepal-explore__title .underline::after,
 	.iflynepal-cta__title .underline::after,
-	.iflynepal-about-offers__heading .underline::after {
+	.iflynepal-about-offers__heading .underline::after,
+	.iflynepal-team-section__heading .underline::after {
 		content: '';
 		@apply pointer-events-none absolute block origin-left opacity-[.85];
 		left: -2%;
@@ -3780,6 +3784,498 @@
 			font-size: 15px;
 		}
 	}
+
+	/* ==========================================================================
+	   Team — the people page
+	   A hero with a portrait cluster beside its copy, then two rosters that
+	   share one card: the global representatives on the tinted band, the
+	   executive team on white.
+	   ========================================================================== */
+
+	/*
+	 * The only hero on the site with a second column, so it is the only one
+	 * that lays its inner container out as a grid. Everything else here is the
+	 * shared hero component (§ .iflynepal-hero).
+	 */
+	.iflynepal-team-hero__grid {
+		@apply grid items-center;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+		gap: 80px;
+	}
+
+	/*
+	 * The copy column pulls left out of the shell on a wide screen, so the
+	 * headline sits against the edge of the frame rather than in a column of
+	 * its own. Nothing to pull on a narrow one, where the shift resolves to 0.
+	 */
+	.iflynepal-hero--team .iflynepal-hero__copy {
+		--iflynepal-hero-shift: clamp(0px, calc((100vw - 1280px) / 2), 220px);
+		@apply max-w-none;
+		width: calc(100% + var(--iflynepal-hero-shift));
+		margin-left: calc(-1 * var(--iflynepal-hero-shift));
+	}
+
+	/*
+	 * A horizontal scrim in place of the centre-weighted one every other hero
+	 * uses (§ .iflynepal-hero.wp-block-cover::before): the copy sits in the
+	 * left half here, so the frame is held down on that side and let up on the
+	 * right, where the photograph shows through behind the portraits.
+	 *
+	 * It replaces that gradient on the same pseudo-element rather than adding a
+	 * second layer over it, which would darken the frame twice.
+	 */
+	.iflynepal-hero--team.wp-block-cover::before {
+		background: linear-gradient(
+			90deg,
+			rgba(4, 26, 64, 0.97) 0%,
+			rgba(4, 26, 64, 0.9) 45%,
+			rgba(4, 26, 64, 0.45) 74%,
+			rgba(4, 26, 64, 0.58) 100%
+		);
+	}
+
+	.iflynepal-team-hero__kicker {
+		@apply font-extrabold uppercase;
+		margin: 0 0 14px;
+		color: #bbd4f7;
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	/* The headline is two lines: a plain one, then the company name in the
+	   gold serif beside the logo mark. */
+	.iflynepal-team-hero__line {
+		@apply block;
+		white-space: nowrap;
+	}
+
+	.iflynepal-team-hero__brand {
+		@apply flex items-center justify-center;
+		gap: 18px;
+		margin-top: 12px;
+	}
+
+	.iflynepal-team-hero__mark {
+		@apply shrink-0;
+		width: 1.4em;
+		height: 1.4em;
+		object-fit: contain;
+	}
+
+	.iflynepal-hero--team .iflynepal-hero__title em {
+		white-space: nowrap;
+	}
+
+	/*
+	 * The sub-title's second sentence is 761px at the shared 18px, against a
+	 * copy column that is only 717px at 1440 — so it wrapped to a third line.
+	 * Above 1300px it is allowed out of the 700px cap and set on one line per
+	 * sentence, with the size easing down just enough to fit the column at the
+	 * bottom of that range and reaching the design's full 18px by ~1565px.
+	 *
+	 * The <br> between the two sentences still breaks under `nowrap` — only
+	 * automatic wrapping is suppressed — so this is two lines, not one.
+	 *
+	 * Below 1300px nothing here applies and the shared rule wraps it as the
+	 * design does.
+	 */
+	@media (min-width: 1300px) {
+		.iflynepal-hero--team .iflynepal-hero__lead {
+			@apply max-w-none;
+			font-size: clamp(15px, 1.15vw, 18px);
+			white-space: nowrap;
+		}
+	}
+
+	/*
+	 * Between these two widths the headline is allowed to wrap: it is too wide
+	 * for the column at the smaller end and would otherwise run under the
+	 * portraits.
+	 */
+	@media (min-width: 861px) and (max-width: 1500px) {
+		.iflynepal-team-hero__line {
+			white-space: normal;
+		}
+	}
+
+	/* ------------------------------------------------------ hero portraits */
+
+	/*
+	 * Three frames in a fixed arrangement rather than a grid: each has its own
+	 * shape, size and tilt, and they overlap. Sized off the cluster's own
+	 * height so the whole thing scales with the column.
+	 */
+	.iflynepal-team-hero__cluster {
+		@apply relative;
+		height: 470px;
+	}
+
+	.iflynepal-team-portrait {
+		@apply absolute overflow-hidden bg-white;
+		margin: 0;
+		border: 1px solid rgba(255, 255, 255, 0.35);
+		box-shadow: 0 28px 70px rgba(4, 26, 64, 0.38);
+	}
+
+	.iflynepal-team-portrait img {
+		@apply h-full w-full object-cover;
+		filter: saturate(0.92);
+	}
+
+	.iflynepal-team-portrait--one {
+		inset: 28px 120px 44px 0;
+		border-radius: 145px 145px 26px 26px;
+	}
+
+	.iflynepal-team-portrait--two {
+		top: 0;
+		right: 0;
+		width: 190px;
+		height: 245px;
+		border-radius: 24px 95px 24px 24px;
+		transform: rotate(3deg);
+	}
+
+	.iflynepal-team-portrait--three {
+		right: 12px;
+		bottom: 0;
+		width: 205px;
+		height: 225px;
+		border-radius: 24px 24px 100px 24px;
+		transform: rotate(-2deg);
+	}
+
+	.iflynepal-team-hero__script {
+		@apply absolute font-hand;
+		right: 8px;
+		bottom: -30px;
+		color: var(--iflynepal-gold);
+		font-size: 29px;
+		transform: rotate(-4deg);
+	}
+
+	/*
+	 * The pill at the foot of the hero. It bounces to say it is a control
+	 * rather than a label, and stops bouncing while it is hovered or focused
+	 * so it is not a moving target.
+	 */
+	.iflynepal-team-hero__scroll {
+		@apply absolute inline-flex items-center justify-center font-bold uppercase no-underline;
+		left: 50%;
+		/*
+		 * Higher than the design's 25px, which sat the pill hard against the
+		 * bottom edge of the frame — and under the admin bar's extra 32px it
+		 * read as clipped rather than placed.
+		 */
+		bottom: 56px;
+		gap: 10px;
+		min-height: 48px;
+		padding: 12px 23px;
+		border: 1px solid rgba(255, 255, 255, 0.55);
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.12);
+		color: #fff;
+		font-size: 12px;
+		letter-spacing: 0.12em;
+		transform: translateX(-50%);
+		animation: iflynepal-team-bounce 2s ease-in-out infinite;
+	}
+
+	.iflynepal-team-hero__scroll:hover,
+	.iflynepal-team-hero__scroll:focus-visible {
+		background: rgba(255, 255, 255, 0.24);
+		animation-play-state: paused;
+	}
+
+	/* -------------------------------------------------------------- rosters */
+
+	/*
+	 * The scroll pill and the footer's legal links both land here by fragment,
+	 * so the section clears the docked header (70px) rather than starting
+	 * underneath it. A little more than the design's flush 70 so the heading
+	 * has air above it when it arrives.
+	 */
+	.iflynepal-team-section {
+		padding: 104px 0;
+		scroll-margin-top: 90px;
+	}
+
+	/* The admin bar stops being fixed here, and the header docks lower. */
+	@media (max-width: 782px) {
+		.iflynepal-team-section {
+			scroll-margin-top: 68px;
+		}
+	}
+
+	.iflynepal-team-section__inner {
+		@apply relative mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		z-index: 1;
+	}
+
+	.iflynepal-team-section__head {
+		@apply mx-auto text-center;
+		max-width: 860px;
+		margin-bottom: 50px;
+	}
+
+	.iflynepal-team-section__kicker {
+		@apply font-extrabold uppercase;
+		margin: 0 0 14px;
+		color: var(--iflynepal-navy);
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	.iflynepal-team-section__heading {
+		@apply m-0 font-display font-semibold;
+		color: var(--iflynepal-ink);
+		font-size: clamp(38px, 4.6vw, 62px);
+		line-height: 1.07;
+		letter-spacing: -0.03em;
+	}
+
+	/* The serif italic word, the same mark the About page's vision panel uses
+	   — navy here, where the heading sits on paper rather than on navy. */
+	.iflynepal-team-section__heading .accent {
+		@apply inline-block font-accent font-semibold italic;
+		color: var(--iflynepal-navy);
+		font-size: 1.13em;
+		letter-spacing: -0.025em;
+	}
+
+	.iflynepal-team-section__lead {
+		@apply mx-auto;
+		max-width: 690px;
+		margin-top: 16px;
+		margin-bottom: 0;
+		color: var(--iflynepal-muted);
+		font-size: 17px;
+	}
+
+	/*
+	 * The Executive Team's sub-title is 832px against the shared 690px cap, so
+	 * it wrapped to two lines. Let out to the width of the head it sits in
+	 * (860px) and set on one line from the width at which the shell is wide
+	 * enough to hold it; below that the cap and the wrap come back.
+	 */
+	@media (min-width: 900px) {
+		.iflynepal-team-section__lead {
+			@apply max-w-none;
+			white-space: nowrap;
+		}
+	}
+
+	/* ---------------------------------------------------------------- cards */
+
+	/*
+	 * One card for both rosters. A representative's is shorter and carries a
+	 * label over the name; an executive's is taller and carries the role on a
+	 * pill over the photograph. Everything else about them is the same.
+	 */
+	.iflynepal-team-grid {
+		@apply grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 28px;
+	}
+
+	.iflynepal-team-card {
+		@apply overflow-hidden bg-white;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 20px;
+		box-shadow: 0 14px 38px rgba(4, 26, 64, 0.07);
+		transition:
+			transform var(--iflynepal-card-fall) var(--iflynepal-ease-card-out),
+			box-shadow var(--iflynepal-card-fall) var(--iflynepal-ease-card-out);
+	}
+
+	.iflynepal-team-card:hover,
+	.iflynepal-team-card:focus-within {
+		transform: translateY(-5px);
+		box-shadow: 0 22px 48px rgba(4, 26, 64, 0.13);
+		transition-duration: var(--iflynepal-card-lift);
+		transition-timing-function: var(--iflynepal-ease-card);
+	}
+
+	.iflynepal-team-card__photo {
+		@apply relative overflow-hidden bg-sand;
+		height: 380px;
+	}
+
+	/*
+	 * Centred, not the design's `center top`. These are the client's own
+	 * photographs rather than shot-to-brief headshots — several are selfies
+	 * with the subject low in the frame — and anchoring to the top filled the
+	 * card with whatever was above them. This is the treatment the front
+	 * page's People rail already uses (§ .iflynepal-people__photo-image), and
+	 * matching it keeps the same face framed the same way in both places.
+	 */
+	.iflynepal-team-card__photo img {
+		@apply h-full w-full object-cover;
+		transition: transform 0.6s var(--iflynepal-ease-card-out);
+	}
+
+	.iflynepal-team-card:hover .iflynepal-team-card__photo img,
+	.iflynepal-team-card:focus-within .iflynepal-team-card__photo img {
+		transform: scale(1.045);
+		transition-duration: 0.85s;
+		transition-timing-function: var(--iflynepal-ease-card);
+	}
+
+	.iflynepal-team-card__body {
+		@apply text-center;
+		padding: 26px 24px 29px;
+	}
+
+	.iflynepal-team-card__label {
+		@apply flex items-center justify-center font-black uppercase;
+		gap: 8px;
+		margin-bottom: 10px;
+		color: var(--iflynepal-navy);
+		font-size: 10px;
+		letter-spacing: 0.12em;
+	}
+
+	.iflynepal-team-card__name {
+		@apply m-0 font-display font-semibold;
+		color: var(--iflynepal-ink);
+		font-size: 28px;
+		line-height: 1.07;
+		letter-spacing: -0.03em;
+	}
+
+	.iflynepal-team-card__meta {
+		margin: 6px 0 0;
+		color: var(--iflynepal-muted);
+		font-size: 15px;
+	}
+
+	/* The executive card: a taller frame, and the role on a pill over it. */
+	.iflynepal-team-card--member .iflynepal-team-card__photo {
+		height: 470px;
+	}
+
+	/* The design's own gradient on the foot of the frame, which grounds the
+	   photograph against the card body below it. */
+	.iflynepal-team-card--member .iflynepal-team-card__photo::after {
+		content: '';
+		@apply pointer-events-none absolute inset-x-0 bottom-0;
+		height: 32%;
+		background: linear-gradient(transparent, rgba(4, 26, 64, 0.35));
+	}
+
+	.iflynepal-team-card--member .iflynepal-team-card__body {
+		padding: 23px 22px 27px;
+	}
+
+	.iflynepal-team-card--member .iflynepal-team-card__name {
+		font-size: 27px;
+	}
+
+	.iflynepal-team-card--member .iflynepal-team-card__meta {
+		margin-top: 7px;
+		font-size: 14px;
+	}
+
+	/*
+	 * The role pill sits at the top-left of the frame, not centred on its foot
+	 * as the design has it — asked for on review. It carries its own opaque
+	 * ground, so it does not depend on the scrim below for legibility.
+	 */
+	.iflynepal-team-card__pill {
+		@apply absolute z-10 font-black uppercase;
+		top: 16px;
+		left: 16px;
+		max-width: calc(100% - 32px);
+		padding: 8px 11px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.94);
+		color: var(--iflynepal-navy);
+		font-size: 10px;
+		letter-spacing: 0.07em;
+		text-align: center;
+		white-space: nowrap;
+		backdrop-filter: blur(8px);
+	}
+
+	.iflynepal-team-grid--member {
+		gap: 24px;
+	}
+
+	/* ------------------------------------------------------- team: narrower */
+
+	@media (max-width: 1080px) {
+		.iflynepal-team-hero__grid {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+			gap: 46px;
+		}
+
+		.iflynepal-team-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 860px) {
+		.iflynepal-team-hero__grid {
+			grid-template-columns: 1fr;
+		}
+
+		/*
+		 * The cluster goes rather than stacking: the three frames overlap by
+		 * design and there is no arrangement of them that reads at this width.
+		 */
+		.iflynepal-team-hero__cluster {
+			@apply hidden;
+		}
+
+		.iflynepal-hero--team .iflynepal-hero__copy {
+			@apply mx-auto;
+			width: 100%;
+			max-width: 760px;
+			margin-left: auto;
+		}
+	}
+
+	@media (max-width: 680px) {
+		.iflynepal-team-section {
+			padding: 78px 0;
+		}
+
+		.iflynepal-team-section__inner {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		.iflynepal-team-hero__line {
+			white-space: normal;
+		}
+
+		.iflynepal-team-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.iflynepal-team-card__photo {
+			height: 430px;
+		}
+
+		.iflynepal-team-card--member .iflynepal-team-card__photo {
+			height: 520px;
+		}
+
+		.iflynepal-team-card__pill {
+			white-space: normal;
+		}
+	}
+}
+
+@keyframes iflynepal-team-bounce {
+	0%,
+	100% {
+		transform: translate(-50%, 0);
+	}
+
+	50% {
+		transform: translate(-50%, -9px);
+	}
 }
 
 @keyframes iflynepal-trust-scroll {
@@ -3867,6 +4363,24 @@
 	}
 
 	.iflynepal-guides__card:hover .iflynepal-guides__card-image {
+		transform: none;
+	}
+
+	/*
+	 * The scroll pill stops bouncing but keeps its place — it is a control, so
+	 * it has to stay where it is rather than being hidden with its motion.
+	 */
+	.iflynepal-team-hero__scroll {
+		animation: none;
+	}
+
+	.iflynepal-team-card:hover,
+	.iflynepal-team-card:focus-within {
+		transform: none;
+	}
+
+	.iflynepal-team-card:hover .iflynepal-team-card__photo img,
+	.iflynepal-team-card:focus-within .iflynepal-team-card__photo img {
 		transform: none;
 	}
 }

@@ -109,6 +109,17 @@
 				<element value="iflynepal_render_country_bring_prose"/>
 				<element value="iflynepal_render_country_permit_title"/>
 				<element value="iflynepal_render_country_permit_text"/>
+				<element value="iflynepal_render_team_hero_kicker"/>
+				<element value="iflynepal_render_team_hero_title"/>
+				<element value="iflynepal_render_team_hero_lead"/>
+				<element value="iflynepal_render_team_portraits"/>
+				<element value="iflynepal_render_team_reps_kicker"/>
+				<element value="iflynepal_render_team_reps_title"/>
+				<element value="iflynepal_render_team_reps_lead"/>
+				<element value="iflynepal_render_team_representatives"/>
+				<element value="iflynepal_render_team_executive_title"/>
+				<element value="iflynepal_render_team_executive_lead"/>
+				<element value="iflynepal_render_team_members"/>
 				<element value="iflynepal_render_footer_blurb"/>
 				<element value="iflynepal_render_footer_office"/>
 				<element value="iflynepal_render_footer_office_heading"/>

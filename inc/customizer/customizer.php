@@ -21,6 +21,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/travel-guide.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/cta.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/about.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/about-country.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/team.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 
 /**
@@ -101,6 +102,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/cta.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/about-company.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/about-country.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/team.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
@@ -410,6 +412,63 @@ function iflynepal_customizer_controls_assets() {
 		array(
 			'lists'       => $iflynepal_country_lists,
 			'sectorIcons' => $iflynepal_sector_empties,
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-customizer-team-lists',
+		IFLYNEPAL_URI . '/assets/js/team/repeaters.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/team/repeaters.js' ),
+		true
+	);
+
+	/*
+	 * The Team page's two rosters. Both are the same card three fields wide, so
+	 * they are described here and walked by one file rather than getting a
+	 * script each.
+	 */
+	wp_localize_script(
+		'iflynepal-customizer-team-lists',
+		'iflynepalTeamLists',
+		array(
+			'lists' => array(
+				array(
+					'patterns'    => array(
+						'iflynepal_team_representative_%d_name',
+						'iflynepal_team_representative_%d_country',
+						'iflynepal_team_representative_%d_image',
+					),
+					'max'         => IFLYNEPAL_TEAM_REPRESENTATIVE_MAX,
+					// The shared card label is the last control before the cards.
+					'anchor'      => 'iflynepal_team_reps_label',
+					'addLabel'    => __( 'Add representative', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of representatives. */
+						__( 'Maximum %d representatives allowed.', 'iflynepal' ),
+						IFLYNEPAL_TEAM_REPRESENTATIVE_MAX
+					),
+					/* translators: %d: representative number. */
+					'removeLabel' => __( 'Remove representative %d', 'iflynepal' ),
+				),
+				array(
+					'patterns'    => array(
+						'iflynepal_team_member_%d_name',
+						'iflynepal_team_member_%d_role',
+						'iflynepal_team_member_%d_image',
+					),
+					'max'         => IFLYNEPAL_TEAM_MEMBER_MAX,
+					'anchor'      => 'iflynepal_team_executive_lead',
+					'addLabel'    => __( 'Add person', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of team members. */
+						__( 'Maximum %d people allowed.', 'iflynepal' ),
+						IFLYNEPAL_TEAM_MEMBER_MAX
+					),
+					/* translators: %d: team member number. */
+					'removeLabel' => __( 'Remove person %d', 'iflynepal' ),
+				),
+			),
 		)
 	);
 

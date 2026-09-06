@@ -31,6 +31,33 @@
 	var hasGsap = typeof window.gsap !== 'undefined';
 	var reduced = window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 
+	/* --------------------------------------------------------- scroll pill */
+
+	/*
+	 * The Team hero's "Meet everyone" pill. A plain fragment link to begin
+	 * with, so it still navigates with JavaScript off; all this adds is the
+	 * glide. It sits above the GSAP guard below because it is not motion — the
+	 * pill has to work whether or not anything animates.
+	 *
+	 * scrollIntoView honours the target's own scroll-margin-top, so the
+	 * section clears the fixed header without any offset arithmetic here.
+	 */
+	var scrollPill = hero.querySelector( '.iflynepal-team-hero__scroll' );
+
+	if ( scrollPill ) {
+		var pillTarget = document.querySelector( scrollPill.getAttribute( 'href' ) );
+
+		if ( pillTarget ) {
+			scrollPill.addEventListener( 'click', function ( event ) {
+				event.preventDefault();
+				pillTarget.scrollIntoView( {
+					behavior: reduced ? 'auto' : 'smooth',
+					block: 'start'
+				} );
+			} );
+		}
+	}
+
 	/* ------------------------------------------------------- background video */
 
 	/**
@@ -220,9 +247,11 @@
 	/* -------------------------------------------------------------- reveals */
 
 	var words = splitHeadline();
+	var kicker = hero.querySelector( '.iflynepal-team-hero__kicker' );
 	var actions = hero.querySelector( '.iflynepal-hero__actions' );
 	var lead = hero.querySelector( '.iflynepal-hero__lead' );
 	var proof = hero.querySelectorAll( '.iflynepal-hero__proof p' );
+	var portraits = hero.querySelectorAll( '.iflynepal-team-portrait' );
 
 	// No GSAP, or motion is unwelcome: show everything and stop.
 	if ( ! hasGsap || reduced ) {
@@ -238,26 +267,57 @@
 
 	gsap.defaults( { duration: 0.8, ease: 'power2.out' } );
 
-	// actions (homepage/About hero) and lead (About/About Nepal hero) never
-	// both exist on one template, so they share the same staged treatment.
-	var staged = [ actions, lead ].filter( Boolean );
+	/*
+	 * The pieces around the headline, which differ per template: the homepage
+	 * has actions and trust bullets, About has a sub-title and actions, About
+	 * Nepal a sub-title alone, Team a kicker, a sub-title and the portraits.
+	 * Each is looked for and skipped when absent, so one file drives them all.
+	 */
+	var staged = [ kicker, actions, lead ].filter( Boolean );
 
 	gsap.set( words, { opacity: 0, y: 42 } );
 	gsap.set( staged, { opacity: 0, y: 22 } );
 	gsap.set( proof, { opacity: 0, y: 10 } );
+	/*
+	 * Opacity only, deliberately. Two of the three frames are rotated a couple
+	 * of degrees in the stylesheet, and animating y here would have GSAP write
+	 * its own transform over that and stand them straight.
+	 */
+	gsap.set( portraits, { opacity: 0 } );
 
 	// The gate can come off now that GSAP owns these elements' opacity.
 	root.classList.remove( 'iflynepal-anim' );
 
 	var timeline = gsap.timeline( { delay: 0.15 } );
 
-	timeline.to( words, {
-		opacity: 1,
-		y: 0,
-		duration: 0.95,
-		ease: 'expo.out',
-		stagger: 0.055,
-	} );
+	if ( kicker ) {
+		timeline.to( kicker, { opacity: 1, y: 0, duration: 0.6 } );
+	}
+
+	timeline.to(
+		words,
+		{
+			opacity: 1,
+			y: 0,
+			duration: 0.95,
+			ease: 'expo.out',
+			stagger: 0.055,
+		},
+		kicker ? '-=0.35' : 0
+	);
+
+	/*
+	 * The portraits come in with the headline rather than after it: they are
+	 * the other half of the same view, and waiting for the words to finish
+	 * left the right-hand column visibly empty on a wide screen.
+	 */
+	if ( portraits.length ) {
+		timeline.to(
+			portraits,
+			{ opacity: 1, duration: 0.8, stagger: 0.12 },
+			'-=0.75'
+		);
+	}
 
 	if ( lead ) {
 		timeline.to( lead, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5' );

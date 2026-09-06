@@ -83,7 +83,7 @@ function iflynepal_get_nav_cta_item() {
  * @return bool
  */
 function iflynepal_has_hero() {
-	return is_front_page() || iflynepal_has_about() || iflynepal_has_about_country();
+	return is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team();
 }
 
 /**
@@ -184,18 +184,33 @@ function iflynepal_has_about_country() {
 }
 
 /**
+ * Whether the current request renders the Team page template.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_team() {
+	return is_page_template( 'page-team.php' );
+}
+
+/**
  * The background image of whichever hero this request renders.
  *
- * The front page, the About page and the About Nepal page each have their own,
- * and each is the LCP element of its template — so the preconnect and the
- * preload in inc/enqueue.php have to resolve the one actually on the page
- * rather than always reaching for the front page's.
+ * The front page, the About page, the About Nepal page and the Team page each
+ * have their own, and each is the LCP element of its template — so the
+ * preconnect and the preload in inc/enqueue.php have to resolve the one
+ * actually on the page rather than always reaching for the front page's.
  *
  * @since 1.0.0
  *
  * @return string Image URL, or an empty string when this template has no hero.
  */
 function iflynepal_current_hero_image_url() {
+	if ( iflynepal_has_team() ) {
+		return iflynepal_team_hero_image_url();
+	}
+
 	if ( iflynepal_has_about_country() ) {
 		return iflynepal_country_hero_image_url();
 	}
