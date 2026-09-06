@@ -24,7 +24,9 @@ $iflynepal_cta = iflynepal_get_nav_cta_item();
 				'theme_location' => 'primary',
 				'container'      => false,
 				'menu_class'     => 'iflynepal-menu',
-				'depth'          => 1,
+				// One level of nesting: a top-level item and its dropdown.
+				'depth'          => 2,
+				'walker'         => new IFly_Nepal_Nav_Walker(),
 				'fallback_cb'    => false,
 			)
 		);

@@ -273,6 +273,161 @@
 		@apply scale-x-100;
 	}
 
+	/* ------------------------------------------------------- nav dropdowns */
+
+	/*
+	 * A top-level item that has children. The item is the positioning context
+	 * for its panel, and the trigger inside it is a button rather than a link
+	 * — it opens the panel and goes nowhere, which is what the client asked
+	 * for and what keeps it off the keyboard's list of dead ends.
+	 */
+	.iflynepal-nav-item {
+		@apply relative;
+	}
+
+	.iflynepal-nav-trigger {
+		@apply inline-flex cursor-pointer items-center border-0 bg-transparent p-0 opacity-[.88];
+		gap: 7px;
+		padding-block: 10px;
+		color: inherit;
+		font: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+	}
+
+	.iflynepal-nav-trigger:hover,
+	.iflynepal-nav-trigger[aria-expanded='true'] {
+		@apply opacity-100;
+	}
+
+	.iflynepal-nav-chevron {
+		@apply h-[13px] w-[13px];
+		transition: transform 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-nav-item.is-open .iflynepal-nav-chevron {
+		@apply rotate-180;
+	}
+
+	/*
+	 * The panel. Closed with visibility rather than display, so the transition
+	 * has something to animate and the links stay out of the tab order while
+	 * it is shut.
+	 */
+	.iflynepal-nav-panel {
+		@apply invisible absolute left-1/2 z-40 grid list-none opacity-0;
+		top: calc(100% + 14px);
+		width: 268px;
+		gap: 2px 18px;
+		padding: 14px;
+		border: 1px solid rgba(255, 255, 255, 0.16);
+		border-radius: 16px;
+		background: linear-gradient(145deg, rgba(4, 35, 84, 0.98), rgba(5, 69, 167, 0.94));
+		box-shadow: 0 22px 48px rgba(3, 22, 55, 0.3);
+		backdrop-filter: blur(14px);
+		pointer-events: none;
+		transform: translate(-50%, 10px);
+		transition:
+			opacity 0.25s ease,
+			visibility 0.25s ease,
+			transform 0.3s var(--iflynepal-ease);
+	}
+
+	/*
+	 * Past the split point the panel goes two-up. `grid-auto-flow: column`
+	 * with the row count set inline by the walker is what fills the first
+	 * column top to bottom before starting the second — the default row-first
+	 * flow would deal the links left, right, left, right instead.
+	 */
+	.iflynepal-nav-panel--split {
+		@apply grid-flow-col;
+		width: 520px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	/* The little pointer up at the trigger. */
+	.iflynepal-nav-panel::before {
+		content: '';
+		@apply absolute left-1/2 h-3.5 w-3.5;
+		top: -7px;
+		background: #073a8d;
+		border-left: 1px solid rgba(255, 255, 255, 0.14);
+		border-top: 1px solid rgba(255, 255, 255, 0.14);
+		transform: translateX(-50%) rotate(45deg);
+	}
+
+	/* The rule between the columns, drawn only when there are two. */
+	.iflynepal-nav-panel--split::after {
+		content: '';
+		@apply absolute left-1/2 w-px;
+		top: 20px;
+		bottom: 20px;
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.iflynepal-nav-panel a {
+		@apply relative z-10 flex items-center no-underline opacity-100;
+		min-height: 42px;
+		padding: 9px 13px;
+		border-left: 2px solid transparent;
+		border-radius: 9px;
+		color: rgba(255, 255, 255, 0.84);
+		font: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		transition:
+			color 0.2s ease,
+			background 0.2s ease,
+			border-color 0.2s ease,
+			transform 0.25s var(--iflynepal-ease);
+	}
+
+	/* The underline the flat menu items carry would double up in here. */
+	.iflynepal-nav-panel a::after {
+		content: none;
+	}
+
+	.iflynepal-nav-panel a:hover,
+	.iflynepal-nav-panel a:focus-visible {
+		@apply text-white;
+		border-left-color: var(--iflynepal-gold);
+		background: rgba(255, 255, 255, 0.08);
+		transform: translateX(2px);
+	}
+
+	.iflynepal-nav-item.is-open > .iflynepal-nav-panel {
+		@apply visible opacity-100;
+		pointer-events: auto;
+		transform: translate(-50%, 0);
+	}
+
+	/*
+	 * Pointer devices open on hover. The bridge is a transparent strip across
+	 * the 14px gap between the trigger and the panel, so the cursor can travel
+	 * down into the panel without passing over dead space and closing it.
+	 */
+	@media (min-width: 1081px) {
+		.iflynepal-nav-item::after {
+			content: '';
+			@apply absolute left-1/2 w-[540px];
+			top: 100%;
+			height: 20px;
+			transform: translateX(-50%);
+		}
+
+		.iflynepal-nav-item:hover > .iflynepal-nav-panel,
+		.iflynepal-nav-item:focus-within > .iflynepal-nav-panel {
+			@apply visible opacity-100;
+			pointer-events: auto;
+			transform: translate(-50%, 0);
+		}
+
+		.iflynepal-nav-item:hover .iflynepal-nav-chevron,
+		.iflynepal-nav-item:focus-within .iflynepal-nav-chevron {
+			@apply rotate-180;
+		}
+	}
+
 	.iflynepal-nav-side {
 		@apply flex items-center justify-self-end gap-3;
 	}
@@ -360,6 +515,27 @@
 	.iflynepal-hero .wp-block-cover__video-background {
 		@apply w-full max-w-none object-cover;
 		object-position: center 42%;
+	}
+
+	/*
+	 * The background slideshow. Every frame is stacked on the same spot inside
+	 * .iflynepal-hero__media, which already carries the 130% travel height and
+	 * the parallax, so the slides inherit both and only have to handle the
+	 * cross-fade.
+	 *
+	 * They are transparent by default with the first one shown, which is the
+	 * state a visitor keeps when assets/js/homepage/hero/slides.js does not run
+	 * — no JavaScript, reduced motion or Data Saver. GSAP takes the opacity
+	 * from there.
+	 */
+	.iflynepal-hero__slide {
+		@apply absolute inset-0 h-full w-full max-w-none object-cover opacity-0;
+		object-position: center 42%;
+		will-change: transform, opacity;
+	}
+
+	.iflynepal-hero__slide:first-child {
+		@apply opacity-100;
 	}
 
 	/* Fades in only once the file is playable; if it 404s the still stays put. */
@@ -1458,9 +1634,18 @@
 		box-shadow: 0 18px 42px rgba(4, 26, 64, 0.11);
 	}
 
+	/*
+	 * 416px against the card's 312px of inside width is exactly 3:4 — the
+	 * portrait crop these photographs are actually shot at. At the design's
+	 * 340px the frame was squarer than the pictures, so `cover` took the
+	 * difference off the top and bottom and clipped the top of a head (Vijay's
+	 * 413x531 lost about 30px up there). At 3:4 the full height of every
+	 * portrait in the roster is visible; a landscape photograph still loses its
+	 * sides, which no single frame height can avoid.
+	 */
 	.iflynepal-people__photo {
 		@apply relative overflow-hidden;
-		height: 340px;
+		height: 416px;
 	}
 
 	.iflynepal-people__photo-image {
@@ -1485,18 +1670,6 @@
 	.iflynepal-people__avatar svg {
 		@apply block h-[104px] w-[104px] fill-none stroke-current;
 		stroke-width: 2;
-	}
-
-	.iflynepal-people__role {
-		@apply absolute font-black uppercase;
-		left: 14px;
-		bottom: 14px;
-		padding: 7px 10px;
-		border-radius: 999px;
-		background: rgba(255, 255, 255, 0.94);
-		color: var(--iflynepal-navy);
-		font-size: 10px;
-		letter-spacing: 0.07em;
 	}
 
 	.iflynepal-people__body {
@@ -1541,9 +1714,6 @@
 			font-size: 14px;
 		}
 
-		.iflynepal-people__photo {
-			height: 330px;
-		}
 	}
 
 	/* ------------------------------------------------ traveller proof cards */
@@ -1626,7 +1796,7 @@
 	 * resolves against the viewport and the script never has to size a card.
 	 */
 	.iflynepal-testimonials__item {
-		@apply shrink-0 grow-0;
+		@apply flex shrink-0 grow-0;
 		flex-basis: 33.3333%;
 
 		/* Padding rather than margin keeps the drag maths on whole card widths. */
@@ -1651,8 +1821,19 @@
 		transform: none;
 	}
 
+	/*
+	 * Every card is the height of the tallest one in view, however long the
+	 * review is. The track's items already stretched — they are flex children —
+	 * but the card inside each one only took the height of its own words, so a
+	 * short review left a short card. The item is now a flex box and the card
+	 * fills it.
+	 *
+	 * The card lays its contents out as a column so the attribution can be
+	 * pushed to the bottom, which lines the avatars up across the row rather
+	 * than leaving them floating at whatever height the quote happens to end.
+	 */
 	.iflynepal-testimonials__card {
-		@apply m-0 bg-white text-center;
+		@apply m-0 flex flex-1 flex-col bg-white text-center;
 		padding: 40px;
 		border: 1px solid #fff;
 		border-radius: 10px;
@@ -1682,6 +1863,8 @@
 
 	.iflynepal-testimonials__by {
 		@apply flex items-center justify-center;
+		/* Takes up whatever slack the quote left, so it sits on the floor. */
+		margin-top: auto;
 	}
 
 	/* The reviewer's own photograph, when one has been uploaded. */
@@ -3022,6 +3205,48 @@
 			@apply flex-col items-start gap-[18px] text-[15px] normal-case tracking-[.02em];
 		}
 
+		/*
+		 * The panel is part of the column here rather than floating over it:
+		 * the header is already a sheet on this size, so a second card on top
+		 * of it would be a card on a card. It stays closed until the trigger is
+		 * used — there is no hover to open it with.
+		 */
+		.iflynepal-menu-item {
+			@apply w-full;
+		}
+
+		.iflynepal-nav-panel {
+			@apply static hidden w-full translate-x-0 grid-flow-row opacity-100;
+			margin-top: 10px;
+			padding: 0 0 0 12px;
+			border: 0;
+			border-left: 1px solid rgba(255, 255, 255, 0.18);
+			border-radius: 0;
+			background: none;
+			box-shadow: none;
+			backdrop-filter: none;
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: none;
+			transform: none;
+			transition: none;
+		}
+
+		.iflynepal-nav-item.is-open > .iflynepal-nav-panel {
+			@apply grid;
+			transform: none;
+		}
+
+		/* Both are the floating panel's furniture. */
+		.iflynepal-nav-panel::before,
+		.iflynepal-nav-panel--split::after {
+			content: none;
+		}
+
+		.iflynepal-nav-panel a {
+			min-height: 38px;
+			padding: 6px 10px;
+		}
+
 		.iflynepal-menu-btn {
 			@apply grid;
 		}
@@ -4317,9 +4542,14 @@
 
 	/* ---------------------------------------------------------- section head */
 
+	/*
+	 * No max-width. The design's 820px cap is what forced these headings to
+	 * wrap and orphan their last word — "Building Futures, Enriching" over
+	 * "Communities". There is no lead paragraph in any of these heads, only a
+	 * kicker and a title, so letting them use the shell costs nothing.
+	 */
 	.iflynepal-csr-head {
 		@apply mx-auto text-center;
-		max-width: 820px;
 		margin-bottom: 46px;
 	}
 
@@ -4338,12 +4568,23 @@
 	}
 
 
+	/*
+	 * Ceiling lowered from the design's 62px to 58px. At 62 the longest default
+	 * heading — "Empowering Lives, Transforming Communities" — needs more than
+	 * the 1240px shell holds, so it wrapped however the width happened to fall.
+	 * At 58 it sits on one line from roughly 760px upward.
+	 *
+	 * `text-wrap: balance` is the safety net below that, and for any heading an
+	 * editor writes longer than these: when it does wrap it splits evenly
+	 * instead of leaving one word stranded on the second line.
+	 */
 	.iflynepal-csr-head__title {
 		@apply m-0 font-display font-semibold;
 		color: var(--iflynepal-ink);
-		font-size: clamp(38px, 4.6vw, 62px);
+		font-size: clamp(38px, 4.6vw, 58px);
 		line-height: 1.07;
 		letter-spacing: -0.03em;
+		text-wrap: balance;
 	}
 
 	/* ---------------------------------------------------------- commitment */

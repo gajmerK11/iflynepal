@@ -123,6 +123,24 @@ function iflynepal_enqueue_assets() {
 		);
 	}
 
+	/*
+	 * The hero's background slideshow. Listed after GSAP because it tweens,
+	 * and enqueued only when there are at least two pictures to move between —
+	 * a single one is a static background and needs nothing.
+	 */
+	if ( is_front_page() && iflynepal_hero_slides_animate() ) {
+		wp_enqueue_script(
+			'iflynepal-hero-slides',
+			IFLYNEPAL_URI . '/assets/js/homepage/hero/slides.js',
+			array( 'iflynepal-gsap' ),
+			iflynepal_asset_version( 'assets/js/homepage/hero/slides.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
 	if ( $has_explore ) {
 		wp_enqueue_script(
 			'iflynepal-reveal',
@@ -387,6 +405,22 @@ function iflynepal_enqueue_navigation() {
 		IFLYNEPAL_URI . '/assets/js/header/navigation.js',
 		array(),
 		iflynepal_asset_version( 'assets/js/header/navigation.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+
+	/*
+	 * The dropdowns. Separate from the toggle above because it is what makes
+	 * them work by keyboard and by touch — the hover that opens them on a
+	 * pointer device is CSS and needs nothing.
+	 */
+	wp_enqueue_script(
+		'iflynepal-nav-dropdown',
+		IFLYNEPAL_URI . '/assets/js/header/nav-dropdown.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/header/nav-dropdown.js' ),
 		array(
 			'strategy'  => 'defer',
 			'in_footer' => true,

@@ -189,6 +189,30 @@ function iflynepal_customizer_controls_assets() {
 	);
 
 	wp_enqueue_script(
+		'iflynepal-customizer-hero-slides',
+		IFLYNEPAL_URI . '/assets/js/homepage/hero/slides-list.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/homepage/hero/slides-list.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'iflynepal-customizer-hero-slides',
+		'iflynepalHeroSlides',
+		array(
+			'max'         => IFLYNEPAL_HERO_SLIDE_MAX,
+			'addLabel'    => __( 'Add image', 'iflynepal' ),
+			'maxMessage'  => sprintf(
+				/* translators: %d: maximum number of slideshow images. */
+				__( 'Maximum %d images allowed.', 'iflynepal' ),
+				IFLYNEPAL_HERO_SLIDE_MAX
+			),
+			/* translators: %d: image number. */
+			'removeLabel' => __( 'Remove image %d', 'iflynepal' ),
+		)
+	);
+
+	wp_enqueue_script(
 		'iflynepal-customizer-trust-logos',
 		IFLYNEPAL_URI . '/assets/js/homepage/trust/logos.js',
 		array( 'iflynepal-customizer-repeater' ),

@@ -60,7 +60,6 @@
 				<element value="iflynepal_render_people_lead"/>
 				<element value="iflynepal_render_people_cta"/>
 				<element value="iflynepal_render_people_card_photo"/>
-				<element value="iflynepal_render_people_card_title"/>
 				<element value="iflynepal_render_people_card_name"/>
 				<element value="iflynepal_render_people_card_country"/>
 				<element value="iflynepal_render_testimonial_platform_icon"/>

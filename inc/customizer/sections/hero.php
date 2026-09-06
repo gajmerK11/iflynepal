@@ -114,6 +114,54 @@ for ( $iflynepal_i = 1; $iflynepal_i <= IFLYNEPAL_HERO_TRUST_MAX; $iflynepal_i++
 
 /* ------------------------------------------------------------------ media */
 
+$wp_customize->add_control(
+	new IFly_Nepal_Customize_Heading_Control(
+		$wp_customize,
+		'iflynepal_hero_slides_heading',
+		array(
+			'label'       => __( 'Background images (slideshow)', 'iflynepal' ),
+			'description' => __( 'Upload two or more and the hero cross-fades between them, slowly drifting in on each. One on its own is simply the background. Anything here replaces both the single background image and the video below — the video is not downloaded at all.', 'iflynepal' ),
+			'section'     => 'iflynepal_hero',
+			'settings'    => array(),
+		)
+	)
+);
+
+/*
+ * Every slot is registered here; the Customizer's control script hides the
+ * empty ones behind an "Add image" button.
+ */
+for ( $iflynepal_slide = 1; $iflynepal_slide <= IFLYNEPAL_HERO_SLIDE_MAX; $iflynepal_slide++ ) {
+	$wp_customize->add_setting(
+		'iflynepal_hero_slide_' . $iflynepal_slide . '_image',
+		array(
+			'default'           => 0,
+			'sanitize_callback' => 'absint',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		new WP_Customize_Media_Control(
+			$wp_customize,
+			'iflynepal_hero_slide_' . $iflynepal_slide . '_image',
+			array(
+				/* translators: %d: slide number. */
+				'label'       => sprintf( __( 'Image %d', 'iflynepal' ), $iflynepal_slide ),
+				'description' => 1 === $iflynepal_slide
+					? sprintf(
+						/* translators: 1: minimum width in pixels, 2: minimum height in pixels. */
+						__( 'The first one paints immediately and is the largest element on the page — keep it under 150 KB. Landscape, at least %1$d x %2$d pixels. The rest are only downloaded once the slideshow starts.', 'iflynepal' ),
+						IFLYNEPAL_HERO_IMAGE_MIN_WIDTH,
+						IFLYNEPAL_HERO_IMAGE_MIN_HEIGHT
+					)
+					: '',
+				'section'     => 'iflynepal_hero',
+				'mime_type'   => 'image',
+			)
+		)
+	);
+}
+
 $wp_customize->add_setting(
 	'iflynepal_hero_background_image',
 	array(
@@ -131,7 +179,7 @@ $wp_customize->add_control(
 			'label'       => __( 'Background image', 'iflynepal' ),
 			'description' => sprintf(
 				/* translators: 1: minimum width in pixels, 2: minimum height in pixels. */
-				__( 'Shown immediately, and behind the video. This is the largest element on the page — keep it under 150 KB. Must be landscape and at least %1$d x %2$d pixels.', 'iflynepal' ),
+				__( 'Used when the slideshow above is empty. Shown immediately, and behind the video. This is the largest element on the page — keep it under 150 KB. Must be landscape and at least %1$d x %2$d pixels.', 'iflynepal' ),
 				IFLYNEPAL_HERO_IMAGE_MIN_WIDTH,
 				IFLYNEPAL_HERO_IMAGE_MIN_HEIGHT
 			),
@@ -154,9 +202,10 @@ $wp_customize->add_control(
 		$wp_customize,
 		'iflynepal_hero_background_video',
 		array(
-			'label'     => __( 'Background video', 'iflynepal' ),
-			'section'   => 'iflynepal_hero',
-			'mime_type' => 'video',
+			'label'       => __( 'Background video', 'iflynepal' ),
+			'description' => __( 'Ignored while the slideshow above has any image in it.', 'iflynepal' ),
+			'section'     => 'iflynepal_hero',
+			'mime_type'   => 'video',
 		)
 	)
 );

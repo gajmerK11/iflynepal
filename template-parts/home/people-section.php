@@ -70,12 +70,6 @@ if ( ! $iflynepal_people ) {
 						// The image URL and its alt text are escaped inside the render callback.
 						echo iflynepal_render_people_card_photo( $iflynepal_card );
 						?>
-						<span class="iflynepal-people__role" id="iflynepal-people-card-<?php echo esc_attr( $iflynepal_card ); ?>-title">
-							<?php
-							// Escaped inside the render callback.
-							echo iflynepal_render_people_card_title( $iflynepal_card );
-							?>
-						</span>
 					</div>
 					<div class="iflynepal-people__body">
 						<h3 class="wp-block-heading iflynepal-people__name">

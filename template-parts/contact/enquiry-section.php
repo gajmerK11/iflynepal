@@ -14,15 +14,15 @@ $iflynepal_countries = array( 'Australia', 'France', 'Italy', 'Japan', 'Nepal', 
 <section class="wp-block-group iflynepal-contact-section iflynepal-section--mist" id="enquiry" data-iflynepal-motion aria-labelledby="iflynepal-contact-enquiry-title">
 	<div class="iflynepal-contact-container">
 		<header class="iflynepal-contact-head" data-iflynepal-reveal>
-			<p class="iflynepal-contact-eyebrow"><?php echo iflynepal_contact_text( 'enquiry_kicker' ); ?></p>
+			<p class="iflynepal-contact-eyebrow" id="iflynepal-contact-enquiry-kicker"><?php echo iflynepal_contact_text( 'enquiry_kicker' ); ?></p>
 			<h2 id="iflynepal-contact-enquiry-title"><?php echo iflynepal_contact_text( 'enquiry_title' ); ?></h2>
-			<p><?php echo iflynepal_contact_text( 'enquiry_lead' ); ?></p>
+			<p id="iflynepal-contact-enquiry-lead"><?php echo iflynepal_contact_text( 'enquiry_lead' ); ?></p>
 		</header>
 
 		<div class="iflynepal-contact-enquiry">
 			<div class="iflynepal-contact-form-card" data-iflynepal-reveal>
-				<h2><?php echo esc_html( iflynepal_contact_plain( 'form_title' ) ); ?></h2>
-				<p class="iflynepal-contact-form-card__note"><?php echo esc_html( iflynepal_contact_plain( 'form_note' ) ); ?></p>
+				<h2 id="iflynepal-contact-form-title"><?php echo esc_html( iflynepal_contact_plain( 'form_title' ) ); ?></h2>
+				<p class="iflynepal-contact-form-card__note" id="iflynepal-contact-form-note"><?php echo esc_html( iflynepal_contact_plain( 'form_note' ) ); ?></p>
 				<?php if ( $iflynepal_notice ) : ?>
 					<div class="iflynepal-contact-notice iflynepal-contact-notice--<?php echo esc_attr( $iflynepal_notice['type'] ); ?>" role="status"><?php echo esc_html( $iflynepal_notice['message'] ); ?></div>
 				<?php endif; ?>
@@ -36,13 +36,13 @@ $iflynepal_countries = array( 'Australia', 'France', 'Italy', 'Japan', 'Nepal', 
 					<label class="iflynepal-contact-field"><span><?php esc_html_e( 'Country', 'iflynepal' ); ?> <b>*</b></span><select class="iflynepal-contact-control" name="country" required><option value="" selected disabled><?php esc_html_e( 'Select your country', 'iflynepal' ); ?></option><?php foreach ( $iflynepal_countries as $iflynepal_country ) : ?><option value="<?php echo esc_attr( $iflynepal_country ); ?>"><?php echo esc_html( $iflynepal_country ); ?></option><?php endforeach; ?></select><small><?php esc_html_e( 'Please select your country.', 'iflynepal' ); ?></small></label>
 					<label class="iflynepal-contact-field"><span><?php esc_html_e( 'Mobile Number', 'iflynepal' ); ?> <b>*</b></span><input class="iflynepal-contact-control" type="tel" name="phone" placeholder="+977 9800000000" autocomplete="tel" pattern="^\+?[0-9\s()\-]{7,20}$" required><small><?php esc_html_e( 'Please enter a valid mobile number.', 'iflynepal' ); ?></small></label>
 					<label class="iflynepal-contact-field"><span><?php esc_html_e( 'Your Question / Message', 'iflynepal' ); ?> <b>*</b></span><textarea class="iflynepal-contact-control" name="message" rows="5" placeholder="<?php esc_attr_e( 'Write your message here...', 'iflynepal' ); ?>" required></textarea><small><?php esc_html_e( 'Please enter your question or message.', 'iflynepal' ); ?></small></label>
-					<div class="iflynepal-contact-form__actions"><button class="iflynepal-button iflynepal-contact-submit" type="submit"><?php esc_html_e( 'Submit', 'iflynepal' ); ?> <?php echo iflynepal_contact_icon( 'arrow-right' ); ?></button><span><?php echo esc_html( iflynepal_contact_plain( 'form_hint' ) ); ?></span></div>
+					<div class="iflynepal-contact-form__actions"><button class="iflynepal-button iflynepal-contact-submit" type="submit"><?php esc_html_e( 'Submit', 'iflynepal' ); ?> <?php echo iflynepal_contact_icon( 'arrow-right' ); ?></button><span id="iflynepal-contact-form-hint"><?php echo esc_html( iflynepal_contact_plain( 'form_hint' ) ); ?></span></div>
 				</form>
 			</div>
 
 			<div class="iflynepal-contact-map" data-iflynepal-reveal>
-				<div class="iflynepal-contact-map__frame"><iframe title="<?php esc_attr_e( 'iFly Nepal on Google Maps', 'iflynepal' ); ?>" src="<?php echo esc_url( iflynepal_contact_plain( 'map_embed_url' ) ); ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
-				<div class="iflynepal-contact-map__foot"><div><small><?php echo esc_html( iflynepal_contact_plain( 'map_label' ) ); ?></small><h3><?php echo esc_html( iflynepal_contact_plain( 'map_title' ) ); ?></h3><p><?php echo esc_html( iflynepal_contact_plain( 'map_hours' ) ); ?></p></div><a class="iflynepal-button iflynepal-contact-submit" href="<?php echo esc_url( iflynepal_contact_link( 'map_button_url' ) ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( iflynepal_contact_plain( 'map_button_label' ) ); ?> <?php echo iflynepal_contact_icon( 'arrow-right' ); ?></a></div>
+				<div class="iflynepal-contact-map__frame"><?php echo iflynepal_render_contact_map_embed(); ?></div>
+				<div class="iflynepal-contact-map__foot"><div><small id="iflynepal-contact-map-label"><?php echo esc_html( iflynepal_contact_plain( 'map_label' ) ); ?></small><h3 id="iflynepal-contact-map-title"><?php echo esc_html( iflynepal_contact_plain( 'map_title' ) ); ?></h3><p id="iflynepal-contact-map-hours"><?php echo esc_html( iflynepal_contact_plain( 'map_hours' ) ); ?></p></div><?php echo iflynepal_render_contact_map_button(); ?></div>
 			</div>
 		</div>
 	</div>

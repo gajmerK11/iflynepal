@@ -200,7 +200,7 @@ for ( $iflynepal_card = 1; $iflynepal_card <= IFLYNEPAL_PEOPLE_CARD_MAX; $iflyne
 		array(
 			/* translators: %d: card number. */
 			'label'       => sprintf( __( 'Person %d — title', 'iflynepal' ), $iflynepal_card ),
-			'description' => __( 'The role shown on the pill over the photograph.', 'iflynepal' ),
+			'description' => __( 'Not shown on the card. It describes the photograph for screen readers — "Prakash, Travel Expert for USA" — so it is worth filling in.', 'iflynepal' ),
 			'section'     => 'iflynepal_people',
 			'priority'    => $iflynepal_priority + 1,
 			'type'        => 'text',
@@ -303,7 +303,9 @@ if ( isset( $wp_customize->selective_refresh ) ) {
 	);
 
 	for ( $iflynepal_card = 1; $iflynepal_card <= IFLYNEPAL_PEOPLE_CARD_MAX; $iflynepal_card++ ) {
-		foreach ( array( 'title', 'country' ) as $iflynepal_field ) {
+		// The role is no longer printed on the card, so only the country has a
+		// fragment to refresh — see the control's own description.
+		foreach ( array( 'country' ) as $iflynepal_field ) {
 			$wp_customize->selective_refresh->add_partial(
 				'iflynepal_people_card_' . $iflynepal_card . '_' . $iflynepal_field,
 				array(

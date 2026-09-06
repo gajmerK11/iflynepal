@@ -214,6 +214,182 @@ function iflynepal_contact_has_representatives() {
 	return '' !== trim( wp_strip_all_tags( iflynepal_contact_text( 'reps_title' ) ) ) && (bool) iflynepal_contact_representatives();
 }
 
+/* ------------------------------------------------------ render callbacks */
+
+/**
+ * Renders one simple Contact setting for selective refresh.
+ *
+ * @param WP_Customize_Partial $partial Partial being rendered.
+ * @return string Markup or escaped text.
+ */
+function iflynepal_render_contact_field( $partial ) {
+	$field = str_replace( 'iflynepal_contact_', '', $partial->id );
+	$html_fields = array(
+		'hero_kicker',
+		'hero_title',
+		'hero_lead',
+		'office_address',
+		'enquiry_kicker',
+		'enquiry_title',
+		'enquiry_lead',
+		'reps_kicker',
+		'reps_title',
+		'reps_lead',
+	);
+
+	if ( in_array( $field, $html_fields, true ) ) {
+		return iflynepal_contact_text( $field );
+	}
+
+	return esc_html( iflynepal_contact_plain( $field ) );
+}
+
+/**
+ * Hero image markup.
+ *
+ * @return string Markup.
+ */
+function iflynepal_render_contact_hero_image() {
+	return sprintf(
+		'<img class="iflynepal-hero__still" src="%s" alt="" fetchpriority="high" loading="eager" decoding="sync">',
+		esc_url( iflynepal_contact_hero_image_url() )
+	);
+}
+
+/**
+ * Renders the full hero when its background changes.
+ *
+ * The image layer sits behind the overlay, so its edit shortcut is placed on
+ * the visible section and the section is refreshed as one inclusive fragment.
+ *
+ * @return string Markup.
+ */
+function iflynepal_render_contact_hero_section() {
+	ob_start();
+	get_template_part( 'template-parts/contact/hero-section' );
+
+	return (string) ob_get_clean();
+}
+
+/**
+ * One hero action.
+ *
+ * @param string $type Action type.
+ * @return string Markup.
+ */
+function iflynepal_contact_hero_button_markup( $type ) {
+	$primary  = 'primary' === $type;
+	$label    = iflynepal_contact_plain( 'hero_' . $type . '_label' );
+	$url      = iflynepal_contact_link( 'hero_' . $type . '_url' );
+	$modifier = $primary ? 'iflynepal-button--light' : 'iflynepal-button--outline';
+
+	if ( '' === $label || '' === $url ) {
+		return '';
+	}
+
+	return sprintf(
+		'<a id="iflynepal-contact-hero-%1$s" class="iflynepal-button %2$s" href="%3$s">%4$s</a>',
+		esc_attr( $type ),
+		esc_attr( $modifier ),
+		esc_url( $url ),
+		esc_html( $label )
+	);
+}
+
+/** @return string Markup. */
+function iflynepal_render_contact_hero_primary_button() {
+	return iflynepal_contact_hero_button_markup( 'primary' );
+}
+
+/** @return string Markup. */
+function iflynepal_render_contact_hero_secondary_button() {
+	return iflynepal_contact_hero_button_markup( 'secondary' );
+}
+
+/** @return string Markup. */
+function iflynepal_render_contact_hero_scroll_label() {
+	return esc_html( iflynepal_contact_plain( 'hero_scroll_label' ) ) . ' <span aria-hidden="true">&#8595;</span>';
+}
+
+/** @return string Markup. */
+function iflynepal_render_contact_office_phone() {
+	$phone = iflynepal_contact_plain( 'office_phone' );
+	$href  = preg_replace( '/[^0-9+]/', '', $phone );
+
+	return sprintf( '<a id="iflynepal-contact-office-phone" href="tel:%1$s">%2$s</a>', esc_attr( $href ), esc_html( $phone ) );
+}
+
+/** @return string Markup. */
+function iflynepal_render_contact_office_email() {
+	$email = sanitize_email( iflynepal_contact_plain( 'office_email' ) );
+
+	return sprintf( '<a id="iflynepal-contact-office-email" href="mailto:%1$s">%2$s</a>', esc_attr( $email ), esc_html( $email ) );
+}
+
+/** @return string Markup. */
+function iflynepal_render_contact_map_embed() {
+	return sprintf(
+		'<iframe id="iflynepal-contact-map-embed" title="%1$s" src="%2$s" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>',
+		esc_attr__( 'iFly Nepal on Google Maps', 'iflynepal' ),
+		esc_url( iflynepal_contact_plain( 'map_embed_url' ) )
+	);
+}
+
+/** @return string Markup. */
+function iflynepal_render_contact_map_button() {
+	return sprintf(
+		'<a id="iflynepal-contact-map-button" class="iflynepal-button iflynepal-contact-submit" href="%1$s" target="_blank" rel="noopener noreferrer">%2$s %3$s</a>',
+		esc_url( iflynepal_contact_link( 'map_button_url' ) ),
+		esc_html( iflynepal_contact_plain( 'map_button_label' ) ),
+		iflynepal_contact_icon( 'arrow-right' )
+	);
+}
+
+/**
+ * One representative card.
+ *
+ * @param array $card Representative data.
+ * @return string Markup.
+ */
+function iflynepal_contact_representative_card_markup( $card ) {
+	$channel = '';
+
+	if ( '' !== $card['channel'] ) {
+		$channel = '<p class="iflynepal-contact-rep__channel">' . esc_html( $card['channel'] ) . '</p>';
+	}
+
+	return sprintf(
+		'<article id="iflynepal-contact-rep-%1$d" class="iflynepal-team-card iflynepal-contact-rep" data-iflynepal-reveal><div class="iflynepal-team-card__photo"><img src="%2$s" alt="%3$s" loading="lazy"><span class="iflynepal-contact-rep__country">%4$s</span></div><div class="iflynepal-team-card__body"><h3 class="iflynepal-team-card__name">%5$s</h3><a class="iflynepal-contact-rep__phone" href="tel:%6$s">%7$s%8$s</a>%9$s</div></article>',
+		(int) $card['index'],
+		esc_url( iflynepal_contact_representative_image_url( $card['index'] ) ),
+		esc_attr( iflynepal_contact_representative_image_alt( $card ) ),
+		esc_html( $card['country'] ),
+		esc_html( $card['name'] ),
+		esc_attr( $card['phone'] ),
+		iflynepal_contact_icon( 'phone' ),
+		esc_html( $card['phone_label'] ),
+		$channel
+	);
+}
+
+/**
+ * Renders a representative card for selective refresh.
+ *
+ * @param WP_Customize_Partial $partial Partial being rendered.
+ * @return string Markup.
+ */
+function iflynepal_render_contact_representative( $partial ) {
+	$index = (int) str_replace( 'iflynepal_contact_representative_', '', $partial->id );
+
+	foreach ( iflynepal_contact_representatives() as $card ) {
+		if ( $index === (int) $card['index'] ) {
+			return iflynepal_contact_representative_card_markup( $card );
+		}
+	}
+
+	return '';
+}
+
 /**
  * Small inline icon used by the Contact page.
  *

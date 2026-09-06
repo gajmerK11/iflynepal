@@ -164,3 +164,124 @@ for ( $iflynepal_rep = 1; $iflynepal_rep <= IFLYNEPAL_CONTACT_REPRESENTATIVE_MAX
 		)
 	);
 }
+
+/* --------------------------------------------------------------- partials */
+
+if ( isset( $wp_customize->selective_refresh ) ) {
+	/* Every one-value fragment receives its own preview shortcut. */
+	$iflynepal_contact_fields = array(
+		'hero_kicker'    => '#iflynepal-contact-hero-kicker',
+		'hero_title'     => '#iflynepal-contact-hero-title',
+		'hero_lead'      => '#iflynepal-contact-hero-lead',
+		'hero_script'    => '#iflynepal-contact-hero-script',
+		'office_label'   => '#iflynepal-contact-office-title',
+		'office_address' => '#iflynepal-contact-office-address',
+		'office_hours'   => '#iflynepal-contact-office-hours',
+		'enquiry_kicker' => '#iflynepal-contact-enquiry-kicker',
+		'enquiry_title'  => '#iflynepal-contact-enquiry-title',
+		'enquiry_lead'   => '#iflynepal-contact-enquiry-lead',
+		'form_title'     => '#iflynepal-contact-form-title',
+		'form_note'      => '#iflynepal-contact-form-note',
+		'form_hint'      => '#iflynepal-contact-form-hint',
+		'map_label'      => '#iflynepal-contact-map-label',
+		'map_title'      => '#iflynepal-contact-map-title',
+		'map_hours'      => '#iflynepal-contact-map-hours',
+		'reps_kicker'    => '#iflynepal-contact-reps-kicker',
+		'reps_title'     => '#iflynepal-contact-representatives-title',
+		'reps_lead'      => '#iflynepal-contact-reps-lead',
+	);
+
+	foreach ( $iflynepal_contact_fields as $iflynepal_field => $iflynepal_selector ) {
+		$wp_customize->selective_refresh->add_partial(
+			'iflynepal_contact_' . $iflynepal_field,
+			array(
+				'selector'        => $iflynepal_selector,
+				'settings'        => array( 'iflynepal_contact_' . $iflynepal_field ),
+				'render_callback' => 'iflynepal_render_contact_field',
+			)
+		);
+	}
+
+	$wp_customize->selective_refresh->add_partial(
+		'iflynepal_contact_hero_image',
+		array(
+			'selector'            => '.iflynepal-contact-hero',
+			'settings'            => array( 'iflynepal_contact_hero_image' ),
+			'render_callback'     => 'iflynepal_render_contact_hero_section',
+			'container_inclusive' => true,
+		)
+	);
+
+	foreach ( array( 'primary', 'secondary' ) as $iflynepal_type ) {
+		$wp_customize->selective_refresh->add_partial(
+			'iflynepal_contact_hero_' . $iflynepal_type . '_button',
+			array(
+				'selector'            => '#iflynepal-contact-hero-' . $iflynepal_type,
+				'settings'            => array(
+					'iflynepal_contact_hero_' . $iflynepal_type . '_label',
+					'iflynepal_contact_hero_' . $iflynepal_type . '_url',
+				),
+				'render_callback'     => 'iflynepal_render_contact_hero_' . $iflynepal_type . '_button',
+				'container_inclusive' => true,
+			)
+		);
+	}
+
+	$wp_customize->selective_refresh->add_partial(
+		'iflynepal_contact_hero_scroll_label',
+		array(
+			'selector'        => '#iflynepal-contact-hero-scroll',
+			'settings'        => array( 'iflynepal_contact_hero_scroll_label' ),
+			'render_callback' => 'iflynepal_render_contact_hero_scroll_label',
+		)
+	);
+
+	foreach ( array( 'phone', 'email' ) as $iflynepal_field ) {
+		$wp_customize->selective_refresh->add_partial(
+			'iflynepal_contact_office_' . $iflynepal_field,
+			array(
+				'selector'            => '#iflynepal-contact-office-' . $iflynepal_field,
+				'settings'            => array( 'iflynepal_contact_office_' . $iflynepal_field ),
+				'render_callback'     => 'iflynepal_render_contact_office_' . $iflynepal_field,
+				'container_inclusive' => true,
+			)
+		);
+	}
+
+	$wp_customize->selective_refresh->add_partial(
+		'iflynepal_contact_map_embed_url',
+		array(
+			'selector'        => '.iflynepal-contact-map__frame',
+			'settings'        => array( 'iflynepal_contact_map_embed_url' ),
+			'render_callback' => 'iflynepal_render_contact_map_embed',
+		)
+	);
+
+	$wp_customize->selective_refresh->add_partial(
+		'iflynepal_contact_map_button',
+		array(
+			'selector'            => '#iflynepal-contact-map-button',
+			'settings'            => array( 'iflynepal_contact_map_button_label', 'iflynepal_contact_map_button_url' ),
+			'render_callback'     => 'iflynepal_render_contact_map_button',
+			'container_inclusive' => true,
+		)
+	);
+
+	for ( $iflynepal_rep = 1; $iflynepal_rep <= IFLYNEPAL_CONTACT_REPRESENTATIVE_MAX; $iflynepal_rep++ ) {
+		$iflynepal_rep_settings = array();
+
+		foreach ( array( 'name', 'country', 'phone', 'phone_label', 'channel', 'image' ) as $iflynepal_field ) {
+			$iflynepal_rep_settings[] = 'iflynepal_contact_rep_' . $iflynepal_rep . '_' . $iflynepal_field;
+		}
+
+		$wp_customize->selective_refresh->add_partial(
+			'iflynepal_contact_representative_' . $iflynepal_rep,
+			array(
+				'selector'            => '#iflynepal-contact-rep-' . $iflynepal_rep,
+				'settings'            => $iflynepal_rep_settings,
+				'render_callback'     => 'iflynepal_render_contact_representative',
+				'container_inclusive' => true,
+			)
+		);
+	}
+}

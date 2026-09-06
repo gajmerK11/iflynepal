@@ -386,18 +386,6 @@ function iflynepal_render_people_card_photo( $index ) {
 }
 
 /**
- * Renders one card's role pill.
- *
- * @since 1.0.0
- *
- * @param int $index Card number.
- * @return string Markup.
- */
-function iflynepal_render_people_card_title( $index ) {
-	return esc_html( iflynepal_people_card_field( $index, 'title' ) );
-}
-
-/**
  * Renders one card's name.
  *
  * @since 1.0.0

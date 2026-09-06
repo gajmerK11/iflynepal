@@ -189,6 +189,108 @@ function iflynepal_hero_background_image_size() {
 	);
 }
 
+/* ------------------------------------------------------ background slideshow */
+
+/**
+ * The images the hero can cycle through.
+ *
+ * Changing this needs a matching change to the max passed into
+ * assets/js/homepage/hero/slides-list.js.
+ *
+ * @since 1.0.0
+ */
+const IFLYNEPAL_HERO_SLIDE_MAX = 8;
+
+/**
+ * The slideshow images that have actually been uploaded, in order.
+ *
+ * Every slot is registered up front and the Customizer's repeater hides the
+ * unused ones, so this skips the gaps rather than assuming the filled slots are
+ * contiguous — an editor who empties slot 2 of four leaves 1, 3 and 4 set.
+ *
+ * @since 1.0.0
+ *
+ * @return array[] Slides, each with 'url', 'width' and 'height'.
+ */
+function iflynepal_hero_slides() {
+	$slides = array();
+
+	for ( $i = 1; $i <= IFLYNEPAL_HERO_SLIDE_MAX; $i++ ) {
+		$attachment_id = (int) get_theme_mod( 'iflynepal_hero_slide_' . $i . '_image', 0 );
+
+		if ( ! $attachment_id ) {
+			continue;
+		}
+
+		$url = wp_get_attachment_image_url( $attachment_id, 'full' );
+
+		if ( ! $url ) {
+			continue;
+		}
+
+		$meta = wp_get_attachment_metadata( $attachment_id );
+
+		$slides[] = array(
+			'url'    => (string) $url,
+			'width'  => empty( $meta['width'] ) ? 0 : (int) $meta['width'],
+			'height' => empty( $meta['height'] ) ? 0 : (int) $meta['height'],
+		);
+	}
+
+	return $slides;
+}
+
+/**
+ * Whether the hero is running its own slideshow.
+ *
+ * One image is enough to take over: putting a picture in this control is a
+ * clear instruction to use it as the background, and having it silently do
+ * nothing until a second one arrives would be the surprising behaviour. What a
+ * second image adds is the cross-fade.
+ *
+ * When this is true the single background image and the video are both skipped
+ * — the template does not render them at all, so the video is never fetched.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_hero_has_slides() {
+	return array() !== iflynepal_hero_slides();
+}
+
+/**
+ * Whether the slideshow has enough images to cross-fade between.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_hero_slides_animate() {
+	return count( iflynepal_hero_slides() ) > 1;
+}
+
+/**
+ * The image the hero paints first.
+ *
+ * The slideshow's opening frame when there is one, otherwise the single
+ * background image. This is the LCP element either way, which is what
+ * inc/enqueue.php preloads and preconnects for.
+ *
+ * @since 1.0.0
+ *
+ * @return string Image URL, or an empty string when the hero has no picture.
+ */
+function iflynepal_hero_first_image_url() {
+	$slides = iflynepal_hero_slides();
+
+	if ( $slides ) {
+		return $slides[0]['url'];
+	}
+
+	return iflynepal_hero_background_image_url();
+}
+
 /**
  * Background video URL.
  *

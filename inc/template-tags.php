@@ -16,6 +16,16 @@ defined( 'ABSPATH' ) || exit;
 const IFLYNEPAL_NAV_CTA_CLASS = 'nav-cta';
 
 /**
+ * How many links a dropdown holds before it splits into two columns.
+ *
+ * At or under this it is a single column; past it the panel goes two-up and
+ * fills them top to bottom — see IFly_Nepal_Nav_Walker::start_lvl().
+ *
+ * @since 1.0.0
+ */
+const IFLYNEPAL_NAV_PANEL_SPLIT_AT = 5;
+
+/**
  * Returns the primary menu item flagged as the call to action.
  *
  * The client sets this by adding the "nav-cta" CSS class to a menu item under
@@ -250,7 +260,8 @@ function iflynepal_current_hero_image_url() {
 	}
 
 	if ( is_front_page() ) {
-		return iflynepal_hero_background_image_url();
+		// The slideshow's first frame when there is one — see the getter.
+		return iflynepal_hero_first_image_url();
 	}
 
 	return '';

@@ -1,7 +1,13 @@
 <?php
 /**
- * Front page hero: background video over an image, headline, two calls to
- * action and the trust bullets.
+ * Front page hero: a background, the headline, two calls to action and the
+ * trust bullets.
+ *
+ * The background is one of three things, in order of precedence: the slideshow
+ * (two or more images cross-fading, or one held still), the single background
+ * image with the video over it, or the section's own dark ground. Putting any
+ * image in the slideshow control takes the other two off the page entirely, so
+ * the video is never requested.
  *
  * Everything editable here lives in Appearance > Customize > Homepage > Hero.
  * The background image is the LCP element, so it renders eager and at high
@@ -17,9 +23,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_image      = iflynepal_hero_background_image_url();
+$iflynepal_slides     = iflynepal_hero_slides();
+$iflynepal_image      = $iflynepal_slides ? '' : iflynepal_hero_background_image_url();
 $iflynepal_image_size = iflynepal_hero_background_image_size();
-$iflynepal_video      = iflynepal_hero_background_video_url();
+$iflynepal_video      = $iflynepal_slides ? '' : iflynepal_hero_background_video_url();
 $iflynepal_video_mime = iflynepal_hero_background_video_mime();
 $iflynepal_audio      = iflynepal_hero_audio_url();
 $iflynepal_audio_mime = iflynepal_hero_audio_mime();
@@ -40,6 +47,40 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 		>
 			<source src="<?php echo esc_url( $iflynepal_video ); ?>" type="<?php echo esc_attr( $iflynepal_video_mime ); ?>">
 		</video>
+	<?php endif; ?>
+
+	<?php if ( $iflynepal_slides ) : ?>
+		<?php
+		/*
+		 * The slideshow. Only the first slide carries a src: it is the LCP
+		 * element and paints immediately, while the rest wait behind a
+		 * data-src that assets/js/homepage/hero/slides.js promotes once it has
+		 * decided to run. A visitor on reduced motion or Data Saver — or with
+		 * no JavaScript — keeps the first picture and downloads nothing else.
+		 */
+		?>
+		<div class="iflynepal-hero__media" aria-hidden="true">
+			<?php foreach ( $iflynepal_slides as $iflynepal_index => $iflynepal_slide ) : ?>
+				<img
+					class="iflynepal-hero__slide"
+					<?php if ( 0 === $iflynepal_index ) : ?>
+						src="<?php echo esc_url( $iflynepal_slide['url'] ); ?>"
+						fetchpriority="high"
+						loading="eager"
+						decoding="sync"
+					<?php else : ?>
+						data-src="<?php echo esc_url( $iflynepal_slide['url'] ); ?>"
+						loading="lazy"
+						decoding="async"
+					<?php endif; ?>
+					<?php if ( $iflynepal_slide['width'] && $iflynepal_slide['height'] ) : ?>
+						width="<?php echo esc_attr( $iflynepal_slide['width'] ); ?>"
+						height="<?php echo esc_attr( $iflynepal_slide['height'] ); ?>"
+					<?php endif; ?>
+					alt=""
+				>
+			<?php endforeach; ?>
+		</div>
 	<?php endif; ?>
 
 	<?php if ( $iflynepal_image ) : ?>
