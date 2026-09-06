@@ -62,22 +62,28 @@ function iflynepal_get_nav_cta_item() {
 /**
  * Whether the current request renders a hero.
  *
- * Two templates carry one: the front page and the About page. Both use the
- * same component and the same script, so both answer yes here — that script
- * is also what swaps the header from transparent to solid on scroll, and
- * without it a hero template keeps white nav links over white content.
+ * Three templates carry one: the front page, the About page and the About
+ * Nepal page. All three use the same component and the same script, so all
+ * three answer yes here — that script is also what swaps the header from
+ * transparent to solid on scroll, and without it a hero template keeps white
+ * nav links over white content.
  *
  * Heroes are fixed sections of their templates, not editor content, so this
  * is a template question rather than a post-content one. Kept as its own
  * function because inc/enqueue.php and inc/template-functions.php both
  * condition on it.
  *
+ * ⚠️ Anything else keyed on this reads "a hero" and not "the front page".
+ * iflynepal_current_hero_image_url() below is what resolves which one, and a
+ * new hero template has to be added there as well as here — otherwise the
+ * preload points at a picture that is not on the page.
+ *
  * @since 1.0.0
  *
  * @return bool
  */
 function iflynepal_has_hero() {
-	return is_front_page() || iflynepal_has_about();
+	return is_front_page() || iflynepal_has_about() || iflynepal_has_about_country();
 }
 
 /**
@@ -167,18 +173,33 @@ function iflynepal_has_about() {
 }
 
 /**
+ * Whether the current request renders the About Nepal page template.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_about_country() {
+	return is_page_template( 'page-about-country.php' );
+}
+
+/**
  * The background image of whichever hero this request renders.
  *
- * The front page and the About page each have their own, and both are the
- * LCP element of their template — so the preconnect and the preload in
- * inc/enqueue.php have to resolve the one actually on the page rather than
- * always reaching for the front page's.
+ * The front page, the About page and the About Nepal page each have their own,
+ * and each is the LCP element of its template — so the preconnect and the
+ * preload in inc/enqueue.php have to resolve the one actually on the page
+ * rather than always reaching for the front page's.
  *
  * @since 1.0.0
  *
  * @return string Image URL, or an empty string when this template has no hero.
  */
 function iflynepal_current_hero_image_url() {
+	if ( iflynepal_has_about_country() ) {
+		return iflynepal_country_hero_image_url();
+	}
+
 	if ( iflynepal_has_about() ) {
 		return iflynepal_about_hero_image_url();
 	}

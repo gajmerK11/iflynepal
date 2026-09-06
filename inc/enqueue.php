@@ -60,8 +60,9 @@ function iflynepal_enqueue_assets() {
 	$has_guides       = iflynepal_has_guides();
 	$has_cta          = iflynepal_has_cta();
 	$has_about        = iflynepal_has_about();
+	$has_country      = iflynepal_has_about_country();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country ) {
 		return;
 	}
 
@@ -188,14 +189,33 @@ function iflynepal_enqueue_assets() {
 
 	/*
 	 * The generic, markup-driven motion file. Sections opt in with
-	 * data-iflynepal-motion; only the About page's do so far.
+	 * data-iflynepal-motion; the About page's and the About Nepal page's do so
+	 * far. Both templates share the one file rather than each growing a reveal
+	 * script of its own.
 	 */
-	if ( $has_about ) {
+	if ( $has_about || $has_country ) {
 		wp_enqueue_script(
 			'iflynepal-sections-motion',
 			IFLYNEPAL_URI . '/assets/js/sections/motion.js',
 			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
 			iflynepal_asset_version( 'assets/js/sections/motion.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	/*
+	 * The index bar's active mark. No GSAP dependency — it is an
+	 * IntersectionObserver and a class, and the links work without it.
+	 */
+	if ( $has_country ) {
+		wp_enqueue_script(
+			'iflynepal-country-index-bar',
+			IFLYNEPAL_URI . '/assets/js/about-country/index-bar.js',
+			array(),
+			iflynepal_asset_version( 'assets/js/about-country/index-bar.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,

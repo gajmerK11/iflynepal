@@ -51,11 +51,13 @@ const IFLYNEPAL_TRUST_TITLE_DEFAULT = 'Trust should be visible before someone pa
  * Stand-in promo photograph, used until the client's own image is uploaded.
  *
  * The card is a photographic panel, so it needs an image to hold its shape at
- * all — the same reasoning as the Explore cards, and unlike the hero.
+ * all — the same reasoning as the Explore cards, and unlike the hero. The file
+ * lives in assets/images/homepage, named for this card, so swapping it is a
+ * matter of replacing the file at that path.
  *
  * @since 1.0.0
  */
-const IFLYNEPAL_TRUST_PROMO_IMAGE_DEFAULT = 'https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1200&q=85';
+define( 'IFLYNEPAL_TRUST_PROMO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/homepage/trust-promo-why-trust-iflynepal.jpg' );
 
 /**
  * The icons a feature bullet can be given.

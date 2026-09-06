@@ -50,11 +50,12 @@ const IFLYNEPAL_CTA_DESCRIPTION_DEFAULT = 'Come for the mountains, culture or wi
  *
  * The card is a photograph with a scrim over it, so it needs an image to be
  * the thing the design describes at all. This is the frame the approved mockup
- * ships.
+ * ships. The file lives in assets/images/homepage, named for this card, so
+ * swapping it is a matter of replacing the file at that path.
  *
  * @since 1.0.0
  */
-const IFLYNEPAL_CTA_IMAGE_DEFAULT = 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=88';
+define( 'IFLYNEPAL_CTA_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/homepage/cta-your-nepal-your-pace.jpg' );
 
 /**
  * Alt text for the stand-in photograph, as the approved mockup has it.

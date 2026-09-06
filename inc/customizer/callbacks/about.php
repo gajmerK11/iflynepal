@@ -65,10 +65,12 @@ const IFLYNEPAL_ABOUT_HERO_LEAD_DEFAULT = 'Locally owned and deeply rooted in Ne
  *
  * The hero is a photograph under a scrim, so it needs an image to be the thing
  * the design describes at all. This is the frame the approved design ships.
+ * The file lives in assets/images/about, named for this section, so swapping
+ * it is a matter of replacing the file at that path.
  *
  * @since 1.0.0
  */
-const IFLYNEPAL_ABOUT_HERO_IMAGE_DEFAULT = 'https://images.unsplash.com/photo-1605640840605-14ac1855827b?auto=format&fit=crop&w=2200&q=88';
+define( 'IFLYNEPAL_ABOUT_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/about/hero-more-than-a-travel-company.jpg' );
 
 /**
  * Default label and destination for each hero button.
@@ -252,9 +254,12 @@ function iflynepal_about_story_paragraphs() {
 /**
  * Stand-in photograph for the promo card.
  *
+ * The file lives in assets/images/about, named for this card, so swapping it
+ * is a matter of replacing the file at that path.
+ *
  * @since 1.0.0
  */
-const IFLYNEPAL_ABOUT_PROMO_IMAGE_DEFAULT = 'https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1200&q=85';
+define( 'IFLYNEPAL_ABOUT_PROMO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/about/overview-promo-tell-us-how-you-want-to-travel.jpg' );
 
 /**
  * Default copy for the card beside the Overview text.
@@ -407,6 +412,9 @@ const IFLYNEPAL_ABOUT_OFFER_LEAD_DEFAULT = 'Set itineraries and fully customized
 /**
  * Default rows, as the approved design has them.
  *
+ * Each row's image is a file in assets/images/about, named for that row, so
+ * swapping one is a matter of replacing the file at that path.
+ *
  * @since 1.0.0
  *
  * @return array[] Defaults indexed from 1.
@@ -417,42 +425,42 @@ function iflynepal_about_offer_defaults() {
 			'number'      => '01',
 			'title'       => __( 'Tailored Tours &amp; Cultural Journeys', 'iflynepal' ),
 			'description' => __( 'We design travel experiences that reflect your interests and pace&mdash;from spiritual pilgrimages in Lumbini to cultural circuits in the Kathmandu Valley, jungle safaris in Chitwan to sunrise views over the Annapurna range', 'iflynepal' ),
-			'image'       => 'https://images.unsplash.com/photo-1605640840605-14ac1855827b?auto=format&fit=crop&w=1200&q=84',
+			'image'       => IFLYNEPAL_URI . '/assets/images/about/offer-01-tailored-tours-cultural-journeys.jpg',
 			'image_alt'   => __( 'Heritage architecture in the Kathmandu Valley', 'iflynepal' ),
 		),
 		2 => array(
 			'number'      => '02',
 			'title'       => __( 'Trekking &amp; Adventure Travel', 'iflynepal' ),
 			'description' => __( 'Explore the iconic trails of Everest, Annapurna, and Langtang, or venture into the remote corners of Mustang, Dolpo, or Kanchenjunga. Our experienced, licensed guides&mdash;including female trekking leaders&mdash;prioritize your safety, comfort, and connection with nature.', 'iflynepal' ),
-			'image'       => 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=84',
+			'image'       => IFLYNEPAL_URI . '/assets/images/about/offer-02-trekking-adventure-travel.jpg',
 			'image_alt'   => __( 'Trekkers on a Himalayan trail in Nepal', 'iflynepal' ),
 		),
 		3 => array(
 			'number'      => '03',
 			'title'       => __( 'Wellness &amp; Retreats', 'iflynepal' ),
 			'description' => __( 'We organize mindfulness and wellness retreats in serene locations&mdash;like yoga in Pokhara, monastery stays in the hills of Solu, or shamanic healing journeys in western Nepal. Our retreats are ideal for those looking to reconnect with themselves and the natural world.', 'iflynepal' ),
-			'image'       => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=84',
+			'image'       => IFLYNEPAL_URI . '/assets/images/about/offer-03-wellness-retreats.jpg',
 			'image_alt'   => __( 'A quiet wellness and meditation setting in Nepal', 'iflynepal' ),
 		),
 		4 => array(
 			'number'      => '04',
 			'title'       => __( 'Volunteering &amp; Community Engagement', 'iflynepal' ),
 			'description' => __( 'From teaching in rural schools to working on permaculture farms or shadowing in local clinics, we offer meaningful placements for travelers who want to give back. Our volunteer programs are thoughtfully developed with community needs in mind.', 'iflynepal' ),
-			'image'       => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=84',
+			'image'       => IFLYNEPAL_URI . '/assets/images/about/offer-04-volunteering-community-engagement.jpg',
 			'image_alt'   => __( 'A community gathering outdoors in rural Nepal', 'iflynepal' ),
 		),
 		5 => array(
 			'number'      => '05',
 			'title'       => __( 'Cultural Workshops &amp; Experiences', 'iflynepal' ),
 			'description' => __( 'Roll momos with a local chef, learn traditional Thangka painting, try your hand at wood carving, or join in a vibrant local festival. These moments often become the most cherished parts of the journey.', 'iflynepal' ),
-			'image'       => 'https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1200&q=84',
+			'image'       => IFLYNEPAL_URI . '/assets/images/about/offer-05-cultural-workshops-experiences.jpg',
 			'image_alt'   => __( 'Festival lamps during a Nepali celebration', 'iflynepal' ),
 		),
 		6 => array(
 			'number'      => '06',
 			'title'       => __( 'Travel Services &amp; Logistics', 'iflynepal' ),
 			'description' => __( 'We offer a full suite of travel support&mdash;from domestic and international air ticketing, hotel bookings, and vehicle rentals to visa assistance, insurance coordination, and emergency heli-rescue services. We also support outbound travel for Nepali travelers looking to explore international destinations.', 'iflynepal' ),
-			'image'       => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=84',
+			'image'       => IFLYNEPAL_URI . '/assets/images/about/offer-06-travel-services-logistics.jpg',
 			'image_alt'   => __( 'The Himalaya beneath a clear Nepal sky', 'iflynepal' ),
 		),
 	);

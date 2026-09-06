@@ -3034,6 +3034,714 @@
 			font-size: 46px;
 		}
 	}
+
+	/* ==========================================================================
+	   About Nepal — the country reference page
+	   Nine chapters that all share one shape: a centred head, a wide banner,
+	   then the source copy. What varies between them is one component apiece,
+	   which is what most of this block is.
+	   ========================================================================== */
+
+	/*
+	 * The index bar. Nine chapters is too many to scroll past hunting for one,
+	 * so the row docks under the header and marks where the reader is. It
+	 * reuses the pill shape the rest of the theme already uses for a filter,
+	 * rather than inventing a control.
+	 */
+	.iflynepal-country-index {
+		@apply sticky z-30;
+		/* Clears the docked header, which is 70px tall once it has docked. */
+		top: 70px;
+		margin-top: 28px;
+		background: rgba(255, 255, 255, 0.92);
+		backdrop-filter: blur(14px);
+	}
+
+	.iflynepal-country-index__scroll {
+		@apply mx-auto flex justify-center overflow-x-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		gap: 8px;
+		padding: 14px 0;
+		scroll-snap-type: x proximity;
+		overscroll-behavior-inline: contain;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		/*
+		 * On a narrow screen the row runs past the container, so it is masked
+		 * rather than cut — a hard edge would read as a broken layout.
+		 */
+		-webkit-mask-image: linear-gradient(90deg, transparent, #000 18px, #000 calc(100% - 18px), transparent);
+		mask-image: linear-gradient(90deg, transparent, #000 18px, #000 calc(100% - 18px), transparent);
+	}
+
+	.iflynepal-country-index__scroll::-webkit-scrollbar {
+		@apply hidden;
+	}
+
+	.iflynepal-country-index__link {
+		@apply block shrink-0 whitespace-nowrap rounded-full bg-white font-extrabold uppercase no-underline;
+		padding: 8px 14px;
+		border: 1px solid var(--iflynepal-line);
+		color: var(--iflynepal-muted);
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		scroll-snap-align: center;
+		transition:
+			color 0.25s ease,
+			border-color 0.25s ease,
+			background 0.25s ease,
+			transform 0.25s var(--iflynepal-ease);
+	}
+
+	.iflynepal-country-index__link:hover,
+	.iflynepal-country-index__link:focus-visible {
+		border-color: var(--iflynepal-navy);
+		color: var(--iflynepal-navy);
+		transform: translateY(-1px);
+	}
+
+	.iflynepal-country-index__link.is-here {
+		background: var(--iflynepal-navy);
+		border-color: var(--iflynepal-navy);
+		color: #fff;
+	}
+
+	/* --------------------------------------------------------------- chapters */
+
+	/*
+	 * A chapter's own top offset when it is jumped to. The header and the index
+	 * bar both sit over the page, so a bare anchor would land the heading
+	 * underneath them.
+	 */
+	.iflynepal-country-chapter {
+		@apply relative;
+		padding: 88px 0;
+		scroll-margin-top: 154px;
+	}
+
+	/* The first chapter follows the index bar rather than a section, so it
+	   needs less room above it than the ones that follow a full section. */
+	.iflynepal-country-chapter--first {
+		padding-top: 72px;
+	}
+
+	.iflynepal-country-chapter__inner {
+		@apply mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+	}
+
+	.iflynepal-country-chapter__head {
+		@apply mx-auto text-center;
+		max-width: 840px;
+		margin-bottom: 32px;
+	}
+
+	.iflynepal-country-chapter__head--bring {
+		margin-top: 64px;
+	}
+
+	.iflynepal-country-chapter__kicker {
+		@apply m-0 inline-flex items-center justify-center font-extrabold uppercase;
+		margin-bottom: 14px;
+		color: var(--iflynepal-navy);
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	.iflynepal-country-chapter__heading {
+		@apply m-0 font-display font-extrabold;
+		color: var(--iflynepal-ink);
+		font-size: clamp(30px, 4vw, 44px);
+		line-height: 1.12;
+		letter-spacing: -0.015em;
+	}
+
+	/*
+	 * The banner. A fixed-height frame with the photograph covering it, so a
+	 * portrait source and a landscape one both sit the same on the page.
+	 */
+	.iflynepal-country-chapter__banner {
+		@apply relative m-0 w-full overflow-hidden bg-mist;
+		height: clamp(300px, 38vw, 500px);
+		margin-bottom: 38px;
+		border-radius: 26px;
+		isolation: isolate;
+		box-shadow: 0 18px 44px rgba(4, 26, 64, 0.12);
+	}
+
+	.iflynepal-country-chapter__banner > img {
+		@apply absolute inset-0 h-full w-full object-cover;
+		z-index: -2;
+		transform: scale(1.001);
+		transition: transform 1.05s var(--iflynepal-ease-card-out);
+	}
+
+	/* A wash over the photograph, so the chapter below it starts on a settled
+	   tone rather than against whatever the frame happens to end on. */
+	.iflynepal-country-chapter__banner::after {
+		content: '';
+		@apply absolute inset-0;
+		z-index: -1;
+		background: linear-gradient(180deg, rgba(4, 26, 64, 0.04), rgba(4, 26, 64, 0.24));
+	}
+
+	.iflynepal-country-chapter__banner:hover > img {
+		transform: scale(1.035);
+	}
+
+	/* ------------------------------------------------------------------ prose */
+
+	/*
+	 * Everything long on this page is set to one measure. The chapters vary
+	 * their shape; the reading does not. The first paragraph is set darker and
+	 * a shade larger, which is what carries the reader in.
+	 */
+	.iflynepal-country-prose p {
+		color: var(--iflynepal-muted);
+		font-size: 15.5px;
+		line-height: 1.8;
+	}
+
+	.iflynepal-country-prose p + p {
+		margin-top: 20px;
+	}
+
+	.iflynepal-country-prose p:first-child {
+		color: var(--iflynepal-ink);
+		font-size: 17px;
+	}
+
+	/* The label that opens a paragraph is the source's own, so it stays inline
+	   rather than being promoted to a heading. */
+	.iflynepal-country-prose b,
+	.iflynepal-country-prose strong {
+		color: var(--iflynepal-ink);
+		font-weight: 800;
+	}
+
+	/* ------------------------------------------------------- geography's note */
+
+	/*
+	 * The two ends of the country's altitude range, called out before the
+	 * prose because the figures are what the chapter is remembered for.
+	 */
+	.iflynepal-country-note {
+		@apply w-full;
+		margin: 0 0 30px;
+		padding: 22px 0 24px;
+		border-bottom: 1px solid var(--iflynepal-line);
+	}
+
+	.iflynepal-country-note__label {
+		@apply block font-extrabold uppercase;
+		margin-bottom: 8px;
+		color: var(--iflynepal-navy);
+		font-size: 11px;
+		letter-spacing: 0.14em;
+	}
+
+	.iflynepal-country-note__title {
+		@apply m-0 font-display font-extrabold;
+		color: var(--iflynepal-ink);
+		font-size: 22px;
+	}
+
+	.iflynepal-country-note__text {
+		margin: 8px 0 0;
+		color: var(--iflynepal-muted);
+		font-size: 15px;
+		line-height: 1.7;
+	}
+
+	/* ---------------------------------------------------------- people's cards */
+
+	/*
+	 * A photograph with the group's name laid over it. Built on the theme's
+	 * other photographic cards, with the hover-reveal dropped — on a reference
+	 * page the name is the point rather than a tease.
+	 */
+	.iflynepal-country-bands {
+		@apply grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 18px;
+		margin-top: 44px;
+	}
+
+	.iflynepal-country-band {
+		@apply relative flex items-end overflow-hidden text-white;
+		min-height: 500px;
+		border-radius: 26px;
+		isolation: isolate;
+		transform: translate3d(0, 0, 0);
+		box-shadow: 0 2px 10px rgba(4, 26, 64, 0.05);
+		transition:
+			transform var(--iflynepal-card-fall) var(--iflynepal-ease-card-out),
+			box-shadow var(--iflynepal-card-fall) var(--iflynepal-ease-card-out);
+	}
+
+	.iflynepal-country-band:hover,
+	.iflynepal-country-band:focus-within {
+		transform: translate3d(0, -6px, 0);
+		box-shadow: 0 20px 44px rgba(4, 26, 64, 0.13);
+		transition-duration: var(--iflynepal-card-lift);
+		transition-timing-function: var(--iflynepal-ease-card);
+	}
+
+	.iflynepal-country-band img {
+		@apply absolute inset-0 h-full w-full object-cover;
+		z-index: -2;
+		backface-visibility: hidden;
+		transform: scale(1.001);
+		transition: transform 1.05s var(--iflynepal-ease-card-out);
+	}
+
+	.iflynepal-country-band:hover img,
+	.iflynepal-country-band:focus-within img {
+		transform: scale(1.06);
+		transition-duration: 0.85s;
+		transition-timing-function: var(--iflynepal-ease-card);
+	}
+
+	/* The name sits on the photograph, so the foot of the frame is darkened
+	   until it can hold white text at any exposure. */
+	.iflynepal-country-band::after {
+		content: '';
+		@apply absolute inset-0;
+		z-index: -1;
+		background: linear-gradient(transparent 18%, rgba(4, 26, 64, 0.92));
+	}
+
+	.iflynepal-country-band__body {
+		padding: 26px 24px;
+	}
+
+	.iflynepal-country-band__title {
+		@apply m-0 font-display font-extrabold text-white;
+		font-size: 21px;
+		line-height: 1.35;
+	}
+
+	/* --------------------------------------------------------- flora's regions */
+
+	/*
+	 * The rows themselves are the About page's "What we offer" component and
+	 * are styled there. Only the field they run on is set here: the section
+	 * around them is a plain chapter rather than that page's own shell, so the
+	 * bleed the rows expect has to be re-established.
+	 */
+	.iflynepal-country-regions {
+		margin-top: 52px;
+	}
+
+	/* ------------------------------------------------------- economy's sectors */
+
+	/*
+	 * The same two-by-two feature grid as the front page's Why-trust bullets,
+	 * with a paragraph in place of a line — which is more than that block's
+	 * 13px setting was built for, so it has a block of its own.
+	 */
+	.iflynepal-country-sectors {
+		@apply grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 40px 34px;
+		margin-top: 46px;
+	}
+
+	.iflynepal-country-sector {
+		@apply flex items-start;
+		gap: 16px;
+	}
+
+	.iflynepal-country-sector__icon {
+		@apply grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-mist;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-country-sector__icon .iflynepal-ico {
+		@apply h-6 w-6;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.6;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.iflynepal-country-sector__title {
+		@apply block font-display font-extrabold;
+		margin-bottom: 6px;
+		color: var(--iflynepal-ink);
+		font-size: 17px;
+	}
+
+	.iflynepal-country-sector__desc {
+		@apply block;
+		color: var(--iflynepal-muted);
+		font-size: 14px;
+		line-height: 1.65;
+	}
+
+	/* ------------------------------------------------------- climate's table */
+
+	/*
+	 * The comparison table is wider than a phone, so it scrolls inside its own
+	 * box rather than widening the page.
+	 */
+	.iflynepal-country-table {
+		@apply w-full overflow-x-auto;
+		margin-top: 34px;
+	}
+
+	.iflynepal-country-climate {
+		@apply w-full text-left;
+		border-collapse: collapse;
+		min-width: 720px;
+		font-size: 14px;
+	}
+
+	.iflynepal-country-climate th,
+	.iflynepal-country-climate td {
+		@apply text-left align-top;
+		padding: 15px 18px;
+		border-bottom: 1px solid var(--iflynepal-line);
+	}
+
+	/* The first header row spans the three readings it covers; the second names
+	   them. Together they are what makes the table readable without a legend. */
+	.iflynepal-country-climate thead tr:first-child th {
+		border-bottom: 1px solid var(--iflynepal-line);
+		color: var(--iflynepal-ink);
+		font-size: 16px;
+		font-weight: 600;
+	}
+
+	.iflynepal-country-climate thead tr:last-child th {
+		@apply font-extrabold uppercase;
+		border-bottom: 2px solid rgba(5, 69, 167, 0.3);
+		color: var(--iflynepal-muted);
+		font-size: 11px;
+		letter-spacing: 0.08em;
+	}
+
+	.iflynepal-country-climate tbody th {
+		@apply font-semibold;
+		color: var(--iflynepal-ink);
+	}
+
+	.iflynepal-country-climate tbody td {
+		color: var(--iflynepal-ink);
+	}
+
+	/* ------------------------------------------------------ climate's packing */
+
+	.iflynepal-country-packing {
+		@apply grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 56px;
+		margin-top: 34px;
+	}
+
+	.iflynepal-country-packing__list h3 {
+		@apply m-0 font-display font-extrabold;
+		padding-bottom: 14px;
+		border-bottom: 2px solid rgba(5, 69, 167, 0.3);
+		color: var(--iflynepal-ink);
+		font-size: 21px;
+	}
+
+	.iflynepal-country-packing__list ul {
+		@apply grid list-none;
+		margin: 22px 0 0;
+		padding: 0;
+		gap: 13px;
+	}
+
+	.iflynepal-country-packing__list li {
+		@apply relative;
+		padding-left: 22px;
+		color: var(--iflynepal-muted);
+		font-size: 14.5px;
+		line-height: 1.65;
+	}
+
+	/* A plus rather than a disc: every line is something to pack. */
+	.iflynepal-country-packing__list li::before {
+		content: '+';
+		@apply absolute left-0 font-bold;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-country-packing__list b {
+		color: var(--iflynepal-ink);
+		font-weight: 800;
+	}
+
+	/* --------------------------------------------------------- safety's list */
+
+	.iflynepal-country-safety {
+		@apply grid w-full list-none;
+		margin: 0;
+		padding: 0;
+		gap: 15px;
+	}
+
+	.iflynepal-country-safety li {
+		@apply relative;
+		padding: 0 0 0 24px;
+		color: var(--iflynepal-muted);
+		font-size: 14.5px;
+		line-height: 1.7;
+	}
+
+	.iflynepal-country-safety li::before {
+		content: '';
+		@apply absolute left-0 rounded-full;
+		top: 0.72em;
+		width: 8px;
+		height: 8px;
+		background: var(--iflynepal-navy);
+	}
+
+	/* ------------------------------------------------------- visa's schedule */
+
+	/*
+	 * A fee schedule is looked up rather than read start to finish, so it
+	 * folds. The theme's FAQ block does the same thing in a narrower column.
+	 */
+	.iflynepal-country-schedule {
+		max-width: 900px;
+		border-top: 1px solid var(--iflynepal-line);
+	}
+
+	.iflynepal-country-schedule details {
+		border-bottom: 1px solid var(--iflynepal-line);
+	}
+
+	.iflynepal-country-schedule summary {
+		@apply cursor-pointer list-none font-display font-bold;
+		padding: 20px 40px 20px 0;
+		color: var(--iflynepal-ink);
+		font-size: 17px;
+		position: relative;
+	}
+
+	.iflynepal-country-schedule summary::-webkit-details-marker {
+		@apply hidden;
+	}
+
+	/* The marker is drawn rather than inherited, so it can rotate on open. */
+	.iflynepal-country-schedule summary::after {
+		content: '';
+		@apply absolute;
+		right: 6px;
+		top: 27px;
+		width: 9px;
+		height: 9px;
+		border-right: 2px solid var(--iflynepal-navy);
+		border-bottom: 2px solid var(--iflynepal-navy);
+		transform: rotate(45deg);
+		transition: transform 0.25s var(--iflynepal-ease);
+	}
+
+	.iflynepal-country-schedule details[open] summary::after {
+		transform: rotate(-135deg);
+	}
+
+	.iflynepal-country-schedule details p {
+		margin: 0 0 14px;
+		color: var(--iflynepal-muted);
+		font-size: 14.5px;
+		line-height: 1.7;
+	}
+
+	.iflynepal-country-schedule details > p:first-of-type {
+		padding-top: 2px;
+	}
+
+	.iflynepal-country-schedule details b {
+		color: var(--iflynepal-ink);
+		font-weight: 800;
+	}
+
+	.iflynepal-country-schedule h4 {
+		@apply font-extrabold;
+		margin: 26px 0 0;
+		color: var(--iflynepal-ink);
+		font-size: 14px;
+		letter-spacing: 0.02em;
+	}
+
+	.iflynepal-country-schedule h4:first-of-type {
+		margin-top: 18px;
+	}
+
+	.iflynepal-country-fee {
+		@apply grid list-none;
+		margin: 14px 0 18px;
+		padding: 0;
+		gap: 10px;
+	}
+
+	.iflynepal-country-fee li {
+		@apply flex items-baseline;
+		gap: 14px;
+		color: var(--iflynepal-muted);
+		font-size: 14px;
+		line-height: 1.6;
+	}
+
+	/* The clause letter is what the clauses cross-reference each other by, so
+	   it is set apart from the sentence rather than running into it. */
+	.iflynepal-country-fee__key {
+		@apply shrink-0 font-semibold italic;
+		min-width: 22px;
+		color: var(--iflynepal-navy);
+		font-size: 19px;
+	}
+
+	/* --------------------------------------------------------- visa's permit */
+
+	/*
+	 * Trekking permits are one paragraph, and a chapter of their own would
+	 * overstate them. They close the page as a bordered aside instead.
+	 */
+	.iflynepal-country-permit {
+		@apply grid items-start bg-white;
+		grid-template-columns: auto 1fr;
+		gap: 26px;
+		margin-top: 44px;
+		padding: 34px 36px;
+		border: 1px solid var(--iflynepal-line);
+		border-left: 3px solid var(--iflynepal-gold);
+		border-radius: 14px;
+	}
+
+	.iflynepal-country-permit__mark {
+		@apply grid place-items-center;
+		width: 46px;
+		height: 46px;
+		border-radius: 13px;
+		background: var(--iflynepal-mist, #eef3fb);
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-country-permit__mark .iflynepal-ico {
+		width: 23px;
+		height: 23px;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.6;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.iflynepal-country-permit__title {
+		@apply m-0 font-display font-extrabold;
+		color: var(--iflynepal-ink);
+		font-size: 20px;
+	}
+
+	.iflynepal-country-permit__text {
+		margin-top: 10px;
+		color: var(--iflynepal-muted);
+		font-size: 14.5px;
+		line-height: 1.7;
+	}
+
+	/* ------------------------------------------------------------ responsive */
+
+	/*
+	 * The cards are the only thing here that has to change shape more than
+	 * once: four across, then two, then one.
+	 */
+	@media (max-width: 1080px) {
+		.iflynepal-country-index {
+			top: 66px;
+		}
+
+		.iflynepal-country-index__scroll {
+			@apply justify-start;
+		}
+
+		.iflynepal-country-bands {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.iflynepal-country-sectors {
+			grid-template-columns: 1fr;
+			gap: 30px;
+		}
+	}
+
+	@media (max-width: 782px) {
+		/* The admin bar stops being fixed here, and the header docks lower. */
+		.iflynepal-country-chapter {
+			scroll-margin-top: 132px;
+		}
+	}
+
+	@media (max-width: 720px) {
+		.iflynepal-country-chapter {
+			padding: 64px 0;
+		}
+
+		.iflynepal-country-chapter__banner {
+			height: clamp(250px, 68vw, 370px);
+			margin-bottom: 30px;
+		}
+
+		.iflynepal-country-bands {
+			grid-template-columns: 1fr;
+		}
+
+		.iflynepal-country-band {
+			min-height: 390px;
+		}
+
+		.iflynepal-country-packing {
+			grid-template-columns: 1fr;
+			gap: 38px;
+		}
+
+		.iflynepal-country-permit {
+			grid-template-columns: 1fr;
+			gap: 18px;
+			padding: 26px 24px;
+		}
+
+		.iflynepal-country-prose p:first-child {
+			font-size: 16px;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.iflynepal-country-index {
+			margin-top: 18px;
+		}
+
+		.iflynepal-country-index__scroll {
+			padding: 11px 0;
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		.iflynepal-country-index__link {
+			padding: 7px 12px;
+			font-size: 10px;
+		}
+
+		.iflynepal-country-chapter__inner {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		.iflynepal-country-chapter--first {
+			padding-top: 56px;
+		}
+
+		.iflynepal-country-prose p {
+			font-size: 15px;
+		}
+	}
 }
 
 @keyframes iflynepal-trust-scroll {

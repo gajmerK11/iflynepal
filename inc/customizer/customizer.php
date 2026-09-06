@@ -20,6 +20,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/faq.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/travel-guide.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/cta.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/about.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/about-country.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 
 /**
@@ -56,15 +57,17 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	);
 
 	/*
-	 * The About page template's own panel. A panel rather than another
-	 * Homepage section because none of it is on the homepage — it appears
-	 * only where the About template is assigned.
+	 * The About page templates' own panel: Company is the About page, Nepal is
+	 * the country reference. A panel rather than more Homepage sections
+	 * because none of it is on the homepage — each appears only where its
+	 * template is assigned, and each needs a section, which a section cannot
+	 * hold.
 	 */
 	$wp_customize->add_panel(
 		'iflynepal_about',
 		array(
 			'title'       => __( 'About', 'iflynepal' ),
-			'description' => __( 'Content for the About page template. Assign it to a page under Page Attributes > Template.', 'iflynepal' ),
+			'description' => __( 'Content for the About page templates. Assign one to a page under Page Attributes > Template.', 'iflynepal' ),
 			'priority'    => 32,
 		)
 	);
@@ -97,6 +100,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/travel-guide.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/cta.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/about-company.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/about-country.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
@@ -263,6 +267,149 @@ function iflynepal_customizer_controls_assets() {
 			),
 			/* translators: %d: offering number. */
 			'removeLabel' => __( 'Remove offering %d', 'iflynepal' ),
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-customizer-country-lists',
+		IFLYNEPAL_URI . '/assets/js/about-country/repeaters.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/about-country/repeaters.js' ),
+		true
+	);
+
+	/*
+	 * Every add/remove list on the About Nepal page, described rather than
+	 * coded: the page has eleven of them and they differ only in which
+	 * settings they cover and what the buttons say.
+	 */
+	$iflynepal_country_lists = array();
+
+	foreach ( array_keys( iflynepal_country_chapters() ) as $iflynepal_slug ) {
+		if ( ! iflynepal_country_chapter_has_prose( $iflynepal_slug ) ) {
+			continue;
+		}
+
+		$iflynepal_country_lists[] = array(
+			'pattern'     => 'iflynepal_country_' . $iflynepal_slug . '_paragraph_%d',
+			'max'         => IFLYNEPAL_COUNTRY_PARAGRAPH_MAX,
+			// The chapter's banner is the last control before its paragraphs.
+			'anchor'      => 'iflynepal_country_' . $iflynepal_slug . '_image',
+			'addLabel'    => __( 'Add paragraph', 'iflynepal' ),
+			'maxMessage'  => sprintf(
+				/* translators: %d: maximum number of paragraphs. */
+				__( 'Maximum %d paragraphs allowed.', 'iflynepal' ),
+				IFLYNEPAL_COUNTRY_PARAGRAPH_MAX
+			),
+			/* translators: %d: paragraph number. */
+			'removeLabel' => __( 'Remove paragraph %d', 'iflynepal' ),
+		);
+	}
+
+	$iflynepal_country_lists[] = array(
+		'pattern'     => 'iflynepal_country_bring_paragraph_%d',
+		'max'         => IFLYNEPAL_COUNTRY_PARAGRAPH_MAX,
+		'anchor'      => 'iflynepal_country_bring_title',
+		'addLabel'    => __( 'Add paragraph', 'iflynepal' ),
+		'maxMessage'  => sprintf(
+			/* translators: %d: maximum number of paragraphs. */
+			__( 'Maximum %d paragraphs allowed.', 'iflynepal' ),
+			IFLYNEPAL_COUNTRY_PARAGRAPH_MAX
+		),
+		/* translators: %d: paragraph number. */
+		'removeLabel' => __( 'Remove paragraph %d', 'iflynepal' ),
+	);
+
+	$iflynepal_country_lists[] = array(
+		'pattern'     => array(
+			'iflynepal_country_band_%d_title',
+			'iflynepal_country_band_%d_image',
+		),
+		'max'         => IFLYNEPAL_COUNTRY_BAND_MAX,
+		'anchor'      => 'iflynepal_country_bands_heading',
+		'addLabel'    => __( 'Add card', 'iflynepal' ),
+		'maxMessage'  => sprintf(
+			/* translators: %d: maximum number of cards. */
+			__( 'Maximum %d cards allowed.', 'iflynepal' ),
+			IFLYNEPAL_COUNTRY_BAND_MAX
+		),
+		/* translators: %d: card number. */
+		'removeLabel' => __( 'Remove card %d', 'iflynepal' ),
+	);
+
+	$iflynepal_country_lists[] = array(
+		'pattern'     => array(
+			'iflynepal_country_region_%d_number',
+			'iflynepal_country_region_%d_title',
+			'iflynepal_country_region_%d_description',
+			'iflynepal_country_region_%d_image',
+		),
+		'max'         => IFLYNEPAL_COUNTRY_REGION_MAX,
+		'anchor'      => 'iflynepal_country_regions_heading',
+		'addLabel'    => __( 'Add region', 'iflynepal' ),
+		'maxMessage'  => sprintf(
+			/* translators: %d: maximum number of regions. */
+			__( 'Maximum %d regions allowed.', 'iflynepal' ),
+			IFLYNEPAL_COUNTRY_REGION_MAX
+		),
+		/* translators: %d: region number. */
+		'removeLabel' => __( 'Remove region %d', 'iflynepal' ),
+	);
+
+	$iflynepal_country_lists[] = array(
+		'pattern'     => array(
+			'iflynepal_country_sector_%d_title',
+			'iflynepal_country_sector_%d_description',
+			'iflynepal_country_sector_%d_icon',
+		),
+		'max'         => IFLYNEPAL_COUNTRY_SECTOR_MAX,
+		'anchor'      => 'iflynepal_country_sectors_heading',
+		'addLabel'    => __( 'Add sector', 'iflynepal' ),
+		'maxMessage'  => sprintf(
+			/* translators: %d: maximum number of sectors. */
+			__( 'Maximum %d sectors allowed.', 'iflynepal' ),
+			IFLYNEPAL_COUNTRY_SECTOR_MAX
+		),
+		/* translators: %d: sector number. */
+		'removeLabel' => __( 'Remove sector %d', 'iflynepal' ),
+	);
+
+	$iflynepal_country_lists[] = array(
+		'pattern'     => 'iflynepal_country_safety_%d',
+		'max'         => IFLYNEPAL_COUNTRY_SAFETY_MAX,
+		'anchor'      => 'iflynepal_country_safety_heading',
+		'addLabel'    => __( 'Add point', 'iflynepal' ),
+		'maxMessage'  => sprintf(
+			/* translators: %d: maximum number of points. */
+			__( 'Maximum %d points allowed.', 'iflynepal' ),
+			IFLYNEPAL_COUNTRY_SAFETY_MAX
+		),
+		/* translators: %d: point number. */
+		'removeLabel' => __( 'Remove point %d', 'iflynepal' ),
+	);
+
+	/*
+	 * Two fields in these lists are never blank when a slot is unused: a
+	 * region's numeral defaults to its own position, and a sector's icon
+	 * defaults to a real glyph. The repeater decides a slot is in use by
+	 * finding any field that is not its empty value, so both would keep every
+	 * slot on screen. Their defaults are therefore passed through as what
+	 * "empty" means for those fields.
+	 */
+	$iflynepal_sector_empties = array();
+
+	for ( $iflynepal_sector = 1; $iflynepal_sector <= IFLYNEPAL_COUNTRY_SECTOR_MAX; $iflynepal_sector++ ) {
+		$iflynepal_sector_default = iflynepal_country_sector_default( $iflynepal_sector );
+
+		$iflynepal_sector_empties[ $iflynepal_sector ] = $iflynepal_sector_default['icon'];
+	}
+
+	wp_localize_script(
+		'iflynepal-customizer-country-lists',
+		'iflynepalCountryLists',
+		array(
+			'lists'       => $iflynepal_country_lists,
+			'sectorIcons' => $iflynepal_sector_empties,
 		)
 	);
 

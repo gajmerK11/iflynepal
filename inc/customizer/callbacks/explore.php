@@ -57,6 +57,8 @@ const IFLYNEPAL_EXPLORE_KICKER_DEFAULT = 'Explore Nepal your way';
  * Unlike the hero — which deliberately has no fallback, because a stock photo
  * behind the client's own video reads as a glitch — the cards need an image to
  * hold their shape at all, and these are the two the approved mockup ships.
+ * The files live in assets/images/homepage, named for the card they belong to,
+ * so swapping one is a matter of replacing the file at that path.
  *
  * @since 1.0.0
  *
@@ -64,8 +66,8 @@ const IFLYNEPAL_EXPLORE_KICKER_DEFAULT = 'Explore Nepal your way';
  */
 function iflynepal_explore_card_image_defaults() {
 	return array(
-		1 => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400',
-		2 => 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1400',
+		1 => IFLYNEPAL_URI . '/assets/images/homepage/explore-card-explore-nepal.jpg',
+		2 => IFLYNEPAL_URI . '/assets/images/homepage/explore-card-retreats-in-nepal.jpg',
 	);
 }
 
