@@ -620,6 +620,7 @@
 	 */
 	@media (prefers-reduced-motion: no-preference) {
 		.iflynepal-anim .iflynepal-hero__title,
+		.iflynepal-anim .iflynepal-hero__lead,
 		.iflynepal-anim .iflynepal-hero__actions,
 		.iflynepal-anim .iflynepal-hero__proof p {
 			@apply opacity-0;
@@ -3043,6 +3044,23 @@
 	   ========================================================================== */
 
 	/*
+	 * The hero sub-title reuses .iflynepal-hero__lead's 700px cap (set for the
+	 * About page's own, longer copy), which wraps this page's one-sentence
+	 * default onto two lines. Widened by id rather than by class, so the About
+	 * page's hero is untouched. Reverts to the shared rule below 760px, where
+	 * the hero copy stacks and a wide fixed width would overflow the phone.
+	 */
+	#iflynepal-country-hero-lead {
+		max-width: 900px;
+	}
+
+	@media (min-width: 761px) {
+		#iflynepal-country-hero-lead {
+			white-space: nowrap;
+		}
+	}
+
+	/*
 	 * The index bar. Nine chapters is too many to scroll past hunting for one,
 	 * so the row docks under the header and marks where the reader is. It
 	 * reuses the pill shape the rest of the theme already uses for a filter,
@@ -3321,6 +3339,13 @@
 		line-height: 1.35;
 	}
 
+	/*
+	 * "Northern Himalayan People" and "Middle Hills and Valley People" wrap to
+	 * two lines at this size in a four-up row — tried forcing them to one line
+	 * (shrunk font + padding on just those two cards), reverted at request.
+	 * Two lines is the wanted look; leave this at the base rule above.
+	 */
+
 	/* --------------------------------------------------------- flora's regions */
 
 	/*
@@ -3384,11 +3409,15 @@
 
 	/*
 	 * The comparison table is wider than a phone, so it scrolls inside its own
-	 * box rather than widening the page.
+	 * box rather than widening the page. The bordered white box is the source
+	 * design's own frame (`.compare-scroll`) — without it the table sat
+	 * directly on the section background with no edge of its own.
 	 */
 	.iflynepal-country-table {
-		@apply w-full overflow-x-auto;
+		@apply w-full overflow-x-auto bg-white;
 		margin-top: 34px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 14px;
 	}
 
 	.iflynepal-country-climate {
@@ -3429,6 +3458,13 @@
 
 	.iflynepal-country-climate tbody td {
 		color: var(--iflynepal-ink);
+	}
+
+	/* Separates the place name from its readings, same grey as the header
+	   row's own rule below MAX / MIN / RAIN — one border-collapsed line down
+	   the whole table, since it is set on every row's first cell. */
+	.iflynepal-country-climate th:first-child {
+		border-right: 1px solid rgba(5, 69, 167, 0.3);
 	}
 
 	/* ------------------------------------------------------ climate's packing */
@@ -3509,6 +3545,8 @@
 	 */
 	.iflynepal-country-schedule {
 		max-width: 900px;
+		margin-left: auto;
+		margin-right: auto;
 		border-top: 1px solid var(--iflynepal-line);
 	}
 

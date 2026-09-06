@@ -1,10 +1,10 @@
 /**
  * Hero motion and background video control.
  *
- * Mirrors the approved mockup: the headline reveals word by word, the actions
- * and trust bullets follow, the still drifts, the media parallaxes on scroll,
- * and the header swaps from transparent to the solid bar once the hero is left
- * behind.
+ * Mirrors the approved mockup: the headline reveals word by word, the
+ * sub-title, actions and trust bullets follow, the still drifts, the media
+ * parallaxes on scroll, and the header swaps from transparent to the solid
+ * bar once the hero is left behind.
  *
  * Everything here is enhancement. With JavaScript off, the gate class is never
  * added, nothing is hidden, and the hero renders complete and static.
@@ -221,6 +221,7 @@
 
 	var words = splitHeadline();
 	var actions = hero.querySelector( '.iflynepal-hero__actions' );
+	var lead = hero.querySelector( '.iflynepal-hero__lead' );
 	var proof = hero.querySelectorAll( '.iflynepal-hero__proof p' );
 
 	// No GSAP, or motion is unwelcome: show everything and stop.
@@ -237,7 +238,9 @@
 
 	gsap.defaults( { duration: 0.8, ease: 'power2.out' } );
 
-	var staged = [ actions ].filter( Boolean );
+	// actions (homepage/About hero) and lead (About/About Nepal hero) never
+	// both exist on one template, so they share the same staged treatment.
+	var staged = [ actions, lead ].filter( Boolean );
 
 	gsap.set( words, { opacity: 0, y: 42 } );
 	gsap.set( staged, { opacity: 0, y: 22 } );
@@ -255,6 +258,10 @@
 		ease: 'expo.out',
 		stagger: 0.055,
 	} );
+
+	if ( lead ) {
+		timeline.to( lead, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5' );
+	}
 
 	if ( actions ) {
 		timeline.to( actions, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5' );
