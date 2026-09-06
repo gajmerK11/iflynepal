@@ -440,7 +440,7 @@ function iflynepal_about_offer_defaults() {
 			'title'       => __( 'Wellness &amp; Retreats', 'iflynepal' ),
 			'description' => __( 'We organize mindfulness and wellness retreats in serene locations&mdash;like yoga in Pokhara, monastery stays in the hills of Solu, or shamanic healing journeys in western Nepal. Our retreats are ideal for those looking to reconnect with themselves and the natural world.', 'iflynepal' ),
 			'image'       => IFLYNEPAL_URI . '/assets/images/about/offer-03-wellness-retreats.jpg',
-			'image_alt'   => __( 'A quiet wellness and meditation setting in Nepal', 'iflynepal' ),
+			'image_alt'   => __( 'A traveller sitting alone at the end of a jetty, looking out across a still mountain lake', 'iflynepal' ),
 		),
 		4 => array(
 			'number'      => '04',

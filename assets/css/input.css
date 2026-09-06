@@ -2368,6 +2368,21 @@
 	}
 
 	/*
+	 * "More than just a travel company." wraps to two lines at the shared 88px
+	 * ceiling: measured at 1440px it wants 1264px against the 1180px copy
+	 * column, 84px over. It fits on one line at 82px, so the cap is set a pixel
+	 * under that rather than at the boundary.
+	 *
+	 * Capped by id, not by lowering the shared rule — 88px is sized for the
+	 * front page's own headline and measured to fit there. Below this ceiling
+	 * the clamp's vw term takes over identically, so narrow screens are
+	 * unchanged.
+	 */
+	#iflynepal-about-hero-title {
+		font-size: clamp(48px, 6.8vw, 81px);
+	}
+
+	/*
 	 * The small capitalised line above a page hero's headline. Shared by the
 	 * Team and CSR heroes — it started as the Team page's own and was hoisted
 	 * here rather than written a second time.
