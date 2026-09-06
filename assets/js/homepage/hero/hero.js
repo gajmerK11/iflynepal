@@ -247,7 +247,7 @@
 	/* -------------------------------------------------------------- reveals */
 
 	var words = splitHeadline();
-	var kicker = hero.querySelector( '.iflynepal-team-hero__kicker' );
+	var kicker = hero.querySelector( '.iflynepal-hero__kicker' );
 	var actions = hero.querySelector( '.iflynepal-hero__actions' );
 	var lead = hero.querySelector( '.iflynepal-hero__lead' );
 	var proof = hero.querySelectorAll( '.iflynepal-hero__proof p' );

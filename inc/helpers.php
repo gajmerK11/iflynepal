@@ -41,6 +41,44 @@ function iflynepal_kses_text( $value ) {
 }
 
 /**
+ * Sanitizes copy that is allowed to carry a link.
+ *
+ * The text filter above deliberately does not allow `<a>`: nearly every field
+ * in this theme is a headline or a line of copy whose link, if it has one, is
+ * its own setting with its own URL sanitizer. A running paragraph that names an
+ * address mid-sentence is the exception — splitting it into text, link and more
+ * text would take one sentence and make it three fields.
+ *
+ * `href` is left to wp_kses's own protocol filtering, which allows mailto and
+ * tel alongside http(s) and rejects javascript:.
+ *
+ * @since 1.0.0
+ *
+ * @param string $value Raw value.
+ * @return string Sanitized HTML.
+ */
+function iflynepal_kses_rich( $value ) {
+	return wp_kses(
+		(string) $value,
+		array(
+			'a'      => array(
+				'href'   => array(),
+				'title'  => array(),
+				'target' => array(),
+				'rel'    => array(),
+			),
+			'span'   => array(
+				'class' => array(),
+				'style' => array(),
+			),
+			'br'     => array(),
+			'em'     => array(),
+			'strong' => array(),
+		)
+	);
+}
+
+/**
  * Sanitizes a link that may be an on-page anchor rather than a full URL.
  *
  * The hero's first button points at `#explore`, which esc_url_raw would strip,

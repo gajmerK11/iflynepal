@@ -62,8 +62,9 @@ function iflynepal_enqueue_assets() {
 	$has_about        = iflynepal_has_about();
 	$has_country      = iflynepal_has_about_country();
 	$has_team         = iflynepal_has_team();
+	$has_csr          = iflynepal_has_csr();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr ) {
 		return;
 	}
 
@@ -190,11 +191,11 @@ function iflynepal_enqueue_assets() {
 
 	/*
 	 * The generic, markup-driven motion file. Sections opt in with
-	 * data-iflynepal-motion; the About page's, the About Nepal page's and the
-	 * Team page's do so far. All three templates share the one file rather than
-	 * each growing a reveal script of its own.
+	 * data-iflynepal-motion; the About, About Nepal, Team and CSR templates all
+	 * do. They share the one file rather than each growing a reveal script of
+	 * their own.
 	 */
-	if ( $has_about || $has_country || $has_team ) {
+	if ( $has_about || $has_country || $has_team || $has_csr ) {
 		wp_enqueue_script(
 			'iflynepal-sections-motion',
 			IFLYNEPAL_URI . '/assets/js/sections/motion.js',

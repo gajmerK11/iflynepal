@@ -623,7 +623,7 @@
 		.iflynepal-anim .iflynepal-hero__lead,
 		.iflynepal-anim .iflynepal-hero__actions,
 		.iflynepal-anim .iflynepal-hero__proof p,
-		.iflynepal-anim .iflynepal-team-hero__kicker,
+		.iflynepal-anim .iflynepal-hero__kicker,
 		.iflynepal-anim .iflynepal-team-portrait {
 			@apply opacity-0;
 		}
@@ -2180,6 +2180,19 @@
 		margin-top: 22px;
 		margin-bottom: 0;
 		color: rgba(255, 255, 255, 0.84);
+	}
+
+	/*
+	 * The small capitalised line above a page hero's headline. Shared by the
+	 * Team and CSR heroes — it started as the Team page's own and was hoisted
+	 * here rather than written a second time.
+	 */
+	.iflynepal-hero__kicker {
+		@apply font-extrabold uppercase;
+		margin: 0 0 14px;
+		color: #bbd4f7;
+		font-size: 12px;
+		letter-spacing: 0.16em;
 	}
 
 	/* --------------------------------------------------------------- overview */
@@ -3834,14 +3847,6 @@
 		);
 	}
 
-	.iflynepal-team-hero__kicker {
-		@apply font-extrabold uppercase;
-		margin: 0 0 14px;
-		color: #bbd4f7;
-		font-size: 12px;
-		letter-spacing: 0.16em;
-	}
-
 	/* The headline is two lines: a plain one, then the company name in the
 	   gold serif beside the logo mark. */
 	.iflynepal-team-hero__line {
@@ -4265,6 +4270,496 @@
 			white-space: normal;
 		}
 	}
+
+	/* ==========================================================================
+	   CSR — the responsibility page
+	   Eight blocks down one column: a hero, the commitment, a pledge band, the
+	   sustainability pillars, the community projects, the ways tourism
+	   empowers, the accountability statement and the closing invitation.
+	   ========================================================================== */
+
+	/* The hero shows more of its foreground than the others, which are framed
+	   on their skyline. */
+	.iflynepal-hero--csr .iflynepal-hero__still {
+		object-position: center 58%;
+	}
+
+	/*
+	 * White rather than the shared kicker's pale blue. That blue belongs to the
+	 * Team hero, which is where the shared class came from; this page's own
+	 * design sets its kicker in plain white, and the label reads as a label
+	 * rather than as a link at this size.
+	 */
+	.iflynepal-hero--csr .iflynepal-hero__kicker {
+		color: rgba(255, 255, 255, 0.78);
+	}
+
+	.iflynepal-hero--csr .iflynepal-hero__copy {
+		max-width: 920px;
+	}
+
+	.iflynepal-hero--csr .iflynepal-hero__lead {
+		max-width: 720px;
+	}
+
+	.iflynepal-csr-section {
+		padding: 96px 0;
+		scroll-margin-top: 90px;
+	}
+
+	.iflynepal-csr-section__inner {
+		@apply relative mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		z-index: 1;
+	}
+
+	/* ---------------------------------------------------------- section head */
+
+	.iflynepal-csr-head {
+		@apply mx-auto text-center;
+		max-width: 820px;
+		margin-bottom: 46px;
+	}
+
+	.iflynepal-csr-head__kicker {
+		@apply font-extrabold uppercase;
+		margin: 0 0 14px;
+		color: var(--iflynepal-navy);
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	/* Keep the commitment label identical to the pledge label, even if the
+	   shared section-head treatment changes later. */
+	#iflynepal-csr-commitment-kicker {
+		color: var(--iflynepal-navy);
+	}
+
+
+	.iflynepal-csr-head__title {
+		@apply m-0 font-display font-semibold;
+		color: var(--iflynepal-ink);
+		font-size: clamp(38px, 4.6vw, 62px);
+		line-height: 1.07;
+		letter-spacing: -0.03em;
+	}
+
+	/* ---------------------------------------------------------- commitment */
+
+	.iflynepal-csr-commitment {
+		@apply grid items-center;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+		gap: clamp(38px, 6vw, 82px);
+	}
+
+	.iflynepal-csr-commitment__copy p {
+		margin: 0;
+		color: var(--iflynepal-muted);
+		font-size: clamp(16px, 1.5vw, 18px);
+		line-height: 1.85;
+	}
+
+	.iflynepal-csr-commitment__copy p + p {
+		margin-top: 18px;
+	}
+
+	.iflynepal-csr-commitment__photo {
+		@apply relative overflow-hidden;
+		margin: 0;
+		min-height: 520px;
+		border-radius: 30px;
+		box-shadow: 0 24px 56px rgba(4, 26, 64, 0.14);
+	}
+
+	.iflynepal-csr-commitment__photo img {
+		@apply absolute inset-0 h-full w-full object-cover;
+	}
+
+	/* --------------------------------------------------------- pledge band */
+
+	.iflynepal-csr-pledge {
+		@apply bg-white;
+		padding: clamp(82px, 9vw, 126px) 0;
+	}
+
+	.iflynepal-csr-pledge__inner {
+		@apply mx-auto text-center;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+	}
+
+	.iflynepal-csr-pledge__kicker {
+		@apply font-extrabold uppercase;
+		margin: 0;
+		color: var(--iflynepal-navy);
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	/*
+	 * Set on one line — `width: max-content` with `nowrap`, centred by auto
+	 * margins.
+	 *
+	 * ⚠️ The size is a step under the design's `clamp(36px, 5.1vw, 68px)`. At
+	 * that setting the default pledge measures 1317px against a 1240px shell
+	 * and spills out of the column into the page gutter — it only escapes a
+	 * horizontal scrollbar because the gutter happens to be wide enough at
+	 * 1440. This curve is sized so the line fits the shell at every width down
+	 * to the 620px breakpoint, where it is allowed to wrap instead.
+	 *
+	 * It is fitted to the default text. A materially longer pledge will spill
+	 * again, which is why the control's description says to keep it short.
+	 */
+	.iflynepal-csr-pledge__quote {
+		@apply mx-auto font-display font-semibold;
+		width: max-content;
+		max-width: 100%;
+		margin-top: 24px;
+		margin-bottom: 0;
+		padding: 0;
+		border: 0;
+		color: var(--iflynepal-ink);
+		font-size: clamp(36px, calc(5vw - 2px), 63px);
+		line-height: 1.08;
+		letter-spacing: -0.035em;
+		white-space: nowrap;
+	}
+
+	.iflynepal-csr-pledge__quote em {
+		@apply font-accent font-semibold italic;
+		color: var(--iflynepal-gold);
+	}
+
+	/* ------------------------------------------------------------- pillars */
+
+	/*
+	 * Wide rows, photograph beside copy, alternating sides. The numeral is
+	 * counted at render time from the row's position, so the sides stay
+	 * correct however many rows there are.
+	 */
+	.iflynepal-csr-pillars {
+		@apply grid;
+		gap: 54px;
+	}
+
+	.iflynepal-csr-pillar {
+		@apply grid overflow-hidden bg-white;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		min-height: 430px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 30px;
+		box-shadow: 0 15px 42px rgba(4, 26, 64, 0.08);
+	}
+
+	.iflynepal-csr-pillar:nth-child(even) .iflynepal-csr-pillar__media {
+		order: 2;
+	}
+
+	.iflynepal-csr-pillar__media {
+		@apply relative overflow-hidden;
+		min-height: 360px;
+	}
+
+	.iflynepal-csr-pillar__media img {
+		@apply absolute inset-0 h-full w-full object-cover;
+		transition: transform 0.8s var(--iflynepal-ease);
+	}
+
+	.iflynepal-csr-pillar:hover .iflynepal-csr-pillar__media img {
+		transform: scale(1.04);
+	}
+
+	.iflynepal-csr-pillar__copy {
+		@apply flex flex-col justify-center;
+		padding: clamp(32px, 5vw, 64px);
+	}
+
+	.iflynepal-csr-pillar__title,
+	.iflynepal-csr-project__title,
+	.iflynepal-csr-tourism__title {
+		@apply m-0 font-display font-semibold;
+		color: var(--iflynepal-ink);
+		font-size: clamp(21px, 2vw, 28px);
+		line-height: 1.25;
+		letter-spacing: -0.02em;
+	}
+
+	.iflynepal-csr-pillar__desc,
+	.iflynepal-csr-project__desc,
+	.iflynepal-csr-tourism__desc,
+	.iflynepal-csr-accountability__text {
+		margin: 16px 0 0;
+		color: var(--iflynepal-muted);
+		font-size: 15px;
+		line-height: 1.78;
+	}
+
+	/* -------------------------------------------------- community projects */
+
+	.iflynepal-csr-projects {
+		@apply grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 24px;
+	}
+
+	.iflynepal-csr-project {
+		@apply relative overflow-hidden bg-white;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 20px;
+		box-shadow: 0 10px 30px rgba(4, 26, 64, 0.06);
+		transition:
+			transform 0.35s var(--iflynepal-ease),
+			box-shadow 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-csr-project:hover {
+		transform: translateY(-6px);
+		box-shadow: 0 24px 48px rgba(4, 26, 64, 0.12);
+	}
+
+	.iflynepal-csr-project__media {
+		@apply overflow-hidden bg-mist;
+		height: 230px;
+	}
+
+	.iflynepal-csr-project__media img {
+		@apply h-full w-full object-cover;
+		transition: transform 0.7s var(--iflynepal-ease);
+	}
+
+	.iflynepal-csr-project:hover .iflynepal-csr-project__media img {
+		transform: scale(1.05);
+	}
+
+	.iflynepal-csr-project__copy {
+		padding: 30px 28px 34px;
+	}
+
+	/* ---------------------------------------------------- tourism panels */
+
+	.iflynepal-csr-tourism-grid {
+		@apply grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 32px;
+	}
+
+	/* No photograph on these, so the rule along the top is what gives them an
+	   edge to sit on. */
+	/*
+	 * No min-height. The design gave these a 300px floor to sit under the
+	 * serif numeral and its 22px margin — roughly 66px of furniture that was
+	 * removed on review — so the floor was left holding dead space under the
+	 * copy. The grid stretches the pair to match each other anyway, and the
+	 * padding below the text now mirrors the padding above it.
+	 */
+	.iflynepal-csr-tourism {
+		@apply relative bg-white;
+		padding: clamp(34px, 4vw, 50px);
+		padding-bottom: clamp(24px, 2.4vw, 32px);
+		border-top: 3px solid var(--iflynepal-navy);
+		box-shadow: 0 16px 38px rgba(4, 26, 64, 0.07);
+	}
+
+	/* These paired desktop headings are short enough for one deliberate line.
+	   Let them wrap again before the available viewport becomes tight. */
+	@media (min-width: 1081px) {
+		#iflynepal-csr-community-title,
+		#iflynepal-csr-tourism-title {
+			position: relative;
+			left: 50%;
+			width: max-content;
+			max-width: calc(100vw - 40px);
+			font-size: clamp(44px, 4.1vw, 54px);
+			transform: translateX(-50%);
+			white-space: nowrap;
+		}
+	}
+
+	/* -------------------------------------------------------- accountability */
+
+	.iflynepal-csr-accountability {
+		@apply grid items-center;
+		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+		gap: clamp(38px, 6vw, 78px);
+	}
+
+	.iflynepal-csr-accountability__photo {
+		@apply relative overflow-hidden;
+		margin: 0;
+		min-height: 480px;
+		border-radius: 30px;
+	}
+
+	.iflynepal-csr-accountability__photo img {
+		@apply absolute inset-0 h-full w-full object-cover;
+	}
+
+	.iflynepal-csr-accountability__copy .iflynepal-csr-head__kicker {
+		margin-bottom: 14px;
+	}
+
+	.iflynepal-csr-accountability__copy .iflynepal-csr-head__title {
+		margin-top: 12px;
+	}
+
+	/* --------------------------------------------------------------- closing */
+
+	.iflynepal-csr-close {
+		@apply bg-white;
+	}
+
+	.iflynepal-csr-close__inner {
+		@apply mx-auto text-center;
+		width: min(calc(100% - 40px), 1180px);
+	}
+
+	.iflynepal-csr-close__kicker {
+		@apply font-extrabold uppercase;
+		margin: 0;
+		color: var(--iflynepal-navy);
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	.iflynepal-csr-close__title {
+		@apply mx-auto font-display font-semibold;
+		max-width: 1160px;
+		margin-top: 14px;
+		margin-bottom: 0;
+		color: var(--iflynepal-ink);
+		font-size: clamp(34px, 4vw, 54px);
+		line-height: 1.07;
+		letter-spacing: -0.03em;
+	}
+
+	.iflynepal-csr-close__title > span {
+		@apply block;
+		white-space: nowrap;
+	}
+
+	.iflynepal-csr-close__title em {
+		@apply font-accent font-semibold italic;
+		color: var(--iflynepal-navy);
+		font-size: 1.08em;
+	}
+
+	.iflynepal-csr-close__text {
+		@apply mx-auto;
+		max-width: 780px;
+		margin-top: 24px;
+		margin-bottom: 0;
+		color: var(--iflynepal-muted);
+		font-size: 16px;
+		line-height: 1.8;
+	}
+
+	.iflynepal-csr-close__text a {
+		@apply font-semibold underline;
+		color: var(--iflynepal-navy);
+		text-underline-offset: 3px;
+	}
+
+	/* -------------------------------------------------------- csr: narrower */
+
+	@media (max-width: 980px) {
+		.iflynepal-csr-commitment,
+		.iflynepal-csr-accountability {
+			grid-template-columns: 1fr;
+			gap: 38px;
+		}
+
+		.iflynepal-csr-commitment__photo,
+		.iflynepal-csr-accountability__photo {
+			min-height: 430px;
+		}
+
+		.iflynepal-csr-projects {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		/* An odd card left on its own reads as a mistake, so the last one goes
+		   wide and lays its photograph beside its copy instead. */
+		.iflynepal-csr-project:last-child:nth-child(odd) {
+			@apply grid;
+			grid-column: 1 / -1;
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.iflynepal-csr-project:last-child:nth-child(odd) .iflynepal-csr-project__media {
+			height: 100%;
+			min-height: 300px;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-csr-pillar {
+			grid-template-columns: 1fr;
+		}
+
+		.iflynepal-csr-pillar:nth-child(even) .iflynepal-csr-pillar__media {
+			order: 0;
+		}
+
+		.iflynepal-csr-pillar__media {
+			min-height: 300px;
+		}
+
+		.iflynepal-csr-tourism-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 620px) {
+		.iflynepal-csr-section {
+			padding: 78px 0;
+		}
+
+		.iflynepal-csr-section__inner,
+		.iflynepal-csr-pledge__inner,
+		.iflynepal-csr-close__inner {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		.iflynepal-csr-projects {
+			grid-template-columns: 1fr;
+		}
+
+		.iflynepal-csr-project:last-child:nth-child(odd) {
+			@apply block;
+			grid-column: auto;
+		}
+
+		.iflynepal-csr-project:last-child:nth-child(odd) .iflynepal-csr-project__media {
+			height: 230px;
+			min-height: 0;
+		}
+
+		.iflynepal-csr-commitment__photo,
+		.iflynepal-csr-accountability__photo {
+			min-height: 350px;
+		}
+
+		.iflynepal-csr-pillar__copy,
+		.iflynepal-csr-project__copy {
+			padding: 28px 24px 32px;
+		}
+
+		.iflynepal-csr-head {
+			margin-bottom: 34px;
+		}
+
+		/*
+		 * Both of these are held to one line on a wide screen and have to be
+		 * let go on a narrow one, or they run off the side.
+		 */
+		.iflynepal-csr-close__title > span,
+		.iflynepal-csr-pledge__quote {
+			white-space: normal;
+		}
+
+		.iflynepal-csr-pledge__quote {
+			width: auto;
+		}
+	}
 }
 
 @keyframes iflynepal-team-bounce {
@@ -4381,6 +4876,15 @@
 
 	.iflynepal-team-card:hover .iflynepal-team-card__photo img,
 	.iflynepal-team-card:focus-within .iflynepal-team-card__photo img {
+		transform: none;
+	}
+
+	.iflynepal-csr-project:hover {
+		transform: none;
+	}
+
+	.iflynepal-csr-pillar:hover .iflynepal-csr-pillar__media img,
+	.iflynepal-csr-project:hover .iflynepal-csr-project__media img {
 		transform: none;
 	}
 }

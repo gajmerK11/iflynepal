@@ -46,7 +46,7 @@ $iflynepal_team_scroll     = iflynepal_team_hero_scroll_label();
 
 			<div class="wp-block-group iflynepal-hero__copy">
 
-				<p class="iflynepal-team-hero__kicker" id="iflynepal-team-hero-kicker">
+				<p class="iflynepal-hero__kicker" id="iflynepal-team-hero-kicker">
 					<?php
 					// Sanitized by iflynepal_kses_text() on save and again on read.
 					echo iflynepal_render_team_hero_kicker();

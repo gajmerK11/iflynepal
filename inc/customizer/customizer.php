@@ -22,6 +22,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/cta.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/about.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/about-country.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/team.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/csr.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 
 /**
@@ -103,6 +104,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/about-company.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/about-country.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/team.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/csr.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
@@ -467,6 +469,94 @@ function iflynepal_customizer_controls_assets() {
 					),
 					/* translators: %d: team member number. */
 					'removeLabel' => __( 'Remove person %d', 'iflynepal' ),
+				),
+			),
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-customizer-csr-lists',
+		IFLYNEPAL_URI . '/assets/js/csr/repeaters.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/csr/repeaters.js' ),
+		true
+	);
+
+	/*
+	 * The CSR page's four lists. None of them stores a numeral — the pillars,
+	 * projects and panels are counted at render time from their position — so
+	 * every field here is blank when unused apart from the media controls,
+	 * which hold 0.
+	 */
+	wp_localize_script(
+		'iflynepal-customizer-csr-lists',
+		'iflynepalCsrLists',
+		array(
+			'lists' => array(
+				array(
+					'patterns'    => array( 'iflynepal_csr_commitment_paragraph_%d' ),
+					'max'         => IFLYNEPAL_CSR_PARAGRAPH_MAX,
+					// The photograph is the last control before the paragraphs.
+					'anchor'      => 'iflynepal_csr_commitment_image',
+					'addLabel'    => __( 'Add paragraph', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of paragraphs. */
+						__( 'Maximum %d paragraphs allowed.', 'iflynepal' ),
+						IFLYNEPAL_CSR_PARAGRAPH_MAX
+					),
+					/* translators: %d: paragraph number. */
+					'removeLabel' => __( 'Remove paragraph %d', 'iflynepal' ),
+					'minVisible'  => 1,
+				),
+				array(
+					'patterns'    => array(
+						'iflynepal_csr_pillar_%d_title',
+						'iflynepal_csr_pillar_%d_description',
+						'iflynepal_csr_pillar_%d_image',
+					),
+					'max'         => IFLYNEPAL_CSR_PILLAR_MAX,
+					'anchor'      => 'iflynepal_csr_pillars_heading',
+					'addLabel'    => __( 'Add pillar', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of pillars. */
+						__( 'Maximum %d pillars allowed.', 'iflynepal' ),
+						IFLYNEPAL_CSR_PILLAR_MAX
+					),
+					/* translators: %d: pillar number. */
+					'removeLabel' => __( 'Remove pillar %d', 'iflynepal' ),
+				),
+				array(
+					'patterns'    => array(
+						'iflynepal_csr_project_%d_title',
+						'iflynepal_csr_project_%d_description',
+						'iflynepal_csr_project_%d_image',
+					),
+					'max'         => IFLYNEPAL_CSR_PROJECT_MAX,
+					'anchor'      => 'iflynepal_csr_community_title',
+					'addLabel'    => __( 'Add project', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of projects. */
+						__( 'Maximum %d projects allowed.', 'iflynepal' ),
+						IFLYNEPAL_CSR_PROJECT_MAX
+					),
+					/* translators: %d: project number. */
+					'removeLabel' => __( 'Remove project %d', 'iflynepal' ),
+				),
+				array(
+					'patterns'    => array(
+						'iflynepal_csr_tourism_%d_title',
+						'iflynepal_csr_tourism_%d_description',
+					),
+					'max'         => IFLYNEPAL_CSR_TOURISM_MAX,
+					'anchor'      => 'iflynepal_csr_tourism_title',
+					'addLabel'    => __( 'Add panel', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of panels. */
+						__( 'Maximum %d panels allowed.', 'iflynepal' ),
+						IFLYNEPAL_CSR_TOURISM_MAX
+					),
+					/* translators: %d: panel number. */
+					'removeLabel' => __( 'Remove panel %d', 'iflynepal' ),
 				),
 			),
 		)
