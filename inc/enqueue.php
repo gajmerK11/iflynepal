@@ -63,8 +63,9 @@ function iflynepal_enqueue_assets() {
 	$has_country      = iflynepal_has_about_country();
 	$has_team         = iflynepal_has_team();
 	$has_csr          = iflynepal_has_csr();
+	$has_contact      = iflynepal_has_contact();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact ) {
 		return;
 	}
 
@@ -195,12 +196,25 @@ function iflynepal_enqueue_assets() {
 	 * do. They share the one file rather than each growing a reveal script of
 	 * their own.
 	 */
-	if ( $has_about || $has_country || $has_team || $has_csr ) {
+	if ( $has_about || $has_country || $has_team || $has_csr || $has_contact ) {
 		wp_enqueue_script(
 			'iflynepal-sections-motion',
 			IFLYNEPAL_URI . '/assets/js/sections/motion.js',
 			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
 			iflynepal_asset_version( 'assets/js/sections/motion.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	if ( $has_contact ) {
+		wp_enqueue_script(
+			'iflynepal-contact-form',
+			IFLYNEPAL_URI . '/assets/js/contact/form.js',
+			array(),
+			iflynepal_asset_version( 'assets/js/contact/form.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,

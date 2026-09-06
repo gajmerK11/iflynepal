@@ -70,7 +70,7 @@ const IFLYNEPAL_ABOUT_HERO_LEAD_DEFAULT = 'Locally owned and deeply rooted in Ne
  *
  * @since 1.0.0
  */
-define( 'IFLYNEPAL_ABOUT_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/about/hero-more-than-a-travel-company.jpg' );
+define( 'IFLYNEPAL_ABOUT_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/about/hero-local-guides-and-travelers.jpg' );
 
 /**
  * Default label and destination for each hero button.

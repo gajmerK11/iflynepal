@@ -83,7 +83,7 @@ function iflynepal_get_nav_cta_item() {
  * @return bool
  */
 function iflynepal_has_hero() {
-	return is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr();
+	return is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact();
 }
 
 /**
@@ -206,6 +206,17 @@ function iflynepal_has_csr() {
 }
 
 /**
+ * Whether the current request renders the Contact Us page template.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_contact() {
+	return is_page_template( 'page-contact-us.php' ) || is_page( 'contact-us' );
+}
+
+/**
  * The background image of whichever hero this request renders.
  *
  * The front page, the About page, the About Nepal page and the Team page each
@@ -218,6 +229,10 @@ function iflynepal_has_csr() {
  * @return string Image URL, or an empty string when this template has no hero.
  */
 function iflynepal_current_hero_image_url() {
+	if ( iflynepal_has_contact() ) {
+		return iflynepal_contact_hero_image_url();
+	}
+
 	if ( iflynepal_has_csr() ) {
 		return iflynepal_csr_hero_image_url();
 	}

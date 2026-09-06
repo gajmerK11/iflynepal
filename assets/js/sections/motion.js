@@ -98,7 +98,7 @@
 
 		gsap.to( mark, {
 			'--iflynepal-underline-scale': 1,
-			duration: 0.9,
+			duration: mark.closest( '.iflynepal-contact-head' ) ? 0.6 : 0.9,
 			ease: 'power1.inOut',
 			scrollTrigger: {
 				trigger: mark,

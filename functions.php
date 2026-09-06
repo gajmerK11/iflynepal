@@ -25,3 +25,4 @@ require_once IFLYNEPAL_DIR . '/inc/testimonial-links.php';
 require_once IFLYNEPAL_DIR . '/inc/meta-boxes/class-ifly-nepal-testimonial-meta-box.php';
 require_once IFLYNEPAL_DIR . '/inc/settings/class-ifly-nepal-testimonial-links-settings.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/customizer.php';
+require_once IFLYNEPAL_DIR . '/inc/contact-form.php';

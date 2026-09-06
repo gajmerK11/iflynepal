@@ -24,6 +24,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/about-country.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/team.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/csr.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/contact.php';
 
 /**
  * Registers the theme's panels and sections.
@@ -88,6 +89,15 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 		)
 	);
 
+	$wp_customize->add_panel(
+		'iflynepal_contact',
+		array(
+			'title'       => __( 'Contact Us', 'iflynepal' ),
+			'description' => __( 'Content for the Contact Us page template, from the hero through the worldwide representatives.', 'iflynepal' ),
+			'priority'    => 34,
+		)
+	);
+
 	/*
 	 * Control classes extend WP_Customize_Control, which only exists once the
 	 * Customizer is being registered — so they load here rather than at the top
@@ -106,6 +116,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/team.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/csr.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/contact.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
 
