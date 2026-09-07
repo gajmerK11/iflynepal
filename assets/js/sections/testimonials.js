@@ -29,6 +29,8 @@
 	 * @return {void}
 	 */
 	function setup( carousel ) {
+		// The prev/next buttons live in the section's head, beside the kicker, not inside the carousel itself.
+		var section = carousel.closest( '.iflynepal-testimonials' ) || carousel;
 		var viewport = carousel.querySelector( '.iflynepal-testimonials__viewport' );
 		var track = carousel.querySelector( '.iflynepal-testimonials__track' );
 
@@ -68,6 +70,17 @@
 		var startShift = 0;
 		var moved = 0;
 		var settle = null;
+
+		/*
+		 * Only one band of clones sits either side of the real slides, so the
+		 * track can safely move one step before it needs the rewind. A second
+		 * step fired before that rewind lands would walk the index past the
+		 * cloned band entirely — with few reviews (two, say) that is one click
+		 * away, not several — and the track would translate to a position with
+		 * no slide behind it, reading as the carousel having "run out". This
+		 * flag makes a step wait for the previous one to fully settle first.
+		 */
+		var busy = false;
 
 		carousel.classList.add( 'is-ready' );
 
@@ -154,15 +167,23 @@
 		 * @return {void}
 		 */
 		function go( delta ) {
+			if ( busy ) {
+				return;
+			}
+
+			busy = true;
 			index += delta;
 			paint( true );
 
 			window.clearTimeout( settle );
-			settle = window.setTimeout( rewind, 470 );
+			settle = window.setTimeout( function () {
+				rewind();
+				busy = false;
+			}, 470 );
 		}
 
 		track.addEventListener( 'pointerdown', function ( event ) {
-			if ( 0 !== event.button ) {
+			if ( 0 !== event.button || busy ) {
 				return;
 			}
 
@@ -209,6 +230,21 @@
 				go( steps );
 			} );
 		} );
+
+		var prevBtn = section.querySelector( '.iflynepal-testimonials__prev' );
+		var nextBtn = section.querySelector( '.iflynepal-testimonials__next' );
+
+		if ( prevBtn ) {
+			prevBtn.addEventListener( 'click', function () {
+				go( -1 );
+			} );
+		}
+
+		if ( nextBtn ) {
+			nextBtn.addEventListener( 'click', function () {
+				go( 1 );
+			} );
+		}
 
 		carousel.addEventListener( 'keydown', function ( event ) {
 			if ( 'ArrowLeft' === event.key ) {

@@ -1737,8 +1737,13 @@
 		width: min(calc(100% - 40px), var(--iflynepal-shell));
 	}
 
+	/*
+	 * z-index above the carousel: the scaled-up track bleeds past its own box
+	 * on every side, and without this it paints over the nav buttons and eats
+	 * their clicks even where nothing is visibly on top of them.
+	 */
 	.iflynepal-testimonials__head {
-		@apply text-center;
+		@apply relative z-10 flex items-center justify-center;
 	}
 
 	.iflynepal-testimonials__kicker {
@@ -1764,6 +1769,50 @@
 
 	.iflynepal-testimonials__viewport {
 		@apply overflow-hidden;
+	}
+
+	/*
+	 * Same button as the People rail's, so both drag-and-arrow carousels match.
+	 * Pinned to the head row's right edge, then pulled out past the shell's own
+	 * gutter with the same hug-the-edge formula the sources strip below uses,
+	 * so it lands near the true right edge of the viewport rather than the
+	 * text column.
+	 */
+	.iflynepal-testimonials__nav {
+		@apply absolute flex shrink-0 items-center;
+		right: min(0px, calc(58px - (100vw - min(100vw - 40px, var(--iflynepal-shell))) / 2));
+		gap: 10px;
+	}
+
+	.iflynepal-testimonials__nav button {
+		@apply grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded-full bg-transparent;
+		border: 1px solid var(--iflynepal-line);
+		color: var(--iflynepal-navy);
+		transition:
+			background 0.2s ease,
+			color 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.iflynepal-testimonials__nav button:hover {
+		@apply text-white;
+		background: var(--iflynepal-navy);
+		border-color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-testimonials__nav .iflynepal-ico {
+		@apply h-4 w-4;
+	}
+
+	@media (max-width: 640px) {
+		.iflynepal-testimonials__nav {
+			@apply static;
+			margin-top: 16px;
+		}
+
+		.iflynepal-testimonials__head {
+			@apply flex-col;
+		}
 	}
 
 	.iflynepal-testimonials__track {

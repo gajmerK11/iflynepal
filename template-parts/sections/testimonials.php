@@ -73,6 +73,15 @@ if ( ! $iflynepal_testimonials ) {
 		<div class="iflynepal-testimonials__inner">
 			<div class="iflynepal-testimonials__head" data-iflynepal-reveal>
 				<p class="iflynepal-testimonials__kicker"><?php echo esc_html( $iflynepal_args['kicker'] ); ?></p>
+
+				<div class="iflynepal-testimonials__nav">
+					<button type="button" class="iflynepal-testimonials__prev" aria-label="<?php esc_attr_e( 'Previous review', 'iflynepal' ); ?>">
+						<svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg>
+					</button>
+					<button type="button" class="iflynepal-testimonials__next" aria-label="<?php esc_attr_e( 'Next review', 'iflynepal' ); ?>">
+						<svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7"/></svg>
+					</button>
+				</div>
 			</div>
 		</div>
 	<?php endif; ?>
