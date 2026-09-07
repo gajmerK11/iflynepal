@@ -2694,12 +2694,10 @@
 		grid-column: 6 / -1;
 		margin-left: 0;
 		margin-right: calc(var(--iflynepal-offer-bleed) * -1);
-		margin-top: var(--iflynepal-offer-step);
 	}
 
 	.iflynepal-about-offer:nth-child(even) .iflynepal-about-offer__copy {
 		grid-column: 1 / span 6;
-		margin-top: 0;
 	}
 
 	/*
