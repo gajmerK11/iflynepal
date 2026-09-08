@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  */
-const IFLYNEPAL_TRUST_FEATURES = 4;
+const IFLYNEPAL_TRUST_FEATURES = 6;
 
 /**
  * Logos each band can carry.
@@ -134,6 +134,31 @@ function iflynepal_trust_icons() {
 			'path'  => 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7.4V12l3.2 2',
 			'fill'  => false,
 		),
+		'chat-solid' => array(
+			'label' => __( 'Chat bubble', 'iflynepal' ),
+			'path'  => 'M6 4h12a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6.2l-4.1 3.1a.6.6 0 0 1-.96-.48V17H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z',
+			'fill'  => true,
+		),
+		'tag'      => array(
+			'label' => __( 'Price tag', 'iflynepal' ),
+			'path'  => 'M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.59 1.41.59.55 0 1.05-.23 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z',
+			'fill'  => true,
+		),
+		'dollar'   => array(
+			'label' => __( 'Dollar sign', 'iflynepal' ),
+			'path'  => 'M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z',
+			'fill'  => true,
+		),
+		'phone'    => array(
+			'label' => __( 'Phone', 'iflynepal' ),
+			'path'  => 'M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z',
+			'fill'  => true,
+		),
+		'leaf'     => array(
+			'label' => __( 'Leaf', 'iflynepal' ),
+			'path'  => 'M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.39 9.32 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05z',
+			'fill'  => true,
+		),
 	);
 }
 
@@ -147,24 +172,34 @@ function iflynepal_trust_icons() {
 function iflynepal_trust_feature_defaults() {
 	return array(
 		1 => array(
-			'icon'        => 'globe',
-			'title'       => __( 'Wide range of trips', 'iflynepal' ),
-			'description' => __( 'Treks, cultural tours, wildlife and retreats — real choice across Nepal, not a fixed catalogue.', 'iflynepal' ),
+			'icon'        => 'chat-solid',
+			'title'       => __( '24/7 Personalized Support', 'iflynepal' ),
+			'description' => __( 'A Kathmandu-based expert is a message away, day or night, before and during your trip.', 'iflynepal' ),
 		),
 		2 => array(
-			'icon'        => 'thumb-up',
-			'title'       => __( 'Trusted by travellers', 'iflynepal' ),
-			'description' => __( 'Verify the story on Google and Tripadvisor — review platforms we don’t control.', 'iflynepal' ),
+			'icon'        => 'tag',
+			'title'       => __( 'Experienced Local Guides', 'iflynepal' ),
+			'description' => __( 'Every trek and tour is led by licensed guides who know the trails, culture and language.', 'iflynepal' ),
 		),
 		3 => array(
-			'icon'        => 'card',
-			'title'       => __( 'Flexible & clear booking', 'iflynepal' ),
-			'description' => __( 'See exactly what gets confirmed before you pay, with a Kathmandu contact to adjust plans.', 'iflynepal' ),
+			'icon'        => 'dollar',
+			'title'       => __( 'Value for Money', 'iflynepal' ),
+			'description' => __( 'Transparent pricing with no hidden costs, so what you agree to is what you pay.', 'iflynepal' ),
 		),
 		4 => array(
 			'icon'        => 'badge',
-			'title'       => __( 'Licensed & certified', 'iflynepal' ),
+			'title'       => __( 'Licensed & Certified', 'iflynepal' ),
 			'description' => __( 'Listed with Nepal Tourism Board, TAAN, NMA and KEEP — memberships you can check.', 'iflynepal' ),
+		),
+		5 => array(
+			'icon'        => 'phone',
+			'title'       => __( 'Safety First, Ethical Practices', 'iflynepal' ),
+			'description' => __( 'Vetted operators, briefed guides and clear protocols on every trip we run.', 'iflynepal' ),
+		),
+		6 => array(
+			'icon'        => 'leaf',
+			'title'       => __( 'Sustainable & Inclusive Travel', 'iflynepal' ),
+			'description' => __( 'Trips planned to respect local communities, culture and the environment they pass through.', 'iflynepal' ),
 		),
 	);
 }
@@ -259,9 +294,12 @@ function iflynepal_trust_title() {
  * @return string Icon slug.
  */
 function iflynepal_trust_feature_icon( $index ) {
+	// No Customizer control sets this any more, so the code default always wins —
+	// otherwise an icon saved to the database under an older layout would keep
+	// overriding it forever.
 	$default = iflynepal_trust_feature_default( $index );
 
-	return iflynepal_sanitize_trust_icon( (string) get_theme_mod( 'iflynepal_trust_feature_' . $index . '_icon', $default['icon'] ) );
+	return iflynepal_sanitize_trust_icon( $default['icon'] );
 }
 
 /**

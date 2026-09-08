@@ -1181,10 +1181,11 @@
 		gap: 48px;
 	}
 
+	/* Three rows of two now that there are six bullets, so a shorter vertical gap keeps the block from outrunning the card beside it. */
 	.iflynepal-trust__features {
 		@apply grid self-center;
 		grid-template-columns: 1fr 1fr;
-		gap: 96px 26px;
+		gap: 52px 26px;
 	}
 
 	.iflynepal-trust__feature {
@@ -1193,8 +1194,8 @@
 	}
 
 	.iflynepal-trust__icon {
-		@apply grid h-11 w-11 shrink-0 place-items-center bg-mist;
-		border-radius: 13px;
+		@apply grid h-14 w-14 shrink-0 place-items-center bg-mist;
+		border-radius: 15px;
 		color: var(--iflynepal-navy);
 		transition: background 0.25s ease;
 	}
@@ -1208,7 +1209,7 @@
 	 * painted, the rest drawn as strokes. Both take their colour from the tile.
 	 */
 	.iflynepal-trust__glyph {
-		@apply block h-[23px] w-[23px] shrink-0 fill-none stroke-current;
+		@apply block h-[30px] w-[30px] shrink-0 fill-none stroke-current;
 		stroke-width: 1.7;
 		stroke-linecap: round;
 		stroke-linejoin: round;

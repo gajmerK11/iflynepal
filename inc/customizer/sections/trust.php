@@ -70,12 +70,6 @@ $wp_customize->add_control(
 
 /* --------------------------------------------------------------- features */
 
-$iflynepal_icon_choices = array();
-
-foreach ( iflynepal_trust_icons() as $iflynepal_slug => $iflynepal_icon ) {
-	$iflynepal_icon_choices[ $iflynepal_slug ] = $iflynepal_icon['label'];
-}
-
 for ( $iflynepal_feature = 1; $iflynepal_feature <= IFLYNEPAL_TRUST_FEATURES; $iflynepal_feature++ ) {
 	$iflynepal_prefix  = 'iflynepal_trust_feature_' . $iflynepal_feature . '_';
 	$iflynepal_default = iflynepal_trust_feature_default( $iflynepal_feature );
@@ -101,26 +95,6 @@ for ( $iflynepal_feature = 1; $iflynepal_feature <= IFLYNEPAL_TRUST_FEATURES; $i
 	);
 
 	$wp_customize->add_setting(
-		$iflynepal_prefix . 'icon',
-		array(
-			'default'           => $iflynepal_default['icon'],
-			'sanitize_callback' => 'iflynepal_sanitize_trust_icon',
-			'transport'         => 'postMessage',
-		)
-	);
-	$wp_customize->add_control(
-		$iflynepal_prefix . 'icon',
-		array(
-			'label'       => __( 'Icon', 'iflynepal' ),
-			'description' => __( 'Drawn in the theme, so it takes the section\'s colours and stays sharp at any size.', 'iflynepal' ),
-			'section'     => 'iflynepal_trust',
-			'priority'    => $iflynepal_priority + 1,
-			'type'        => 'select',
-			'choices'     => $iflynepal_icon_choices,
-		)
-	);
-
-	$wp_customize->add_setting(
 		$iflynepal_prefix . 'title',
 		array(
 			'default'           => $iflynepal_default['title'],
@@ -133,7 +107,7 @@ for ( $iflynepal_feature = 1; $iflynepal_feature <= IFLYNEPAL_TRUST_FEATURES; $i
 		array(
 			'label'    => __( 'Title', 'iflynepal' ),
 			'section'  => 'iflynepal_trust',
-			'priority' => $iflynepal_priority + 2,
+			'priority' => $iflynepal_priority + 1,
 			'type'     => 'text',
 		)
 	);
@@ -151,7 +125,7 @@ for ( $iflynepal_feature = 1; $iflynepal_feature <= IFLYNEPAL_TRUST_FEATURES; $i
 		array(
 			'label'    => __( 'Description', 'iflynepal' ),
 			'section'  => 'iflynepal_trust',
-			'priority' => $iflynepal_priority + 3,
+			'priority' => $iflynepal_priority + 2,
 			'type'     => 'textarea',
 		)
 	);
@@ -374,7 +348,7 @@ if ( isset( $wp_customize->selective_refresh ) ) {
 	for ( $iflynepal_feature = 1; $iflynepal_feature <= IFLYNEPAL_TRUST_FEATURES; $iflynepal_feature++ ) {
 		$iflynepal_prefix = 'iflynepal_trust_feature_' . $iflynepal_feature . '_';
 
-		foreach ( array( 'icon', 'title', 'description' ) as $iflynepal_field ) {
+		foreach ( array( 'title', 'description' ) as $iflynepal_field ) {
 			$wp_customize->selective_refresh->add_partial(
 				$iflynepal_prefix . $iflynepal_field,
 				array(
