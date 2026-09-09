@@ -93,7 +93,7 @@ function iflynepal_get_nav_cta_item() {
  * @return bool
  */
 function iflynepal_has_hero() {
-	return is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact() || iflynepal_has_terms();
+	return is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie();
 }
 
 /**
@@ -245,6 +245,21 @@ function iflynepal_has_terms() {
 }
 
 /**
+ * Whether the current request renders the Cookie Policy page template.
+ *
+ * The slug is accepted as well as the template, for the reason given above
+ * iflynepal_has_terms(): WordPress picks `page-cookie-policy.php` up by
+ * filename and does not set the page-template meta in that case.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_cookie() {
+	return is_page_template( 'page-cookie-policy.php' ) || is_page( 'cookie-policy' );
+}
+
+/**
  * The background image of whichever hero this request renders.
  *
  * The front page, the About page, the About Nepal page and the Team page each
@@ -257,6 +272,10 @@ function iflynepal_has_terms() {
  * @return string Image URL, or an empty string when this template has no hero.
  */
 function iflynepal_current_hero_image_url() {
+	if ( iflynepal_has_cookie() ) {
+		return iflynepal_cookie_hero_image_url();
+	}
+
 	if ( iflynepal_has_terms() ) {
 		return iflynepal_terms_hero_image_url();
 	}

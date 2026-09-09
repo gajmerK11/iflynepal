@@ -24,6 +24,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/about-country.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/team.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/csr.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/terms.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/cookie.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/contact.php';
 
@@ -116,6 +117,20 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	);
 
 	/*
+	 * The Cookie Policy page. Only its hero is editable, but it gets a panel
+	 * rather than a lone section so the legal pages sit together in the list
+	 * and are found the same way.
+	 */
+	$wp_customize->add_panel(
+		'iflynepal_cookie',
+		array(
+			'title'       => __( 'Cookie Policy', 'iflynepal' ),
+			'description' => __( 'The hero photograph on the Cookie Policy page. The policy itself is part of the document and is edited in the theme.', 'iflynepal' ),
+			'priority'    => 36,
+		)
+	);
+
+	/*
 	 * Control classes extend WP_Customize_Control, which only exists once the
 	 * Customizer is being registered — so they load here rather than at the top
 	 * of the file.
@@ -133,6 +148,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/team.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/csr.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/terms.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/cookie.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/contact.php';
 }

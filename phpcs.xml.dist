@@ -149,6 +149,9 @@
 				<element value="iflynepal_render_terms_cta_script"/>
 				<element value="iflynepal_render_terms_cta_actions"/>
 				<element value="iflynepal_render_terms_cta_lines"/>
+				<element value="iflynepal_render_cookie_index"/>
+				<element value="iflynepal_render_cookie_clause_head"/>
+				<element value="iflynepal_render_cookie_browsers"/>
 				<element value="iflynepal_render_footer_blurb"/>
 				<element value="iflynepal_render_footer_office"/>
 				<element value="iflynepal_render_footer_office_heading"/>

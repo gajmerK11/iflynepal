@@ -1,6 +1,11 @@
 /**
- * Terms & Conditions: marks which clause the reader is in, inside the sticky
+ * Legal documents: marks which clause the reader is in, inside the sticky
  * index beside the document.
+ *
+ * Shared by every page built on the `iflynepal-legal-*` furniture — Terms &
+ * Conditions and Cookie Policy today — which is why it finds the index by its
+ * class rather than by a per-page id. One index per page; the first one found
+ * is it.
  *
  * The links are ordinary fragment links and still navigate without this file;
  * what it adds is the "you are here" mark and keeping that entry in view inside
@@ -8,10 +13,10 @@
  *
  * ⚠️ A scroll position rather than an IntersectionObserver, unlike the About
  * Nepal index bar (assets/js/about-country/index-bar.js). A clause here can be
- * taller than the viewport — clause 02 is — and while it fills the screen it
- * never crosses an intersection boundary, so an observer leaves it unmarked the
- * whole time it is being read. Asking "which clause has its top above the
- * reading line" answers correctly at any height.
+ * taller than the viewport — the Terms page's clause 02 is — and while it fills
+ * the screen it never crosses an intersection boundary, so an observer leaves
+ * it unmarked the whole time it is being read. Asking "which clause has its top
+ * above the reading line" answers correctly at any height.
  *
  * @package IFly_Nepal
  * @since   1.0.0
@@ -20,7 +25,7 @@
 ( function () {
 	'use strict';
 
-	var index = document.getElementById( 'iflynepal-terms-index' );
+	var index = document.querySelector( '.iflynepal-legal-index__list' );
 
 	if ( ! index ) {
 		return;
@@ -80,7 +85,7 @@
 		link.setAttribute( 'aria-current', 'true' );
 
 		/*
-		 * Fourteen entries do not all fit, so the index scrolls on its own. Only
+		 * A long index does not fit, so it scrolls on its own. Only
 		 * nudge it when the active entry is actually outside it — and only the
 		 * index, never the page, which is why this is arithmetic on scrollTop
 		 * rather than scrollIntoView.
@@ -121,7 +126,7 @@
 
 		/*
 		 * At the very bottom of the page the last clause is the one being read,
-		 * even though the closing card has pushed its top back above the line.
+		 * even though what follows it has pushed its top back above the line.
 		 */
 		if ( window.innerHeight + window.scrollY >= document.body.scrollHeight - 2 ) {
 			reading = clauses[ clauses.length - 1 ];
