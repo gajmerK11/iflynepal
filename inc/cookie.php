@@ -134,9 +134,13 @@ function iflynepal_render_cookie_clause_head( $anchor ) {
  * Simple Icons glyphs the design loaded from a CDN — the same artwork, without
  * a third-party request on a page about third-party requests.
  *
+ * ⚠️ They live under assets/images/policy/, not assets/images/cookie/ — see the
+ * note above IFLYNEPAL_COOKIE_HERO_IMAGE_DEFAULT. A content blocker matching
+ * "cookie" in the request path takes these out along with the hero.
+ *
  * @since 1.0.0
  *
- * @return array[] Each with 'name', 'url' and 'icon' (a file under assets/images/cookie/browsers).
+ * @return array[] Each with 'name', 'url' and 'icon' (a file under assets/images/policy/browsers).
  */
 function iflynepal_cookie_browsers() {
 	return array(
@@ -184,7 +188,7 @@ function iflynepal_render_cookie_browsers() {
 				<svg class="iflynepal-ico iflynepal-cookie-browser__arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>
 			</a>',
 			esc_url( $browser['url'] ),
-			esc_url( IFLYNEPAL_URI . '/assets/images/cookie/browsers/' . $browser['icon'] ),
+			esc_url( IFLYNEPAL_URI . '/assets/images/policy/browsers/' . $browser['icon'] ),
 			esc_html( $browser['name'] )
 		);
 	}

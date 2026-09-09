@@ -34,15 +34,24 @@
 	/* --------------------------------------------------------- scroll pill */
 
 	/*
-	 * The Team hero's "Meet everyone" pill. A plain fragment link to begin
-	 * with, so it still navigates with JavaScript off; all this adds is the
-	 * glide. It sits above the GSAP guard below because it is not motion — the
-	 * pill has to work whether or not anything animates.
+	 * The pill at the foot of a hero that scrolls to the first section: Team's
+	 * "Meet everyone", Contact's, and the legal pages' "Read the terms" /
+	 * "Types of cookies". Each page names its own — the pills are styled
+	 * differently — so all three are listed rather than given a shared class,
+	 * which would mean restyling three components to fix a scroll.
+	 *
+	 * A plain fragment link to begin with, so it still navigates with
+	 * JavaScript off; all this adds is the glide. Without it the browser jumps
+	 * the page in one frame, which is what made the legal pills feel abrupt.
+	 * It sits above the GSAP guard below because it is not motion — the pill
+	 * has to work whether or not anything animates.
 	 *
 	 * scrollIntoView honours the target's own scroll-margin-top, so the
 	 * section clears the fixed header without any offset arithmetic here.
 	 */
-	var scrollPill = hero.querySelector( '.iflynepal-team-hero__scroll' );
+	var scrollPill = hero.querySelector(
+		'.iflynepal-team-hero__scroll, .iflynepal-contact-hero__scroll, .iflynepal-legal-hero__scroll'
+	);
 
 	if ( scrollPill ) {
 		var pillTarget = document.querySelector( scrollPill.getAttribute( 'href' ) );
@@ -275,7 +284,18 @@
 	 */
 	var staged = [ kicker, actions, lead ].filter( Boolean );
 
-	gsap.set( words, { opacity: 0, y: 42 } );
+	/*
+	 * The legal heroes carry a headline and nothing else — no kicker above it,
+	 * no sub-title, no buttons — so the cascade that gives the other heroes
+	 * their entrance has only two pieces to work with ("Cookie" and the accent
+	 * "Policy"). At the shared 42px rise and a 55ms stagger the two land almost
+	 * together and the title reads as though it simply appeared. Given further
+	 * to travel and a stagger you can actually see, the same tween becomes an
+	 * entrance.
+	 */
+	var isLegal = hero.classList.contains( 'iflynepal-hero--legal' );
+
+	gsap.set( words, { opacity: 0, y: isLegal ? 64 : 42 } );
 	gsap.set( staged, { opacity: 0, y: 22 } );
 	gsap.set( proof, { opacity: 0, y: 10 } );
 	/*
@@ -299,9 +319,9 @@
 		{
 			opacity: 1,
 			y: 0,
-			duration: 0.95,
+			duration: isLegal ? 1.15 : 0.95,
 			ease: 'expo.out',
-			stagger: 0.055,
+			stagger: isLegal ? 0.14 : 0.055,
 		},
 		kicker ? '-=0.35' : 0
 	);

@@ -15,10 +15,17 @@ defined( 'ABSPATH' ) || exit;
 /**
  * The hero photograph shipped with the theme, used until one is uploaded.
  *
+ * ⚠️ The file lives under assets/images/policy/ and its name says nothing about
+ * cookies, deliberately. Content blockers run network rules against the request
+ * URL, and the cookie-notice filter lists in uBlock Origin and AdGuard match
+ * "cookie" in a path — which silently blocked this page's hero and its browser
+ * logos while the files sat under assets/images/cookie/. The page still has to
+ * be named cookie-policy; its assets do not.
+ *
  * @since 1.0.0
  * @var string
  */
-define( 'IFLYNEPAL_COOKIE_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/cookie/hero-cookie-policy.jpg' );
+define( 'IFLYNEPAL_COOKIE_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/policy/hero-policy-himalaya.jpg' );
 
 /**
  * The hero photograph's URL.
