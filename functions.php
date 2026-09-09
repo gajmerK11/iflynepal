@@ -18,6 +18,7 @@ require_once IFLYNEPAL_DIR . '/inc/helpers.php';
 require_once IFLYNEPAL_DIR . '/inc/setup.php';
 require_once IFLYNEPAL_DIR . '/inc/enqueue.php';
 require_once IFLYNEPAL_DIR . '/inc/template-tags.php';
+require_once IFLYNEPAL_DIR . '/inc/terms.php';
 require_once IFLYNEPAL_DIR . '/inc/template-functions.php';
 require_once IFLYNEPAL_DIR . '/inc/walkers/class-ifly-nepal-nav-walker.php';
 require_once IFLYNEPAL_DIR . '/inc/walkers/class-ifly-nepal-footer-nav-walker.php';

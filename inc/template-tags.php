@@ -93,7 +93,7 @@ function iflynepal_get_nav_cta_item() {
  * @return bool
  */
 function iflynepal_has_hero() {
-	return is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact();
+	return is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact() || iflynepal_has_terms();
 }
 
 /**
@@ -227,6 +227,24 @@ function iflynepal_has_contact() {
 }
 
 /**
+ * Whether the current request renders the Terms & Conditions page template.
+ *
+ * The slug is accepted as well as the template, and in both spellings the site
+ * uses. WordPress picks `page-terms-and-conditions.php` up by filename for the
+ * live slug, and in that case it does not set the page-template meta that
+ * is_page_template() reads — so the slug check is what answers there.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_terms() {
+	return is_page_template( 'page-terms-and-conditions.php' )
+		|| is_page( 'terms-and-conditions' )
+		|| is_page( 'terms-conditions' );
+}
+
+/**
  * The background image of whichever hero this request renders.
  *
  * The front page, the About page, the About Nepal page and the Team page each
@@ -239,6 +257,10 @@ function iflynepal_has_contact() {
  * @return string Image URL, or an empty string when this template has no hero.
  */
 function iflynepal_current_hero_image_url() {
+	if ( iflynepal_has_terms() ) {
+		return iflynepal_terms_hero_image_url();
+	}
+
 	if ( iflynepal_has_contact() ) {
 		return iflynepal_contact_hero_image_url();
 	}

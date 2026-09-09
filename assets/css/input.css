@@ -891,7 +891,8 @@
 	.iflynepal-cta__title .underline,
 	.iflynepal-about-offers__heading .underline,
 	.iflynepal-team-section__heading .underline,
-	.iflynepal-contact-head .underline {
+	.iflynepal-contact-head .underline,
+	.iflynepal-legal-head__title .underline {
 		@apply relative inline-block whitespace-nowrap;
 		text-decoration-line: none;
 	}
@@ -916,7 +917,8 @@
 	.iflynepal-cta__title .underline::after,
 	.iflynepal-about-offers__heading .underline::after,
 	.iflynepal-team-section__heading .underline::after,
-	.iflynepal-contact-head .underline::after {
+	.iflynepal-contact-head .underline::after,
+	.iflynepal-legal-head__title .underline::after {
 		content: '';
 		@apply pointer-events-none absolute block origin-left opacity-[.85];
 		left: -2%;
@@ -5563,6 +5565,647 @@
 			width: 100%;
 		}
 	}
+
+	/* ==========================================================================
+	   Legal documents — Terms & Conditions
+	   A hero, then the document itself: a sticky index of clauses beside the
+	   clause cards, and a closing card that invites a question about any of it.
+
+	   Named `legal` rather than `terms` on purpose. The approved designs for the
+	   Privacy, Cookie and Sustainability policies are the same document
+	   furniture with different copy — same clause card, same index, same closing
+	   card — so when those are built they reuse this block rather than copying
+	   it. Only the Terms page renders it today.
+	   ========================================================================== */
+
+	/* The photograph is a ridge under prayer flags, framed on its skyline. */
+	.iflynepal-hero--legal .iflynepal-hero__still {
+		object-position: center 46%;
+	}
+
+	/*
+	 * The one hero on the site with a headline and nothing else. Without a
+	 * kicker above it or a sub-title beneath, the shared 150px/90px padding
+	 * leaves it sitting high in the frame, so the block is centred instead.
+	 */
+	.iflynepal-hero--legal .wp-block-cover__inner-container {
+		padding: 130px 0 110px;
+	}
+
+	/*
+	 * Reuses `iflynepal-team-bounce` rather than declaring a third identical
+	 * keyframe — the Team and Contact pills already each have one, and this is
+	 * the same nine-pixel rise.
+	 */
+	.iflynepal-legal-hero__scroll {
+		@apply absolute inline-flex items-center justify-center font-bold uppercase no-underline;
+		bottom: 56px;
+		left: 50%;
+		gap: 10px;
+		min-height: 48px;
+		padding: 12px 23px;
+		border: 1px solid rgba(255, 255, 255, 0.55);
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.12);
+		color: #fff;
+		font-size: 12px;
+		letter-spacing: 0.12em;
+		transform: translateX(-50%);
+		animation: iflynepal-team-bounce 2s ease-in-out infinite;
+	}
+
+	.iflynepal-legal-hero__scroll:hover,
+	.iflynepal-legal-hero__scroll:focus-visible {
+		background: rgba(255, 255, 255, 0.24);
+		animation-play-state: paused;
+	}
+
+	/* ------------------------------------------------------------- the shell */
+
+	.iflynepal-legal {
+		padding: 104px 0;
+		scroll-margin-top: 70px;
+	}
+
+	.iflynepal-legal-final {
+		padding: 76px 0;
+	}
+
+	.iflynepal-legal__inner {
+		@apply relative mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		z-index: 1;
+	}
+
+	.iflynepal-legal-head {
+		@apply mx-auto text-center;
+		max-width: 860px;
+		margin-bottom: 50px;
+	}
+
+	.iflynepal-legal-head__title {
+		@apply m-0 font-display font-semibold;
+		margin-bottom: 16px;
+		font-size: clamp(38px, 4.6vw, 62px);
+		line-height: 1.07;
+		letter-spacing: -0.03em;
+	}
+
+	.iflynepal-legal-head__lead {
+		@apply mx-auto;
+		max-width: 690px;
+		margin-bottom: 0;
+		color: var(--iflynepal-muted);
+		font-size: 17px;
+	}
+
+	/* ---------------------------------------------------- index and clauses */
+
+	.iflynepal-legal-layout {
+		@apply grid items-start;
+		grid-template-columns: minmax(0, 0.36fr) minmax(0, 1fr);
+		gap: 38px;
+	}
+
+	/*
+	 * Sticky rather than fixed, so it rides down beside the clauses and stops
+	 * at the end of the document rather than following the reader onto the
+	 * closing card.
+	 */
+	.iflynepal-legal-index {
+		@apply sticky bg-white;
+		top: 96px;
+		padding: 28px 24px 26px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 30px;
+		box-shadow: 0 24px 64px rgba(4, 26, 64, 0.1);
+	}
+
+	.iflynepal-legal-index__title {
+		@apply m-0 font-black uppercase;
+		color: var(--iflynepal-navy);
+		font-size: 11px;
+		letter-spacing: 0.15em;
+	}
+
+	/*
+	 * Fourteen entries is more than fits beside the first clause, so the list
+	 * scrolls inside the card. `overscroll-behavior: contain` stops that scroll
+	 * handing off to the page once it reaches its own end, which would throw
+	 * the reader down the document.
+	 */
+	.iflynepal-legal-index__list {
+		max-height: min(66vh, 620px);
+		margin-top: 18px;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		counter-reset: iflynepal-legal-idx;
+		scrollbar-width: thin;
+		scrollbar-color: rgba(5, 69, 167, 0.3) transparent;
+	}
+
+	.iflynepal-legal-index__list::-webkit-scrollbar {
+		width: 5px;
+	}
+
+	.iflynepal-legal-index__list::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.iflynepal-legal-index__list::-webkit-scrollbar-thumb {
+		border-radius: 999px;
+		background: rgba(5, 69, 167, 0.28);
+	}
+
+	.iflynepal-legal-index__list::-webkit-scrollbar-thumb:hover {
+		background: rgba(5, 69, 167, 0.5);
+	}
+
+	.iflynepal-legal-index__link {
+		@apply flex no-underline;
+		gap: 11px;
+		padding: 9px 11px;
+		border-radius: 11px;
+		color: var(--iflynepal-muted);
+		font-size: 13.5px;
+		line-height: 1.4;
+		transition: background 0.2s ease, color 0.2s ease;
+	}
+
+	/*
+	 * The number is drawn by a counter rather than written into the markup, so
+	 * inserting a clause renumbers the index without touching it. The clause
+	 * cards get their own numbers from the register in inc/terms.php, which is
+	 * the same order — this counter and that register cannot disagree, because
+	 * both count the same list.
+	 */
+	.iflynepal-legal-index__link::before {
+		counter-increment: iflynepal-legal-idx;
+		content: counter(iflynepal-legal-idx, decimal-leading-zero);
+		@apply shrink-0 font-black;
+		padding-top: 2px;
+		color: var(--iflynepal-navy);
+		font-size: 11px;
+		letter-spacing: 0.04em;
+		opacity: 0.55;
+	}
+
+	.iflynepal-legal-index__link:hover {
+		@apply bg-mist;
+		color: #04234f;
+	}
+
+	.iflynepal-legal-index__link.is-here {
+		@apply bg-mist font-semibold;
+		color: #04234f;
+	}
+
+	.iflynepal-legal-index__link.is-here::before {
+		opacity: 1;
+	}
+
+	.iflynepal-legal-body {
+		@apply grid;
+		gap: 24px;
+	}
+
+	.iflynepal-legal-clause {
+		@apply bg-white;
+		scroll-margin-top: 96px;
+		padding: 38px 40px 34px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 30px;
+		box-shadow: 0 14px 38px rgba(4, 26, 64, 0.07);
+		transition:
+			transform 0.3s var(--iflynepal-ease),
+			box-shadow 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-legal-clause:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 22px 52px rgba(4, 26, 64, 0.12);
+	}
+
+	.iflynepal-legal-clause__head {
+		@apply flex items-start;
+		gap: 18px;
+		padding-bottom: 20px;
+		border-bottom: 1px solid var(--iflynepal-line);
+	}
+
+	.iflynepal-legal-clause__num {
+		@apply grid shrink-0 place-items-center rounded-full bg-mist font-extrabold;
+		width: 48px;
+		height: 48px;
+		color: var(--iflynepal-navy);
+		font-size: 15px;
+	}
+
+	.iflynepal-legal-clause__title {
+		@apply m-0 font-display font-semibold;
+		font-size: clamp(21px, 2vw, 27px);
+		line-height: 1.07;
+		letter-spacing: -0.03em;
+	}
+
+	.iflynepal-legal-clause__note {
+		@apply block font-black uppercase;
+		margin-top: 7px;
+		color: var(--iflynepal-navy);
+		font-size: 10.5px;
+		letter-spacing: 0.13em;
+	}
+
+	.iflynepal-legal-clause__body {
+		margin-top: 22px;
+	}
+
+	.iflynepal-legal-clause__body > p {
+		margin: 0;
+		color: var(--iflynepal-muted);
+		font-size: 15.5px;
+		line-height: 1.6;
+	}
+
+	/*
+	 * A link inside a clause reads as a word in the sentence, not as a button:
+	 * inherited weight, the blue, and its own underline. The earlier
+	 * border-bottom sat a few pixels low and made the phrase look detached.
+	 */
+	.iflynepal-legal-clause__body a {
+		@apply underline;
+		color: var(--iflynepal-navy);
+		font-weight: inherit;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 2px;
+		transition: color 0.2s ease;
+	}
+
+	.iflynepal-legal-clause__body a:hover {
+		color: var(--iflynepal-navy-deep);
+	}
+
+	/* --------------------------------------------------- rules, labels, notes */
+
+	.iflynepal-legal-sublabel {
+		@apply inline-flex items-center bg-mist font-black uppercase;
+		gap: 9px;
+		margin: 24px 0 12px;
+		padding: 6px 14px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 999px;
+		color: var(--iflynepal-navy);
+		font-size: 11px;
+		letter-spacing: 0.12em;
+	}
+
+	.iflynepal-legal-clause__body .iflynepal-legal-sublabel:first-child {
+		margin-top: 0;
+	}
+
+	.iflynepal-legal-rules {
+		@apply grid list-none;
+		margin: 0;
+		padding: 0;
+		gap: 13px;
+	}
+
+	.iflynepal-legal-rules li {
+		@apply relative;
+		padding-left: 32px;
+		color: var(--iflynepal-muted);
+		font-size: 15.5px;
+		line-height: 1.65;
+	}
+
+	/*
+	 * A dot with a soft ring rather than a list marker: the ring is a spread
+	 * shadow, so it does not affect layout and the text keeps its 32px indent
+	 * whatever the ring is doing.
+	 */
+	.iflynepal-legal-rules li::before {
+		content: '';
+		@apply absolute rounded-full;
+		left: 5px;
+		top: 0.62em;
+		width: 9px;
+		height: 9px;
+		background: theme('colors.navy.tint');
+		box-shadow: 0 0 0 4px rgba(122, 168, 246, 0.2);
+	}
+
+	/* The emphasised phrase reads as ink, not as bold muted grey. */
+	.iflynepal-legal-rules li strong {
+		@apply font-semibold;
+		color: #04234f;
+	}
+
+	.iflynepal-legal-rules--spaced {
+		margin-top: 16px;
+	}
+
+	/*
+	 * Two flex children only — the icon and one <span> holding the whole
+	 * sentence. Left as bare text nodes around a link, the browser makes each
+	 * run its own anonymous flex item, so the link became a column of its own
+	 * with the gap either side of it and wrapped mid-sentence.
+	 */
+	.iflynepal-legal-note {
+		@apply flex;
+		gap: 13px;
+		margin-top: 22px;
+		padding: 16px 18px;
+		border: 1px solid var(--iflynepal-line);
+		border-left: 3px solid var(--iflynepal-gold-soft);
+		border-radius: 14px;
+		background: #fffcf5;
+		color: #04234f;
+		font-size: 14.5px;
+		line-height: 1.6;
+	}
+
+	/*
+	 * Overrides the shared 15px icon: this one sits beside body copy rather
+	 * than inside a button, and the darker gold is what carries on paper-white.
+	 */
+	.iflynepal-legal-note .iflynepal-ico {
+		@apply shrink-0;
+		width: 19px;
+		height: 19px;
+		margin-top: 3px;
+		color: #b98b23;
+	}
+
+	/* ------------------------------------------------------- the refund table */
+
+	.iflynepal-legal-refunds {
+		@apply grid;
+		gap: 11px;
+	}
+
+	.iflynepal-legal-refunds__row {
+		@apply grid items-center;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 18px;
+		padding: 15px 18px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 14px;
+		background: #fbfcff;
+	}
+
+	.iflynepal-legal-refunds__row span {
+		@apply font-semibold;
+		color: #04234f;
+		font-size: 15px;
+	}
+
+	.iflynepal-legal-refunds__row b {
+		@apply bg-mist font-extrabold;
+		padding: 6px 14px;
+		border-radius: 999px;
+		color: var(--iflynepal-navy);
+		font-size: 12.5px;
+		white-space: nowrap;
+	}
+
+	/* The only red on the site, and it is doing real work: "no refund". */
+	.iflynepal-legal-refunds__row--warn b {
+		background: #fdf0ee;
+		color: #c0392b;
+	}
+
+	/* ----------------------------------------------------- the closing card */
+
+	.iflynepal-legal-accept {
+		@apply relative isolate overflow-hidden text-white;
+		padding: 56px 56px 52px;
+		border-radius: 30px;
+		background: #04234f;
+		box-shadow: var(--iflynepal-shadow);
+	}
+
+	/* The same drawn blob the mist sections carry, in white on the dark card. */
+	.iflynepal-legal-accept::before {
+		content: '';
+		@apply absolute;
+		width: 460px;
+		height: 460px;
+		right: -150px;
+		top: -190px;
+		z-index: -1;
+		border: 1px solid rgba(255, 255, 255, 0.09);
+		border-radius: 43% 57% 58% 42%;
+		box-shadow: 0 0 0 34px rgba(255, 255, 255, 0.03);
+		transform: rotate(18deg);
+	}
+
+	.iflynepal-legal-accept__grid {
+		@apply grid items-center;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+		gap: 52px;
+	}
+
+	.iflynepal-legal-accept__kicker {
+		@apply m-0 inline-flex items-center font-extrabold uppercase;
+		margin-bottom: 14px;
+		color: #bbd4f7;
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	.iflynepal-legal-accept__title {
+		@apply m-0 font-display font-semibold;
+		font-size: clamp(32px, 3.6vw, 48px);
+		line-height: 1.07;
+		letter-spacing: -0.03em;
+	}
+
+	.iflynepal-legal-accept__title em {
+		@apply inline-block font-accent font-semibold italic;
+		color: var(--iflynepal-gold);
+	}
+
+	.iflynepal-legal-accept__text {
+		max-width: 520px;
+		margin: 18px 0 0;
+		color: rgba(255, 255, 255, 0.78);
+		font-size: 16.5px;
+	}
+
+	.iflynepal-legal-accept__script {
+		@apply font-hand;
+		margin: 22px 0 0;
+		color: var(--iflynepal-gold);
+		font-size: 27px;
+		transform: rotate(-2deg);
+	}
+
+	.iflynepal-legal-accept__actions {
+		@apply flex flex-wrap;
+		gap: 13px;
+		margin-top: 30px;
+	}
+
+	.iflynepal-legal-accept__contact {
+		padding: 30px 30px 26px;
+		border: 1px solid rgba(255, 255, 255, 0.24);
+		border-radius: 20px;
+		background: rgba(255, 255, 255, 0.08);
+		backdrop-filter: blur(12px);
+	}
+
+	.iflynepal-legal-accept__lines {
+		margin-top: 18px;
+		padding-top: 18px;
+		border-top: 1px solid rgba(255, 255, 255, 0.2);
+	}
+
+	/*
+	 * The rule under the office name, when there is no office name above it.
+	 * The card now opens straight onto the contact lines.
+	 */
+	.iflynepal-legal-accept__lines:first-child {
+		margin-top: 0;
+		padding-top: 0;
+		border-top: 0;
+	}
+
+	.iflynepal-legal-accept__lines:first-child .iflynepal-legal-accept__line:first-child {
+		margin-top: 0;
+	}
+
+	.iflynepal-legal-accept__line {
+		@apply flex items-start;
+		gap: 12px;
+		margin: 14px 0;
+		color: rgba(255, 255, 255, 0.82);
+		font-size: 15.5px;
+		line-height: 1.5;
+	}
+
+	.iflynepal-legal-accept__line .iflynepal-ico {
+		@apply shrink-0;
+		width: 19px;
+		height: 19px;
+		margin-top: 3px;
+		color: var(--iflynepal-gold);
+	}
+
+	.iflynepal-legal-accept__line a {
+		@apply no-underline;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+		transition: border-color 0.2s ease, color 0.2s ease;
+	}
+
+	.iflynepal-legal-accept__line a:hover {
+		color: #fff;
+		border-color: var(--iflynepal-gold);
+	}
+
+	/* ------------------------------------------------------ legal: narrower */
+
+	@media (max-width: 1080px) {
+		/*
+		 * The index stops being a column beside the document and becomes a
+		 * two-up block above it. It also stops sticking: pinned to the top of a
+		 * narrow screen it would take a third of the viewport off the clause
+		 * the reader is trying to read.
+		 */
+		.iflynepal-legal-layout {
+			grid-template-columns: 1fr;
+			gap: 30px;
+		}
+
+		.iflynepal-legal-index {
+			@apply static;
+		}
+
+		.iflynepal-legal-index__list {
+			@apply grid;
+			max-height: none;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 2px;
+		}
+
+		.iflynepal-legal-accept__grid {
+			grid-template-columns: 1fr;
+			gap: 34px;
+		}
+	}
+
+	@media (max-width: 860px) {
+		.iflynepal-legal-hero__scroll {
+			@apply hidden;
+		}
+	}
+
+	@media (max-width: 680px) {
+		.iflynepal-legal__inner {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		.iflynepal-legal {
+			padding: 78px 0;
+		}
+
+		.iflynepal-legal-final {
+			padding: 60px 0;
+		}
+
+		.iflynepal-legal-index__list {
+			grid-template-columns: 1fr;
+		}
+
+		.iflynepal-legal-clause {
+			padding: 28px 22px 26px;
+		}
+
+		.iflynepal-legal-clause__head {
+			gap: 14px;
+		}
+
+		.iflynepal-legal-clause__num {
+			width: 42px;
+			height: 42px;
+			font-size: 14px;
+		}
+
+		/* The badge drops under the term rather than being squeezed beside it. */
+		.iflynepal-legal-refunds__row {
+			grid-template-columns: 1fr;
+			gap: 10px;
+		}
+
+		.iflynepal-legal-refunds__row b {
+			justify-self: start;
+		}
+
+		.iflynepal-legal-accept {
+			padding: 34px 24px 32px;
+		}
+
+		.iflynepal-legal-accept__actions .iflynepal-button {
+			width: 100%;
+		}
+	}
+
+	/* The document is the point; the furniture around it is not printed. */
+	@media print {
+		.iflynepal-legal-hero__scroll,
+		.iflynepal-legal-index {
+			@apply hidden;
+		}
+
+		.iflynepal-legal-layout {
+			grid-template-columns: 1fr;
+		}
+
+		.iflynepal-legal-clause {
+			break-inside: avoid;
+			border-color: #ccc;
+			box-shadow: none;
+		}
+	}
 }
 
 @keyframes iflynepal-team-bounce {
@@ -5672,8 +6315,13 @@
 		animation: none;
 	}
 
-	.iflynepal-contact-hero__scroll {
+	.iflynepal-contact-hero__scroll,
+	.iflynepal-legal-hero__scroll {
 		animation: none;
+	}
+
+	.iflynepal-legal-clause:hover {
+		transform: none;
 	}
 
 	.iflynepal-team-card:hover,

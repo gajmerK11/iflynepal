@@ -64,8 +64,9 @@ function iflynepal_enqueue_assets() {
 	$has_team         = iflynepal_has_team();
 	$has_csr          = iflynepal_has_csr();
 	$has_contact      = iflynepal_has_contact();
+	$has_terms        = iflynepal_has_terms();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms ) {
 		return;
 	}
 
@@ -210,11 +211,11 @@ function iflynepal_enqueue_assets() {
 
 	/*
 	 * The generic, markup-driven motion file. Sections opt in with
-	 * data-iflynepal-motion; the About, About Nepal, Team and CSR templates all
-	 * do. They share the one file rather than each growing a reveal script of
-	 * their own.
+	 * data-iflynepal-motion; the About, About Nepal, Team, CSR, Contact and
+	 * Terms templates all do. They share the one file rather than each growing
+	 * a reveal script of their own.
 	 */
-	if ( $has_about || $has_country || $has_team || $has_csr || $has_contact ) {
+	if ( $has_about || $has_country || $has_team || $has_csr || $has_contact || $has_terms ) {
 		wp_enqueue_script(
 			'iflynepal-sections-motion',
 			IFLYNEPAL_URI . '/assets/js/sections/motion.js',
@@ -250,6 +251,23 @@ function iflynepal_enqueue_assets() {
 			IFLYNEPAL_URI . '/assets/js/about-country/index-bar.js',
 			array(),
 			iflynepal_asset_version( 'assets/js/about-country/index-bar.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	/*
+	 * The Terms index's active mark. No GSAP dependency, the same as the About
+	 * Nepal index bar above — the links are fragment links and work without it.
+	 */
+	if ( $has_terms ) {
+		wp_enqueue_script(
+			'iflynepal-terms-index',
+			IFLYNEPAL_URI . '/assets/js/terms/index.js',
+			array(),
+			iflynepal_asset_version( 'assets/js/terms/index.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,
