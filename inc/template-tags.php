@@ -93,7 +93,24 @@ function iflynepal_get_nav_cta_item() {
  * @return bool
  */
 function iflynepal_has_hero() {
-	return is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie();
+	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie();
+
+	/**
+	 * Filters whether this request renders a hero.
+	 *
+	 * A plugin template can carry the theme's hero component — the package
+	 * archives do — and the header has to dock over it like any other. Without
+	 * this the theme could only ever know about its own templates, and a plugin
+	 * hero would sit under a transparent header with white text on white.
+	 *
+	 * Filter iflynepal_current_hero_image_url as a pair with this one, or the
+	 * preload in inc/enqueue.php points at a picture that is not on the page.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $has_hero Whether a hero is rendered.
+	 */
+	return (bool) apply_filters( 'iflynepal_has_hero', $has_hero );
 }
 
 /**
@@ -272,6 +289,23 @@ function iflynepal_has_cookie() {
  * @return string Image URL, or an empty string when this template has no hero.
  */
 function iflynepal_current_hero_image_url() {
+	/**
+	 * Filters the hero image URL before the theme's own templates are consulted.
+	 *
+	 * Returning a URL short-circuits the chain below, which is what a plugin
+	 * template rendering the theme's hero component needs: none of the theme's
+	 * own conditions match it. The pair to the iflynepal_has_hero filter.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $url Empty by default.
+	 */
+	$filtered = (string) apply_filters( 'iflynepal_pre_current_hero_image_url', '' );
+
+	if ( '' !== $filtered ) {
+		return $filtered;
+	}
+
 	if ( iflynepal_has_cookie() ) {
 		return iflynepal_cookie_hero_image_url();
 	}
