@@ -5855,7 +5855,12 @@
 		margin-top: 22px;
 	}
 
-	.iflynepal-legal-clause__body > p {
+	/*
+	 * Body copy only. The note is a <p> too, and without the :not() this rule
+	 * outranks .iflynepal-legal-note (a class and an element beat a class) —
+	 * which stripped every note of its gap above, its ink and its size.
+	 */
+	.iflynepal-legal-clause__body > p:not(.iflynepal-legal-note) {
 		margin: 0;
 		color: var(--iflynepal-muted);
 		font-size: 15.5px;
@@ -6003,10 +6008,19 @@
 		white-space: nowrap;
 	}
 
-	/* The only red on the site, and it is doing real work: "no refund". */
+	/*
+	 * The only red on the site, and it is doing real work: "no refund" on the
+	 * Terms page, "stored indefinitely" on the Privacy Policy.
+	 */
 	.iflynepal-legal-refunds__row--warn b {
 		background: #fdf0ee;
 		color: #c0392b;
+	}
+
+	/* The Privacy Policy's retention rows reuse this table; green is "yours to change". */
+	.iflynepal-legal-refunds__row--ok b {
+		background: #edf7f1;
+		color: #1e874b;
 	}
 
 	/* ----------------------------------------------------- the closing card */
@@ -6267,6 +6281,219 @@
 		transform: translateX(3px);
 	}
 
+	/* ==========================================================================
+	   Sustainability Policy — the three blocks the other legal pages do not have
+
+	   The six pledge cards above the policy, the Sustainability Coordinator
+	   card in clause 06, and the frameworks list in clause 14. Everything else
+	   is the shared `iflynepal-legal-` furniture above.
+	   ========================================================================== */
+
+	.iflynepal-sustain-pledges {
+		@apply relative grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 22px;
+		z-index: 1;
+	}
+
+	.iflynepal-sustain-pledge {
+		@apply bg-white;
+		padding: 30px 26px 28px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 20px;
+		box-shadow: 0 14px 38px rgba(4, 26, 64, 0.07);
+		transition:
+			transform 0.3s var(--iflynepal-ease),
+			box-shadow 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-sustain-pledge:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 22px 48px rgba(4, 26, 64, 0.13);
+	}
+
+	.iflynepal-sustain-pledge__icon {
+		@apply grid place-items-center rounded-full bg-mist;
+		width: 52px;
+		height: 52px;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-sustain-pledge__icon .iflynepal-ico {
+		width: 24px;
+		height: 24px;
+	}
+
+	.iflynepal-sustain-pledge__title {
+		@apply m-0 font-display font-bold;
+		margin-top: 18px;
+		font-size: 19px;
+		line-height: 1.35;
+		letter-spacing: -0.01em;
+	}
+
+	.iflynepal-sustain-pledge__text {
+		margin: 9px 0 0;
+		color: var(--iflynepal-muted);
+		font-size: 14.5px;
+		line-height: 1.65;
+	}
+
+	/* Two paragraphs in a row, as the introduction has, are spaced apart. */
+	.iflynepal-legal-clause__body > p + p:not(.iflynepal-legal-note) {
+		margin-top: 14px;
+	}
+
+	/* ------------------------------------------------------ the coordinator */
+
+	.iflynepal-sustain-coordinator {
+		@apply bg-mist;
+		margin-top: 22px;
+		padding: 22px 24px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 20px;
+	}
+
+	.iflynepal-sustain-coordinator__role {
+		@apply block font-black uppercase;
+		color: var(--iflynepal-navy);
+		font-size: 10.5px;
+		letter-spacing: 0.13em;
+	}
+
+	.iflynepal-sustain-coordinator__name {
+		@apply m-0 font-display font-bold;
+		margin-top: 6px;
+		color: #04234f;
+		font-size: 20px;
+		line-height: 1.2;
+	}
+
+	.iflynepal-sustain-coordinator__links {
+		@apply flex flex-wrap;
+		gap: 8px;
+		margin-top: 12px;
+	}
+
+	/*
+	 * Pills rather than underlined words, so the clause-body link rule above is
+	 * undone here: these are the card's two actions, not words in a sentence.
+	 */
+	.iflynepal-legal-clause__body .iflynepal-sustain-coordinator__links a {
+		@apply inline-flex items-center bg-white font-bold no-underline;
+		gap: 8px;
+		padding: 8px 14px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 999px;
+		color: var(--iflynepal-navy);
+		font-size: 13px;
+		transition:
+			background 0.22s ease,
+			border-color 0.22s ease,
+			color 0.22s ease,
+			transform 0.22s ease;
+	}
+
+	.iflynepal-legal-clause__body .iflynepal-sustain-coordinator__links a:hover {
+		border-color: var(--iflynepal-navy);
+		background: var(--iflynepal-navy);
+		color: #fff;
+		transform: translateY(-2px);
+	}
+
+	.iflynepal-sustain-coordinator__links .iflynepal-ico {
+		@apply shrink-0;
+		width: 15px;
+		height: 15px;
+	}
+
+	/* ------------------------------------------------------- the frameworks */
+
+	.iflynepal-sustain-frameworks {
+		@apply m-0 grid list-none p-0;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 12px;
+		margin-top: 18px;
+	}
+
+	.iflynepal-sustain-framework {
+		@apply flex items-start font-semibold;
+		gap: 12px;
+		padding: 15px 17px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 14px;
+		background: #fbfcff;
+		color: #04234f;
+		font-size: 14.5px;
+		line-height: 1.5;
+		transition:
+			background 0.22s ease,
+			border-color 0.22s ease;
+	}
+
+	.iflynepal-sustain-framework:hover {
+		@apply bg-mist;
+		border-color: rgba(5, 69, 167, 0.3);
+	}
+
+	.iflynepal-sustain-framework .iflynepal-ico {
+		@apply shrink-0;
+		width: 18px;
+		height: 18px;
+		margin-top: 2px;
+		color: var(--iflynepal-navy);
+	}
+
+	/* ==========================================================================
+	   Privacy Policy — the one block the other legal pages do not have
+
+	   The three rights cards in clause 11. Everything else on that page is the
+	   shared `iflynepal-legal-` furniture above, the retention rows included.
+	   ========================================================================== */
+
+	.iflynepal-privacy-rights {
+		@apply grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 14px;
+	}
+
+	.iflynepal-privacy-right {
+		@apply bg-mist;
+		padding: 20px 18px 18px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 20px;
+		transition:
+			transform 0.3s var(--iflynepal-ease),
+			box-shadow 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-privacy-right:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 16px 34px rgba(4, 26, 64, 0.1);
+	}
+
+	.iflynepal-privacy-right .iflynepal-ico {
+		width: 24px;
+		height: 24px;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-privacy-right__title {
+		@apply m-0 font-display font-bold;
+		margin-top: 13px;
+		color: #04234f;
+		font-size: 16.5px;
+		line-height: 1.3;
+		letter-spacing: -0.01em;
+	}
+
+	.iflynepal-privacy-right__text {
+		margin: 7px 0 0;
+		color: var(--iflynepal-muted);
+		font-size: 13.5px;
+		line-height: 1.6;
+	}
+
 	/* ------------------------------------------------------ legal: narrower */
 
 	@media (max-width: 1080px) {
@@ -6305,6 +6532,11 @@
 		.iflynepal-cookie-types {
 			grid-template-columns: repeat(2, 1fr);
 		}
+
+		.iflynepal-privacy-rights,
+		.iflynepal-sustain-pledges {
+			grid-template-columns: repeat(2, 1fr);
+		}
 	}
 
 	@media (max-width: 860px) {
@@ -6312,7 +6544,8 @@
 			@apply hidden;
 		}
 
-		.iflynepal-cookie-browsers {
+		.iflynepal-cookie-browsers,
+		.iflynepal-sustain-frameworks {
 			grid-template-columns: 1fr;
 		}
 	}
@@ -6322,7 +6555,9 @@
 			width: min(calc(100% - 28px), var(--iflynepal-shell));
 		}
 
-		.iflynepal-cookie-types {
+		.iflynepal-cookie-types,
+		.iflynepal-privacy-rights,
+		.iflynepal-sustain-pledges {
 			grid-template-columns: 1fr;
 		}
 
@@ -6383,7 +6618,9 @@
 		}
 
 		.iflynepal-legal-clause,
-		.iflynepal-cookie-type {
+		.iflynepal-cookie-type,
+		.iflynepal-privacy-right,
+		.iflynepal-sustain-pledge {
 			break-inside: avoid;
 			border-color: #ccc;
 			box-shadow: none;

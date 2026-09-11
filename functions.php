@@ -20,6 +20,8 @@ require_once IFLYNEPAL_DIR . '/inc/enqueue.php';
 require_once IFLYNEPAL_DIR . '/inc/template-tags.php';
 require_once IFLYNEPAL_DIR . '/inc/terms.php';
 require_once IFLYNEPAL_DIR . '/inc/cookie.php';
+require_once IFLYNEPAL_DIR . '/inc/privacy.php';
+require_once IFLYNEPAL_DIR . '/inc/sustainability.php';
 require_once IFLYNEPAL_DIR . '/inc/template-functions.php';
 require_once IFLYNEPAL_DIR . '/inc/walkers/class-ifly-nepal-nav-walker.php';
 require_once IFLYNEPAL_DIR . '/inc/walkers/class-ifly-nepal-footer-nav-walker.php';

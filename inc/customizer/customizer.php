@@ -25,6 +25,8 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/team.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/csr.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/terms.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/cookie.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/privacy.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/sustainability.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/contact.php';
 
@@ -130,6 +132,29 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 		)
 	);
 
+	// The Privacy Policy page, arranged the same way as the Cookie Policy's.
+	$wp_customize->add_panel(
+		'iflynepal_privacy',
+		array(
+			'title'       => __( 'Privacy Policy', 'iflynepal' ),
+			'description' => __( 'The hero photograph on the Privacy Policy page. The policy itself is part of the document and is edited in the theme.', 'iflynepal' ),
+			'priority'    => 37,
+		)
+	);
+
+	/*
+	 * The Sustainability Policy page: its hero, as on the other legal pages,
+	 * and the coordinator card, which names a person rather than a policy.
+	 */
+	$wp_customize->add_panel(
+		'iflynepal_sustainability',
+		array(
+			'title'       => __( 'Sustainability Policy', 'iflynepal' ),
+			'description' => __( 'The hero photograph and the Sustainability Coordinator card on the Sustainability Policy page. The policy itself is part of the document and is edited in the theme.', 'iflynepal' ),
+			'priority'    => 38,
+		)
+	);
+
 	/*
 	 * Control classes extend WP_Customize_Control, which only exists once the
 	 * Customizer is being registered — so they load here rather than at the top
@@ -149,6 +174,8 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/csr.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/terms.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/cookie.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/privacy.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/sustainability.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/contact.php';
 }

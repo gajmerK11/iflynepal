@@ -66,8 +66,10 @@ function iflynepal_enqueue_assets() {
 	$has_contact      = iflynepal_has_contact();
 	$has_terms        = iflynepal_has_terms();
 	$has_cookie       = iflynepal_has_cookie();
+	$has_privacy      = iflynepal_has_privacy();
+	$has_sustain      = iflynepal_has_sustainability();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie && ! $has_privacy && ! $has_sustain ) {
 		return;
 	}
 
@@ -213,10 +215,10 @@ function iflynepal_enqueue_assets() {
 	/*
 	 * The generic, markup-driven motion file. Sections opt in with
 	 * data-iflynepal-motion; the About, About Nepal, Team, CSR, Contact and
-	 * Terms templates all do. They share the one file rather than each growing
+	 * legal templates all do. They share the one file rather than each growing
 	 * a reveal script of their own.
 	 */
-	if ( $has_about || $has_country || $has_team || $has_csr || $has_contact || $has_terms || $has_cookie ) {
+	if ( $has_about || $has_country || $has_team || $has_csr || $has_contact || $has_terms || $has_cookie || $has_privacy || $has_sustain ) {
 		wp_enqueue_script(
 			'iflynepal-sections-motion',
 			IFLYNEPAL_URI . '/assets/js/sections/motion.js',
@@ -260,12 +262,13 @@ function iflynepal_enqueue_assets() {
 	}
 
 	/*
-	 * The active mark in a legal document's index — Terms & Conditions and
-	 * Cookie Policy share one script, since they share the index. No GSAP
+	 * The active mark in a legal document's index — Terms & Conditions, Cookie
+	 * Policy, Privacy Policy and Sustainability Policy share one script, since
+	 * they share the index. No GSAP
 	 * dependency, the same as the About Nepal index bar above: the links are
 	 * fragment links and work without it.
 	 */
-	if ( $has_terms || $has_cookie ) {
+	if ( $has_terms || $has_cookie || $has_privacy || $has_sustain ) {
 		wp_enqueue_script(
 			'iflynepal-legal-index',
 			IFLYNEPAL_URI . '/assets/js/legal/index.js',

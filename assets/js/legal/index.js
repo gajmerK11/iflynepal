@@ -3,7 +3,7 @@
  * index beside the document.
  *
  * Shared by every page built on the `iflynepal-legal-*` furniture — Terms &
- * Conditions and Cookie Policy today — which is why it finds the index by its
+ * Conditions, Cookie, Privacy and Sustainability Policy today — which is why it finds the index by its
  * class rather than by a per-page id. One index per page; the first one found
  * is it.
  *

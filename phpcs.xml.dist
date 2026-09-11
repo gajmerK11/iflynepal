@@ -152,6 +152,17 @@
 				<element value="iflynepal_render_cookie_index"/>
 				<element value="iflynepal_render_cookie_clause_head"/>
 				<element value="iflynepal_render_cookie_browsers"/>
+				<element value="iflynepal_render_privacy_index"/>
+				<element value="iflynepal_render_privacy_clause_head"/>
+				<element value="iflynepal_render_privacy_cookie_note"/>
+				<element value="iflynepal_render_privacy_contact_note"/>
+				<element value="iflynepal_render_privacy_rights"/>
+				<element value="iflynepal_render_sustainability_index"/>
+				<element value="iflynepal_render_sustainability_clause_head"/>
+				<element value="iflynepal_render_sustainability_pledges"/>
+				<element value="iflynepal_render_sustainability_frameworks"/>
+				<element value="iflynepal_render_sustainability_policy_link"/>
+				<element value="iflynepal_render_sustainability_coordinator"/>
 				<element value="iflynepal_render_footer_blurb"/>
 				<element value="iflynepal_render_footer_office"/>
 				<element value="iflynepal_render_footer_office_heading"/>

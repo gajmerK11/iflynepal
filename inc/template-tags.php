@@ -93,7 +93,7 @@ function iflynepal_get_nav_cta_item() {
  * @return bool
  */
 function iflynepal_has_hero() {
-	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie();
+	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie() || iflynepal_has_privacy() || iflynepal_has_sustainability();
 
 	/**
 	 * Filters whether this request renders a hero.
@@ -163,7 +163,25 @@ function iflynepal_has_people() {
  * @return bool
  */
 function iflynepal_has_testimonials() {
-	return (bool) iflynepal_get_testimonials( array( 'limit' => 1 ) );
+	$has_testimonials = (bool) iflynepal_get_testimonials( array( 'limit' => 1 ) );
+
+	/**
+	 * Filters whether this request renders a testimonial section.
+	 *
+	 * The default answer is "are any reviews assigned to the page being
+	 * viewed", which a plugin template rendering this section cannot satisfy:
+	 * a term archive is not a page, so no review can be assigned to one. The
+	 * package type archives render the section with the page filter turned off
+	 * and say so here, which is what puts the carousel script on the page.
+	 *
+	 * The same arrangement as iflynepal_has_hero: the knowledge of which plugin
+	 * templates draw a theme component stays inside the plugin.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $has_testimonials Whether a testimonial section is rendered.
+	 */
+	return (bool) apply_filters( 'iflynepal_has_testimonials', $has_testimonials );
 }
 
 /**
@@ -277,6 +295,39 @@ function iflynepal_has_cookie() {
 }
 
 /**
+ * Whether the current request renders the Privacy Policy page template.
+ *
+ * The slug is accepted as well as the template, for the reason given above
+ * iflynepal_has_terms(). "privacy-policy" is also the slug WordPress gives the
+ * privacy page it creates on install, so that page picks the template up
+ * without being assigned it.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_privacy() {
+	return is_page_template( 'page-privacy-policy.php' ) || is_page( 'privacy-policy' );
+}
+
+/**
+ * Whether the current request renders the Sustainability Policy page template.
+ *
+ * The slug is accepted as well as the template, for the reason given above
+ * iflynepal_has_terms(), and in both spellings: "sustainable-policy" is the
+ * live URL, "sustainability-policy" what the page is called.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_sustainability() {
+	return is_page_template( 'page-sustainable-policy.php' )
+		|| is_page( 'sustainable-policy' )
+		|| is_page( 'sustainability-policy' );
+}
+
+/**
  * The background image of whichever hero this request renders.
  *
  * The front page, the About page, the About Nepal page and the Team page each
@@ -304,6 +355,14 @@ function iflynepal_current_hero_image_url() {
 
 	if ( '' !== $filtered ) {
 		return $filtered;
+	}
+
+	if ( iflynepal_has_sustainability() ) {
+		return iflynepal_sustainability_hero_image_url();
+	}
+
+	if ( iflynepal_has_privacy() ) {
+		return iflynepal_privacy_hero_image_url();
 	}
 
 	if ( iflynepal_has_cookie() ) {

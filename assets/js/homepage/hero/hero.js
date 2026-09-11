@@ -36,7 +36,7 @@
 	/*
 	 * The pill at the foot of a hero that scrolls to the first section: Team's
 	 * "Meet everyone", Contact's, and the legal pages' "Read the terms" /
-	 * "Types of cookies". Each page names its own — the pills are styled
+	 * "Types of cookies" / "Read the policy" (Privacy, Sustainability). Each page names its own — the pills are styled
 	 * differently — so all three are listed rather than given a shared class,
 	 * which would mean restyling three components to fix a scroll.
 	 *
