@@ -5685,10 +5685,14 @@
 	 * Sticky rather than fixed, so it rides down beside the clauses and stops
 	 * at the end of the document rather than following the reader onto the
 	 * closing card.
+	 *
+	 * 86px is the docked header (70px) plus the 16px a clause rests under it,
+	 * so the index and the clause jumped to line up — see REST_GAP in
+	 * assets/js/legal/index.js.
 	 */
 	.iflynepal-legal-index {
 		@apply sticky bg-white;
-		top: 96px;
+		top: 86px;
 		padding: 28px 24px 26px;
 		border: 1px solid var(--iflynepal-line);
 		border-radius: 30px;
@@ -5783,9 +5787,16 @@
 		gap: 24px;
 	}
 
+	/*
+	 * scroll-margin-top keeps the clause above out of sight on arrival: the
+	 * docked header (70px) plus 16px, which is less than the 24px gap between
+	 * cards. Past that, the foot of the previous card shows under the header.
+	 * This is the no-JavaScript and arrive-by-URL path; the index's own glide
+	 * computes the same resting place in assets/js/legal/index.js.
+	 */
 	.iflynepal-legal-clause {
 		@apply bg-white;
-		scroll-margin-top: 96px;
+		scroll-margin-top: 86px;
 		padding: 38px 40px 34px;
 		border: 1px solid var(--iflynepal-line);
 		border-radius: 30px;
@@ -5798,6 +5809,16 @@
 	.iflynepal-legal-clause:hover {
 		transform: translateY(-3px);
 		box-shadow: 0 22px 52px rgba(4, 26, 64, 0.12);
+	}
+
+	/*
+	 * The index moves focus onto the clause it glides to (tabindex="-1"), so
+	 * keyboard and screen-reader users continue reading from there. The card
+	 * is a destination, not a control, and a ring round the whole of it only
+	 * looked like an error.
+	 */
+	.iflynepal-legal-clause:focus {
+		outline: none;
 	}
 
 	.iflynepal-legal-clause__head {
@@ -6262,6 +6283,11 @@
 
 		.iflynepal-legal-index {
 			@apply static;
+		}
+
+		/* The docked header is 66px from here down. */
+		.iflynepal-legal-clause {
+			scroll-margin-top: 82px;
 		}
 
 		.iflynepal-legal-index__list {
