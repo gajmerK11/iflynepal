@@ -244,27 +244,4 @@
 	window.addEventListener( 'popstate', function () {
 		load( window.location.href, false, false );
 	} );
-
-	/* ----------------------------------------------------- the search field */
-
-	/*
-	 * The cross inside the search field is the browser's own, and clearing the
-	 * field is all it does — which leaves a visitor looking at an empty box and
-	 * a page still filtered by what used to be in it. The `search` event is what
-	 * that cross fires (and Escape with it), so an emptied field on a page that
-	 * is a search does what the Clear search button beside it does.
-	 */
-	var input = document.getElementById( 'ifn-search-input' );
-
-	if ( input && input.defaultValue ) {
-		input.addEventListener( 'search', function () {
-			if ( '' !== input.value ) {
-				return;
-			}
-
-			var form = input.form;
-
-			window.location.href = form && form.action ? form.action : window.location.pathname;
-		} );
-	}
 }() );

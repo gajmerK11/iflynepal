@@ -30,9 +30,15 @@ const IFLYNEPAL_NEWS_RELATED = 4;
 /**
  * The rendered story, dressed the way the news design has it.
  *
- * The shared pass, with the two differences the news body asks for: the
- * standfirst carries `news-lede` as well as `post-lede`, and it opens with the
- * dateline rather than with a dropped capital.
+ * The shared pass, with the one difference the news body asks for: the
+ * standfirst carries `news-lede` as well as `post-lede` rather than opening on
+ * a dropped capital.
+ *
+ * The dateline is not printed into the body. The design opens the standfirst
+ * with it, newspaper-fashion, but this install shows the same place in the
+ * details row under the breadcrumb, and a story that says KATHMANDU twice
+ * within two lines of itself reads as a mistake rather than as a convention.
+ * The row is the one that keeps it: see template-parts/news/single-intro-section.php.
  *
  * @since 1.0.0
  *
@@ -40,24 +46,23 @@ const IFLYNEPAL_NEWS_RELATED = 4;
  * @return array{html:string,headings:array<int,array{id:string,text:string}>} Body and index.
  */
 function iflynepal_news_body( $post_id = null ) {
-	return iflynepal_article_body( $post_id, iflynepal_news_body_args( $post_id ) );
+	return iflynepal_article_body( $post_id, iflynepal_news_body_args() );
 }
 
 /**
  * The arguments the story's body is rendered with.
  *
  * Split out so the reading time can ask for the same body rather than a second
- * rendering of the same content.
+ * rendering of the same content. The same for every story, since what the news
+ * design changes about a body is a class name on its standfirst.
  *
  * @since 1.0.0
  *
- * @param int|null $post_id Story. Defaults to the one in the loop.
  * @return array<string,string> Arguments for iflynepal_article_body().
  */
-function iflynepal_news_body_args( $post_id = null ) {
+function iflynepal_news_body_args() {
 	return array(
 		'lede_class' => 'news-lede',
-		'dateline'   => iflynepal_news_place( $post_id ),
 	);
 }
 
@@ -70,7 +75,7 @@ function iflynepal_news_body_args( $post_id = null ) {
  * @return int Minutes.
  */
 function iflynepal_news_read_minutes( $post_id = null ) {
-	return iflynepal_article_read_minutes( $post_id, iflynepal_news_body_args( $post_id ) );
+	return iflynepal_article_read_minutes( $post_id, iflynepal_news_body_args() );
 }
 
 /**

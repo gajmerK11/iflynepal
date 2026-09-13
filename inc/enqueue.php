@@ -328,6 +328,23 @@ function iflynepal_enqueue_assets() {
 	}
 
 	/*
+	 * The cross inside the search field, on both archives: it empties the box,
+	 * and this takes the page off the search the box was holding.
+	 */
+	if ( $has_articles || $has_news ) {
+		wp_enqueue_script(
+			'iflynepal-articles-search-clear',
+			IFLYNEPAL_URI . '/assets/js/articles/search-clear.js',
+			array(),
+			iflynepal_asset_version( 'assets/js/articles/search-clear.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	/*
 	 * The archive's tab row: the sliding pill, the centring of the current tab
 	 * and the edge fades. Listed after GSAP but not dependent on it — without
 	 * it the pill is placed rather than tweened, and the tabs are links either

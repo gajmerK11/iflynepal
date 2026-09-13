@@ -62,10 +62,10 @@ $iflynepal_news_found  = (int) $GLOBALS['wp_query']->found_posts;
 							esc_html( number_format_i18n( $iflynepal_news_found ) )
 						);
 						?>
-						<a href="<?php echo esc_url( $iflynepal_news_base ); ?>"><?php esc_html_e( 'Clear search', 'iflynepal' ); ?></a>.
+						<a class="button button--quiet" href="<?php echo esc_url( $iflynepal_news_base ); ?>"><?php esc_html_e( 'Clear search', 'iflynepal' ); ?></a>
 					<?php else : ?>
-						<?php esc_html_e( 'Nothing matched. Try a trek, a region or a festival, or', 'iflynepal' ); ?>
-						<a href="<?php echo esc_url( $iflynepal_news_base ); ?>"><?php esc_html_e( 'see all the news', 'iflynepal' ); ?></a>.
+						<?php esc_html_e( 'Nothing matched. Try a trek, a region or a festival.', 'iflynepal' ); ?>
+						<a class="button button--quiet" href="<?php echo esc_url( $iflynepal_news_base ); ?>"><?php esc_html_e( 'See all the news', 'iflynepal' ); ?></a>
 					<?php endif; ?>
 				</p>
 

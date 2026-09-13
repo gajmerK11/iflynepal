@@ -4,9 +4,14 @@
  *
  * The design's two-column layout: a card on the left holding the contributors,
  * the share control and the rail of recent headlines, and the story itself on
- * the right, closed by the line that says where it was filed. Under 1080px the
- * card lies down above the story rather than coming off, because unlike an
- * article's sidebar it carries nothing that is repeated further down the page.
+ * the right. Under 1080px the card lies down above the story rather than coming
+ * off, because unlike an article's sidebar it carries nothing that is repeated
+ * further down the page.
+ *
+ * The design closes the story with a "Filed under News · date" line. It is not
+ * printed: every story on this install is filed under News, so the line names
+ * the only section there is, and the date it carries is already in the details
+ * row under the breadcrumb.
  *
  * @package IFly_Nepal
  * @since   1.0.0
@@ -40,14 +45,6 @@ $iflynepal_news_main_body = iflynepal_news_body();
 					)
 				);
 				?>
-				<p class="story-end"><i aria-hidden="true"></i><?php
-				printf(
-					/* translators: 1: link to the News archive, 2: the date the story was filed. */
-					esc_html__( 'Filed under %1$s · %2$s', 'iflynepal' ),
-					'<a href="' . esc_url( iflynepal_news_archive_url() ) . '">' . esc_html__( 'News', 'iflynepal' ) . '</a>',
-					esc_html( get_the_date( 'j F Y' ) )
-				);
-				?></p>
 			</article>
 
 		</div>

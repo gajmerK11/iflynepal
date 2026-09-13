@@ -8,6 +8,10 @@
  * short enough not to need an index, and the reader of one is more likely to
  * want the next story than a way back up this one.
  *
+ * The rail holds the same five stories the hero's ticker runs, this one left
+ * out of both: the two are one list read twice, and a reader who has just
+ * scrolled past the ticker should find the rail agreeing with it.
+ *
  * @package IFly_Nepal
  * @since   1.0.0
  */
@@ -18,7 +22,7 @@ $iflynepal_news_aside_author   = (int) get_the_author_meta( 'ID' );
 $iflynepal_news_aside_name     = get_the_author();
 $iflynepal_news_aside_initials = iflynepal_article_initials( $iflynepal_news_aside_name );
 $iflynepal_news_aside_share    = iflynepal_article_share_links();
-$iflynepal_news_aside_latest   = iflynepal_news_latest( IFLYNEPAL_NEWS_RELATED, (int) get_the_ID() );
+$iflynepal_news_aside_latest   = iflynepal_news_latest( IFLYNEPAL_NEWS_LATEST, (int) get_the_ID() );
 $iflynepal_news_aside_socials  = array_filter(
 	array(
 		'facebook'  => iflynepal_article_social_url( 'facebook' ),
