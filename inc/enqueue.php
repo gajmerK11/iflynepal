@@ -68,12 +68,16 @@ function iflynepal_enqueue_assets() {
 	$has_cookie       = iflynepal_has_cookie();
 	$has_privacy      = iflynepal_has_privacy();
 	$has_sustain      = iflynepal_has_sustainability();
+	$has_articles     = iflynepal_has_articles();
+	$has_article      = iflynepal_has_article();
+	$has_news         = iflynepal_has_news();
+	$has_news_story   = iflynepal_has_news_story();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie && ! $has_privacy && ! $has_sustain ) {
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie && ! $has_privacy && ! $has_sustain && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story ) {
 		return;
 	}
 
-	if ( $has_hero ) {
+	if ( $has_hero && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story ) {
 		/*
 		 * Reveal gate, printed in the head so the class lands before the hero
 		 * paints. Every hiding rule in the stylesheet is scoped under it, so a
@@ -114,7 +118,7 @@ function iflynepal_enqueue_assets() {
 		)
 	);
 
-	if ( $has_hero ) {
+	if ( $has_hero && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story ) {
 		wp_enqueue_script(
 			'iflynepal-hero',
 			IFLYNEPAL_URI . '/assets/js/homepage/hero/hero.js',
@@ -274,6 +278,114 @@ function iflynepal_enqueue_assets() {
 			IFLYNEPAL_URI . '/assets/js/legal/index.js',
 			array(),
 			iflynepal_asset_version( 'assets/js/legal/index.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	/*
+	 * The Articles and News pages. They carry the approved designs' own
+	 * stylesheet and their own motion script rather than the theme's hero.js
+	 * and sections/motion.js: the markup is the designs', class for class, and
+	 * the two scripts look for different class names for the same behaviour.
+	 * The stylesheet is enqueued after main.css so its rules land last.
+	 */
+	if ( $has_articles || $has_article || $has_news || $has_news_story ) {
+		wp_enqueue_style(
+			'iflynepal-articles',
+			IFLYNEPAL_URI . '/assets/css/articles.css',
+			array( 'iflynepal-main' ),
+			iflynepal_asset_version( 'assets/css/articles.css' )
+		);
+
+		/*
+		 * News is the same stylesheet with a block appended, exactly as the
+		 * approved news designs carry it — the pages wear the articles' class
+		 * names and the news rules are written to win where they differ, so
+		 * this has to land after articles.css rather than replace it.
+		 */
+		if ( $has_news || $has_news_story ) {
+			wp_enqueue_style(
+				'iflynepal-news',
+				IFLYNEPAL_URI . '/assets/css/news.css',
+				array( 'iflynepal-articles' ),
+				iflynepal_asset_version( 'assets/css/news.css' )
+			);
+		}
+
+		wp_enqueue_script(
+			'iflynepal-articles-motion',
+			IFLYNEPAL_URI . '/assets/js/articles/motion.js',
+			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
+			iflynepal_asset_version( 'assets/js/articles/motion.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	/*
+	 * The archive's tab row: the sliding pill, the centring of the current tab
+	 * and the edge fades. Listed after GSAP but not dependent on it — without
+	 * it the pill is placed rather than tweened, and the tabs are links either
+	 * way. The News archive has no tab row, so it does not load this.
+	 */
+	if ( $has_articles ) {
+		wp_enqueue_script(
+			'iflynepal-articles-archive',
+			IFLYNEPAL_URI . '/assets/js/articles/archive.js',
+			array( 'iflynepal-gsap' ),
+			iflynepal_asset_version( 'assets/js/articles/archive.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+
+		// The two chevrons at the ends of the tab row's scrollbar.
+		wp_localize_script(
+			'iflynepal-articles-archive',
+			'iflynepalArchiveL10n',
+			array(
+				'scrollLeft'  => __( 'Scroll categories left', 'iflynepal' ),
+				'scrollRight' => __( 'Scroll categories right', 'iflynepal' ),
+			)
+		);
+
+		/*
+		 * Changing category in place, so the hero is not rebuilt and re-staged
+		 * under a visitor who is only changing a filter. Depends on the tab
+		 * row's script, which it hands each swapped-in row back to. Not
+		 * required either: without it the tabs and the pager are the links
+		 * they already are.
+		 */
+		wp_enqueue_script(
+			'iflynepal-articles-filter',
+			IFLYNEPAL_URI . '/assets/js/articles/filter.js',
+			array( 'iflynepal-articles-archive' ),
+			iflynepal_asset_version( 'assets/js/articles/filter.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	/*
+	 * A single article, and a news story: the reading bar, the share menu, the
+	 * index that follows the reader, and the FAQ blocks' height tween. A story
+	 * has neither an index nor FAQs and the script simply finds none — the
+	 * bar and the share menu are the two it draws on both.
+	 */
+	if ( $has_article || $has_news_story ) {
+		wp_enqueue_script(
+			'iflynepal-articles-single',
+			IFLYNEPAL_URI . '/assets/js/articles/single.js',
+			array( 'iflynepal-gsap' ),
+			iflynepal_asset_version( 'assets/js/articles/single.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,

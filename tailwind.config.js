@@ -14,6 +14,18 @@ module.exports = {
 		'./assets/js/**/*.js',
 	],
 	safelist: [ 'is-docked', 'is-open', 'is-live' ],
+
+	/*
+	 * Tailwind's own `.container` utility is off. The theme never uses it — its
+	 * shell is `.iflynepal-container` — but the Articles templates carry the
+	 * approved design's `.container`, and Tailwind would otherwise generate a
+	 * utility of that name with breakpoint max-widths that clamp the design's
+	 * own `width: min(calc(100% - 40px), 1240px)` at every width below the cap.
+	 */
+	corePlugins: {
+		container: false,
+	},
+
 	theme: {
 		extend: {
 			colors: {

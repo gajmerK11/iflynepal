@@ -72,6 +72,16 @@ function iflynepal_body_class( $classes ) {
 		$classes[] = 'has-iflynepal-hero';
 	}
 
+	/*
+	 * The Articles and News pages carry the approved designs' own stylesheet,
+	 * and a handful of its rules are scoped to this class on the document —
+	 * the archives' shortened hero and the news story's bottom-heavy one among
+	 * them. See assets/css/articles.css and assets/css/news.css.
+	 */
+	if ( iflynepal_has_articles() || iflynepal_has_article() || iflynepal_has_news() || iflynepal_has_news_story() ) {
+		$classes[] = 'ifn-articles-route';
+	}
+
 	return $classes;
 }
 add_filter( 'body_class', 'iflynepal_body_class' );

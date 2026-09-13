@@ -26,8 +26,10 @@
  *
  *     @type string  $id           Section id, used as the anchor. Default 'proof'.
  *     @type string  $kicker       Small line above the cards. Default 'Traveller proof'.
- *     @type int|string $page      Page whose reviews to show. 'current' (the default)
- *                                reads the page being viewed; 0 shows every review.
+ *     @type int|string $target    Place whose reviews to show — 'page:12', 'term:4'
+ *                                or a bare page ID. 'current' (the default) reads
+ *                                the request being rendered; 0 shows every review.
+ *     @type int|string $page      Deprecated alias for 'target'.
  *     @type int     $limit        Most reviews to show. -1 for all. Default -1.
  *     @type int[]   $include      Specific testimonial IDs, in the order given.
  *     @type string  $note         Handwritten note. Defaults to the one saved on
@@ -43,7 +45,8 @@ defined( 'ABSPATH' ) || exit;
 $iflynepal_args = wp_parse_args(
 	isset( $args ) ? $args : array(),
 	array(
-		'page'         => 'current',
+		'target'       => 'current',
+		'page'         => null,
 		'id'           => 'proof',
 		'kicker'       => __( 'Traveller proof', 'iflynepal' ),
 		'limit'        => -1,
@@ -56,6 +59,7 @@ $iflynepal_args = wp_parse_args(
 
 $iflynepal_testimonials = iflynepal_get_testimonials(
 	array(
+		'target'  => $iflynepal_args['target'],
 		'page'    => $iflynepal_args['page'],
 		'limit'   => $iflynepal_args['limit'],
 		'include' => $iflynepal_args['include'],

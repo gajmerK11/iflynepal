@@ -2,8 +2,8 @@
 /**
  * The Testimonials meta box.
  *
- * Holds the review's fields, the reviewer's photograph and the page the review
- * is shown on. Same shape as the meta boxes in the reference theme: one class,
+ * Holds the review's fields, the reviewer's photograph and the places the
+ * review is shown on. Same shape as the meta boxes in the reference theme: one class,
  * hooked in its own constructor, instantiated at the foot of the file.
  *
  * @package IFly_Nepal
@@ -49,35 +49,35 @@ class IFly_Nepal_Testimonial_Meta_Box {
 	 */
 	private function fields() {
 		return array(
-			'_iflynepal_review_headline'  => array(
+			'_iflynepal_review_headline'     => array(
 				'label'       => __( 'Review Headline', 'iflynepal' ),
 				'description' => __( 'The line set in italics at the top of the card. A short phrase lifted from the review reads better than a summary written for it.', 'iflynepal' ),
 				'type'        => 'text',
 			),
-			'_iflynepal_review_body'      => array(
+			'_iflynepal_review_body'         => array(
 				'label'       => __( 'Review Body', 'iflynepal' ),
 				'description' => __( "The traveller's own words, quoted verbatim from the platform the review came from. Two to four sentences. A testimonial with an empty body is not shown.", 'iflynepal' ),
 				'type'        => 'textarea',
 			),
-			'_iflynepal_reviewer_name'    => array(
+			'_iflynepal_reviewer_name'       => array(
 				'label'       => __( 'Reviewer Name', 'iflynepal' ),
 				'description' => '',
 				'type'        => 'text',
 			),
-			'_iflynepal_reviewer_country' => array(
+			'_iflynepal_reviewer_country'    => array(
 				'label'       => __( 'Reviewer Country', 'iflynepal' ),
 				'description' => __( 'Printed after the name, as "Marcus, Germany".', 'iflynepal' ),
 				'type'        => 'text',
 			),
-			'_iflynepal_reviewer_photo'   => array(
+			'_iflynepal_reviewer_photo'      => array(
 				'label'       => __( 'Reviewer Photo', 'iflynepal' ),
 				'description' => __( 'Square works best; the card crops it to a circle at 40px. Leave it empty and the card draws a neutral avatar instead.', 'iflynepal' ),
 				'type'        => 'media',
 			),
-			'_iflynepal_display_page'     => array(
-				'label'       => __( 'Display On Page', 'iflynepal' ),
-				'description' => __( 'The one page this review appears on. A review belongs to a single page, so choosing another page here moves it rather than copying it. Left unassigned, it appears nowhere.', 'iflynepal' ),
-				'type'        => 'page',
+			IFLYNEPAL_TESTIMONIAL_TARGET_KEY => array(
+				'label'       => __( 'Display On Pages', 'iflynepal' ),
+				'description' => __( 'Every place this review appears — pages, and package type archives when the booking plugin is active. Tick as many as it belongs on; the review is shown in full on each of them. Left untouched, it appears nowhere. The review is named after the first place ticked.', 'iflynepal' ),
+				'type'        => 'target',
 			),
 		);
 	}
@@ -112,7 +112,14 @@ class IFly_Nepal_Testimonial_Meta_Box {
 		wp_nonce_field( self::ID . '_save', self::ID . '_nonce' );
 
 		foreach ( $this->fields() as $key => $field ) {
-			$value    = get_post_meta( $post->ID, $key, true );
+			/*
+			 * The target field is the one that holds a row per value rather than
+			 * a single value, so it is read as a list and every other field is
+			 * read as the scalar it is.
+			 */
+			$value    = 'target' === $field['type']
+				? iflynepal_testimonial_targets( $post->ID )
+				: get_post_meta( $post->ID, $key, true );
 			$field_id = str_replace( '_iflynepal_', 'iflynepal-', $key );
 			?>
 			<p class="iflynepal-meta-field">
@@ -136,8 +143,8 @@ class IFly_Nepal_Testimonial_Meta_Box {
 						$this->render_media_field( $field_id, $key, (int) $value );
 						break;
 
-					case 'page':
-						$this->render_page_field( $field_id, $key, (int) $value );
+					case 'target':
+						$this->render_target_field( $field_id, $key, (array) $value );
 						break;
 
 					default:
@@ -205,36 +212,108 @@ class IFly_Nepal_Testimonial_Meta_Box {
 	}
 
 	/**
-	 * Draws the page chooser.
+	 * Draws the chooser for the places a review is shown.
 	 *
-	 * One page, not several: a review belongs to a single page, so this is a
-	 * select rather than a list of checkboxes. Choosing another page moves the
-	 * review rather than copying it.
+	 * Several, not one. A review used to belong to a single page and this was a
+	 * select; the same quote is worth showing on the homepage and on the retreat
+	 * archive, so it is a list of checkboxes and choosing another place adds to
+	 * the set rather than moving the review out of the one it was in.
+	 *
+	 * Hand-built rather than wp_dropdown_pages(), which can only ever list pages
+	 * and only ever picks one. The options come from
+	 * iflynepal_testimonial_display_targets(), so a plugin's own templates — the
+	 * package type archives — appear here in their own group without the theme
+	 * naming any of them.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $field_id Select's DOM id.
-	 * @param string $key      Meta key, used as the select name.
-	 * @param int    $page_id  Currently chosen page.
+	 * @param string   $field_id Fieldset's DOM id.
+	 * @param string   $key      Meta key, used as the base of the input name.
+	 * @param string[] $stored   Targets currently chosen.
 	 * @return void
 	 */
-	private function render_page_field( $field_id, $key, $page_id ) {
-		/*
-		 * Captured rather than echoed so the escaping sniff can see that what
-		 * reaches the page is core's own markup, not the arguments handed in.
-		 */
-		echo wp_dropdown_pages(
-			array(
-				'id'                => $field_id,
-				'name'              => $key,
-				'selected'          => $page_id,
-				'show_option_none'  => __( '— Not shown on any page —', 'iflynepal' ),
-				'option_none_value' => 0,
-				'class'             => 'widefat',
-				'post_status'       => 'publish',
-				'echo'              => 0,
-			)
-		);
+	private function render_target_field( $field_id, $key, $stored ) {
+		$groups  = iflynepal_testimonial_display_targets();
+		$choices = iflynepal_testimonial_display_target_choices();
+		$name    = $key . '[]';
+		$number  = 0;
+		?>
+		<span class="iflynepal-meta-targets" id="<?php echo esc_attr( $field_id ); ?>">
+			<?php
+			/*
+			 * A marker, so that clearing every box means "shown nowhere" rather
+			 * than "not submitted". An unchecked checkbox posts nothing at all, so
+			 * without this the save routine cannot tell a review the editor has
+			 * just taken off every page from one whose field was never on screen —
+			 * and would leave the old assignments in place for both.
+			 */
+			?>
+			<input type="hidden" name="<?php echo esc_attr( $key ); ?>_submitted" value="1">
+
+			<?php
+			/*
+			 * A target that is no longer on offer is still drawn, and still ticked.
+			 * A plugin switched off takes its own targets out of the list with it,
+			 * and without this the review would show as shown nowhere — so opening
+			 * it and pressing Update, changing nothing, would unassign it.
+			 */
+			foreach ( $stored as $orphan_target ) :
+				if ( isset( $choices[ $orphan_target ] ) ) :
+					continue;
+				endif;
+
+				$orphan_label = iflynepal_testimonial_target_label( $orphan_target );
+				++$number;
+				?>
+				<label class="iflynepal-meta-targets__item" for="<?php echo esc_attr( $field_id . '-' . $number ); ?>">
+					<input
+						type="checkbox"
+						id="<?php echo esc_attr( $field_id . '-' . $number ); ?>"
+						name="<?php echo esc_attr( $name ); ?>"
+						value="<?php echo esc_attr( $orphan_target ); ?>"
+						checked>
+					<?php
+					printf(
+						/* translators: %s: the name of the page or archive the review is shown on. */
+						esc_html__( '%s (currently unavailable)', 'iflynepal' ),
+						'' === $orphan_label ? esc_html( $orphan_target ) : esc_html( $orphan_label )
+					);
+					?>
+				</label>
+				<?php
+			endforeach;
+			?>
+
+			<?php foreach ( $groups as $group ) : ?>
+				<?php if ( empty( $group['options'] ) || ! is_array( $group['options'] ) ) : ?>
+					<?php continue; ?>
+				<?php endif; ?>
+
+				<span class="iflynepal-meta-targets__group">
+					<span class="iflynepal-meta-targets__group-label">
+						<?php echo esc_html( isset( $group['label'] ) ? $group['label'] : '' ); ?>
+					</span>
+
+					<?php foreach ( $group['options'] as $target => $label ) : ?>
+						<?php $target = iflynepal_testimonial_normalize_target( $target ); ?>
+						<?php if ( '' === $target ) : ?>
+							<?php continue; ?>
+						<?php endif; ?>
+						<?php ++$number; ?>
+						<label class="iflynepal-meta-targets__item" for="<?php echo esc_attr( $field_id . '-' . $number ); ?>">
+							<input
+								type="checkbox"
+								id="<?php echo esc_attr( $field_id . '-' . $number ); ?>"
+								name="<?php echo esc_attr( $name ); ?>"
+								value="<?php echo esc_attr( $target ); ?>"
+								<?php checked( in_array( $target, $stored, true ) ); ?>>
+							<?php echo esc_html( $label ); ?>
+						</label>
+					<?php endforeach; ?>
+				</span>
+			<?php endforeach; ?>
+		</span>
+		<?php
 	}
 
 	/**
@@ -265,6 +344,32 @@ class IFly_Nepal_Testimonial_Meta_Box {
 				display: flex;
 				align-items: center;
 				gap: 12px;
+			}
+
+			#<?php echo esc_html( self::ID ); ?> .iflynepal-meta-targets {
+				display: block;
+				max-height: 260px;
+				padding: 8px 12px;
+				overflow-y: auto;
+				border: 1px solid #dcdcde;
+				border-radius: 4px;
+				background: #fff;
+			}
+
+			#<?php echo esc_html( self::ID ); ?> .iflynepal-meta-targets__group-label {
+				display: block;
+				margin: 10px 0 4px;
+				color: #646970;
+				font-size: 11px;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: .04em;
+			}
+
+			#<?php echo esc_html( self::ID ); ?> .iflynepal-meta-targets__item {
+				display: block;
+				padding: 2px 0;
+				font-weight: 400;
 			}
 
 			#<?php echo esc_html( self::ID ); ?> .iflynepal-meta-media__preview img {
@@ -306,6 +411,21 @@ class IFly_Nepal_Testimonial_Meta_Box {
 		}
 
 		foreach ( $this->fields() as $key => $field ) {
+			/*
+			 * The targets are handled before the "was it submitted" test, and
+			 * have to be: an unticked checkbox posts nothing, so a review taken
+			 * off every page submits no value at all under this key. Its own
+			 * marker says the field was on screen, and the absent list then
+			 * means an empty one rather than "leave what is stored alone".
+			 */
+			if ( 'target' === $field['type'] ) {
+				if ( isset( $_POST[ $key . '_submitted' ] ) ) {
+					$this->save_targets( $post_id, isset( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : array() ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized per value in save_targets().
+				}
+
+				continue;
+			}
+
 			if ( ! isset( $_POST[ $key ] ) ) {
 				continue;
 			}
@@ -314,8 +434,7 @@ class IFly_Nepal_Testimonial_Meta_Box {
 
 			switch ( $field['type'] ) {
 				case 'media':
-				case 'page':
-					// Both hold an ID and nothing else.
+					// An attachment ID and nothing else.
 					$value = absint( $raw );
 					break;
 
@@ -337,6 +456,60 @@ class IFly_Nepal_Testimonial_Meta_Box {
 		}
 
 		$this->rename( $post_id );
+	}
+
+	/**
+	 * Stores the places a review is shown.
+	 *
+	 * One meta row per target, under the one key, because that is what the query
+	 * selecting a request's reviews matches — see iflynepal_testimonial_targets().
+	 * The rows are deleted and rewritten rather than reconciled: the set is at
+	 * most a handful of values, and a reconciliation is two loops that have to
+	 * agree with each other.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int   $post_id Review being saved.
+	 * @param mixed $raw     Submitted list, unslashed.
+	 * @return void
+	 */
+	private function save_targets( $post_id, $raw ) {
+		$stored  = iflynepal_testimonial_targets( $post_id );
+		$choices = iflynepal_testimonial_display_target_choices();
+		$keep    = array();
+
+		foreach ( (array) $raw as $value ) {
+			$target = iflynepal_testimonial_normalize_target( sanitize_text_field( is_scalar( $value ) ? (string) $value : '' ) );
+
+			if ( '' === $target || in_array( $target, $keep, true ) ) {
+				continue;
+			}
+
+			/*
+			 * A checkbox is markup, and markup is a suggestion — anything at all
+			 * can be posted to this screen, so a target has to be one the site
+			 * actually offers rather than merely one that is shaped right.
+			 *
+			 * The exception is a target already stored. One whose plugin is
+			 * switched off is not on offer and is still the editor's own choice;
+			 * re-saving the review for an unrelated reason must not throw it away.
+			 */
+			if ( ! isset( $choices[ $target ] ) && ! in_array( $target, $stored, true ) ) {
+				continue;
+			}
+
+			$keep[] = $target;
+		}
+
+		if ( $keep === $stored ) {
+			return;
+		}
+
+		delete_post_meta( $post_id, IFLYNEPAL_TESTIMONIAL_TARGET_KEY );
+
+		foreach ( $keep as $target ) {
+			add_post_meta( $post_id, IFLYNEPAL_TESTIMONIAL_TARGET_KEY, $target );
+		}
 	}
 
 	/**

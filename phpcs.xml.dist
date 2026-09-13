@@ -8,6 +8,36 @@
 	<exclude-pattern>/vendor/*</exclude-pattern>
 	<exclude-pattern>/assets/js/vendor/*</exclude-pattern>
 
+	<!--
+		WordPress finds a taxonomy template by `taxonomy-{taxonomy}.php`, and the
+		taxonomy keys carry underscores, so these two filenames are fixed by the
+		template hierarchy rather than chosen.
+	-->
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+		<exclude-pattern>/taxonomy-article_category\.php$</exclude-pattern>
+		<exclude-pattern>/taxonomy-article_tag\.php$</exclude-pattern>
+	</rule>
+
+	<!--
+		The Articles and News template parts reproduce the approved designs'
+		markup whitespace and all: a newline the sniff wants added between a tag and a
+		PHP block is a space in the rendered HTML, and inside an inline-flex row
+		or a set of adjacent spans that space is a visible gap. The markup is
+		held exact instead.
+	-->
+	<rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen">
+		<exclude-pattern>/template-parts/articles/*</exclude-pattern>
+		<exclude-pattern>/template-parts/news/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.PHP.EmbeddedPhp.ContentAfterEnd">
+		<exclude-pattern>/template-parts/articles/*</exclude-pattern>
+		<exclude-pattern>/template-parts/news/*</exclude-pattern>
+	</rule>
+	<rule ref="Generic.WhiteSpace.ScopeIndent">
+		<exclude-pattern>/template-parts/articles/*</exclude-pattern>
+		<exclude-pattern>/template-parts/news/*</exclude-pattern>
+	</rule>
+
 	<arg name="extensions" value="php"/>
 	<arg name="colors"/>
 	<arg value="ps"/>
@@ -163,6 +193,8 @@
 				<element value="iflynepal_render_sustainability_frameworks"/>
 				<element value="iflynepal_render_sustainability_policy_link"/>
 				<element value="iflynepal_render_sustainability_coordinator"/>
+				<element value="iflynepal_article_headline"/>
+				<element value="iflynepal_articles_hero_title_html"/>
 				<element value="iflynepal_render_footer_blurb"/>
 				<element value="iflynepal_render_footer_office"/>
 				<element value="iflynepal_render_footer_office_heading"/>

@@ -93,7 +93,7 @@ function iflynepal_get_nav_cta_item() {
  * @return bool
  */
 function iflynepal_has_hero() {
-	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie() || iflynepal_has_privacy() || iflynepal_has_sustainability();
+	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie() || iflynepal_has_privacy() || iflynepal_has_sustainability() || iflynepal_has_articles() || iflynepal_has_article() || iflynepal_has_news() || iflynepal_has_news_story();
 
 	/**
 	 * Filters whether this request renders a hero.
@@ -355,6 +355,22 @@ function iflynepal_current_hero_image_url() {
 
 	if ( '' !== $filtered ) {
 		return $filtered;
+	}
+
+	if ( iflynepal_has_news_story() ) {
+		return iflynepal_news_hero_image_url();
+	}
+
+	if ( iflynepal_has_news() ) {
+		return iflynepal_news_archive_hero_image_url();
+	}
+
+	if ( iflynepal_has_article() ) {
+		return iflynepal_article_hero_image_url();
+	}
+
+	if ( iflynepal_has_articles() ) {
+		return iflynepal_articles_hero_image_url();
 	}
 
 	if ( iflynepal_has_sustainability() ) {

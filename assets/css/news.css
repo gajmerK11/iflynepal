@@ -1,0 +1,307 @@
+/**
+ * News archive and single news story.
+ *
+ * The approved designs' own stylesheet — news-archive-design.html and
+ * news-single-design.html — carried over the way those files carry it: the
+ * News pages wear the Articles pages' class names, and their stylesheet is the
+ * Articles stylesheet with one block appended. This file is that block, so
+ * inc/enqueue.php loads articles.css first and this after it.
+ *
+ * Two rules at the head are not from that block. They are Articles-design
+ * rules that only the News pages use — the hero's eyebrow colour, and the
+ * corner pill the Top News cards carry — so they were never picked up into
+ * articles.css. They are the designs' own, unchanged.
+ *
+ * Everything here is class-scoped, so nothing needs the :where() wrapper
+ * articles.css puts around the designs' bare element rules.
+ *
+ * @package IFly_Nepal
+ * @since   1.0.0
+ */
+
+/* ----------------------------------------------- from the Articles design
+   Used on the News pages alone: the archive hero carries an eyebrow above its
+   headline, and a Top News card carries a corner pill. */
+.hero .eyebrow{color:#BBD4F7}
+.pill{position:absolute;left:16px;top:16px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.94);color:var(--navy);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+
+/* ==========================================================================
+   NEWS — cloudcolleague's news-archive-layout.php (hero with "News Center"
+   and search, three Top News cards, Recent News as horizontal cards with
+   pagination) and news-single-layout.php, in the articles' dress.
+   ========================================================================== */
+
+/* the "News Center" kicker above the headline */
+.hero .news-kicker{justify-content:center;margin-bottom:18px;color:#F2C879}
+.hero .news-kicker::before,.hero .news-kicker::after{content:"";width:28px;height:1px;background:currentColor;opacity:.7}
+
+/* ---------- section heads -------------------------------------------------- */
+.news-section{padding:88px 0 0}
+.news-section:last-of-type{padding-bottom:104px}
+.news-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:32px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.news-head .eyebrow{margin-bottom:10px}
+.news-head .eyebrow::before{display:none}
+.news-head h2{font-size:clamp(30px,3.2vw,44px);line-height:1.1}
+.news-head p{max-width:420px;color:var(--muted);font-size:15px;text-align:right}
+
+/* ---------- top news: three tall cards ------------------------------------- */
+.top-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.top-card{display:flex;flex-direction:column}
+.top-card .post-img{height:auto;aspect-ratio:16/10;position:relative}
+.top-card .post-img img{height:100%}
+.pill--gold{background:var(--gold);color:var(--ink-deep)}
+.top-card .post-title{font-size:23px}
+.top-card .post-excerpt{-webkit-line-clamp:2}
+
+/* ---------- recent news: horizontal cards ---------------------------------- */
+.news-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.news-card{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:stretch}
+.news-card.is-off{display:none}
+.news-card.is-leaving{pointer-events:none}
+.news-card .post-img{height:auto;min-height:250px}
+.news-card .post-img img{height:100%}
+.news-card .post-body{padding:22px 22px 20px}
+.news-card .post-title{margin:8px 0 8px;font-size:19px;line-height:1.28;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.news-card .post-excerpt{font-size:14px;-webkit-line-clamp:2}
+.news-card .post-body .post-excerpt{margin-bottom:16px}
+.news-card .post-foot{padding-top:14px}
+.news-byline{display:flex;flex-direction:column;line-height:1.3}
+.news-byline b{color:var(--ink);font-size:13px;font-weight:700}
+.news-byline time{color:var(--muted);font-size:12px;font-weight:600}
+.news-card .post-avatar{width:36px;height:36px}
+
+/* ---------- news single ---------------------------------------------------- */
+/* no table of contents on a news story, so the sidebar is only its card */
+.ifn-news-single .aside-card{max-height:none}
+/* news runs as plain headed prose, not numbered chapters */
+.ifn-news-single .post-content h2{padding-top:0;margin-top:52px}
+.ifn-news-single .post-content h2::before,.ifn-news-single .post-content h2::after{display:none}
+.post-content .news-dates{display:grid;gap:10px;margin:22px 0 0;padding:0;list-style:none}
+.post-content .news-dates li{
+  display:grid;
+  grid-template-columns:150px minmax(0,1fr);
+  gap:18px;
+  align-items:baseline;
+  padding:16px 20px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+  font-size:15.5px;
+  line-height:1.6;
+}
+.post-content .news-dates b{color:var(--navy);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+
+/* the articles hide their sidebar on small screens because its contents list
+   moves above the post; the news sidebar is only contributors and share, and
+   the theme keeps it there, stacked above the story */
+@media (max-width:1080px){
+  .ifn-news-single .post-aside{display:block;position:static;margin-bottom:30px}
+  .ifn-news-single .aside-card{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;padding:20px 22px}
+  .ifn-news-single .aside-card .aside-rule{display:none}
+  /* the rail repeats Other News below, so a stacked sidebar leaves it out */
+  .ifn-news-single .aside-latest{display:none}
+}
+/* ---------- news cues on the story page ------------------------------------ */
+/* a live tag and a dateline lead the details row */
+.news-flag{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 12px 6px 10px;
+  border-radius:999px;
+  background:var(--navy);
+  color:#fff;
+  font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;
+}
+.news-flag i{position:relative;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.news-flag i::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--gold);animation:newsPulse 1.8s ease-out infinite}
+@keyframes newsPulse{from{transform:scale(1);opacity:.8}to{transform:scale(2.8);opacity:0}}
+.post-meta-row .news-place{color:var(--ink-deep)}
+
+/* the standfirst: a larger opening paragraph, led by the dateline, closed by
+   a rule, in place of the article's drop cap */
+.ifn-news-single .post-content .news-lede{
+  padding-bottom:28px;
+  border-bottom:1px solid var(--line);
+  color:var(--ink-deep);
+  font-size:clamp(19px,1.6vw,22px);
+  font-weight:500;
+  line-height:1.62;
+}
+.ifn-news-single .post-content .news-lede::first-letter{float:none;margin:0;color:inherit;font:inherit;line-height:inherit}
+.news-lede .dateline{color:var(--navy);font-size:.78em;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+
+/* key dates run down a timeline */
+.post-content .news-dates{position:relative;gap:14px;padding-left:28px}
+.post-content .news-dates::before{content:"";position:absolute;left:7px;top:14px;bottom:14px;width:2px;border-radius:2px;background:linear-gradient(var(--gold),rgba(5,69,167,.25))}
+.post-content .news-dates li{position:relative}
+.post-content .news-dates li::before{
+  content:"";
+  position:absolute;
+  left:-27px;top:21px;
+  width:14px;height:14px;
+  border:3px solid #fff;
+  border-radius:50%;
+  background:var(--navy);
+  box-shadow:0 0 0 1px rgba(5,69,167,.25);
+}
+.post-content .news-dates li:first-child::before{background:var(--gold)}
+
+.post-figure .credit{display:block;margin-top:4px;color:rgba(109,117,126,.8);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+
+/* the end of the story */
+.post-content .story-end{display:flex;align-items:center;gap:12px;margin-top:40px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:600}
+.post-content .story-end i{width:10px;height:10px;flex:none;background:var(--navy)}
+.post-content .story-end a{font-weight:700}
+
+/* the Latest news rail under share */
+.aside-latest ol{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.aside-latest li{display:grid;gap:3px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.aside-latest li:first-child{padding-top:2px}
+.aside-latest time{color:var(--navy);font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.aside-latest li a{color:var(--ink-deep);font-size:13.5px;font-weight:600;line-height:1.4;transition:color .2s ease}
+.aside-latest li a:hover{color:var(--navy)}
+.aside-more{display:inline-flex;align-items:center;gap:7px;margin-top:14px;color:var(--navy);font-size:13px;font-weight:800}
+.aside-more .link-arrow{transition:transform .35s var(--ease)}
+.aside-more:hover .link-arrow{transform:translateX(4px)}
+
+@media (prefers-reduced-motion:reduce){.news-flag i::after{animation:none;display:none}}
+
+@media (max-width:1200px){
+  .news-card{grid-template-columns:1fr}
+  .news-card .post-img{min-height:0;height:220px}
+}
+@media (max-width:1020px){
+  .top-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .top-grid .top-card:last-child{grid-column:1/-1}
+  .top-grid .top-card:last-child .post-img{aspect-ratio:21/9}
+}
+@media (max-width:760px){
+  .news-section{padding-top:60px}
+  .news-section:last-of-type{padding-bottom:80px}
+  .news-head{flex-direction:column;align-items:flex-start;gap:8px}
+  .news-head p{text-align:left}
+  .top-grid,.news-grid{grid-template-columns:1fr}
+  .top-grid .top-card:last-child{grid-column:auto}
+  .top-grid .top-card:last-child .post-img{aspect-ratio:16/10}
+  .post-content .news-dates li{grid-template-columns:1fr;gap:4px}
+}
+
+/* ---------- the story's hero: a front-page photo lead ----------------------
+   Same full-viewport photograph, read the way a news front runs one: the
+   headline sits low and left over a bottom-heavy shade, under a kicker that
+   says what kind of story it is, and the latest headlines run along the foot
+   of the picture. ---------------------------------------------------------- */
+.ifn-articles-route .news-hero{align-items:flex-end}
+.news-hero::before{
+  background:
+    linear-gradient(180deg,rgba(4,26,64,.42) 0%,rgba(4,26,64,.12) 32%,rgba(4,26,64,.46) 62%,rgba(4,26,64,.94) 100%),
+    linear-gradient(90deg,rgba(4,26,64,.55) 0%,rgba(4,26,64,0) 62%);
+}
+.ifn-articles-route .news-hero .hero-inner{width:min(calc(100% - 40px),var(--max));padding:150px 0 132px}
+.news-hero .news-hero-copy{max-width:none;margin:0;text-align:left}
+.news-hero h1{max-width:22ch;margin:0;font-size:clamp(42px,5.2vw,80px);line-height:1.03;letter-spacing:-.025em}
+
+.news-kicker-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px 14px;
+  margin-bottom:22px;
+  animation:newsRise .8s var(--ease) .1s both;
+}
+.news-kicker-row .news-flag{background:#fff;color:var(--navy)}
+.news-topic{
+  display:inline-flex;
+  align-items:center;
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+/* a gold rule under the headline, drawn in once the words have landed */
+.news-hero h1::after{
+  content:"";
+  display:block;
+  width:96px;
+  height:3px;
+  margin-top:26px;
+  border-radius:2px;
+  background:var(--gold);
+  transform-origin:left center;
+  animation:newsRule .9s var(--ease) .9s both;
+}
+@keyframes newsRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes newsRule{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* the ticker along the foot of the picture */
+.news-ticker{
+  position:absolute;
+  inset:auto 0 0;
+  z-index:2;
+  display:flex;
+  align-items:stretch;
+  height:56px;
+  border-top:1px solid rgba(255,255,255,.14);
+  background:rgba(4,26,64,.62);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  color:#fff;
+}
+.news-ticker-label{
+  flex:none;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 22px 0 max(20px,calc((100% - var(--max)) / 2));
+  background:var(--gold);
+  color:var(--ink-deep);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  clip-path:polygon(0 0,100% 0,calc(100% - 14px) 100%,0 100%);
+  padding-right:34px;
+}
+.news-ticker-window{
+  position:relative;
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 60px),transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 60px),transparent);
+}
+.news-ticker-track{
+  display:flex;
+  align-items:center;
+  width:max-content;
+  height:100%;
+  margin:0;
+  padding:0;
+  list-style:none;
+  animation:newsTicker 60s linear infinite;
+}
+.news-ticker:hover .news-ticker-track,.news-ticker:focus-within .news-ticker-track{animation-play-state:paused}
+.news-ticker-track li{display:flex;align-items:center;gap:12px;padding:0 30px;white-space:nowrap;font-size:14px;font-weight:600}
+.news-ticker-track li::after{content:"";width:6px;height:6px;margin-left:30px;transform:rotate(45deg);background:var(--gold);opacity:.8}
+.news-ticker-track time{color:var(--gold);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.news-ticker-track a{color:rgba(255,255,255,.92);transition:color .2s ease}
+.news-ticker-track a:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+/* the list is written out twice, so moving it one copy's width loops cleanly */
+@keyframes newsTicker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+@media (max-width:760px){
+  .ifn-articles-route .news-hero .hero-inner{width:min(calc(100% - 28px),var(--max));padding:120px 0 110px}
+  .news-hero h1{font-size:clamp(34px,9vw,48px)}
+  .news-hero h1::after{width:72px;margin-top:20px}
+  .news-kicker-row{margin-bottom:16px}
+  .news-ticker{height:48px}
+  .news-ticker-label{padding-left:14px;padding-right:26px;font-size:10px}
+  .news-ticker-track li{padding:0 20px;font-size:13px}
+  .news-ticker-track li::after{margin-left:20px}
+}
+@media (prefers-reduced-motion:reduce){
+  .news-kicker-row,.news-hero h1::after{animation:none}
+  /* no travel: the first headlines sit still and the rest scroll by hand */
+  .news-ticker-track{animation:none}
+  .news-ticker-window{overflow-x:auto;scrollbar-width:none}
+}

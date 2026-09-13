@@ -27,6 +27,8 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/terms.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/cookie.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/privacy.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/sustainability.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/articles.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/news.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/contact.php';
 
@@ -156,6 +158,33 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	);
 
 	/*
+	 * The Articles archive. Only its hero is editable: the tabs are the
+	 * category list and the cards are the articles, so everything below the
+	 * hero is written in the posts themselves rather than here.
+	 */
+	$wp_customize->add_panel(
+		'iflynepal_articles',
+		array(
+			'title'       => __( 'Articles', 'iflynepal' ),
+			'description' => __( 'The hero at the top of the Articles archive. The grid under it is built from the articles and their categories.', 'iflynepal' ),
+			'priority'    => 39,
+		)
+	);
+
+	/*
+	 * The News archive. As with Articles, only its hero is editable: which
+	 * three stories lead is a toggle on each story rather than a field here.
+	 */
+	$wp_customize->add_panel(
+		'iflynepal_news',
+		array(
+			'title'       => __( 'News', 'iflynepal' ),
+			'description' => __( 'The hero at the top of the News archive. The stories under it, and the three that lead, are set on the stories themselves.', 'iflynepal' ),
+			'priority'    => 40,
+		)
+	);
+
+	/*
 	 * Control classes extend WP_Customize_Control, which only exists once the
 	 * Customizer is being registered — so they load here rather than at the top
 	 * of the file.
@@ -176,6 +205,8 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/cookie.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/privacy.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/sustainability.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/articles.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/news.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/contact.php';
 }
