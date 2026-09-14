@@ -503,3 +503,110 @@ function iflynepal_validate_hero_background_image( $validity, $value ) {
 
 	return $validity;
 }
+
+/* ----------------------------------------------------------- trip finder */
+
+/**
+ * The plugin's answer to "what does the trip-finder picker need", cached for
+ * one request.
+ *
+ * Same shape as iflynepal_reasons_payload() above: nothing here is edited in
+ * the Customizer — the type list is live taxonomy data and the results URL
+ * is a plugin setting, so both are asked for fresh rather than stored as
+ * theme mods that would drift the moment either one changes.
+ *
+ * @since 1.0.0
+ *
+ * @return array{types: array[], url: string, durations: array[]} Empty of all
+ *               three when the plugin is inactive or nothing is configured.
+ */
+function iflynepal_hero_finder_payload() {
+	static $payload = null;
+
+	if ( null === $payload ) {
+		/**
+		 * Filters the trip types, results URL and duration buckets for the
+		 * hero's picker.
+		 *
+		 * The theme fires this and renders whatever comes back; it carries no
+		 * opinion of its own about what a package type is. See
+		 * ifn-booking/includes/frontend/homepage-trip-finder.php.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array{types: array[], url: string, durations: array[]} $payload Empty by default.
+		 */
+		$payload = (array) apply_filters(
+			'iflynepal_homepage_trip_finder',
+			array(
+				'types'     => array(),
+				'url'       => '',
+				'durations' => array(),
+			)
+		);
+
+		$payload += array(
+			'types'     => array(),
+			'url'       => '',
+			'durations' => array(),
+		);
+	}
+
+	return $payload;
+}
+
+/**
+ * The trip types offered in the picker.
+ *
+ * @since 1.0.0
+ *
+ * @return array[] Each with 'slug' and 'label'.
+ */
+function iflynepal_hero_finder_types() {
+	return iflynepal_hero_finder_payload()['types'];
+}
+
+/**
+ * The trip-length buckets offered in the picker's "I have" field.
+ *
+ * Optional refinement, not a requirement: iflynepal_has_hero_finder() does
+ * not check this, so a plugin version that has not shipped it yet still gets
+ * a working "I want to" picker with no second field, rather than none at all.
+ *
+ * @since 1.0.0
+ *
+ * @return array[] Each with 'key' and 'label' (the 'min'/'max' bounds are the
+ *               plugin's own business — the theme only ever echoes 'key' back
+ *               in the submitted form).
+ */
+function iflynepal_hero_finder_durations() {
+	return iflynepal_hero_finder_payload()['durations'];
+}
+
+/**
+ * The URL the picker's form submits to.
+ *
+ * @since 1.0.0
+ *
+ * @return string URL, or '' when unconfigured.
+ */
+function iflynepal_hero_finder_url() {
+	return iflynepal_hero_finder_payload()['url'];
+}
+
+/**
+ * Whether the trip-finder picker has anything to show.
+ *
+ * Gated on both halves at once: a type list with nowhere to send it is a
+ * button that goes nowhere, and a configured page with no types to offer is
+ * an empty control. Either missing and the section is left off the hero
+ * entirely, the same "opt-in, nothing broken when unconfigured" rule the
+ * payment button and the WhatsApp link both follow in the plugin.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_hero_finder() {
+	return (bool) iflynepal_hero_finder_types() && '' !== iflynepal_hero_finder_url();
+}

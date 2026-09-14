@@ -124,6 +124,66 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 				?>
 			</div>
 
+			<?php if ( iflynepal_has_hero_finder() ) : ?>
+				<?php
+				/*
+				 * The trip types and the results URL both come from the
+				 * ifn-booking plugin (iflynepal_homepage_trip_finder filter) —
+				 * this template only knows it got a list of {slug,label} pairs
+				 * and a URL to send them to.
+				 *
+				 * A plain <form method="get"> does the whole job on its own:
+				 * the browser assembles ?types[]=a&types[]=b from whichever
+				 * boxes are checked, with or without JavaScript.
+				 * assets/js/homepage/hero/trip-finder.js only keeps the
+				 * summary's label in step with the selection — it is not
+				 * needed for the redirect to work.
+				 */
+				?>
+				<form class="iflynepal-hero__finder" method="get" action="<?php echo esc_url( iflynepal_hero_finder_url() ); ?>" id="iflynepal-hero-finder">
+					<details class="iflynepal-hero__finder-field" id="iflynepal-hero-finder-types">
+						<summary class="iflynepal-hero__finder-trigger">
+							<span class="iflynepal-hero__finder-row">
+								<span>
+									<span class="iflynepal-hero__finder-label"><?php esc_html_e( 'I want to', 'iflynepal' ); ?></span>
+									<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Explore Nepal', 'iflynepal' ); ?>"><?php esc_html_e( 'Explore Nepal', 'iflynepal' ); ?></span>
+								</span>
+								<svg class="iflynepal-hero__finder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							</span>
+						</summary>
+
+						<div class="iflynepal-hero__finder-list">
+							<?php foreach ( iflynepal_hero_finder_types() as $iflynepal_finder_type ) : ?>
+								<label class="iflynepal-hero__finder-option">
+									<input type="checkbox" name="types[]" value="<?php echo esc_attr( $iflynepal_finder_type['slug'] ); ?>">
+									<?php echo esc_html( $iflynepal_finder_type['label'] ); ?>
+								</label>
+							<?php endforeach; ?>
+						</div>
+					</details>
+
+					<?php $iflynepal_finder_durations = iflynepal_hero_finder_durations(); ?>
+					<?php if ( $iflynepal_finder_durations ) : ?>
+						<div class="iflynepal-hero__finder-field iflynepal-hero__finder-field--select">
+							<label class="iflynepal-hero__finder-trigger" for="iflynepal-hero-finder-days">
+								<span class="iflynepal-hero__finder-label"><?php esc_html_e( 'I have', 'iflynepal' ); ?></span>
+								<select class="iflynepal-hero__finder-value" id="iflynepal-hero-finder-days" name="days">
+									<option value=""><?php esc_html_e( 'Not sure yet', 'iflynepal' ); ?></option>
+									<?php foreach ( $iflynepal_finder_durations as $iflynepal_finder_duration ) : ?>
+										<option value="<?php echo esc_attr( $iflynepal_finder_duration['key'] ); ?>"><?php echo esc_html( $iflynepal_finder_duration['label'] ); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</label>
+						</div>
+					<?php endif; ?>
+
+					<button type="submit" class="iflynepal-button iflynepal-button--dark iflynepal-hero__finder-submit">
+						<?php esc_html_e( 'Find My Trip', 'iflynepal' ); ?>
+						<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+					</button>
+				</form>
+			<?php endif; ?>
+
 		</div>
 	</div>
 

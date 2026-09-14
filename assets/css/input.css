@@ -580,6 +580,14 @@
 	 */
 	.iflynepal-hero__copy {
 		@apply mx-auto max-w-[1180px] text-center;
+		/*
+		 * assets/js/homepage/hero/trip-finder.js sets an inline transform on
+		 * this element to keep the open "I want to" checklist inside the
+		 * hero on a short window — see the comment there. The transition is
+		 * here rather than inline so it is one declaration regardless of how
+		 * many times the script updates the value.
+		 */
+		transition: transform 0.3s var(--iflynepal-ease);
 	}
 
 	.iflynepal-hero__title {
@@ -803,6 +811,200 @@
 		.iflynepal-anim .iflynepal-team-portrait {
 			@apply opacity-0;
 		}
+	}
+
+	/*
+	 * The trip-finder picker: "I want to", a checklist of the ifn-booking
+	 * plugin's own top-level package types, "I have", a trip-length bucket,
+	 * and a submit button that sends both to the plugin's results page as
+	 * ?types[]=…&days=….
+	 *
+	 * Geometry, spacing and typography measured directly off the design file
+	 * (Downloads/iFlyNepal/ifly-nepal-homepage-refined.html, its `.trip-search`
+	 * / `.search-field` rules) rather than approximated — every value below
+	 * that has a design source names it in a comment. The design's own control
+	 * is a 4-column strip ("I want to" / "I have" / "Travelling" / submit);
+	 * this picker only ever needed two fields (§ client's own scope decision,
+	 * 14 Sep 2026 — no "Travelling" field was asked for), so the grid below
+	 * drops that third column rather than leaving a gap where it would sit,
+	 * keeping the design's own 1.2fr : 0.8fr ratio between the two it kept.
+	 *
+	 * <details>/<summary> for "I want to" rather than a hand-built dropdown:
+	 * the browser already does open/close, keyboard handling and
+	 * click-outside-to-close for free, so nothing here depends on
+	 * assets/js/homepage/hero/trip-finder.js to be usable — that file only
+	 * keeps the summary's label in step with what is checked. Deliberately
+	 * left out of the .iflynepal-anim reveal gate above: those elements only
+	 * reach opacity 1 again once hero.js's GSAP timeline tweens them back in,
+	 * and this section is not one of the things that timeline knows about.
+	 */
+	.iflynepal-hero__finder {
+		@apply relative z-[2] mx-auto grid w-full items-stretch text-left;
+		margin-top: 46px; /* .trip-search margin-top (centred-hero pass) */
+		padding: 12px; /* .trip-search padding */
+		gap: 10px; /* .trip-search gap */
+		grid-template-columns: 1.2fr 0.8fr auto; /* .trip-search's want:have ratio, travel column dropped */
+		background: rgba(255, 255, 255, 0.94); /* .trip-search background */
+		border-radius: 20px; /* .trip-search border-radius */
+		max-width: 1030px; /* .trip-search max-width */
+		box-shadow: var(--iflynepal-shadow); /* .trip-search box-shadow: var(--shadow) — identical token */
+	}
+
+	@media (max-width: 1080px) {
+		.iflynepal-hero__finder {
+			grid-template-columns: 1fr 1fr; /* .trip-search's own 1080px collapse */
+		}
+
+		.iflynepal-hero__finder-submit.iflynepal-button {
+			/* This picker has no third field to sit beside at this width, unlike
+			 * the design's — the button spans both columns instead of floating
+			 * half-width and alone. */
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-hero__finder {
+			grid-template-columns: 1fr; /* .trip-search's own 760px stack */
+			margin-top: 34px; /* .trip-search margin-top at this breakpoint */
+		}
+	}
+
+	.iflynepal-hero__finder-field,
+	.iflynepal-hero__finder-field--select {
+		@apply relative min-w-0;
+		padding: 5px 14px; /* .search-field padding */
+		border-right: 1px solid var(--iflynepal-line); /* .search-field border-right */
+	}
+
+	/*
+	 * .search-field:last-of-type{border-right:0} — :last-of-type does not
+	 * translate directly: the design's three fields are all <div>s of the
+	 * same tag, so "last of type" and "last field" are the same element. This
+	 * picker's two fields are a <details> and a <div>, different tags, so
+	 * :last-of-type would be true of BOTH independently (each is trivially
+	 * the only element of its own tag) and strip the divider from both at
+	 * once — caught by measuring the rendered page rather than by reading
+	 * the rule. Targeting the select field's own class is unambiguous
+	 * regardless of tag, and it is always the visually-last field here.
+	 */
+	.iflynepal-hero__finder-field--select {
+		border-right: 0;
+	}
+
+	@media (max-width: 1080px) {
+		.iflynepal-hero__finder-field,
+		.iflynepal-hero__finder-field--select {
+			border-right: 0;
+			border-bottom: 1px solid var(--iflynepal-line);
+		}
+
+		.iflynepal-hero__finder-field--select {
+			border-bottom: 0;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-hero__finder-field,
+		.iflynepal-hero__finder-field--select {
+			border-bottom: 1px solid var(--iflynepal-line) !important;
+		}
+
+		.iflynepal-hero__finder-field--select {
+			border-bottom: 0 !important;
+		}
+	}
+
+	/* The browser's own disclosure triangle, replaced by the chevron below. */
+	.iflynepal-hero__finder-trigger {
+		@apply flex w-full cursor-pointer list-none flex-col items-start gap-0.5 text-left;
+		color: var(--iflynepal-ink);
+	}
+
+	.iflynepal-hero__finder-trigger::-webkit-details-marker {
+		display: none;
+	}
+
+	.iflynepal-hero__finder-trigger::marker {
+		content: '';
+	}
+
+	.iflynepal-hero__finder-row {
+		@apply flex w-full items-center justify-between gap-3;
+	}
+
+	/* .search-field label */
+	.iflynepal-hero__finder-label {
+		@apply block uppercase;
+		display: block;
+		margin-bottom: 2px;
+		font-size: 10px;
+		font-weight: 800;
+		letter-spacing: 0.12em;
+		color: var(--iflynepal-muted);
+	}
+
+	/* .search-field select (the value text shares its typography either way) */
+	.iflynepal-hero__finder-value {
+		@apply block w-full truncate;
+		padding: 4px 0;
+		font-weight: 750;
+	}
+
+	.iflynepal-hero__finder-chevron {
+		@apply h-4 w-4 shrink-0 transition-transform duration-300;
+		color: var(--iflynepal-muted);
+	}
+
+	.iflynepal-hero__finder-field[open] .iflynepal-hero__finder-chevron {
+		transform: rotate(180deg);
+	}
+
+	.iflynepal-hero__finder-list {
+		@apply absolute inset-x-0 top-full z-10 mt-2 flex max-h-[280px] flex-col gap-1 overflow-y-auto rounded-xl bg-white p-2;
+		border: 1px solid var(--iflynepal-line);
+		box-shadow: var(--iflynepal-shadow);
+	}
+
+	.iflynepal-hero__finder-option {
+		@apply flex cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium;
+		color: var(--iflynepal-ink);
+	}
+
+	.iflynepal-hero__finder-option:hover {
+		background: var(--iflynepal-mist, #eef3fb);
+	}
+
+	.iflynepal-hero__finder-submit.iflynepal-button {
+		@apply min-h-0 self-stretch;
+	}
+
+	/*
+	 * The "I have" duration field. A real <select> rather than a second
+	 * <details> — the design's own control for this field is a plain
+	 * dropdown (one choice, not several), so there is nothing a checklist
+	 * would add here that the browser's native picker does not already do
+	 * for free, keyboard and all.
+	 */
+	.iflynepal-hero__finder-field--select .iflynepal-hero__finder-trigger {
+		@apply cursor-pointer gap-0.5;
+	}
+
+	/*
+	 * .search-field select{border:0;outline:0;background:transparent;
+	 * appearance:none;padding:4px 0} — no custom arrow image either: the
+	 * design runs this exact field with none, so none is added here. The
+	 * "I want to" field above is not a native select and keeps its chevron,
+	 * because that control's whole affordance (it is a checklist, not a
+	 * single choice) does not exist for a browser to supply on its own.
+	 */
+	.iflynepal-hero__finder-field--select select.iflynepal-hero__finder-value {
+		@apply cursor-pointer appearance-none border-0 bg-transparent font-sans;
+	}
+
+	.iflynepal-hero__finder-field--select select.iflynepal-hero__finder-value:focus-visible {
+		outline: 2px solid var(--iflynepal-navy);
+		outline-offset: 2px;
 	}
 
 	/* ------------------------------------------------------- explore cards */

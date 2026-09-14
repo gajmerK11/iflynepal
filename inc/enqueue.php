@@ -556,6 +556,47 @@ function iflynepal_enqueue_reasons() {
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_reasons' );
 
 /**
+ * Enqueues the hero's trip-finder picker script.
+ *
+ * Opt-in on iflynepal_has_hero_finder(), same shape as the reasons grid and
+ * the departures rail above: the ifn-booking plugin answers whether there is
+ * a type list and a results page to send it to, and nothing is enqueued when
+ * either is missing. The script itself is decoration only — see
+ * assets/js/homepage/hero/trip-finder.js — the <form method="get"> it
+ * enhances already works without it.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_enqueue_hero_trip_finder() {
+	if ( ! is_front_page() || ! function_exists( 'iflynepal_has_hero_finder' ) || ! iflynepal_has_hero_finder() ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'iflynepal-hero-trip-finder',
+		IFLYNEPAL_URI . '/assets/js/homepage/hero/trip-finder.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/homepage/hero/trip-finder.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+
+	wp_localize_script(
+		'iflynepal-hero-trip-finder',
+		'iflynepalHeroFinder',
+		array(
+			/* translators: %d: how many trip types are checked. */
+			'selected' => __( '%d selected', 'iflynepal' ),
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_hero_trip_finder' );
+
+/**
  * Enqueues the testimonial carousel.
  *
  * Kept out of the animation bundle because it needs no GSAP, and enqueued on
