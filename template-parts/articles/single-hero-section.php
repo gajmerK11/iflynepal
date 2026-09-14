@@ -19,7 +19,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_single_image = iflynepal_article_hero_image_url();
+$iflynepal_single_image = iflynepal_section_single_hero_image_url();
 ?>
 <section class="hero post-hero" aria-labelledby="hero-title">
 

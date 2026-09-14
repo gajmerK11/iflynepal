@@ -12,29 +12,30 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_related_posts = iflynepal_article_related();
+$iflynepal_related_posts = iflynepal_section_related_posts();
 
 if ( ! $iflynepal_related_posts ) {
 	return;
 }
 
-$iflynepal_related_category = iflynepal_article_primary_category( get_the_ID() );
+$iflynepal_related_labels   = iflynepal_section_labels();
+$iflynepal_related_category = iflynepal_section_primary_category( get_the_ID() );
 $iflynepal_related_all      = $iflynepal_related_category
 	? get_term_link( $iflynepal_related_category )
-	: iflynepal_articles_archive_url();
+	: iflynepal_section_archive_url();
 $iflynepal_related_label    = $iflynepal_related_category
 	? sprintf(
 		/* translators: %s: the category's name, lowercased. */
 		__( 'View all %s', 'iflynepal' ),
 		strtolower( $iflynepal_related_category->name )
 	)
-	: __( 'View all articles', 'iflynepal' );
+	: $iflynepal_related_labels['view_all'];
 ?>
 <section class="section section--mist related" aria-labelledby="related-title">
 	<div class="container">
 
 		<div class="section-head" data-anim>
-			<span class="eyebrow"><?php esc_html_e( 'From the articles', 'iflynepal' ); ?></span>
+			<span class="eyebrow"><?php echo esc_html( $iflynepal_related_labels['related_eyebrow'] ); ?></span>
 			<h2 id="related-title"><?php
 				printf(
 					/* translators: %s: the word "reading", which carries the drawn underline. */
@@ -42,7 +43,7 @@ $iflynepal_related_label    = $iflynepal_related_category
 					'<span class="ink-mark">' . esc_html__( 'reading', 'iflynepal' ) . '<i class="ink-line"></i></span>'
 				);
 			?></h2>
-			<p class="lead"><?php esc_html_e( 'More travel tips for planning your Nepal trip, from the same shelf.', 'iflynepal' ); ?></p>
+			<p class="lead"><?php echo esc_html( $iflynepal_related_labels['related_lead'] ); ?></p>
 		</div>
 
 		<div class="related-grid">

@@ -892,7 +892,8 @@
 	.iflynepal-about-offers__heading .underline,
 	.iflynepal-team-section__heading .underline,
 	.iflynepal-contact-head .underline,
-	.iflynepal-legal-head__title .underline {
+	.iflynepal-legal-head__title .underline,
+	.iflynepal-reasons__title .underline {
 		@apply relative inline-block whitespace-nowrap;
 		text-decoration-line: none;
 	}
@@ -918,7 +919,8 @@
 	.iflynepal-about-offers__heading .underline::after,
 	.iflynepal-team-section__heading .underline::after,
 	.iflynepal-contact-head .underline::after,
-	.iflynepal-legal-head__title .underline::after {
+	.iflynepal-legal-head__title .underline::after,
+	.iflynepal-reasons__title .underline::after {
 		content: '';
 		@apply pointer-events-none absolute block origin-left opacity-[.85];
 		left: -2%;
@@ -1717,6 +1719,788 @@
 			font-size: 14px;
 		}
 
+	}
+
+	/* ------------------------------------------------------- upcoming journeys */
+
+	/*
+	 * Copy and controls on the left, a photographic rail on the right — the
+	 * same two-column shape as the People section, but the rail here is a
+	 * fixed run of tall cards rather than a repeating loop, because its
+	 * contents change with the month chip pressed.
+	 */
+	.iflynepal-departures {
+		padding: 96px 0;
+	}
+
+	.iflynepal-departures__inner {
+		@apply mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+	}
+
+	.iflynepal-departures__split {
+		display: grid;
+		grid-template-columns: minmax(280px, 400px) 1fr;
+		gap: 56px;
+		align-items: center;
+	}
+
+	/*
+	 * The design's shared .eyebrow class, with .departures-copy's own
+	 * override folded in: no leading dash (the ::before is display:none
+	 * there), so no gap is needed either.
+	 */
+	.iflynepal-departures__eyebrow {
+		@apply inline-flex items-center font-extrabold uppercase;
+		margin: 0 0 14px;
+		color: var(--iflynepal-navy);
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	.iflynepal-departures__title {
+		@apply font-display font-medium;
+		margin: 0 0 16px;
+		font-size: clamp(36px, 4.4vw, 60px);
+		line-height: 1.04;
+		letter-spacing: -0.02em;
+	}
+
+	/*
+	 * The design's travelling gold shine plus a slow heartbeat scale — the
+	 * exact treatment its h2 em carries, not the flatter gold the hero and
+	 * Explore cards use. Tiled rather than stretched, so the loop point
+	 * cannot be seen and the word is fully painted at every frame.
+	 */
+	.iflynepal-departures__title em {
+		@apply inline-block font-accent font-semibold italic;
+		font-size: 1.14em;
+		line-height: 0.95;
+		background-image: linear-gradient(
+			100deg,
+			#f2c879 0%,
+			#f2c879 30%,
+			#fff6e2 42%,
+			#ffffff 50%,
+			#ffdc9a 58%,
+			#f2c879 70%,
+			#f2c879 100%
+		);
+		background-size: 5em 100%;
+		background-repeat: repeat;
+		background-position: 0 0;
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+		-webkit-text-fill-color: transparent;
+		transform-origin: center;
+		animation:
+			iflynepal-departures-shine 7s linear infinite,
+			iflynepal-departures-beat 4.5s ease-in-out infinite;
+	}
+
+	@keyframes iflynepal-departures-shine {
+		from {
+			background-position: 0 0;
+		}
+		to {
+			background-position: -5em 0;
+		}
+	}
+
+	@keyframes iflynepal-departures-beat {
+		0% {
+			transform: scale(1);
+		}
+		10% {
+			transform: scale(1.055);
+		}
+		20% {
+			transform: scale(1);
+		}
+		30% {
+			transform: scale(1.035);
+		}
+		42% {
+			transform: scale(1);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.iflynepal-departures__title em {
+			background-image: none;
+			color: var(--iflynepal-gold-soft);
+			-webkit-text-fill-color: var(--iflynepal-gold-soft);
+			animation: none;
+			transform: none;
+		}
+	}
+
+	.iflynepal-departures__lead {
+		margin: 12px 0 0;
+		color: var(--iflynepal-muted);
+		font-size: 18px;
+	}
+
+	/* ------------------------------------------------------------ month chips */
+
+	.iflynepal-departures__months {
+		@apply flex flex-wrap;
+		gap: 8px;
+		margin-top: 28px;
+	}
+
+	.iflynepal-departures__chip {
+		@apply cursor-pointer bg-white;
+		padding: 8px 12px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 999px;
+		color: var(--iflynepal-ink);
+		font-size: 11px;
+		font-weight: 850;
+		transition:
+			background 0.3s ease,
+			color 0.3s ease,
+			border-color 0.3s ease,
+			transform 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-departures__chip:hover {
+		transform: translateY(-2px);
+		border-color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-departures__chip.is-active {
+		background: var(--iflynepal-navy);
+		border-color: var(--iflynepal-navy);
+		color: #fff;
+	}
+
+	.iflynepal-departures__status {
+		margin: 14px 0 0;
+		min-height: 18px;
+		color: var(--iflynepal-muted);
+		font-size: 12px;
+		font-weight: 600;
+	}
+
+	/* --------------------------------------------------------- rail buttons */
+
+	.iflynepal-departures__nav {
+		@apply flex shrink-0;
+		gap: 12px;
+		margin-top: 26px;
+	}
+
+	.iflynepal-departures__nav button {
+		@apply grid h-[52px] w-[52px] shrink-0 cursor-pointer place-items-center rounded-full bg-transparent;
+		border: 1px solid var(--iflynepal-line);
+		color: var(--iflynepal-navy);
+		transition:
+			background 0.2s ease,
+			color 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.iflynepal-departures__nav button:hover:not(:disabled) {
+		@apply text-white;
+		background: var(--iflynepal-navy);
+		border-color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-departures__nav button:disabled {
+		@apply cursor-default;
+		opacity: 0.35;
+	}
+
+	.iflynepal-departures__nav .iflynepal-ico {
+		@apply h-4 w-4;
+	}
+
+	/* ---------------------------------------------------------------- rail */
+
+	.iflynepal-departures__rail {
+		@apply flex min-w-0;
+		gap: 24px;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		scroll-behavior: smooth;
+		padding-bottom: 4px;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	.iflynepal-departures__rail::-webkit-scrollbar {
+		display: none;
+	}
+
+	.iflynepal-departures__card {
+		@apply relative block shrink-0 grow-0 overflow-hidden no-underline;
+		flex-basis: 373px;
+		aspect-ratio: 373 / 600;
+		scroll-snap-align: start;
+		border-radius: 24px;
+		background: var(--iflynepal-navy-deep);
+		color: #fff;
+	}
+
+	.iflynepal-departures__card.is-hidden {
+		display: none;
+	}
+
+	.iflynepal-departures__card img {
+		@apply absolute inset-0 h-full w-full object-cover;
+		transition: transform 0.7s ease;
+	}
+
+	.iflynepal-departures__card:hover img,
+	.iflynepal-departures__card:focus-within img {
+		transform: scale(1.07);
+	}
+
+	.iflynepal-departures__scrim {
+		@apply absolute inset-0;
+		background: linear-gradient(
+			180deg,
+			rgba(4, 26, 64, 0) 25%,
+			rgba(4, 26, 64, 0.42) 55%,
+			rgba(4, 26, 64, 0.9) 100%
+		);
+	}
+
+	.iflynepal-departures__top {
+		@apply absolute z-[2] flex items-center justify-between;
+		top: 18px;
+		left: 18px;
+		right: 18px;
+		gap: 10px;
+	}
+
+	/* The design's shared .pill, as the departure card uses it (inline
+	 * position:static, since .iflynepal-departures__top already places it). */
+	.iflynepal-departures__pill {
+		@apply inline-flex items-center uppercase;
+		padding: 7px 10px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.93);
+		color: var(--iflynepal-navy);
+		font-size: 10px;
+		font-weight: 900;
+		letter-spacing: 0.08em;
+	}
+
+	/*
+	 * The design's own badge here reads "Live availability", with a pulsing
+	 * dot, over a plain equality dot — a claim this catalogue cannot back:
+	 * there is no live inventory or capacity system anywhere in this project
+	 * (§5.1). The month the package is actually marked "When available?" for
+	 * takes its place instead, in the same white/900/uppercase treatment the
+	 * design's badge carries.
+	 */
+	.iflynepal-departures__badge {
+		@apply inline-flex items-center uppercase;
+		color: #fff;
+		font-size: 10px;
+		font-weight: 900;
+		letter-spacing: 0.07em;
+	}
+
+	.iflynepal-departures__body {
+		@apply absolute inset-x-0 bottom-0 z-[2];
+		padding: 28px 26px;
+		color: #fff;
+	}
+
+	.iflynepal-departures__card-title {
+		margin: 0;
+		font-size: 26px;
+		font-weight: 500;
+		line-height: 1.18;
+		letter-spacing: -0.02em;
+		color: #fff;
+	}
+
+	.iflynepal-departures__price {
+		@apply block uppercase;
+		margin-top: 10px;
+		color: rgba(255, 255, 255, 0.85);
+		font-size: 11px;
+		letter-spacing: 0.13em;
+	}
+
+	/* Excerpt and "View" reveal on hover or keyboard focus. */
+	.iflynepal-departures__reveal {
+		display: grid;
+		grid-template-rows: 0fr;
+		margin-top: 0;
+		opacity: 0;
+		transition:
+			grid-template-rows 0.45s ease,
+			opacity 0.35s ease,
+			margin-top 0.45s ease;
+	}
+
+	.iflynepal-departures__reveal > div {
+		overflow: hidden;
+	}
+
+	.iflynepal-departures__card:hover .iflynepal-departures__reveal,
+	.iflynepal-departures__card:focus-within .iflynepal-departures__reveal {
+		grid-template-rows: 1fr;
+		margin-top: 14px;
+		opacity: 1;
+	}
+
+	.iflynepal-departures__excerpt {
+		@apply overflow-hidden;
+		display: -webkit-box;
+		margin: 0;
+		color: rgba(255, 255, 255, 0.9);
+		font-size: 14px;
+		line-height: 1.6;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
+	}
+
+	.iflynepal-departures__view {
+		@apply inline-flex items-center justify-center bg-transparent font-extrabold uppercase;
+		margin-top: 16px;
+		min-height: 44px;
+		padding: 10px 26px;
+		border: 2px solid #fff;
+		border-radius: 999px;
+		color: #fff;
+		font-size: 12px;
+		letter-spacing: 0.12em;
+		transition:
+			background 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.iflynepal-departures__card:hover .iflynepal-departures__view {
+		background: #fff;
+		color: var(--iflynepal-navy);
+	}
+
+	@media (max-width: 1080px) {
+		.iflynepal-departures__split {
+			grid-template-columns: 1fr;
+			gap: 30px;
+			align-items: start;
+		}
+	}
+
+	/* The design's generic .section breakpoint: 96px drops to 72px here. */
+	@media (max-width: 760px) {
+		.iflynepal-departures {
+			padding: 72px 0;
+		}
+
+		.iflynepal-departures__inner {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+	}
+
+	/* The chips need a real tap target on touch, with wider padding to suit. */
+	@media (hover: none), (max-width: 760px) {
+		.iflynepal-departures__chip {
+			display: inline-flex;
+			min-height: 44px;
+			align-items: center;
+			padding: 0 15px;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.iflynepal-departures__card {
+			flex-basis: 78vw;
+			max-width: 320px;
+		}
+
+		.iflynepal-departures__reveal {
+			grid-template-rows: 1fr;
+			margin-top: 14px;
+			opacity: 1;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.iflynepal-departures__card img,
+		.iflynepal-departures__reveal {
+			transition: none;
+		}
+	}
+
+	/* -------------------------------------------------- a few good reasons */
+
+	.iflynepal-reasons {
+		padding: 96px 0;
+	}
+
+	.iflynepal-reasons__inner {
+		@apply mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+	}
+
+	/* bottom-aligned so the note sits down beside the filters and cards
+	 * rather than up level with the heading */
+	.iflynepal-reasons__head {
+		@apply flex items-end justify-between;
+		gap: 48px;
+		margin-bottom: 20px;
+	}
+
+	.iflynepal-reasons__copy {
+		@apply max-w-[780px];
+		margin-bottom: 0;
+	}
+
+	.iflynepal-reasons__title {
+		@apply font-display font-medium;
+		margin: 0 0 16px;
+		font-size: clamp(36px, 4.4vw, 60px);
+		line-height: 1.04;
+		letter-spacing: -0.02em;
+	}
+
+	.iflynepal-reasons__lead {
+		@apply max-w-[690px];
+		margin: 12px 0 0;
+		color: var(--iflynepal-muted);
+		font-size: 18px;
+	}
+
+	/* ------------------------------------------------------- the annotation */
+
+	/*
+	 * Static positioning and a reversed flex direction: the arrow sits to the
+	 * right of the handwriting, mirrored so its curve still sweeps back
+	 * toward the heading it is pointing away from. The ink starts 22px inside
+	 * its own box, so the gap here is 0 and the negative margin on the svg is
+	 * what leaves the real ~6px of space.
+	 */
+	.iflynepal-reasons__annot {
+		@apply inline-flex flex-row-reverse items-center;
+		gap: 0;
+		width: max-content;
+		flex: none;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-reasons__annot svg {
+		width: 44px;
+		height: 118px;
+		margin-left: -14px;
+		opacity: 0.9;
+		overflow: hidden;
+		transform: scaleX(-1);
+		animation: iflynepal-reasons-drift 2.4s ease-in-out infinite;
+	}
+
+	.iflynepal-reasons__annot b {
+		@apply whitespace-nowrap not-italic;
+		font-family: 'Caveat', 'Segoe Script', cursive;
+		font-size: 27px;
+		font-weight: 600;
+		line-height: 1.05;
+		letter-spacing: 0.01em;
+		transform: rotate(-2.5deg);
+	}
+
+	/* the word is typed, so the box reserves the width of the longest one
+	 * ("Experiences", ~3.96em) or the arrow beside it shuffles on every
+	 * keystroke */
+	.iflynepal-reasons__annot-word {
+		display: inline-block;
+		min-width: 4.2em;
+	}
+
+	.iflynepal-reasons__a-dash {
+		animation: iflynepal-reasons-dash 1.5s linear infinite;
+	}
+
+	.iflynepal-reasons__a-head {
+		animation: iflynepal-reasons-head 2.4s ease-in-out infinite;
+	}
+
+	@keyframes iflynepal-reasons-dash {
+		to {
+			stroke-dashoffset: -22;
+		}
+	}
+
+	@keyframes iflynepal-reasons-head {
+		0%,
+		100% {
+			transform: translateX(0);
+			opacity: 0.75;
+		}
+		50% {
+			transform: translateX(4px);
+			opacity: 1;
+		}
+	}
+
+	@keyframes iflynepal-reasons-drift {
+		0%,
+		100% {
+			transform: scaleX(-1) translateY(0);
+		}
+		50% {
+			transform: scaleX(-1) translateY(6px);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.iflynepal-reasons__a-dash,
+		.iflynepal-reasons__a-head,
+		.iflynepal-reasons__annot svg {
+			animation: none;
+		}
+	}
+
+	/*
+	 * Dropped down to sit just above the cards it points at. A relative
+	 * offset, so the row keeps its layout height and nothing below it moves.
+	 */
+	@media (min-width: 1001px) {
+		.iflynepal-reasons__annot {
+			position: relative;
+			top: 80px;
+		}
+	}
+
+	/*
+	 * Transcribed exactly from the design, gap included: a generic rule there
+	 * hides every handwritten note under 1024px, and this one is re-enabled
+	 * only under 1000px — so between 1001 and 1023px it is briefly absent.
+	 */
+	@media (max-width: 1023px) {
+		.iflynepal-reasons__annot {
+			display: none;
+		}
+	}
+
+	@media (max-width: 1000px) {
+		.iflynepal-reasons__head {
+			flex-direction: column;
+			gap: 26px;
+		}
+
+		.iflynepal-reasons__annot {
+			display: inline-flex;
+			order: -1;
+		}
+
+		/* the ink inset scales down with the smaller box, so the desktop
+		 * margin-left is too aggressive here and clips into the text */
+		.iflynepal-reasons__annot svg {
+			width: 34px;
+			height: 88px;
+			margin-left: -6px;
+		}
+
+		.iflynepal-reasons__annot b {
+			font-size: 23px;
+		}
+	}
+
+	/* ------------------------------------------------------------ filters */
+
+	.iflynepal-reasons__filters {
+		@apply flex flex-wrap;
+		gap: 8px;
+		margin-bottom: 26px;
+	}
+
+	.iflynepal-reasons__filter-btn {
+		@apply cursor-pointer bg-transparent;
+		padding: 9px 14px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 999px;
+		color: var(--iflynepal-ink);
+		font-size: 12px;
+		font-weight: 800;
+		transition:
+			background 0.3s ease,
+			color 0.3s ease,
+			border-color 0.3s ease,
+			transform 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-reasons__filter-btn:hover {
+		transform: translateY(-2px);
+		border-color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-reasons__filter-btn.is-active {
+		background: var(--iflynepal-navy);
+		border-color: var(--iflynepal-navy);
+		color: #fff;
+	}
+
+	/* ---------------------------------------------------------------- grid */
+
+	.iflynepal-reasons__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+	}
+
+	.iflynepal-reasons__card {
+		@apply block overflow-hidden bg-white;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 24px;
+		transition:
+			transform 0.24s ease,
+			box-shadow 0.24s ease;
+	}
+
+	.iflynepal-reasons__card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 18px 42px rgba(4, 26, 64, 0.11);
+	}
+
+	.iflynepal-reasons__card.is-hidden {
+		display: none;
+	}
+
+	.iflynepal-reasons__media {
+		@apply relative overflow-hidden;
+		height: 260px;
+	}
+
+	.iflynepal-reasons__media img {
+		@apply block h-full w-full object-cover;
+		transition: transform 0.45s ease;
+	}
+
+	.iflynepal-reasons__card:hover .iflynepal-reasons__media img {
+		transform: scale(1.04);
+	}
+
+	.iflynepal-reasons__pill {
+		@apply absolute uppercase;
+		left: 16px;
+		top: 16px;
+		padding: 7px 10px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.93);
+		color: var(--iflynepal-navy);
+		font-size: 10px;
+		font-weight: 900;
+		letter-spacing: 0.08em;
+	}
+
+	/* the description hides on the photo instead, so the card gets shorter
+	 * rather than emptier while it is closed */
+	.iflynepal-reasons__peek {
+		@apply absolute inset-x-0 bottom-0;
+		padding: 20px 18px 18px;
+		background: linear-gradient(180deg, rgba(4, 26, 64, 0), rgba(4, 26, 64, 0.86) 42%, rgba(4, 26, 64, 0.94));
+		transform: translateY(101%);
+		transition: transform 0.55s var(--iflynepal-ease);
+	}
+
+	.iflynepal-reasons__peek p {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.93);
+		font-size: 13.5px;
+		line-height: 1.55;
+	}
+
+	.iflynepal-reasons__card:hover .iflynepal-reasons__peek,
+	.iflynepal-reasons__card:focus-within .iflynepal-reasons__peek {
+		transform: none;
+	}
+
+	@media (hover: none) {
+		.iflynepal-reasons__peek {
+			position: static;
+			transform: none;
+			background: none;
+			padding: 14px 22px 0;
+		}
+
+		.iflynepal-reasons__peek p {
+			color: var(--iflynepal-muted);
+		}
+	}
+
+	.iflynepal-reasons__body {
+		padding: 22px;
+	}
+
+	.iflynepal-reasons__meta {
+		@apply flex uppercase;
+		gap: 10px;
+		color: var(--iflynepal-muted);
+		font-size: 11px;
+		font-weight: 800;
+		letter-spacing: 0.06em;
+	}
+
+	.iflynepal-reasons__card-title {
+		margin: 7px 0 9px;
+		font-size: 27px;
+		font-weight: 500;
+		line-height: 1.04;
+		letter-spacing: -0.02em;
+	}
+
+	.iflynepal-reasons__foot {
+		@apply flex items-center justify-between;
+		margin-top: 18px;
+		padding-top: 16px;
+		border-top: 1px solid var(--iflynepal-line);
+		gap: 14px;
+		color: var(--iflynepal-navy);
+		font-size: 13px;
+		font-weight: 850;
+	}
+
+	.iflynepal-reasons__link {
+		@apply inline-flex items-center;
+		gap: 6px;
+		color: var(--iflynepal-navy);
+	}
+
+	.iflynepal-reasons__link .iflynepal-ico-arr {
+		transition: transform 0.2s ease;
+	}
+
+	.iflynepal-reasons__link:hover .iflynepal-ico-arr {
+		transform: translateX(4px);
+	}
+
+	@media (max-width: 1080px) {
+		.iflynepal-reasons__grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-reasons {
+			padding: 72px 0;
+		}
+
+		.iflynepal-reasons__inner {
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+		}
+
+		.iflynepal-reasons__grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.iflynepal-reasons__media {
+			height: 230px;
+		}
 	}
 
 	/* ------------------------------------------------ traveller proof cards */

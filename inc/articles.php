@@ -281,13 +281,7 @@ function iflynepal_article_hero_image_url() {
  * @return WP_Term|null The term, or null when the article has no category.
  */
 function iflynepal_article_primary_category( $post_id ) {
-	$terms = get_the_terms( $post_id, IFLYNEPAL_ARTICLE_CATEGORY );
-
-	if ( is_wp_error( $terms ) || ! $terms ) {
-		return null;
-	}
-
-	return $terms[0];
+	return iflynepal_section_primary_category( $post_id );
 }
 
 /**

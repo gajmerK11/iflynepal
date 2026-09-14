@@ -75,6 +75,11 @@
 				<element value="iflynepal_render_explore_card_title"/>
 				<element value="iflynepal_render_explore_card_description"/>
 				<element value="iflynepal_render_explore_card_links"/>
+				<element value="iflynepal_render_upcoming_eyebrow"/>
+				<element value="iflynepal_render_upcoming_heading"/>
+				<element value="iflynepal_render_upcoming_description"/>
+				<element value="iflynepal_render_reasons_heading"/>
+				<element value="iflynepal_render_reasons_description"/>
 				<element value="iflynepal_render_trust_kicker"/>
 				<element value="iflynepal_render_trust_title"/>
 				<element value="iflynepal_render_trust_feature_icon"/>
@@ -195,6 +200,10 @@
 				<element value="iflynepal_render_sustainability_coordinator"/>
 				<element value="iflynepal_article_headline"/>
 				<element value="iflynepal_articles_hero_title_html"/>
+				<element value="iflynepal_blogs_hero_title_html"/>
+				<element value="iflynepal_hero_title_words"/>
+				<element value="iflynepal_section_hero_title_html"/>
+				<element value="iflynepal_section_match_count"/>
 				<element value="iflynepal_render_footer_blurb"/>
 				<element value="iflynepal_render_footer_office"/>
 				<element value="iflynepal_render_footer_office_heading"/>

@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 
 $iflynepal_main_body = iflynepal_article_body();
 ?>
-<section class="post-main" aria-label="<?php esc_attr_e( 'Article', 'iflynepal' ); ?>">
+<section class="post-main" aria-label="<?php echo esc_attr( iflynepal_section_labels()['single'] ); ?>">
 	<div class="container post-layout">
 
 		<?php

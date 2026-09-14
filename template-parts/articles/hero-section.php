@@ -1,6 +1,6 @@
 <?php
 /**
- * Articles archive hero: the photograph, the headline and the search field.
+ * The editorial archive hero: the photograph, the headline and the search field.
  *
  * The markup is the approved design's, class for class, and it is styled by
  * assets/css/articles.css rather than by the theme's own hero component. The
@@ -12,11 +12,14 @@
  * The headline's words are wrapped in `.w` spans in the markup rather than
  * being split by script, as the design has them, so the entrance can stagger
  * them without JavaScript having to touch the text first. The wrapping is done
- * by iflynepal_articles_hero_title_html(), since the headline is an editor's
- * to write.
+ * by iflynepal_hero_title_words(), since the headline is an editor's to write.
  *
  * Searching swaps the headline for the query and the standfirst for the count.
  * That is a page load: see iflynepal_articles_pre_get_posts().
+ *
+ * Drawn for both editorial sections. Which one it is drawing, and so which
+ * theme mods the hero reads and what its copy calls a piece, comes from
+ * inc/sections.php.
  *
  * @package IFly_Nepal
  * @since   1.0.0
@@ -24,11 +27,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_articles_image  = iflynepal_articles_hero_image_url();
-$iflynepal_articles_lead   = iflynepal_articles_hero_lead();
+$iflynepal_articles_image  = iflynepal_section_hero_image_url();
+$iflynepal_articles_lead   = iflynepal_section_hero_lead();
 $iflynepal_articles_search = iflynepal_articles_search_term();
-$iflynepal_articles_base   = iflynepal_articles_archive_url();
+$iflynepal_articles_base   = iflynepal_section_archive_url();
 $iflynepal_articles_found  = (int) $GLOBALS['wp_query']->found_posts;
+$iflynepal_articles_labels = iflynepal_section_labels();
 ?>
 <section class="hero" aria-labelledby="hero-title">
 
@@ -58,22 +62,19 @@ $iflynepal_articles_found  = (int) $GLOBALS['wp_query']->found_posts;
 				<p class="lead" id="hero-lead">
 					<?php if ( $iflynepal_articles_found ) : ?>
 						<?php
-						printf(
-							/* translators: %s: number of matching articles. */
-							esc_html( _n( '%s article matches.', '%s articles match.', $iflynepal_articles_found, 'iflynepal' ) ),
-							esc_html( number_format_i18n( $iflynepal_articles_found ) )
-						);
+						// Escaped inside the helper, which is where the plural is chosen.
+						echo iflynepal_section_match_count( $iflynepal_articles_found ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						?>
 						<a class="button button--quiet" href="<?php echo esc_url( $iflynepal_articles_base ); ?>"><?php esc_html_e( 'Clear search', 'iflynepal' ); ?></a>
 					<?php else : ?>
 						<?php esc_html_e( 'Nothing matched. Try a trek, a region or a festival.', 'iflynepal' ); ?>
-						<a class="button button--quiet" href="<?php echo esc_url( $iflynepal_articles_base ); ?>"><?php esc_html_e( 'Browse every article', 'iflynepal' ); ?></a>
+						<a class="button button--quiet" href="<?php echo esc_url( $iflynepal_articles_base ); ?>"><?php echo esc_html( $iflynepal_articles_labels['browse_all'] ); ?></a>
 					<?php endif; ?>
 				</p>
 
 			<?php else : ?>
 
-				<h1 id="hero-title"><?php echo iflynepal_articles_hero_title_html(); ?></h1>
+				<h1 id="hero-title"><?php echo iflynepal_section_hero_title_html(); ?></h1>
 
 				<?php if ( '' !== $iflynepal_articles_lead || is_customize_preview() ) : ?>
 					<p class="lead" id="hero-lead"><?php echo esc_html( $iflynepal_articles_lead ); ?></p>
@@ -90,14 +91,14 @@ $iflynepal_articles_found  = (int) $GLOBALS['wp_query']->found_posts;
 				data-anim="hero"
 				data-hero-step="2"
 			>
-				<label class="sr-only" for="ifn-search-input"><?php esc_html_e( 'Search articles', 'iflynepal' ); ?></label>
+				<label class="sr-only" for="ifn-search-input"><?php echo esc_html( $iflynepal_articles_labels['search_label'] ); ?></label>
 				<svg class="hero-search-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
 				<input
 					type="search"
 					id="ifn-search-input"
 					name="<?php echo esc_attr( IFLYNEPAL_ARTICLES_SEARCH_VAR ); ?>"
 					value="<?php echo esc_attr( $iflynepal_articles_search ); ?>"
-					placeholder="<?php echo esc_attr( iflynepal_articles_search_placeholder() ); ?>"
+					placeholder="<?php echo esc_attr( iflynepal_section_search_placeholder() ); ?>"
 					autocomplete="off"
 				>
 				<button type="submit" class="button button--primary"><?php esc_html_e( 'Search', 'iflynepal' ); ?></button>

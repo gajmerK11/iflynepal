@@ -1,6 +1,9 @@
 <?php
 /**
- * The Articles archive: the category tabs, the grid and the pager.
+ * The editorial archive: the category tabs, the grid and the pager.
+ *
+ * Drawn for Articles and for Blogs both, off whichever section's post type and
+ * taxonomy inc/sections.php reports for the request.
  *
  * The approved design's markup, class for class. Its script stands in for the
  * server so the file can be clicked through on its own; here each of those
@@ -20,22 +23,24 @@ defined( 'ABSPATH' ) || exit;
 
 global $wp_query;
 
+$iflynepal_list_section    = iflynepal_section();
+$iflynepal_list_labels     = iflynepal_section_labels();
 $iflynepal_list_search     = iflynepal_articles_search_term();
-$iflynepal_list_base       = iflynepal_articles_archive_url();
-$iflynepal_list_term       = iflynepal_articles_current_term();
-$iflynepal_list_categories = '' === $iflynepal_list_search ? iflynepal_articles_categories() : array();
-$iflynepal_list_current    = ( $iflynepal_list_term && IFLYNEPAL_ARTICLE_CATEGORY === $iflynepal_list_term->taxonomy )
+$iflynepal_list_base       = iflynepal_section_archive_url();
+$iflynepal_list_term       = iflynepal_section_current_term();
+$iflynepal_list_categories = '' === $iflynepal_list_search ? iflynepal_section_categories() : array();
+$iflynepal_list_current    = ( $iflynepal_list_term && $iflynepal_list_section && $iflynepal_list_section['category'] === $iflynepal_list_term->taxonomy )
 	? (int) $iflynepal_list_term->term_id
 	: 0;
 $iflynepal_list_page       = max( 1, (int) $wp_query->get( 'paged' ) );
 $iflynepal_list_pages      = (int) $wp_query->max_num_pages;
 ?>
-<section class="section post-archive" id="articles" aria-label="<?php esc_attr_e( 'Articles', 'iflynepal' ); ?>">
+<section class="section post-archive" id="articles" aria-label="<?php echo esc_attr( $iflynepal_list_labels['archive'] ); ?>">
 	<div class="container">
 
 		<?php if ( $iflynepal_list_categories ) : ?>
 			<div class="post-tabs-wrap" data-anim>
-				<nav class="post-tabs" id="ifn-archive-tabs" aria-label="<?php esc_attr_e( 'Article categories', 'iflynepal' ); ?>">
+				<nav class="post-tabs" id="ifn-archive-tabs" aria-label="<?php echo esc_attr( $iflynepal_list_labels['categories_nav'] ); ?>">
 					<span class="tab-thumb" aria-hidden="true"></span>
 					<a class="post-tab" href="<?php echo esc_url( $iflynepal_list_base ); ?>" data-cat="all"<?php echo $iflynepal_list_current ? '' : ' aria-current="page"'; ?>><?php esc_html_e( 'All', 'iflynepal' ); ?></a>
 					<?php foreach ( $iflynepal_list_categories as $iflynepal_list_category ) : ?>
@@ -55,10 +60,10 @@ $iflynepal_list_pages      = (int) $wp_query->max_num_pages;
 			?>
 		</div>
 
-		<p class="post-empty" id="ifn-post-empty"<?php echo $wp_query->found_posts ? ' hidden' : ''; ?>><?php esc_html_e( 'No articles found.', 'iflynepal' ); ?></p>
+		<p class="post-empty" id="ifn-post-empty"<?php echo $wp_query->found_posts ? ' hidden' : ''; ?>><?php echo esc_html( $iflynepal_list_labels['empty'] ); ?></p>
 
 		<?php if ( $iflynepal_list_pages > 1 ) : ?>
-			<nav class="post-pagination" id="ifn-pagination" aria-label="<?php esc_attr_e( 'Article pages', 'iflynepal' ); ?>">
+			<nav class="post-pagination" id="ifn-pagination" aria-label="<?php echo esc_attr( $iflynepal_list_labels['pages_nav'] ); ?>">
 				<?php if ( $iflynepal_list_page > 1 ) : ?>
 					<a class="pg-step pg-prev" href="<?php echo esc_url( iflynepal_articles_page_url( $iflynepal_list_page - 1 ) ); ?>" rel="prev"><svg class="link-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg><?php esc_html_e( 'Previous', 'iflynepal' ); ?></a>
 				<?php else : ?>

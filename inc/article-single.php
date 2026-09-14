@@ -423,10 +423,26 @@ function iflynepal_article_share_links() {
  * @return WP_Post[] Articles, at most IFLYNEPAL_ARTICLE_RELATED of them.
  */
 function iflynepal_article_related() {
+	return iflynepal_section_related( IFLYNEPAL_ARTICLE_POST_TYPE, IFLYNEPAL_ARTICLE_CATEGORY );
+}
+
+/**
+ * The pieces a section's closing row offers next.
+ *
+ * The rule above, written once for both sections: same category first, newest
+ * first, this piece excluded, the rest of the archive topping the row up.
+ *
+ * @since 1.0.0
+ *
+ * @param string $post_type Post type to draw from.
+ * @param string $taxonomy  Taxonomy the category comes from.
+ * @return WP_Post[] Posts, at most IFLYNEPAL_ARTICLE_RELATED of them.
+ */
+function iflynepal_section_related( $post_type, $taxonomy ) {
 	$post_id  = (int) get_the_ID();
-	$category = iflynepal_article_primary_category( $post_id );
+	$category = iflynepal_section_primary_category( $post_id );
 	$args     = array(
-		'post_type'              => IFLYNEPAL_ARTICLE_POST_TYPE,
+		'post_type'              => $post_type,
 		'post_status'            => 'publish',
 		'posts_per_page'         => IFLYNEPAL_ARTICLE_RELATED,
 		'post__not_in'           => array( $post_id ),
@@ -442,7 +458,7 @@ function iflynepal_article_related() {
 			$args + array(
 				'tax_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- One term, on a single-article request.
 					array(
-						'taxonomy' => IFLYNEPAL_ARTICLE_CATEGORY,
+						'taxonomy' => $taxonomy,
 						'field'    => 'term_id',
 						'terms'    => $category->term_id,
 					),

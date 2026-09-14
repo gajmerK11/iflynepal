@@ -11,15 +11,16 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_intro_category = iflynepal_article_primary_category( get_the_ID() );
+$iflynepal_intro_category = iflynepal_section_primary_category( get_the_ID() );
 $iflynepal_intro_minutes  = iflynepal_article_read_minutes();
+$iflynepal_intro_labels   = iflynepal_section_labels();
 ?>
 <div class="post-intro">
 	<div class="container">
 
 		<nav class="post-crumbs" aria-label="<?php esc_attr_e( 'Breadcrumb', 'iflynepal' ); ?>" data-anim>
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'iflynepal' ); ?></a><svg class="crumb-sep" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-			<a href="<?php echo esc_url( iflynepal_articles_archive_url() ); ?>"><?php esc_html_e( 'Articles', 'iflynepal' ); ?></a><?php
+			<a href="<?php echo esc_url( iflynepal_section_archive_url() ); ?>"><?php echo esc_html( $iflynepal_intro_labels['archive'] ); ?></a><?php
 			if ( $iflynepal_intro_category ) {
 				printf(
 					'<svg class="crumb-sep" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg><a href="%1$s">%2$s</a>',

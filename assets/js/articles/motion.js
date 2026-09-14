@@ -104,7 +104,36 @@
 
 			gsap.set( reveals, { y: 26 } );
 
-			ScrollTrigger.batch( reveals, {
+			/*
+			 * Anything already on screen when the page opens is not something the
+			 * visitor scrolled to, so it is not made to wait for a scroll: it comes
+			 * in behind the hero's own entrance. Only what is genuinely below the
+			 * fold is handed to the batch. Without this, a section head sitting just
+			 * under a tall hero — the news archive's "Top news" is the case — is on
+			 * screen and invisible until the page is nudged.
+			 */
+			var below = reveals.filter( function ( el ) {
+				return el.getBoundingClientRect().top >= window.innerHeight;
+			} );
+
+			if ( below.length !== reveals.length ) {
+				gsap.to(
+					reveals.filter( function ( el ) {
+						return below.indexOf( el ) === -1;
+					} ),
+					{
+						opacity: 1,
+						y: 0,
+						duration: 0.85,
+						delay: 0.5,
+						stagger: 0.08,
+						overwrite: true,
+						clearProps: 'transform'
+					}
+				);
+			}
+
+			ScrollTrigger.batch( below, {
 				start: 'top 88%',
 				once: true,
 				interval: 0.12,
@@ -131,12 +160,20 @@
 			/* ------------------------------------------------------- underlines */
 
 			gsap.utils.toArray( '.ink-line' ).forEach( function ( line ) {
-				gsap.to( line, {
+				var tween = {
 					scaleX: 1,
 					duration: 0.75,
-					ease: 'power2.inOut',
-					scrollTrigger: { trigger: line, start: 'top 86%', once: true }
-				} );
+					ease: 'power2.inOut'
+				};
+
+				// On screen at load, so it draws with the rest of the head.
+				if ( line.getBoundingClientRect().top < window.innerHeight ) {
+					tween.delay = 0.8;
+				} else {
+					tween.scrollTrigger = { trigger: line, start: 'top 86%', once: true };
+				}
+
+				gsap.to( line, tween );
 			} );
 		}
 	);

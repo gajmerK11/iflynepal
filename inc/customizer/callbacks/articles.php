@@ -110,8 +110,20 @@ function iflynepal_articles_hero_title() {
  * @return string Ready-to-print HTML.
  */
 function iflynepal_articles_hero_title_html() {
-	$title = iflynepal_articles_hero_title();
+	return iflynepal_hero_title_words( iflynepal_articles_hero_title() );
+}
 
+/**
+ * Wraps each plain word of an archive headline for the entrance.
+ *
+ * Shared by both editorial sections, which stage their headlines the same way.
+ *
+ * @since 1.0.0
+ *
+ * @param string $title Headline, already through iflynepal_kses_text().
+ * @return string Ready-to-print HTML.
+ */
+function iflynepal_hero_title_words( $title ) {
 	// Split the accent runs out whole; everything between them is plain words.
 	$parts = preg_split( '#(<em\b[^>]*>.*?</em>)#is', $title, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
 

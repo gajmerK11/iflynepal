@@ -14,6 +14,8 @@ defined( 'ABSPATH' ) || exit;
 
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/hero.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/explore.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/upcoming-journeys.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/reasons.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/trust.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/people.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/faq.php';
@@ -28,6 +30,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/cookie.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/privacy.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/sustainability.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/articles.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/blogs.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/news.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/contact.php';
@@ -172,6 +175,21 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	);
 
 	/*
+	 * The Blogs archive — the site's ordinary posts, drawn by the Articles
+	 * design. Its own panel rather than a section under Articles: the two are
+	 * separate runs of writing with separate categories, and an editor setting
+	 * one should not be scrolling past the other.
+	 */
+	$wp_customize->add_panel(
+		'iflynepal_blogs',
+		array(
+			'title'       => __( 'Blogs', 'iflynepal' ),
+			'description' => __( 'The hero at the top of the Blogs archive. The grid under it is built from the posts and their categories.', 'iflynepal' ),
+			'priority'    => 40,
+		)
+	);
+
+	/*
 	 * The News archive. As with Articles, only its hero is editable: which
 	 * three stories lead is a toggle on each story rather than a field here.
 	 */
@@ -180,7 +198,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 		array(
 			'title'       => __( 'News', 'iflynepal' ),
 			'description' => __( 'The hero at the top of the News archive. The stories under it, and the three that lead, are set on the stories themselves.', 'iflynepal' ),
-			'priority'    => 40,
+			'priority'    => 41,
 		)
 	);
 
@@ -192,6 +210,8 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require_once IFLYNEPAL_DIR . '/inc/customizer/controls/class-ifly-nepal-customize-heading-control.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/hero.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/explore.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/upcoming-journeys.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/reasons.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/trust.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/people.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/faq.php';
@@ -206,6 +226,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/privacy.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/sustainability.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/articles.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/blogs.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/news.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/contact.php';

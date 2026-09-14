@@ -46,7 +46,7 @@ $iflynepal_aside_labels = array(
 	'x'         => __( 'iFly Nepal on X', 'iflynepal' ),
 );
 ?>
-<aside class="post-aside" aria-label="<?php esc_attr_e( 'About this article', 'iflynepal' ); ?>">
+<aside class="post-aside" aria-label="<?php echo esc_attr( iflynepal_section_labels()['aside_about'] ); ?>">
 	<div class="aside-card">
 
 		<div class="aside-block">

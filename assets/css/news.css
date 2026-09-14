@@ -31,9 +31,18 @@
    pagination) and news-single-layout.php, in the articles' dress.
    ========================================================================== */
 
-/* the "News Center" kicker above the headline */
+/* the "News Center" kicker above the headline — the words alone, without the
+   rule `.eyebrow` draws beside them: centred over the headline the rules read
+   as dashes stuck to the text rather than as the margin mark they are */
 .hero .news-kicker{justify-content:center;margin-bottom:18px;color:#F2C879}
-.hero .news-kicker::before,.hero .news-kicker::after{content:"";width:28px;height:1px;background:currentColor;opacity:.7}
+.hero .news-kicker::before,.hero .news-kicker::after{content:none}
+
+/* The archive's hero is shorter than the Articles one it is built from: the
+   news page's job is to get the reader to the stories, so the band stops short
+   of a full screen and the Top News head is already up in view on arrival. */
+.post-type-archive-news .hero{min-height:0}
+.post-type-archive-news.ifn-articles-route .hero-inner{padding:168px 0 96px}
+.post-type-archive-news #top-news{padding-top:64px}
 
 /* ---------- section heads -------------------------------------------------- */
 .news-section{padding:88px 0 0}
@@ -116,8 +125,11 @@
 @keyframes newsPulse{from{transform:scale(1);opacity:.8}to{transform:scale(2.8);opacity:0}}
 .post-meta-row .news-place{color:var(--ink-deep)}
 
-/* the standfirst: a larger opening paragraph, led by the dateline, closed by
-   a rule, in place of the article's drop cap */
+/* the standfirst: a larger opening paragraph closed by a rule, opening on the
+   same dropped capital an article does — the initial is the newspaper's own
+   convention, and a story that starts with one reads as a story rather than as
+   a longer caption. The measurements are the article's, cut down to sit against
+   the standfirst's shorter line height. */
 .ifn-news-single .post-content .news-lede{
   padding-bottom:28px;
   border-bottom:1px solid var(--line);
@@ -126,7 +138,7 @@
   font-weight:500;
   line-height:1.62;
 }
-.ifn-news-single .post-content .news-lede::first-letter{float:none;margin:0;color:inherit;font:inherit;line-height:inherit}
+.ifn-news-single .post-content .news-lede::first-letter{float:left;margin:5px 11px 0 0;color:var(--navy);font-family:var(--serif-alt);font-size:78px;font-style:italic;font-weight:600;line-height:.8}
 .news-lede .dateline{color:var(--navy);font-size:.78em;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
 
 /* key dates run down a timeline */
@@ -182,6 +194,7 @@
   .top-grid,.news-grid{grid-template-columns:1fr}
   .top-grid .top-card:last-child{grid-column:auto}
   .top-grid .top-card:last-child .post-img{aspect-ratio:16/10}
+  .ifn-news-single .post-content .news-lede::first-letter{margin-right:9px;font-size:62px}
   .post-content .news-dates li{grid-template-columns:1fr;gap:4px}
 }
 

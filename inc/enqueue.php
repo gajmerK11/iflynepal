@@ -68,10 +68,16 @@ function iflynepal_enqueue_assets() {
 	$has_cookie       = iflynepal_has_cookie();
 	$has_privacy      = iflynepal_has_privacy();
 	$has_sustain      = iflynepal_has_sustainability();
-	$has_articles     = iflynepal_has_articles();
-	$has_article      = iflynepal_has_article();
-	$has_news         = iflynepal_has_news();
-	$has_news_story   = iflynepal_has_news_story();
+
+	/*
+	 * Blogs are the Articles design drawn over the site's posts — the same
+	 * markup, the same stylesheet, the same scripts — so they are folded into
+	 * these two rather than tested again at every use below.
+	 */
+	$has_articles   = iflynepal_has_articles() || iflynepal_has_blogs();
+	$has_article    = iflynepal_has_article() || iflynepal_has_blog();
+	$has_news       = iflynepal_has_news();
+	$has_news_story = iflynepal_has_news_story();
 
 	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie && ! $has_privacy && ! $has_sustain && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story ) {
 		return;
@@ -465,6 +471,89 @@ function iflynepal_enqueue_people_rail() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_people_rail' );
+
+/**
+ * Enqueues the Upcoming Journeys rail's month chips and prev/next buttons.
+ *
+ * No GSAP here either — the same reasoning as the People rail. The section
+ * itself is opt-in on the plugin's cards (iflynepal_has_upcoming_departures()),
+ * so an empty catalogue or an inactive plugin loads nothing.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_enqueue_upcoming_departures_rail() {
+	if ( ! is_front_page() || ! function_exists( 'iflynepal_has_upcoming_departures' ) || ! iflynepal_has_upcoming_departures() ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'iflynepal-upcoming-departures-rail',
+		IFLYNEPAL_URI . '/assets/js/homepage/departures/rail.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/homepage/departures/rail.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_upcoming_departures_rail' );
+
+/**
+ * Enqueues "A few good reasons": its filter row, its typed annotation and its
+ * scroll reveal (heading rise, ink underline, annotation tilt-in).
+ *
+ * Opt-in on the plugin's cards (iflynepal_has_reasons()), same as the
+ * departures rail above. The reveal script depends on GSAP, which
+ * iflynepal_enqueue_assets() already loads whenever the front page's hero
+ * does — true on every front-page request — so no extra registration is
+ * needed here, only the dependency declaration.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_enqueue_reasons() {
+	if ( ! is_front_page() || ! function_exists( 'iflynepal_has_reasons' ) || ! iflynepal_has_reasons() ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'iflynepal-reasons-filters',
+		IFLYNEPAL_URI . '/assets/js/homepage/reasons/filters.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/homepage/reasons/filters.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-reasons-annotation',
+		IFLYNEPAL_URI . '/assets/js/homepage/reasons/annotation.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/homepage/reasons/annotation.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-reasons-reveal',
+		IFLYNEPAL_URI . '/assets/js/homepage/reasons/reveal.js',
+		array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
+		iflynepal_asset_version( 'assets/js/homepage/reasons/reveal.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_reasons' );
 
 /**
  * Enqueues the testimonial carousel.
