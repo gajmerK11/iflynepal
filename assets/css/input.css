@@ -980,39 +980,18 @@
 	}
 
 	/*
-	 * The "I have" duration field. A real <select> rather than a second
-	 * <details> — the design's own control for this field is a plain
-	 * dropdown (one choice, not several), so there is nothing a checklist
-	 * would add here that the browser's native picker does not already do
-	 * for free, keyboard and all.
+	 * The "I have" duration field was a real <select> — the design's own
+	 * control for this one is a plain dropdown, one choice not several, so a
+	 * native picker did everything a checklist would for free, keyboard
+	 * included. It became a second <details>/<summary>/list, radios instead
+	 * of "I want to"'s checkboxes, once the client asked the two fields to
+	 * match exactly: a native <select>'s popup is drawn by the OS, not the
+	 * page, so its corners, border and shadow can never be made to match a
+	 * styled panel's. `.iflynepal-hero__finder-field--select` is kept only
+	 * for the column-divider rules above (border-right:0, this field's own
+	 * responsive border-bottom) — everything about the control itself now
+	 * comes from the same rules "I want to" already uses, unmodified.
 	 */
-	.iflynepal-hero__finder-field--select .iflynepal-hero__finder-trigger {
-		@apply cursor-pointer gap-0.5;
-	}
-
-	/*
-	 * .search-field select{border:0;outline:0;background:transparent;
-	 * appearance:none;padding:4px 0} — the design runs this field with no
-	 * arrow, but the client asked the two fields to match, so the browser's
-	 * native one is switched off (appearance:none already did that) and the
-	 * "I want to" field's own chevron is reused here — same markup, same
-	 * class, just static rather than rotating (a <select> has no [open]
-	 * attribute to hang that on).
-	 */
-	.iflynepal-hero__finder-field--select select.iflynepal-hero__finder-value {
-		@apply min-w-0 flex-1 cursor-pointer appearance-none border-0 bg-transparent font-sans;
-	}
-
-	/*
-	 * outline-offset pushed the focus ring 2px clear of the control, which
-	 * reads as a stray floating box around plain text rather than a focus
-	 * state on it — the gap in the screenshot. Flush against the edge like
-	 * every other focus style on this page.
-	 */
-	.iflynepal-hero__finder-field--select select.iflynepal-hero__finder-value:focus-visible {
-		outline: 2px solid var(--iflynepal-navy);
-		outline-offset: 0;
-	}
 
 	/* ------------------------------------------------------- explore cards */
 

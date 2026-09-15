@@ -141,7 +141,16 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 				 */
 				?>
 				<form class="iflynepal-hero__finder" method="get" action="<?php echo esc_url( iflynepal_hero_finder_url() ); ?>" id="iflynepal-hero-finder">
-					<details class="iflynepal-hero__finder-field" id="iflynepal-hero-finder-types">
+					<?php
+					/*
+					 * Both fields share name="iflynepal-hero-finder-picker" (the HTML
+					 * <details> exclusive-group attribute, not a form field name — it
+					 * never reaches the querystring): opening one closes the other
+					 * natively, no JS required, the same way only one native <select>
+					 * popup can ever be open at a time.
+					 */
+					?>
+					<details class="iflynepal-hero__finder-field" id="iflynepal-hero-finder-types" name="iflynepal-hero-finder-picker">
 						<summary class="iflynepal-hero__finder-trigger">
 							<span class="iflynepal-hero__finder-row">
 								<span>
@@ -164,20 +173,46 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 
 					<?php $iflynepal_finder_durations = iflynepal_hero_finder_durations(); ?>
 					<?php if ( $iflynepal_finder_durations ) : ?>
-						<div class="iflynepal-hero__finder-field iflynepal-hero__finder-field--select">
-							<label class="iflynepal-hero__finder-trigger" for="iflynepal-hero-finder-days">
-								<span class="iflynepal-hero__finder-label"><?php esc_html_e( 'I have', 'iflynepal' ); ?></span>
+						<?php
+						/*
+						 * A single choice, so radio inputs rather than "I want to"'s
+						 * checkboxes — one <details>/<summary>/list, same as that field,
+						 * is what gives it the identical rounded panel, border and shadow
+						 * a native <select>'s own popup can never be styled to match (the
+						 * OS draws that one, not the page). name="days" on each radio
+						 * still submits exactly one ?days=… value, same as the <select>
+						 * this replaced.
+						 */
+						?>
+						<details class="iflynepal-hero__finder-field iflynepal-hero__finder-field--select" id="iflynepal-hero-finder-days" name="iflynepal-hero-finder-picker">
+							<summary class="iflynepal-hero__finder-trigger">
 								<span class="iflynepal-hero__finder-row">
-									<select class="iflynepal-hero__finder-value" id="iflynepal-hero-finder-days" name="days">
-										<option value=""><?php esc_html_e( 'Not sure yet', 'iflynepal' ); ?></option>
-										<?php foreach ( $iflynepal_finder_durations as $iflynepal_finder_duration ) : ?>
-											<option value="<?php echo esc_attr( $iflynepal_finder_duration['key'] ); ?>"><?php echo esc_html( $iflynepal_finder_duration['label'] ); ?></option>
-										<?php endforeach; ?>
-									</select>
+									<span>
+										<span class="iflynepal-hero__finder-label"><?php esc_html_e( 'I have', 'iflynepal' ); ?></span>
+										<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Not sure yet', 'iflynepal' ); ?>"><?php esc_html_e( 'Not sure yet', 'iflynepal' ); ?></span>
+									</span>
 									<svg class="iflynepal-hero__finder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
 								</span>
-							</label>
-						</div>
+							</summary>
+
+							<?php
+							/*
+							 * "Not sure yet" is the placeholder, matching "I want to"'s
+							 * "Explore Nepal" — what the summary shows before a choice is
+							 * made, not a choice of its own. No radio is checked by default,
+							 * so with nothing picked the group submits no days= at all,
+							 * same as the empty option on the <select> this replaced.
+							 */
+							?>
+							<div class="iflynepal-hero__finder-list">
+								<?php foreach ( $iflynepal_finder_durations as $iflynepal_finder_duration ) : ?>
+									<label class="iflynepal-hero__finder-option">
+										<input type="radio" name="days" value="<?php echo esc_attr( $iflynepal_finder_duration['key'] ); ?>">
+										<?php echo esc_html( $iflynepal_finder_duration['label'] ); ?>
+									</label>
+								<?php endforeach; ?>
+							</div>
+						</details>
 					<?php endif; ?>
 
 					<button type="submit" class="iflynepal-button iflynepal-button--dark iflynepal-hero__finder-submit">
