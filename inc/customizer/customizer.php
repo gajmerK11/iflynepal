@@ -750,25 +750,6 @@ function iflynepal_customizer_controls_assets() {
 			'removeLabel' => __( 'Remove person %d', 'iflynepal' ),
 		)
 	);
-
-	wp_enqueue_script(
-		'iflynepal-customizer-hero-background-image',
-		IFLYNEPAL_URI . '/assets/js/homepage/hero/background-image.js',
-		array( 'jquery', 'customize-controls', 'media-views' ),
-		iflynepal_asset_version( 'assets/js/homepage/hero/background-image.js' ),
-		true
-	);
-
-	wp_localize_script(
-		'iflynepal-customizer-hero-background-image',
-		'iflynepalHeroImage',
-		array(
-			'minWidth'  => IFLYNEPAL_HERO_IMAGE_MIN_WIDTH,
-			'minHeight' => IFLYNEPAL_HERO_IMAGE_MIN_HEIGHT,
-			'minRatio'  => IFLYNEPAL_HERO_IMAGE_MIN_RATIO,
-			'message'   => __( "The image's quality and size is not compatible", 'iflynepal' ),
-		)
-	);
 }
 add_action( 'customize_controls_enqueue_scripts', 'iflynepal_customizer_controls_assets' );
 

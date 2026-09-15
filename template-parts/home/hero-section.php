@@ -167,12 +167,15 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 						<div class="iflynepal-hero__finder-field iflynepal-hero__finder-field--select">
 							<label class="iflynepal-hero__finder-trigger" for="iflynepal-hero-finder-days">
 								<span class="iflynepal-hero__finder-label"><?php esc_html_e( 'I have', 'iflynepal' ); ?></span>
-								<select class="iflynepal-hero__finder-value" id="iflynepal-hero-finder-days" name="days">
-									<option value=""><?php esc_html_e( 'Not sure yet', 'iflynepal' ); ?></option>
-									<?php foreach ( $iflynepal_finder_durations as $iflynepal_finder_duration ) : ?>
-										<option value="<?php echo esc_attr( $iflynepal_finder_duration['key'] ); ?>"><?php echo esc_html( $iflynepal_finder_duration['label'] ); ?></option>
-									<?php endforeach; ?>
-								</select>
+								<span class="iflynepal-hero__finder-row">
+									<select class="iflynepal-hero__finder-value" id="iflynepal-hero-finder-days" name="days">
+										<option value=""><?php esc_html_e( 'Not sure yet', 'iflynepal' ); ?></option>
+										<?php foreach ( $iflynepal_finder_durations as $iflynepal_finder_duration ) : ?>
+											<option value="<?php echo esc_attr( $iflynepal_finder_duration['key'] ); ?>"><?php echo esc_html( $iflynepal_finder_duration['label'] ); ?></option>
+										<?php endforeach; ?>
+									</select>
+									<svg class="iflynepal-hero__finder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+								</span>
 							</label>
 						</div>
 					<?php endif; ?>

@@ -23,20 +23,6 @@ defined( 'ABSPATH' ) || exit;
 const IFLYNEPAL_HERO_TITLE_DEFAULT = 'Nepal Tours, Treks & <span class="hero-text-style">Retreats</span><br>With Local Experts';
 
 /**
- * Smallest background image the hero accepts.
- *
- * The hero is a full-viewport cover, so anything narrower than a common laptop
- * screen is upscaled and visibly soft. The ratio floor rejects portrait and
- * square images, which cannot fill that box without cropping away most of the
- * picture.
- *
- * @since 1.0.0
- */
-const IFLYNEPAL_HERO_IMAGE_MIN_WIDTH  = 1920;
-const IFLYNEPAL_HERO_IMAGE_MIN_HEIGHT = 1080;
-const IFLYNEPAL_HERO_IMAGE_MIN_RATIO  = 1.4;
-
-/**
  * Number of trust bullets the hero can show.
  *
  * Changing this needs a matching change to IFLYNEPAL_HERO_TRUST_MAX in
@@ -461,47 +447,6 @@ function iflynepal_render_hero_trust_points() {
 	}
 
 	return $markup;
-}
-
-/* --------------------------------------------------------------- validation */
-
-/**
- * Rejects a background image too small or too tall for a full-viewport hero.
- *
- * Runs on save and blocks it, so a client cannot end up with a stretched or
- * badly cropped hero. The Customizer control also checks dimensions the moment
- * an image is picked (assets/js/homepage/hero/background-image.js) — that is
- * for immediate feedback only; this is the gate that actually holds.
- *
- * @since 1.0.0
- *
- * @param WP_Error $validity Current validity.
- * @param mixed    $value    Attachment ID.
- * @return WP_Error Validity, carrying an error when the image is unusable.
- */
-function iflynepal_validate_hero_background_image( $validity, $value ) {
-	$attachment_id = (int) $value;
-
-	if ( ! $attachment_id ) {
-		return $validity;
-	}
-
-	$meta = wp_get_attachment_metadata( $attachment_id );
-
-	$width  = empty( $meta['width'] ) ? 0 : (int) $meta['width'];
-	$height = empty( $meta['height'] ) ? 0 : (int) $meta['height'];
-
-	$too_small = $width < IFLYNEPAL_HERO_IMAGE_MIN_WIDTH || $height < IFLYNEPAL_HERO_IMAGE_MIN_HEIGHT;
-	$too_tall  = ! $height || ( $width / $height ) < IFLYNEPAL_HERO_IMAGE_MIN_RATIO;
-
-	if ( $too_small || $too_tall ) {
-		$validity->add(
-			'iflynepal_hero_image_incompatible',
-			__( "The image's quality and size is not compatible", 'iflynepal' )
-		);
-	}
-
-	return $validity;
 }
 
 /* ----------------------------------------------------------- trip finder */

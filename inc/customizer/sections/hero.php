@@ -148,12 +148,7 @@ for ( $iflynepal_slide = 1; $iflynepal_slide <= IFLYNEPAL_HERO_SLIDE_MAX; $iflyn
 				/* translators: %d: slide number. */
 				'label'       => sprintf( __( 'Image %d', 'iflynepal' ), $iflynepal_slide ),
 				'description' => 1 === $iflynepal_slide
-					? sprintf(
-						/* translators: 1: minimum width in pixels, 2: minimum height in pixels. */
-						__( 'The first one paints immediately and is the largest element on the page — keep it under 150 KB. Landscape, at least %1$d x %2$d pixels. The rest are only downloaded once the slideshow starts.', 'iflynepal' ),
-						IFLYNEPAL_HERO_IMAGE_MIN_WIDTH,
-						IFLYNEPAL_HERO_IMAGE_MIN_HEIGHT
-					)
+					? __( 'The first one paints immediately and is the largest element on the page. The rest are only downloaded once the slideshow starts.', 'iflynepal' )
 					: '',
 				'section'     => 'iflynepal_hero',
 				'mime_type'   => 'image',
@@ -167,7 +162,6 @@ $wp_customize->add_setting(
 	array(
 		'default'           => 0,
 		'sanitize_callback' => 'absint',
-		'validate_callback' => 'iflynepal_validate_hero_background_image',
 		'transport'         => 'refresh',
 	)
 );
@@ -177,12 +171,7 @@ $wp_customize->add_control(
 		'iflynepal_hero_background_image',
 		array(
 			'label'       => __( 'Background image', 'iflynepal' ),
-			'description' => sprintf(
-				/* translators: 1: minimum width in pixels, 2: minimum height in pixels. */
-				__( 'Used when the slideshow above is empty. Shown immediately, and behind the video. This is the largest element on the page — keep it under 150 KB. Must be landscape and at least %1$d x %2$d pixels.', 'iflynepal' ),
-				IFLYNEPAL_HERO_IMAGE_MIN_WIDTH,
-				IFLYNEPAL_HERO_IMAGE_MIN_HEIGHT
-			),
+			'description' => __( 'Used when the slideshow above is empty. Shown immediately, and behind the video. This is the largest element on the page.', 'iflynepal' ),
 			'section'     => 'iflynepal_hero',
 			'mime_type'   => 'image',
 		)
