@@ -143,6 +143,16 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 				<form class="iflynepal-hero__finder" method="get" action="<?php echo esc_url( iflynepal_hero_finder_url() ); ?>" id="iflynepal-hero-finder">
 					<?php
 					/*
+					 * The white rounded panel is this wrapper's own background, not
+					 * the <form>'s: the submit button sits outside it as the form's
+					 * other flex child, so it can be pulled onto its own row below
+					 * the panel at mobile width without dragging the panel's rounding
+					 * or shadow along with it (input.css, the mobile breakpoint).
+					 */
+					?>
+					<div class="iflynepal-hero__finder-fields">
+					<?php
+					/*
 					 * Both fields share name="iflynepal-hero-finder-picker" (the HTML
 					 * <details> exclusive-group attribute, not a form field name — it
 					 * never reaches the querystring): opening one closes the other
@@ -214,6 +224,7 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 							</div>
 						</details>
 					<?php endif; ?>
+					</div>
 
 					<button type="submit" class="iflynepal-button iflynepal-button--dark iflynepal-hero__finder-submit">
 						<?php esc_html_e( 'Find My Trip', 'iflynepal' ); ?>

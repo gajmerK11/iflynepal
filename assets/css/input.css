@@ -838,6 +838,13 @@
 	 * reach opacity 1 again once hero.js's GSAP timeline tweens them back in,
 	 * and this section is not one of the things that timeline knows about.
 	 */
+	/*
+	 * Unchanged from before the fields gained their own wrapper div: this is
+	 * the exact original rule, still a flat three-column grid of field, field,
+	 * button. It stays exactly this on tablet, 1024px laptop, desktop and 4K —
+	 * the wrapper below is what makes that possible unmodified. Only mobile
+	 * (below) is any different.
+	 */
 	.iflynepal-hero__finder {
 		@apply relative z-[2] mx-auto grid w-full items-stretch text-left;
 		margin-top: 46px; /* .trip-search margin-top (centred-hero pass) */
@@ -850,23 +857,53 @@
 		box-shadow: var(--iflynepal-shadow); /* .trip-search box-shadow: var(--shadow) — identical token */
 	}
 
-	@media (max-width: 1080px) {
+	/*
+	 * display:contents above phone width: the wrapper generates no box of its
+	 * own, so its two <details> become direct grid items of
+	 * .iflynepal-hero__finder again — exactly the original flat grid above,
+	 * untouched, as if this div were not there at all. It only becomes a real,
+	 * separately-boxed element at mobile, in the query below, which is the one
+	 * place the button needs to be able to leave it.
+	 */
+	.iflynepal-hero__finder-fields {
+		display: contents;
+	}
+
+	/*
+	 * Phone width only. The fields regain a real box — their own background,
+	 * padding, radius and shadow, moved off the form — and the submit button
+	 * leaves it entirely: the form becomes a column of two full-width pieces
+	 * with air between them, rather than a third strip fused to the bottom of
+	 * the white panel. The button takes no size of its own here beyond
+	 * width:100% — it is the same "Explore Nepal" dimensions as every other
+	 * pill on the page (.iflynepal-button's own min-height, padding, type
+	 * size), just filled with the dark/navy background instead of that one's
+	 * translucent outline, and spanning the row it now has to itself.
+	 */
+	@media (max-width: 760px) {
 		.iflynepal-hero__finder {
-			grid-template-columns: 1fr 1fr; /* .trip-search's own 1080px collapse */
+			display: flex;
+			flex-direction: column;
+			margin-top: 34px; /* .trip-search margin-top at this breakpoint */
+			gap: 14px;
+			padding: 0;
+			background: none;
+			border-radius: 0;
+			box-shadow: none;
+		}
+
+		.iflynepal-hero__finder-fields {
+			display: grid;
+			grid-template-columns: 1fr; /* .trip-search's own 760px stack */
+			gap: 10px;
+			padding: 12px;
+			background: rgba(255, 255, 255, 0.94);
+			border-radius: 20px;
+			box-shadow: var(--iflynepal-shadow);
 		}
 
 		.iflynepal-hero__finder-submit.iflynepal-button {
-			/* This picker has no third field to sit beside at this width, unlike
-			 * the design's — the button spans both columns instead of floating
-			 * half-width and alone. */
-			grid-column: 1 / -1;
-		}
-	}
-
-	@media (max-width: 760px) {
-		.iflynepal-hero__finder {
-			grid-template-columns: 1fr; /* .trip-search's own 760px stack */
-			margin-top: 34px; /* .trip-search margin-top at this breakpoint */
+			width: 100%;
 		}
 	}
 
@@ -892,7 +929,14 @@
 		border-right: 0;
 	}
 
-	@media (max-width: 1080px) {
+	/*
+	 * The vertical divider holds from mobile's own stack point all the way up
+	 * through tablet, 1024px laptop, desktop and 4K — the fields stay side by
+	 * side across that entire range now, matching 1440px exactly, so there is
+	 * nothing for it to flip to until the fields themselves stack at phone
+	 * width, below.
+	 */
+	@media (max-width: 760px) {
 		.iflynepal-hero__finder-field,
 		.iflynepal-hero__finder-field--select {
 			border-right: 0;
@@ -901,17 +945,6 @@
 
 		.iflynepal-hero__finder-field--select {
 			border-bottom: 0;
-		}
-	}
-
-	@media (max-width: 760px) {
-		.iflynepal-hero__finder-field,
-		.iflynepal-hero__finder-field--select {
-			border-bottom: 1px solid var(--iflynepal-line) !important;
-		}
-
-		.iflynepal-hero__finder-field--select {
-			border-bottom: 0 !important;
 		}
 	}
 
