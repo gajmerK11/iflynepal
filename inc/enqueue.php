@@ -765,6 +765,32 @@ function iflynepal_enqueue_back_to_top() {
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_back_to_top' );
 
 /**
+ * Enqueues smooth scrolling for in-page fragment links.
+ *
+ * On every template, same reasoning as the back-to-top button: any page can
+ * carry a `href="#id"` link (a hero button, a closing CTA, a scroll pill),
+ * and every one of them should glide rather than snap. Needs no GSAP — it is
+ * one delegated click listener and scrollIntoView.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_enqueue_anchor_scroll() {
+	wp_enqueue_script(
+		'iflynepal-anchor-scroll',
+		IFLYNEPAL_URI . '/assets/js/global/anchor-scroll.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/global/anchor-scroll.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_anchor_scroll' );
+
+/**
  * Enqueues the hero's ambient sound toggle, when a track has been uploaded.
  *
  * Kept out of the hero bundle because it needs no GSAP, and skipped entirely

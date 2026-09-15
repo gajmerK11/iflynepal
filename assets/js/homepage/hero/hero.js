@@ -31,41 +31,16 @@
 	var hasGsap = typeof window.gsap !== 'undefined';
 	var reduced = window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 
-	/* --------------------------------------------------------- scroll pill */
-
 	/*
-	 * The pill at the foot of a hero that scrolls to the first section: Team's
-	 * "Meet everyone", Contact's, and the legal pages' "Read the terms" /
-	 * "Types of cookies" / "Read the policy" (Privacy, Sustainability). Each page names its own — the pills are styled
-	 * differently — so all three are listed rather than given a shared class,
-	 * which would mean restyling three components to fix a scroll.
-	 *
-	 * A plain fragment link to begin with, so it still navigates with
-	 * JavaScript off; all this adds is the glide. Without it the browser jumps
-	 * the page in one frame, which is what made the legal pills feel abrupt.
-	 * It sits above the GSAP guard below because it is not motion — the pill
-	 * has to work whether or not anything animates.
-	 *
-	 * scrollIntoView honours the target's own scroll-margin-top, so the
-	 * section clears the fixed header without any offset arithmetic here.
+	 * The scroll pill at the foot of a hero (Team's "Meet everyone",
+	 * Contact's, the legal pages', and every other in-page fragment link —
+	 * the hero's own "Explore Nepal" button included) gets its smooth glide
+	 * from assets/js/global/anchor-scroll.js, enqueued on every template. It
+	 * used to be bound here, per hero, against a hardcoded list of pill
+	 * classes; that missed any fragment link outside the hero itself (the
+	 * closing CTA button, the trust-band promo — both default to #explore),
+	 * which is why it moved to one delegated, site-wide listener instead.
 	 */
-	var scrollPill = hero.querySelector(
-		'.iflynepal-team-hero__scroll, .iflynepal-contact-hero__scroll, .iflynepal-legal-hero__scroll'
-	);
-
-	if ( scrollPill ) {
-		var pillTarget = document.querySelector( scrollPill.getAttribute( 'href' ) );
-
-		if ( pillTarget ) {
-			scrollPill.addEventListener( 'click', function ( event ) {
-				event.preventDefault();
-				pillTarget.scrollIntoView( {
-					behavior: reduced ? 'auto' : 'smooth',
-					block: 'start'
-				} );
-			} );
-		}
-	}
 
 	/* ------------------------------------------------------- background video */
 
