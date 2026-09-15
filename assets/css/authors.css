@@ -1,0 +1,373 @@
+/**
+ * The Authors directory and a single author's page.
+ *
+ * The approved designs' own stylesheet, author-archive-design.html and
+ * author-single-design.html, under the class names those files use: the
+ * same rule the theme's articles.css follows for the Articles and News
+ * pages. Re-expressing them as utilities is what loses the last few pixels.
+ *
+ * It is not the whole of either design file. Both share the vast majority of
+ * their markup (the hero, the container, the section head, the post grid,
+ * the trip/post card) with the Articles archive, and those rules already
+ * live in articles.css; this file holds only the rules that are new here:
+ * the author card in the directory grid, and the banner/avatar/bio/stats
+ * layout on a single author's own page.
+ *
+ * Loaded by inc/enqueue.php on the Authors directory and single author pages
+ * alone, after articles.css. One declaration here (.button--outline) is a
+ * generic variant of that file's .button component with nowhere else to live
+ * yet; if a third page ever wants it, move it there instead of copying it.
+ *
+ * @package IFly_Nepal
+ * @since   1.0.0
+ */
+
+/* ==========================================================================
+   AUTHORS DIRECTORY: CloudColleague's page-authors.php / authors-layout.php
+   ("Meet Our Authors" over a grid of avatar + name + role + socials cards)
+   in this site's dress.
+   ========================================================================== */
+
+/* The page opens on the short archive hero, not a full-viewport one. */
+.ifn-authors-page .hero-copy { max-width: 820px; }
+.ifn-authors-page .hero .lead { margin-top: 20px; }
+
+.authors-list { padding: 76px 0 96px; }
+
+.authors-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 26px;
+}
+
+.author-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+	padding: 34px 26px 28px;
+	border: 1px solid var(--line);
+	border-radius: var(--r-lg);
+	background: #fff;
+	text-align: center;
+	transition: transform .28s var(--ease), box-shadow .28s var(--ease), border-color .28s var(--ease);
+}
+.author-card:hover {
+	transform: translateY(-4px);
+	border-color: rgba(5, 69, 167, .3);
+	box-shadow: 0 30px 60px -38px rgba(4, 35, 79, .6);
+}
+
+/*
+ * The avatar. Present only when the author has an uploaded photo, see
+ * iflynepal_author_photo_id() and the template it drives, template-parts/
+ * authors/authors-layout.php. A card with none omits this element entirely
+ * rather than falling back to a placeholder, matching the approved design's
+ * own "iFly Nepal" house-byline card.
+ */
+.author-card-photo {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 104px;
+	height: 104px;
+	border-radius: 50%;
+	overflow: hidden;
+	border: 3px solid #fff;
+	background: linear-gradient(150deg, var(--navy) 0%, var(--deep) 100%);
+	box-shadow: 0 0 0 1px var(--line), 0 18px 34px -22px rgba(4, 35, 79, .7);
+}
+.author-card-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; }
+
+.author-card h2 {
+	margin: 0;
+	font-size: 20px;
+	letter-spacing: -.015em;
+	color: var(--ink-deep);
+}
+.author-card h2 a { transition: color .2s ease; }
+.author-card h2 a:hover { color: var(--navy); }
+.author-card-role {
+	margin: 6px 0 0;
+	color: var(--navy);
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.author-card-socials { display: flex; align-items: center; gap: 14px; margin-top: 2px; }
+.author-card-socials a {
+	display: grid;
+	place-items: center;
+	width: 22px;
+	height: 22px;
+	color: var(--muted);
+	transition: color .2s ease, transform .2s ease;
+}
+.author-card-socials a:hover { color: var(--navy); transform: translateY(-2px); }
+.author-card-socials svg { width: 18px; height: 18px; }
+.author-card-socials .ico-solid { fill: currentColor; }
+.author-card-socials .ico-line { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+.author-card-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: auto;
+	padding-top: 6px;
+	color: var(--navy);
+	font-size: 13.5px;
+	font-weight: 700;
+}
+.author-card-link .link-arrow { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .25s var(--ease); }
+.author-card:hover .author-card-link .link-arrow { transform: translateX(4px); }
+
+.authors-foot {
+	display: flex;
+	justify-content: center;
+	margin-top: 48px;
+	padding-top: 30px;
+	border-top: 1px solid var(--line);
+}
+
+@media (max-width: 1000px) {
+	.authors-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+	.authors-list { padding: 52px 0 72px; }
+	.authors-grid { grid-template-columns: 1fr; gap: 18px; }
+	.author-card { padding: 28px 20px 24px; }
+	.author-card-photo { width: 92px; height: 92px; }
+	.authors-foot .button { width: 100%; justify-content: center; }
+}
+
+/* ==========================================================================
+   SINGLE AUTHOR PAGE: CloudColleague's author.php / template-parts/authors/
+   author-layout.php (banner, avatar overlapping it, name + role + socials,
+   bio with expertise pills, then the author's posts) in this site's dress.
+   ========================================================================== */
+
+/*
+ * The banner: the photograph the avatar sits on. CloudColleague's is a flat
+ * 200/300px colour band; here it is a picture, the same treatment the
+ * archive heroes get, and a little taller so the header (which rides over
+ * the top of it, docked from the first frame, see
+ * iflynepal_dock_header_on_author()) has something to sit on.
+ */
+.author-banner {
+	position: relative;
+	height: clamp(320px, 34vw, 460px);
+	overflow: hidden;
+	background: var(--ink-deep);
+}
+.author-banner img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center 42%;
+}
+.author-banner::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background:
+		linear-gradient(180deg, rgba(4, 26, 64, .58) 0%, rgba(4, 26, 64, .12) 42%, rgba(4, 26, 64, .30) 100%),
+		radial-gradient(120% 90% at 50% 100%, rgba(255, 255, 255, .30) 0%, rgba(255, 255, 255, 0) 60%);
+}
+
+/* The head: avatar pulled up over the banner, name, role. */
+.author-head { position: relative; z-index: 1; display: flow-root; background: #fff; text-align: center; }
+.author-head .container { padding-bottom: 44px; }
+
+.author-avatar {
+	display: grid;
+	place-items: center;
+	width: 216px;
+	height: 216px;
+	margin: -116px auto 22px;
+	overflow: hidden;
+	border-radius: 50%;
+	border: 7px solid #fff;
+	background: linear-gradient(150deg, var(--navy) 0%, var(--deep) 100%);
+	box-shadow: 0 26px 60px -30px rgba(4, 35, 79, .55);
+	animation: authorRise .9s var(--ease) both;
+}
+/*
+ * Fills the circle edge to edge with object-fit: cover, not the design's own
+ * width: 100%; height: auto (which only sizes the image, leaving corners
+ * square with nothing to clip them). get_avatar()'s default mystery-man
+ * placeholder is a square gray tile with padding baked into the artwork
+ * itself, so without `cover` it renders as a small square floating inside
+ * the ring (the fault this rule fixes) rather than a filled circle.
+ */
+.author-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.author-head .eyebrow { justify-content: center; margin-bottom: 12px; }
+.author-head h1 {
+	margin: 0;
+	font-size: clamp(34px, 4.4vw, 54px);
+	line-height: 1.06;
+	letter-spacing: -.02em;
+	color: var(--ink-deep);
+}
+.author-head h1 em {
+	font-family: var(--serif-alt);
+	font-style: italic;
+	font-weight: 600;
+	color: var(--navy);
+}
+.author-role {
+	margin: 12px 0 0;
+	color: var(--navy);
+	font-size: 15px;
+	font-weight: 700;
+	letter-spacing: .02em;
+}
+.author-hand {
+	display: block;
+	margin-top: 6px;
+	color: rgba(5, 69, 167, .72);
+	font-family: var(--hand);
+	font-size: 22px;
+	font-weight: 400;
+	letter-spacing: 0;
+}
+
+/* The social row: outlined pills, the same white-on-line treatment the article share row uses, never a solid colour block. */
+.author-socials { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 24px; }
+.author-social {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	padding: 10px 16px;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	background: #fff;
+	color: var(--ink-deep);
+	font-size: 13.5px;
+	font-weight: 700;
+	transition: border-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.author-social svg { width: 17px; height: 17px; flex: none; }
+.author-social .ico-solid { fill: currentColor; }
+.author-social .ico-line { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.author-social:hover {
+	border-color: rgba(5, 69, 167, .4);
+	color: var(--navy);
+	transform: translateY(-2px);
+	box-shadow: 0 12px 26px -18px rgba(4, 35, 79, .6);
+}
+
+/* The counts CloudColleague works out with count_user_posts(). */
+.author-stats {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 14px 42px;
+	margin-top: 32px;
+	padding-top: 26px;
+	border-top: 1px solid var(--line);
+}
+.author-stats div { display: flex; flex-direction: column; gap: 4px; }
+.author-stats b {
+	font-family: var(--display, inherit);
+	font-size: 26px;
+	font-weight: 700;
+	line-height: 1;
+	color: var(--navy);
+}
+.author-stats span {
+	color: var(--muted);
+	font-size: 11.5px;
+	font-weight: 700;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+}
+
+/* The breadcrumb strip, as on the article and news pages. */
+.author-crumbs-strip { padding: 26px 0 0; background: #fff; }
+.author-crumbs-strip .container { padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+
+/* Bio. */
+.author-bio { padding: 54px 0 72px; background: #fff; }
+.author-bio .container { max-width: 840px; }
+.bio-lede { margin: 0 0 30px; color: var(--ink); font-size: 19px; line-height: 1.75; }
+.bio-lede p { margin: 0 0 18px; }
+.bio-lede p:last-child { margin: 0; }
+.bio-lede em { color: var(--navy); }
+
+.bio-card {
+	padding: 24px 26px;
+	margin-bottom: 32px;
+	border: 1px solid var(--line);
+	border-radius: var(--r-lg);
+	background: var(--mist);
+}
+.bio-card h2 { margin: 0 0 14px; font-size: 19px; letter-spacing: -.01em; color: var(--ink-deep); }
+.bio-pills { display: flex; flex-wrap: wrap; gap: 9px; }
+.bio-pills a {
+	display: inline-flex;
+	align-items: center;
+	padding: 7px 15px;
+	border: 1px solid rgba(5, 69, 167, .2);
+	border-radius: 999px;
+	background: #fff;
+	color: var(--navy);
+	font-size: 13px;
+	font-weight: 600;
+	transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.bio-pills a:hover { background: var(--navy); border-color: var(--navy); color: #fff; transform: translateY(-2px); }
+
+.bio-block { margin-bottom: 30px; }
+.bio-block:last-child { margin-bottom: 0; }
+.bio-block h2 { margin: 0 0 10px; font-size: 21px; letter-spacing: -.015em; color: var(--ink-deep); }
+.bio-block h2 .ink-mark { display: inline-block; }
+.bio-block p { margin: 0 0 14px; color: var(--ink); font-size: 17px; line-height: 1.78; }
+.bio-block p:last-child { margin: 0; }
+.bio-block a { color: var(--navy); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+
+/* The author's posts. */
+.author-posts { padding: 76px 0 96px; }
+.author-posts .section-head { margin-bottom: 38px; }
+.author-posts .post-grid { margin-top: 0; }
+.author-posts-foot {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: 12px;
+	margin-top: 42px;
+	padding-top: 26px;
+	border-top: 1px solid var(--line);
+}
+
+/*
+ * The one generic .button variant this file needs that articles.css does
+ * not yet carry: the quieter of the two "View all …" buttons under the
+ * posts grid, when an author has more than one editorial family.
+ */
+.button--outline { border-color: var(--line); background: #fff; color: var(--navy); }
+
+@keyframes authorRise { from { opacity: 0; transform: translateY(26px) scale(.94); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+	.author-avatar { animation: none; }
+}
+
+@media (max-width: 900px) {
+	.author-avatar { width: 168px; height: 168px; margin: -92px auto 18px; border-width: 6px; }
+	.author-stats { gap: 12px 28px; }
+}
+@media (max-width: 620px) {
+	.author-banner { height: clamp(260px, 52vw, 320px); }
+	.author-avatar { width: 142px; height: 142px; margin: -78px auto 16px; }
+	.author-head .container { padding-bottom: 34px; }
+	.author-social { padding: 9px 13px; font-size: 12.5px; }
+	.author-stats { gap: 14px 26px; margin-top: 26px; padding-top: 20px; }
+	.author-stats b { font-size: 22px; }
+	.author-bio { padding: 40px 0 54px; }
+	.bio-lede { font-size: 17.5px; }
+	.author-posts { padding: 56px 0 72px; }
+	.author-posts-foot { justify-content: stretch; }
+	.author-posts-foot .button { width: 100%; justify-content: center; }
+}

@@ -73,12 +73,13 @@ function iflynepal_body_class( $classes ) {
 	}
 
 	/*
-	 * The Articles, Blogs and News pages carry the approved designs' own
-	 * stylesheet, and a handful of its rules are scoped to this class on the
-	 * document — the archives' shortened hero and the news story's bottom-heavy
-	 * one among them. See assets/css/articles.css and assets/css/news.css.
+	 * The Articles, Blogs, News and Authors pages carry the approved designs'
+	 * own stylesheet, and a handful of its rules are scoped to this class on
+	 * the document: the archives' shortened hero and the news story's
+	 * bottom-heavy one among them. See assets/css/articles.css,
+	 * assets/css/news.css and assets/css/authors.css.
 	 */
-	if ( iflynepal_has_articles() || iflynepal_has_article() || iflynepal_has_blogs() || iflynepal_has_blog() || iflynepal_has_news() || iflynepal_has_news_story() ) {
+	if ( iflynepal_has_articles() || iflynepal_has_article() || iflynepal_has_blogs() || iflynepal_has_blog() || iflynepal_has_news() || iflynepal_has_news_story() || iflynepal_has_authors_archive() || iflynepal_has_author() ) {
 		$classes[] = 'ifn-articles-route';
 	}
 

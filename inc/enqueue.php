@@ -79,11 +79,21 @@ function iflynepal_enqueue_assets() {
 	$has_news       = iflynepal_has_news();
 	$has_news_story = iflynepal_has_news_story();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie && ! $has_privacy && ! $has_sustain && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story ) {
+	/*
+	 * The Authors directory and a single author's page. Neither is one of the
+	 * editorial post types above, but both carry the same design's stylesheet
+	 * and motion script as the pages that are, per inc/authors.php's own
+	 * docblock, so they are folded into the same conditions throughout this
+	 * function rather than tested again at every use.
+	 */
+	$has_authors_archive = iflynepal_has_authors_archive();
+	$has_author          = iflynepal_has_author();
+
+	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie && ! $has_privacy && ! $has_sustain && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story && ! $has_authors_archive && ! $has_author ) {
 		return;
 	}
 
-	if ( $has_hero && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story ) {
+	if ( $has_hero && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story && ! $has_authors_archive && ! $has_author ) {
 		/*
 		 * Reveal gate, printed in the head so the class lands before the hero
 		 * paints. Every hiding rule in the stylesheet is scoped under it, so a
@@ -124,7 +134,7 @@ function iflynepal_enqueue_assets() {
 		)
 	);
 
-	if ( $has_hero && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story ) {
+	if ( $has_hero && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story && ! $has_authors_archive && ! $has_author ) {
 		wp_enqueue_script(
 			'iflynepal-hero',
 			IFLYNEPAL_URI . '/assets/js/homepage/hero/hero.js',
@@ -298,7 +308,7 @@ function iflynepal_enqueue_assets() {
 	 * the two scripts look for different class names for the same behaviour.
 	 * The stylesheet is enqueued after main.css so its rules land last.
 	 */
-	if ( $has_articles || $has_article || $has_news || $has_news_story ) {
+	if ( $has_articles || $has_article || $has_news || $has_news_story || $has_authors_archive || $has_author ) {
 		wp_enqueue_style(
 			'iflynepal-articles',
 			IFLYNEPAL_URI . '/assets/css/articles.css',
@@ -318,6 +328,24 @@ function iflynepal_enqueue_assets() {
 				IFLYNEPAL_URI . '/assets/css/news.css',
 				array( 'iflynepal-articles' ),
 				iflynepal_asset_version( 'assets/css/news.css' )
+			);
+		}
+
+		/*
+		 * The Authors directory and a single author's page, the same way News
+		 * is: articles.css's own hero, container, section-head, post-grid and
+		 * card rules carry both pages almost entirely, and this appends only
+		 * what the CloudColleague-shaped markup neither of those already has:
+		 * the banner, the avatar, the social row and the author card. See
+		 * assets/css/authors.css and template-parts/authors/* for the markup
+		 * it styles.
+		 */
+		if ( $has_authors_archive || $has_author ) {
+			wp_enqueue_style(
+				'iflynepal-authors',
+				IFLYNEPAL_URI . '/assets/css/authors.css',
+				array( 'iflynepal-articles' ),
+				iflynepal_asset_version( 'assets/css/authors.css' )
 			);
 		}
 

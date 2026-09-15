@@ -30,6 +30,8 @@ require_once IFLYNEPAL_DIR . '/inc/blogs.php';
 require_once IFLYNEPAL_DIR . '/inc/cpts/news-cpt.php';
 require_once IFLYNEPAL_DIR . '/inc/news.php';
 require_once IFLYNEPAL_DIR . '/inc/news-single.php';
+require_once IFLYNEPAL_DIR . '/inc/authors.php';
+require_once IFLYNEPAL_DIR . '/inc/user-profile.php';
 require_once IFLYNEPAL_DIR . '/inc/template-functions.php';
 require_once IFLYNEPAL_DIR . '/inc/walkers/class-ifly-nepal-nav-walker.php';
 require_once IFLYNEPAL_DIR . '/inc/walkers/class-ifly-nepal-footer-nav-walker.php';

@@ -32,6 +32,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/sustainability.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/articles.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/blogs.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/news.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/authors.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/contact.php';
 
@@ -203,6 +204,21 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	);
 
 	/*
+	 * The Authors directory and the single author page. Both draw their
+	 * copy from the authors themselves (inc/user-profile.php). The hero
+	 * photograph and the shared banner behind every author's avatar are the
+	 * only pieces an editor sets here.
+	 */
+	$wp_customize->add_panel(
+		'iflynepal_authors',
+		array(
+			'title'       => __( 'Authors', 'iflynepal' ),
+			'description' => __( 'The hero on the Authors directory and the banner on every author page. Each author\'s own name, role, bio and socials are set on their user profile, not here.', 'iflynepal' ),
+			'priority'    => 42,
+		)
+	);
+
+	/*
 	 * Control classes extend WP_Customize_Control, which only exists once the
 	 * Customizer is being registered — so they load here rather than at the top
 	 * of the file.
@@ -228,6 +244,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/articles.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/blogs.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/news.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/authors.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/contact.php';
 }
