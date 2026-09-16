@@ -443,6 +443,84 @@
 	}
 
 
+	/*
+	 * The WhatsApp action, client-directed into the header bar at its
+	 * right-hand end. A circle in WhatsApp's own green rather than the header's
+	 * chrome: it is the one control on the bar that hands the visitor to
+	 * something outside the site, and the brand colour is what says so before
+	 * the glyph is read.
+	 *
+	 * It "floats" by shadow rather than by position — a fixed element over a
+	 * fixed header would need its own stacking and would still have to move
+	 * with the bar as it docks. Sitting in the flex row costs nothing and
+	 * docks for free.
+	 */
+	.iflynepal-nav-wa {
+		@apply relative grid h-11 w-11 shrink-0 place-items-center rounded-full text-white;
+		background: #25d366;
+		box-shadow:
+			0 10px 24px rgba(37, 211, 102, 0.34),
+			0 2px 6px rgba(4, 26, 64, 0.18);
+		transition:
+			transform 0.3s var(--iflynepal-ease),
+			box-shadow 0.3s var(--iflynepal-ease),
+			background 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-nav-wa:hover,
+	.iflynepal-nav-wa:focus-visible {
+		background: #1eb955;
+		transform: translateY(-2px);
+		box-shadow:
+			0 14px 30px rgba(37, 211, 102, 0.42),
+			0 3px 8px rgba(4, 26, 64, 0.22);
+	}
+
+	.iflynepal-nav-wa__ico {
+		@apply h-[22px] w-[22px];
+		fill: currentColor;
+	}
+
+	/*
+	 * The ring that breathes out of the button. Drawn on a child rather than on
+	 * ::before so it can sit under the glyph without a z-index fight, and
+	 * aria-hidden in the markup because it says nothing.
+	 */
+	.iflynepal-nav-wa__pulse {
+		@apply pointer-events-none absolute inset-0 rounded-full;
+		border: 2px solid rgba(37, 211, 102, 0.55);
+		animation: iflynepal-wa-pulse 2.4s var(--iflynepal-ease) infinite;
+	}
+
+	@keyframes iflynepal-wa-pulse {
+		0% {
+			opacity: 0.7;
+			transform: scale(1);
+		}
+
+		70% {
+			opacity: 0;
+			transform: scale(1.45);
+		}
+
+		100% {
+			opacity: 0;
+			transform: scale(1.45);
+		}
+	}
+
+	/* A breathing ring is decoration; nobody has to sit through it. */
+	@media (prefers-reduced-motion: reduce) {
+		.iflynepal-nav-wa__pulse {
+			animation: none;
+		}
+
+		.iflynepal-nav-wa:hover,
+		.iflynepal-nav-wa:focus-visible {
+			transform: none;
+		}
+	}
+
 	.iflynepal-menu-btn {
 		@apply hidden h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/[.08] text-white;
 	}
@@ -850,11 +928,54 @@
 		margin-top: 46px; /* .trip-search margin-top (centred-hero pass) */
 		padding: 12px; /* .trip-search padding */
 		gap: 10px; /* .trip-search gap */
-		grid-template-columns: 1.2fr 0.8fr auto; /* .trip-search's want:have ratio, travel column dropped */
+		grid-template-columns: 1.2fr 0.8fr auto; /* two fields: .trip-search's want:have ratio, third column dropped */
 		background: rgba(255, 255, 255, 0.94); /* .trip-search background */
 		border-radius: 20px; /* .trip-search border-radius */
 		max-width: 1030px; /* .trip-search max-width */
 		box-shadow: var(--iflynepal-shadow); /* .trip-search box-shadow: var(--shadow) — identical token */
+	}
+
+	/*
+	 * Three fields is the design's own strip, restored when the budget field
+	 * has brackets to offer: `1.2fr .8fr .8fr auto` is verbatim
+	 * ifly-nepal-homepage-refined.html's `.trip-search`, whose fourth column is
+	 * the submit button.
+	 *
+	 * The count comes from a class the template prints rather than from the
+	 * track list being written to stretch. A four-column list with only two
+	 * fields in it puts the button in column three and leaves a dead column
+	 * beside it, and both of the optional fields depend on catalogue content —
+	 * a site with nothing priced has no budget field at all.
+	 */
+	.iflynepal-hero__finder--fields-2 {
+		grid-template-columns: 1.2fr 0.8fr auto; /* .trip-search, third field's column dropped */
+	}
+
+	.iflynepal-hero__finder--fields-3 {
+		grid-template-columns: 1.2fr 0.8fr 0.8fr auto; /* .trip-search */
+	}
+
+	/*
+	 * The design's own intermediate tier, which this picker did not need while
+	 * it had two fields: three of them plus a button in one row inside a
+	 * 1030px panel leaves each field too narrow to read its own label. Two
+	 * columns instead, the button stretching to fill the cell it shares the
+	 * second row with — `.trip-search` and `.trip-search .button` at
+	 * max-width:1080px in the design file, both verbatim.
+	 *
+	 * Bounded below at 761px so it stops exactly where the phone stack starts;
+	 * without that the two rules overlap and the flex column below inherits a
+	 * grid track list it has no use for.
+	 */
+	@media (min-width: 761px) and (max-width: 1080px) {
+
+		.iflynepal-hero__finder--fields-3 {
+			grid-template-columns: 1fr 1fr; /* .trip-search at 1080px */
+		}
+
+		.iflynepal-hero__finder--fields-3 .iflynepal-hero__finder-submit.iflynepal-button {
+			align-self: stretch; /* .trip-search .button at 1080px */
+		}
 	}
 
 	/*
@@ -918,14 +1039,21 @@
 	 * .search-field:last-of-type{border-right:0} — :last-of-type does not
 	 * translate directly: the design's three fields are all <div>s of the
 	 * same tag, so "last of type" and "last field" are the same element. This
-	 * picker's two fields are a <details> and a <div>, different tags, so
+	 * picker's fields are a <details> and a <div>, different tags, so
 	 * :last-of-type would be true of BOTH independently (each is trivially
 	 * the only element of its own tag) and strip the divider from both at
 	 * once — caught by measuring the rendered page rather than by reading
-	 * the rule. Targeting the select field's own class is unambiguous
-	 * regardless of tag, and it is always the visually-last field here.
+	 * the rule.
+	 *
+	 * :last-child of the fields wrapper is the fix, and it had to replace the
+	 * class this once targeted (`--select`): the budget field carries that
+	 * same class, so from the moment there were two range fields the rule
+	 * stripped the divider between them as well. Structural position is what
+	 * is actually meant here, and it stays correct however many fields the
+	 * catalogue earns. It survives the wrapper's display:contents, because
+	 * :last-child reads the DOM, not the layout.
 	 */
-	.iflynepal-hero__finder-field--select {
+	.iflynepal-hero__finder-fields > :last-child {
 		border-right: 0;
 	}
 
@@ -943,7 +1071,8 @@
 			border-bottom: 1px solid var(--iflynepal-line);
 		}
 
-		.iflynepal-hero__finder-field--select {
+		/* Position, not class — same reasoning as the divider rule above. */
+		.iflynepal-hero__finder-fields > :last-child {
 			border-bottom: 0;
 		}
 	}
@@ -4341,6 +4470,15 @@
 
 		.iflynepal-nav-cta {
 			@apply px-[15px] text-[10px] tracking-[.07em];
+		}
+
+		/* The bar is tight at this width; the chat keeps its target size and loses only its ring. */
+		.iflynepal-nav-wa {
+			@apply h-10 w-10;
+		}
+
+		.iflynepal-nav-wa__ico {
+			@apply h-5 w-5;
 		}
 	}
 

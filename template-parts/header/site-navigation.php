@@ -36,6 +36,16 @@ $iflynepal_cta = iflynepal_get_nav_cta_item();
 
 <div class="iflynepal-nav-side">
 
+	<?php
+	/*
+	 * Client-directed: the WhatsApp action sits at the right-hand end of the
+	 * bar, before the call to action rather than after it — the CTA is still
+	 * the header's one primary action, and the chat is the quieter way to ask.
+	 * It draws nothing when no number is configured.
+	 */
+	get_template_part( 'template-parts/header/whatsapp-button' );
+	?>
+
 	<?php if ( $iflynepal_cta ) : ?>
 		<a class="iflynepal-button iflynepal-button--outline iflynepal-nav-cta" href="<?php echo esc_url( $iflynepal_cta['url'] ); ?>">
 			<?php echo esc_html( $iflynepal_cta['title'] ); ?>

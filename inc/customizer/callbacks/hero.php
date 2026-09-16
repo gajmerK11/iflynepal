@@ -462,16 +462,17 @@ function iflynepal_render_hero_trust_points() {
  *
  * @since 1.0.0
  *
- * @return array{types: array[], url: string, durations: array[]} Empty of all
- *               three when the plugin is inactive or nothing is configured.
+ * @return array{types: array[], url: string, durations: array[], budgets: array[]}
+ *               Empty of all four when the plugin is inactive or nothing is
+ *               configured.
  */
 function iflynepal_hero_finder_payload() {
 	static $payload = null;
 
 	if ( null === $payload ) {
 		/**
-		 * Filters the trip types, results URL and duration buckets for the
-		 * hero's picker.
+		 * Filters the trip types, results URL, duration buckets and price
+		 * brackets for the hero's picker.
 		 *
 		 * The theme fires this and renders whatever comes back; it carries no
 		 * opinion of its own about what a package type is. See
@@ -479,7 +480,7 @@ function iflynepal_hero_finder_payload() {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param array{types: array[], url: string, durations: array[]} $payload Empty by default.
+		 * @param array{types: array[], url: string, durations: array[], budgets: array[]} $payload Empty by default.
 		 */
 		$payload = (array) apply_filters(
 			'iflynepal_homepage_trip_finder',
@@ -487,6 +488,7 @@ function iflynepal_hero_finder_payload() {
 				'types'     => array(),
 				'url'       => '',
 				'durations' => array(),
+				'budgets'   => array(),
 			)
 		);
 
@@ -494,6 +496,7 @@ function iflynepal_hero_finder_payload() {
 			'types'     => array(),
 			'url'       => '',
 			'durations' => array(),
+			'budgets'   => array(),
 		);
 	}
 
@@ -526,6 +529,24 @@ function iflynepal_hero_finder_types() {
  */
 function iflynepal_hero_finder_durations() {
 	return iflynepal_hero_finder_payload()['durations'];
+}
+
+/**
+ * The price brackets offered in the picker's "My budget" field.
+ *
+ * Optional in exactly the way the duration buckets are: iflynepal_has_hero_finder()
+ * does not check for it, so a plugin that offers no brackets — because the
+ * catalogue's prices are all the same, or because nothing is priced yet —
+ * leaves the field out and the rest of the picker still works.
+ *
+ * @since 1.0.0
+ *
+ * @return array[] Each with 'key' and 'label'. The 'min'/'max' bounds are the
+ *               plugin's own business; the theme only ever echoes 'key' back in
+ *               the submitted form.
+ */
+function iflynepal_hero_finder_budgets() {
+	return iflynepal_hero_finder_payload()['budgets'];
 }
 
 /**

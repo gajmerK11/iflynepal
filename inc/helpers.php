@@ -79,6 +79,38 @@ function iflynepal_kses_rich( $value ) {
 }
 
 /**
+ * Sanitizes a Customizer checkbox.
+ *
+ * An unchecked box posts nothing at all, so the value arrives as null rather
+ * than as false — hence a cast rather than a comparison.
+ *
+ * @since 1.0.0
+ *
+ * @param mixed $value Raw value.
+ * @return bool Whether the box is ticked.
+ */
+function iflynepal_sanitize_checkbox( $value ) {
+	return (bool) $value;
+}
+
+/**
+ * Sanitizes a telephone number typed the way people write them.
+ *
+ * The stored value keeps whatever the editor typed minus anything that is not
+ * a digit, a plus, a space, a dash or a bracket; the readers that need a dialable
+ * string reduce it to digits themselves. Keeping the shape means the field still
+ * reads as the number the editor recognises when they come back to it.
+ *
+ * @since 1.0.0
+ *
+ * @param string $value Raw value.
+ * @return string Sanitized number.
+ */
+function iflynepal_sanitize_phone( $value ) {
+	return trim( preg_replace( '/[^0-9+()\-\s]/', '', (string) $value ) );
+}
+
+/**
  * Sanitizes a link that may be an on-page anchor rather than a full URL.
  *
  * The hero's first button points at `#explore`, which esc_url_raw would strip,

@@ -140,7 +140,34 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 				 * needed for the redirect to work.
 				 */
 				?>
-				<form class="iflynepal-hero__finder" method="get" action="<?php echo esc_url( iflynepal_hero_finder_url() ); ?>" id="iflynepal-hero-finder">
+				<?php
+				/*
+				 * How many fields the picker is about to draw. The strip's column
+				 * ratio is the design's own and cannot be written for "however
+				 * many there are": with a four-column track list and only two
+				 * fields, the submit button lands in column three and leaves a
+				 * dead column beside it. Both optional fields depend on catalogue
+				 * content — a site with no prices gets no budget field — so the
+				 * count is worked out here and the stylesheet given a class to
+				 * match, rather than guessed at in CSS.
+				 */
+				$iflynepal_finder_durations = iflynepal_hero_finder_durations();
+				$iflynepal_finder_budgets   = function_exists( 'iflynepal_hero_finder_budgets' ) ? iflynepal_hero_finder_budgets() : array();
+				$iflynepal_finder_count     = 1 + ( $iflynepal_finder_durations ? 1 : 0 ) + ( $iflynepal_finder_budgets ? 1 : 0 );
+
+				/*
+				 * ⚠ Whole class names, never 'iflynepal-hero__finder--fields-' .
+				 * $n. Tailwind keeps a rule only when it can see the class as a
+				 * literal string in the scanned files, and a name assembled at
+				 * runtime is not one — written that way first, and the
+				 * four-column rule was dropped from the compiled main.css while
+				 * the same class inside a media query survived, so the strip
+				 * silently fell back to three columns and pushed the submit
+				 * button onto its own row. Caught by measuring the built page.
+				 */
+				$iflynepal_finder_class = 3 === $iflynepal_finder_count ? 'iflynepal-hero__finder--fields-3' : 'iflynepal-hero__finder--fields-2';
+				?>
+				<form class="iflynepal-hero__finder <?php echo esc_attr( $iflynepal_finder_class ); ?>" method="get" action="<?php echo esc_url( iflynepal_hero_finder_url() ); ?>" id="iflynepal-hero-finder">
 					<?php
 					/*
 					 * The white rounded panel is this wrapper's own background, not
@@ -181,7 +208,6 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 						</div>
 					</details>
 
-					<?php $iflynepal_finder_durations = iflynepal_hero_finder_durations(); ?>
 					<?php if ( $iflynepal_finder_durations ) : ?>
 						<?php
 						/*
@@ -219,6 +245,43 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 									<label class="iflynepal-hero__finder-option">
 										<input type="radio" name="days" value="<?php echo esc_attr( $iflynepal_finder_duration['key'] ); ?>">
 										<?php echo esc_html( $iflynepal_finder_duration['label'] ); ?>
+									</label>
+								<?php endforeach; ?>
+							</div>
+						</details>
+					<?php endif; ?>
+
+					<?php if ( $iflynepal_finder_budgets ) : ?>
+						<?php
+						/*
+						 * "My budget", built exactly as "I have" is: one single-choice
+						 * radio group inside a <details>, so the three fields share one
+						 * panel treatment and one behaviour. name="budget" submits a
+						 * single ?budget=... key.
+						 *
+						 * The brackets are the plugin's, derived from what the catalogue
+						 * actually charges rather than typed anywhere, so this field
+						 * appears only once there are prices with a spread worth
+						 * splitting — a picker offering one price bracket is offering no
+						 * choice at all.
+						 */
+						?>
+						<details class="iflynepal-hero__finder-field iflynepal-hero__finder-field--select" id="iflynepal-hero-finder-budget" name="iflynepal-hero-finder-picker">
+							<summary class="iflynepal-hero__finder-trigger">
+								<span class="iflynepal-hero__finder-row">
+									<span>
+										<span class="iflynepal-hero__finder-label"><?php esc_html_e( 'My budget', 'iflynepal' ); ?></span>
+										<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Any price', 'iflynepal' ); ?>"><?php esc_html_e( 'Any price', 'iflynepal' ); ?></span>
+									</span>
+									<svg class="iflynepal-hero__finder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+								</span>
+							</summary>
+
+							<div class="iflynepal-hero__finder-list">
+								<?php foreach ( $iflynepal_finder_budgets as $iflynepal_finder_budget ) : ?>
+									<label class="iflynepal-hero__finder-option">
+										<input type="radio" name="budget" value="<?php echo esc_attr( $iflynepal_finder_budget['key'] ); ?>">
+										<?php echo esc_html( $iflynepal_finder_budget['label'] ); ?>
 									</label>
 								<?php endforeach; ?>
 							</div>
