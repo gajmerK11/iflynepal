@@ -55,10 +55,24 @@ function iflynepal_handle_contact_form() {
 		iflynepal_contact_form_redirect( 'invalid' );
 	}
 
-	$recipient = sanitize_email( iflynepal_contact_plain( 'office_email' ) );
+	/*
+	 * The booking plugin owns the "send form submissions to" setting, and this
+	 * page's messages belong in the same inbox as the enquiries and the Connect
+	 * With Us requests. The theme still stands on its own without the plugin:
+	 * the address published on the Contact page, then the administrator.
+	 */
+	if ( function_exists( 'iflynepal_notification_recipient' ) ) {
+		$recipient = iflynepal_notification_recipient();
+	} else {
+		$recipient = sanitize_email( iflynepal_contact_plain( 'office_email' ) );
+
+		if ( ! is_email( $recipient ) ) {
+			$recipient = sanitize_email( get_option( 'admin_email' ) );
+		}
+	}
 
 	if ( ! is_email( $recipient ) ) {
-		$recipient = sanitize_email( get_option( 'admin_email' ) );
+		iflynepal_contact_form_redirect( 'error' );
 	}
 
 	$subject = sprintf( __( 'Website enquiry from %s', 'iflynepal' ), $name );
