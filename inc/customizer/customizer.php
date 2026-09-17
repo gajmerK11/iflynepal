@@ -36,6 +36,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/authors.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/contact.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/whatsapp.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/visa.php';
 
 /**
  * Registers the theme's panels and sections.
@@ -249,6 +250,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/footer.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/contact.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/whatsapp.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/visa.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
 
@@ -724,6 +726,112 @@ function iflynepal_customizer_controls_assets() {
 					),
 					/* translators: %d: panel number. */
 					'removeLabel' => __( 'Remove panel %d', 'iflynepal' ),
+				),
+			),
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-customizer-visa-lists',
+		IFLYNEPAL_URI . '/assets/js/visa/repeaters.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/visa/repeaters.js' ),
+		true
+	);
+
+	/*
+	 * The Visa Services page's five lists. None of them holds a media control or
+	 * a stored numeral - the service numerals and the step numerals are both
+	 * counted at render time from position - so every field is blank when
+	 * unused, which is what lets the driver decide "in use" by emptiness alone.
+	 */
+	wp_localize_script(
+		'iflynepal-customizer-visa-lists',
+		'iflynepalVisaLists',
+		array(
+			'lists' => array(
+				array(
+					'patterns'    => array(
+						'iflynepal_visa_service_%d_title',
+						'iflynepal_visa_service_%d_description',
+					),
+					'max'         => IFLYNEPAL_VISA_SERVICE_MAX,
+					'anchor'      => 'iflynepal_visa_services_title',
+					'addLabel'    => __( 'Add item', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of items. */
+						__( 'Maximum %d items allowed.', 'iflynepal' ),
+						IFLYNEPAL_VISA_SERVICE_MAX
+					),
+					/* translators: %d: item number. */
+					'removeLabel' => __( 'Remove item %d', 'iflynepal' ),
+				),
+				array(
+					'patterns'    => array(
+						'iflynepal_visa_type_%d_title',
+						'iflynepal_visa_type_%d_description',
+					),
+					'max'         => IFLYNEPAL_VISA_TYPE_MAX,
+					'anchor'      => 'iflynepal_visa_types_title',
+					'addLabel'    => __( 'Add category', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of visa categories. */
+						__( 'Maximum %d categories allowed.', 'iflynepal' ),
+						IFLYNEPAL_VISA_TYPE_MAX
+					),
+					/* translators: %d: category number. */
+					'removeLabel' => __( 'Remove category %d', 'iflynepal' ),
+				),
+				array(
+					'patterns'    => array(
+						'iflynepal_visa_destination_%d_name',
+						'iflynepal_visa_destination_%d_code',
+					),
+					'max'         => IFLYNEPAL_VISA_DESTINATION_MAX,
+					'anchor'      => 'iflynepal_visa_destinations_note',
+					'addLabel'    => __( 'Add destination', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of destinations. */
+						__( 'Maximum %d destinations allowed.', 'iflynepal' ),
+						IFLYNEPAL_VISA_DESTINATION_MAX
+					),
+					/* translators: %d: destination number. */
+					'removeLabel' => __( 'Remove destination %d', 'iflynepal' ),
+				),
+				array(
+					'patterns'    => array(
+						'iflynepal_visa_step_%d_title',
+						'iflynepal_visa_step_%d_description',
+					),
+					'max'         => IFLYNEPAL_VISA_STEP_MAX,
+					'anchor'      => 'iflynepal_visa_process_title',
+					'addLabel'    => __( 'Add step', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of steps. */
+						__( 'Maximum %d steps allowed.', 'iflynepal' ),
+						IFLYNEPAL_VISA_STEP_MAX
+					),
+					/* translators: %d: step number. */
+					'removeLabel' => __( 'Remove step %d', 'iflynepal' ),
+				),
+				array(
+					'patterns'    => array(
+						'iflynepal_visa_package_%d_name',
+						'iflynepal_visa_package_%d_tagline',
+						'iflynepal_visa_package_%d_badge',
+						'iflynepal_visa_package_%d_carries',
+						'iflynepal_visa_package_%d_features',
+					),
+					'max'         => IFLYNEPAL_VISA_PACKAGE_MAX,
+					'anchor'      => 'iflynepal_visa_packages_title',
+					'addLabel'    => __( 'Add package', 'iflynepal' ),
+					'maxMessage'  => sprintf(
+						/* translators: %d: maximum number of packages. */
+						__( 'Maximum %d packages allowed.', 'iflynepal' ),
+						IFLYNEPAL_VISA_PACKAGE_MAX
+					),
+					/* translators: %d: package number. */
+					'removeLabel' => __( 'Remove package %d', 'iflynepal' ),
 				),
 			),
 		)

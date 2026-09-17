@@ -93,7 +93,7 @@ function iflynepal_get_nav_cta_item() {
  * @return bool
  */
 function iflynepal_has_hero() {
-	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie() || iflynepal_has_privacy() || iflynepal_has_sustainability() || iflynepal_has_articles() || iflynepal_has_article() || iflynepal_has_blogs() || iflynepal_has_blog() || iflynepal_has_news() || iflynepal_has_news_story() || iflynepal_has_authors_archive();
+	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_visa() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie() || iflynepal_has_privacy() || iflynepal_has_sustainability() || iflynepal_has_articles() || iflynepal_has_article() || iflynepal_has_blogs() || iflynepal_has_blog() || iflynepal_has_news() || iflynepal_has_news_story() || iflynepal_has_authors_archive();
 
 	/**
 	 * Filters whether this request renders a hero.
@@ -251,6 +251,17 @@ function iflynepal_has_csr() {
 }
 
 /**
+ * Whether the current request renders the Visa Services page template.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_visa() {
+	return is_page_template( 'page-visa-services.php' );
+}
+
+/**
  * Whether the current request renders the Contact Us page template.
  *
  * @since 1.0.0
@@ -391,6 +402,10 @@ function iflynepal_current_hero_image_url() {
 
 	if ( iflynepal_has_terms() ) {
 		return iflynepal_terms_hero_image_url();
+	}
+
+	if ( iflynepal_has_visa() ) {
+		return iflynepal_visa_hero_image_url();
 	}
 
 	if ( iflynepal_has_contact() ) {

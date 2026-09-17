@@ -7769,6 +7769,632 @@
 			box-shadow: none;
 		}
 	}
+
+	/* ======================================================================
+	   Visa Services page
+
+	   The same furniture as the CSR page — a page hero, a shell, centred
+	   section heads, sections alternating between white and the mist band —
+	   carrying content the rest of the site does not have: a numbered row, a
+	   tiled grid of countries, a ruled list of steps and two package cards.
+
+	   Nothing here invents a second palette. The design this was drawn from
+	   came in its own navy/paper/rust, and every one of those has been mapped
+	   onto the theme's existing tokens: the rust accents are the theme's gold,
+	   the paper ground is the mist band, and the corner brackets that design
+	   used to mark a panel are the theme's hairline rules and rounded cards.
+	   ====================================================================== */
+
+	.iflynepal-visa-section {
+		padding: 96px 0;
+		scroll-margin-top: 90px;
+	}
+
+	.iflynepal-visa-section__inner {
+		@apply relative mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		z-index: 1;
+	}
+
+	/* ----------------------------------------------------- section heading */
+
+	.iflynepal-visa-head {
+		@apply mx-auto text-center;
+		max-width: 900px;
+		margin-bottom: 52px;
+	}
+
+	.iflynepal-visa-head__kicker {
+		@apply font-extrabold uppercase;
+		margin: 0 0 14px;
+		color: var(--iflynepal-navy);
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	/*
+	 * The same curve the CSR heads use, for the same reason: at the design's
+	 * larger ceiling the longest default heading here — "How your application
+	 * moves from blank form to submitted file" — wraps into an orphan.
+	 * `text-wrap: balance` is the safety net under it for anything an editor
+	 * writes longer.
+	 */
+	.iflynepal-visa-head__title {
+		@apply m-0 font-display font-semibold;
+		color: var(--iflynepal-ink);
+		font-size: clamp(32px, 4vw, 52px);
+		line-height: 1.08;
+		letter-spacing: -0.03em;
+		text-wrap: balance;
+	}
+
+	/* ------------------------------------------------- what we handle */
+
+	.iflynepal-visa-services {
+		@apply grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0;
+	}
+
+	/*
+	 * Divided by a hairline rather than carded. Three cards here would compete
+	 * with the package cards further down the same page, and these three are
+	 * one statement in three parts rather than three things to choose between.
+	 */
+	.iflynepal-visa-service {
+		padding: 4px 34px;
+		border-left: 1px solid var(--iflynepal-line);
+	}
+
+	.iflynepal-visa-service:first-child {
+		padding-left: 0;
+		border-left: none;
+	}
+
+	.iflynepal-visa-service:last-child {
+		padding-right: 0;
+	}
+
+	.iflynepal-visa-service__num {
+		@apply block font-accent italic;
+		margin-bottom: 12px;
+		color: var(--iflynepal-gold);
+		font-size: 30px;
+		font-weight: 600;
+		line-height: 1;
+	}
+
+	.iflynepal-visa-service__title {
+		@apply m-0 font-display font-semibold;
+		margin-bottom: 12px;
+		color: var(--iflynepal-ink);
+		font-size: 20px;
+		line-height: 1.25;
+		letter-spacing: -0.015em;
+	}
+
+	.iflynepal-visa-service__desc {
+		margin: 0;
+		color: var(--iflynepal-muted);
+		font-size: 16px;
+		line-height: 1.8;
+	}
+
+	/* ------------------------------------------------------ visa categories */
+
+	.iflynepal-visa-types {
+		@apply grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 20px;
+	}
+
+	.iflynepal-visa-type {
+		@apply relative bg-white;
+		padding: 28px 26px 30px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 20px;
+		box-shadow: 0 10px 30px rgba(4, 26, 64, 0.06);
+		transition: transform var(--iflynepal-card-fall) var(--iflynepal-ease-card-out),
+			box-shadow var(--iflynepal-card-fall) var(--iflynepal-ease-card-out);
+	}
+
+	/*
+	 * The gold cap the original design drew as a corner bracket. A top border
+	 * inside the radius reads as the same mark without the two absolutely
+	 * positioned pseudo-elements that bracket needed, and it survives a card
+	 * growing taller than its neighbours.
+	 */
+	.iflynepal-visa-type::before {
+		content: '';
+		@apply absolute;
+		top: -1px;
+		left: 26px;
+		width: 42px;
+		height: 3px;
+		border-radius: 0 0 3px 3px;
+		background: var(--iflynepal-gold);
+	}
+
+	.iflynepal-visa-type:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 20px 44px rgba(4, 26, 64, 0.12);
+		transition-duration: var(--iflynepal-card-lift);
+		transition-timing-function: var(--iflynepal-ease-card);
+	}
+
+	.iflynepal-visa-type__title {
+		@apply m-0 font-display font-semibold;
+		margin-bottom: 10px;
+		color: var(--iflynepal-ink);
+		font-size: 17px;
+		line-height: 1.3;
+		letter-spacing: -0.01em;
+	}
+
+	.iflynepal-visa-type__desc {
+		margin: 0;
+		color: var(--iflynepal-muted);
+		font-size: 15px;
+		line-height: 1.7;
+	}
+
+	/* --------------------------------------------------------- destinations */
+
+	/*
+	 * One-pixel gaps over a ruled ground, so the grid reads as a single tiled
+	 * block rather than as a row of separate chips — the arrangement the design
+	 * uses, and the one that makes ten countries scan as a list of coverage
+	 * rather than ten things to click.
+	 */
+	.iflynepal-visa-dests {
+		@apply grid overflow-hidden;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		gap: 1px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 20px;
+		background: var(--iflynepal-line);
+	}
+
+	.iflynepal-visa-dest {
+		@apply bg-white text-center;
+		padding: 22px 14px;
+	}
+
+	.iflynepal-visa-dest__code {
+		@apply block font-extrabold uppercase;
+		margin-bottom: 6px;
+		color: var(--iflynepal-gold);
+		font-size: 11px;
+		letter-spacing: 0.14em;
+	}
+
+	.iflynepal-visa-dest__name {
+		@apply block font-display font-medium;
+		color: var(--iflynepal-navy-deep);
+		font-size: 15px;
+		line-height: 1.35;
+	}
+
+	.iflynepal-visa-dests__note {
+		@apply mx-auto text-center;
+		margin-top: 22px;
+		margin-bottom: 0;
+		max-width: 620px;
+		color: var(--iflynepal-muted);
+		font-size: 15px;
+		line-height: 1.7;
+	}
+
+	.iflynepal-visa-dests__note a {
+		color: var(--iflynepal-navy);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	/* ------------------------------------------------------------- process */
+
+	/*
+	 * A counter rather than a stored numeral: the markup is an <ol>, so the
+	 * numbers are the list's own and a step removed in the Customizer
+	 * renumbers the rest with nothing to recount.
+	 */
+	.iflynepal-visa-steps {
+		@apply list-none;
+		counter-reset: iflynepal-visa-step;
+		margin: 0 auto;
+		padding: 0;
+		max-width: 940px;
+	}
+
+	/*
+	 * Column gap only. A `gap` shorthand here would also open a row gap between
+	 * the heading and its paragraph, which already have the heading's own
+	 * margin between them — the pair would read as two separate lines rather
+	 * than as one step.
+	 */
+	.iflynepal-visa-step {
+		@apply relative grid;
+		grid-template-columns: 74px minmax(0, 1fr);
+		column-gap: 22px;
+		row-gap: 0;
+		padding: 26px 0;
+		border-top: 1px solid var(--iflynepal-line);
+	}
+
+	.iflynepal-visa-step:last-child {
+		border-bottom: 1px solid var(--iflynepal-line);
+	}
+
+	/*
+	 * The numeral is a grid item like the two elements after it, so all three
+	 * are placed by hand. Left implicit, the heading and the paragraph fill the
+	 * two columns of row one and row two — which puts the paragraph under the
+	 * numeral, in a 74px column, one word per line. Spanning the numeral down
+	 * both rows is what keeps the copy in one column beside it.
+	 */
+	.iflynepal-visa-step::before {
+		counter-increment: iflynepal-visa-step;
+		content: counter( iflynepal-visa-step, decimal-leading-zero );
+		@apply font-accent italic;
+		grid-column: 1;
+		grid-row: 1 / span 2;
+		color: var(--iflynepal-navy);
+		font-size: 34px;
+		font-weight: 600;
+		line-height: 1;
+		opacity: 0.45;
+	}
+
+	.iflynepal-visa-step__title {
+		@apply m-0 font-display font-semibold;
+		grid-column: 2;
+		grid-row: 1;
+		margin-bottom: 8px;
+		color: var(--iflynepal-ink);
+		font-size: 19px;
+		line-height: 1.3;
+		letter-spacing: -0.015em;
+	}
+
+	.iflynepal-visa-step__desc {
+		grid-column: 2;
+		grid-row: 2;
+		margin: 0;
+		color: var(--iflynepal-muted);
+		font-size: 16px;
+		line-height: 1.8;
+	}
+
+	/* ------------------------------------------------------------ packages */
+
+	/*
+	 * `align-items: start` so a short package does not stretch to the height of
+	 * a long one — two cards of different heights is honest about them holding
+	 * different amounts, and a stretched one puts a stripe of empty card under
+	 * its last tick.
+	 */
+	.iflynepal-visa-packages {
+		@apply grid items-start;
+		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+		gap: 28px;
+	}
+
+	.iflynepal-visa-package {
+		@apply relative bg-white;
+		padding: 36px 34px 38px;
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 30px;
+		box-shadow: 0 14px 40px rgba(4, 26, 64, 0.07);
+	}
+
+	/*
+	 * The badge sits over the card's top edge, so the card needs room for it
+	 * above the name. Given to the featured card only: an unbadged card with
+	 * that padding has a visible gap where nothing is.
+	 */
+	.iflynepal-visa-package--featured {
+		border-color: rgba(227, 180, 99, 0.7);
+		box-shadow: 0 22px 60px rgba(4, 26, 64, 0.13);
+	}
+
+	.iflynepal-visa-package__badge {
+		@apply absolute font-extrabold uppercase;
+		top: -13px;
+		right: 30px;
+		padding: 6px 14px;
+		border-radius: 999px;
+		background: var(--iflynepal-gold);
+		color: var(--iflynepal-navy-deep);
+		font-size: 11px;
+		letter-spacing: 0.12em;
+	}
+
+	.iflynepal-visa-package__name {
+		@apply m-0 font-display font-semibold;
+		color: var(--iflynepal-ink);
+		font-size: 26px;
+		line-height: 1.15;
+		letter-spacing: -0.02em;
+	}
+
+	.iflynepal-visa-package__tagline {
+		margin: 8px 0 22px;
+		color: var(--iflynepal-muted);
+		font-size: 15px;
+		line-height: 1.7;
+	}
+
+	.iflynepal-visa-package__list {
+		@apply list-none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.iflynepal-visa-package__item {
+		@apply relative;
+		padding: 11px 0 11px 30px;
+		border-top: 1px solid rgba(5, 69, 167, 0.1);
+		color: var(--iflynepal-ink);
+		font-size: 15px;
+		line-height: 1.6;
+	}
+
+	.iflynepal-visa-package__item:first-child {
+		border-top: none;
+	}
+
+	/*
+	 * Drawn rather than typed. A tick character in the markup is content a
+	 * screen reader reads out before every line, and an editor can delete it
+	 * out of a feature they are rewording.
+	 */
+	.iflynepal-visa-package__item::before {
+		content: '';
+		@apply absolute;
+		top: 18px;
+		left: 4px;
+		width: 12px;
+		height: 7px;
+		border-left: 2px solid var(--iflynepal-gold);
+		border-bottom: 2px solid var(--iflynepal-gold);
+		transform: rotate(-45deg);
+	}
+
+	/* The carry-over line points at another package, so it is marked, not ticked. */
+	.iflynepal-visa-package__item--carries {
+		color: var(--iflynepal-navy);
+		font-weight: 600;
+	}
+
+	.iflynepal-visa-package__item--carries::before {
+		top: 50%;
+		left: 2px;
+		width: 14px;
+		height: 14px;
+		border: none;
+		background:
+			linear-gradient(var(--iflynepal-navy), var(--iflynepal-navy)) center / 14px 2px no-repeat,
+			linear-gradient(var(--iflynepal-navy), var(--iflynepal-navy)) center / 2px 14px no-repeat;
+		transform: translateY(-50%);
+	}
+
+	/* -------------------------------------------------------- fee notice */
+
+	.iflynepal-visa-notice {
+		padding: 84px 0;
+		background: var(--iflynepal-navy-deep);
+	}
+
+	.iflynepal-visa-notice__panel {
+		@apply mx-auto;
+		max-width: 900px;
+		padding: 34px 38px;
+		border: 1px solid rgba(227, 180, 99, 0.34);
+		border-radius: 24px;
+		background: rgba(255, 255, 255, 0.04);
+	}
+
+	.iflynepal-visa-notice__title {
+		@apply m-0 font-display font-semibold;
+		margin-bottom: 14px;
+		color: var(--iflynepal-gold-soft);
+		font-size: 20px;
+		line-height: 1.25;
+		letter-spacing: -0.01em;
+	}
+
+	.iflynepal-visa-notice__body p {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.76);
+		font-size: 15px;
+		line-height: 1.85;
+	}
+
+	.iflynepal-visa-notice__body p + p {
+		margin-top: 14px;
+	}
+
+	/* ------------------------------------------------- closing invitation */
+
+	.iflynepal-visa-cta {
+		padding: 96px 0;
+	}
+
+	.iflynepal-visa-cta__panel {
+		@apply grid items-center;
+		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+		gap: clamp(32px, 5vw, 68px);
+		padding: clamp(38px, 5vw, 60px);
+		border-radius: 30px;
+		background: var(--iflynepal-navy);
+		box-shadow: var(--iflynepal-shadow);
+	}
+
+	.iflynepal-visa-cta__title {
+		@apply m-0 font-display font-semibold;
+		color: #fff;
+		font-size: clamp(30px, 3.6vw, 46px);
+		line-height: 1.08;
+		letter-spacing: -0.03em;
+		text-wrap: balance;
+	}
+
+	.iflynepal-visa-cta__title em {
+		@apply font-accent not-italic;
+		color: var(--iflynepal-gold-soft);
+		font-style: italic;
+		font-weight: 600;
+	}
+
+	.iflynepal-visa-cta__lead {
+		margin: 16px 0 0;
+		max-width: 620px;
+		color: rgba(255, 255, 255, 0.78);
+		font-size: 16px;
+		line-height: 1.8;
+	}
+
+	.iflynepal-visa-cta__actions {
+		@apply flex flex-wrap;
+		margin-top: 26px;
+		gap: 14px;
+	}
+
+	.iflynepal-visa-contact {
+		@apply grid;
+		gap: 16px;
+		padding-left: clamp(0px, 2vw, 28px);
+		border-left: 1px solid rgba(255, 255, 255, 0.16);
+	}
+
+	.iflynepal-visa-contact__line {
+		@apply grid;
+		gap: 3px;
+	}
+
+	.iflynepal-visa-contact__label {
+		@apply font-extrabold uppercase;
+		color: var(--iflynepal-gold-soft);
+		font-size: 11px;
+		letter-spacing: 0.14em;
+	}
+
+	.iflynepal-visa-contact__value,
+	.iflynepal-visa-contact__value a {
+		color: #fff;
+		font-size: 15px;
+		line-height: 1.6;
+		text-decoration: none;
+	}
+
+	.iflynepal-visa-contact__value a:hover,
+	.iflynepal-visa-contact__value a:focus-visible {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	/* ------------------------------------------------------------ narrower */
+
+	@media (max-width: 1100px) {
+		.iflynepal-visa-dests {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+
+		.iflynepal-visa-types {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 900px) {
+		.iflynepal-visa-section,
+		.iflynepal-visa-cta {
+			padding: 68px 0;
+		}
+
+		.iflynepal-visa-head {
+			margin-bottom: 38px;
+		}
+
+		/*
+		 * The dividing rule turns with the axis: three columns split by vertical
+		 * hairlines become three rows split by horizontal ones, rather than a
+		 * stack with a stray line down its left edge.
+		 */
+		.iflynepal-visa-services {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 28px;
+		}
+
+		.iflynepal-visa-service {
+			padding: 26px 0 0;
+			border-left: none;
+			border-top: 1px solid var(--iflynepal-line);
+		}
+
+		.iflynepal-visa-service:first-child {
+			padding-top: 0;
+			border-top: none;
+		}
+
+		.iflynepal-visa-cta__panel {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.iflynepal-visa-contact {
+			padding-left: 0;
+			padding-top: 24px;
+			border-left: none;
+			border-top: 1px solid rgba(255, 255, 255, 0.16);
+		}
+	}
+
+	@media (max-width: 680px) {
+		.iflynepal-visa-dests {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.iflynepal-visa-types {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.iflynepal-visa-packages {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		/*
+		 * The numeral comes off its own column and sits above the step, so the
+		 * copy keeps the full width of a narrow screen instead of being squeezed
+		 * into what is left beside a 74px gutter.
+		 */
+		.iflynepal-visa-step {
+			grid-template-columns: minmax(0, 1fr);
+			row-gap: 6px;
+		}
+
+		/*
+		 * One column, so the hand placement above is undone rather than left to
+		 * point at a column two that no longer exists.
+		 */
+		.iflynepal-visa-step::before {
+			grid-row: auto;
+			font-size: 26px;
+		}
+
+		.iflynepal-visa-step__title,
+		.iflynepal-visa-step__desc {
+			grid-column: 1;
+			grid-row: auto;
+		}
+
+		.iflynepal-visa-notice__panel {
+			padding: 26px 22px;
+		}
+
+		.iflynepal-visa-package {
+			padding: 32px 24px 34px;
+		}
+	}
+
 }
 
 @keyframes iflynepal-team-bounce {
