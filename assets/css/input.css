@@ -209,7 +209,20 @@
 		transition: min-height 0.35s var(--iflynepal-ease);
 	}
 
-	.site-header.is-docked {
+	/*
+	 * Docked: solid on scroll over a hero, and from the first pixel on a
+	 * template that has no hero for it to be transparent over. The bar is white
+	 * text throughout, so without this a template like Not Found paints a white
+	 * wordmark and white links onto white paper — a header that is there but
+	 * cannot be seen.
+	 *
+	 * Written as one rule rather than a class the templates opt into: the
+	 * condition is exactly "no hero", which the body class already answers, and
+	 * a second switch beside it is a second thing to forget on the next
+	 * template.
+	 */
+	.site-header.is-docked,
+	body:not(.has-iflynepal-hero) .site-header {
 		background: var(--iflynepal-navy);
 		box-shadow: 0 12px 32px rgba(4, 26, 64, 0.32);
 	}
@@ -224,6 +237,32 @@
 	 */
 	body:not(.has-iflynepal-hero) .site-main {
 		padding-top: 92px;
+	}
+
+	/*
+	 * Signed in, core pushes the document down by the admin bar's height with a
+	 * margin on the root element. A fixed element is positioned against the
+	 * viewport rather than the document, so that margin does not move this
+	 * header: it stays at the very top with its first 32px behind the bar —
+	 * clipping the wordmark — while the content below it starts 32px lower than
+	 * the header's own bottom edge, which is the white stripe that leaves.
+	 *
+	 * Moving the header is the fix rather than padding the content, because
+	 * the gap is only the symptom: padding the content would push the first
+	 * section clear and leave the wordmark clipped. With the header moved, the
+	 * offset the rule above applies is correct again at both widths, so it is
+	 * not touched.
+	 *
+	 * The two heights are core's own: 32px, and 46px below 783px.
+	 */
+	body.admin-bar .site-header {
+		top: 32px;
+	}
+
+	@media (max-width: 782px) {
+		body.admin-bar .site-header {
+			top: 46px;
+		}
 	}
 
 	.iflynepal-brand {
@@ -777,6 +816,21 @@
 	}
 
 	/*
+	 * The same outline on a light ground. The one above is drawn for the
+	 * photograph behind the header and disappears on white, and the secondary
+	 * action beside a gold primary has to sit on the page's own paper.
+	 */
+	.iflynepal-button--line {
+		@apply bg-white text-navy;
+		border-color: var(--iflynepal-line);
+	}
+
+	.iflynepal-button--line:hover {
+		border-color: rgba(5, 69, 167, 0.34);
+		box-shadow: 0 12px 28px rgba(4, 26, 64, 0.14);
+	}
+
+	/*
 	 * The design puts an arrow after the gold label. A core Button block holds
 	 * text only, so the glyph is drawn here as a masked shape tinted with
 	 * currentColor rather than as inline SVG the client could delete.
@@ -1243,6 +1297,7 @@
 	.iflynepal-team-section__heading .underline,
 	.iflynepal-contact-head .underline,
 	.iflynepal-legal-head__title .underline,
+	.iflynepal-404__title .underline,
 	.iflynepal-reasons__title .underline {
 		@apply relative inline-block whitespace-nowrap;
 		text-decoration-line: none;
@@ -1270,6 +1325,7 @@
 	.iflynepal-team-section__heading .underline::after,
 	.iflynepal-contact-head .underline::after,
 	.iflynepal-legal-head__title .underline::after,
+	.iflynepal-404__title .underline::after,
 	.iflynepal-reasons__title .underline::after {
 		content: '';
 		@apply pointer-events-none absolute block origin-left opacity-[.85];
@@ -4390,18 +4446,24 @@
 		}
 
 		.iflynepal-nav-links {
-			@apply absolute left-5 right-5 hidden flex-col items-start rounded-[18px] p-5;
-			top: calc(100% + 8px);
-			background: var(--iflynepal-navy);
+			@apply invisible fixed inset-y-0 left-0 flex w-4/5 flex-col items-start overflow-y-auto p-5;
+			max-width: 360px;
+			background: rgba(5, 69, 167, 0.88);
+			backdrop-filter: blur(14px);
 			box-shadow: var(--iflynepal-shadow);
+			transform: translateX(-100%);
+			transition:
+				transform 0.6s var(--iflynepal-ease),
+				visibility 0.6s var(--iflynepal-ease);
 		}
 
 		.iflynepal-nav-links.is-open {
-			@apply flex;
+			@apply visible;
+			transform: translateX(0);
 		}
 
 		.iflynepal-menu {
-			@apply flex-col items-start gap-[18px] text-[15px] normal-case tracking-[.02em];
+			@apply flex-col items-start gap-[18px] text-[17px] normal-case tracking-[.02em];
 		}
 
 		/*
@@ -4415,8 +4477,8 @@
 		}
 
 		.iflynepal-nav-panel {
-			@apply static hidden w-full translate-x-0 grid-flow-row opacity-100;
-			margin-top: 10px;
+			@apply static grid w-full translate-x-0 grid-flow-row opacity-0;
+			margin-top: 0;
 			padding: 0 0 0 12px;
 			border: 0;
 			border-left: 1px solid rgba(255, 255, 255, 0.18);
@@ -4427,12 +4489,23 @@
 			grid-template-columns: minmax(0, 1fr);
 			grid-template-rows: none;
 			transform: none;
-			transition: none;
+			max-height: 0;
+			overflow: hidden;
+			transition:
+				max-height 0.7s var(--iflynepal-ease),
+				opacity 0.5s ease,
+				margin-top 0.7s var(--iflynepal-ease);
 		}
 
 		.iflynepal-nav-item.is-open > .iflynepal-nav-panel {
-			@apply grid;
+			@apply opacity-100;
+			margin-top: 10px;
+			max-height: 480px;
 			transform: none;
+			transition:
+				max-height 0.7s var(--iflynepal-ease),
+				opacity 0.5s ease 0.1s,
+				margin-top 0.7s var(--iflynepal-ease);
 		}
 
 		/* Both are the floating panel's furniture. */
@@ -8392,6 +8465,219 @@
 
 		.iflynepal-visa-package {
 			padding: 32px 24px 34px;
+		}
+	}
+
+	/* ======================================================================
+	   Not Found (404)
+
+	   One band rather than a page of sections, and the theme's furniture
+	   throughout: the mist wash with its contour drawing behind it, the navy
+	   kicker, the display heading with its inked underline, the gold primary
+	   action. Nothing here is drawn for this page alone except the numeral,
+	   which stands in for an illustration until one is uploaded.
+
+	   Sized so the heading, both buttons and all three signposts are above
+	   the fold on a laptop. A visitor on this page is already lost, and a way
+	   out they have to scroll to is a way out they will not find.
+	   ====================================================================== */
+
+	.iflynepal-404 {
+		padding: 92px 0 104px;
+	}
+
+	.iflynepal-404__inner {
+		@apply relative mx-auto grid items-center;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+		gap: clamp(32px, 6vw, 80px);
+		z-index: 1;
+	}
+
+	.iflynepal-404__copy {
+		max-width: 680px;
+	}
+
+	.iflynepal-404__kicker {
+		@apply font-extrabold uppercase;
+		margin: 0 0 14px;
+		color: var(--iflynepal-navy);
+		font-size: 12px;
+		letter-spacing: 0.16em;
+	}
+
+	/*
+	 * The same curve the other page heads use. `text-wrap: balance` is the
+	 * safety net under it: this heading is the one an editor is most likely to
+	 * rewrite, and a two-word orphan on a page about being lost reads badly.
+	 */
+	.iflynepal-404__title {
+		@apply m-0 font-display font-semibold;
+		color: var(--iflynepal-ink);
+		font-size: clamp(34px, 5vw, 58px);
+		line-height: 1.06;
+		letter-spacing: -0.03em;
+		text-wrap: balance;
+	}
+
+	.iflynepal-404__title em {
+		@apply font-accent not-italic;
+		color: var(--iflynepal-navy);
+		font-style: italic;
+		font-weight: 600;
+	}
+
+	.iflynepal-404__lead {
+		margin: 20px 0 0;
+		max-width: 560px;
+		color: var(--iflynepal-muted);
+		font-size: 17px;
+		line-height: 1.8;
+	}
+
+	.iflynepal-404__actions {
+		@apply flex flex-wrap;
+		margin-top: 30px;
+		gap: 14px;
+	}
+
+	/*
+	 * Hidden until assets/js/not-found/actions.js confirms there is a page to
+	 * go back to. Left visible with scripting off, it would be a control that
+	 * does nothing on the one page a visitor is already confused by.
+	 */
+	.iflynepal-404__back {
+		@apply hidden;
+	}
+
+	.iflynepal-has-history .iflynepal-404__back {
+		@apply inline-flex;
+	}
+
+	/*
+	 * Signposts, ruled rather than carded. Three cards here would read as three
+	 * offers to choose between; these are directions, and a hairline list is
+	 * how the rest of the site draws a set of those.
+	 */
+	.iflynepal-404__links {
+		@apply list-none;
+		margin: 42px 0 0;
+		padding: 0;
+		max-width: 520px;
+	}
+
+	.iflynepal-404__link {
+		padding: 18px 0;
+		border-top: 1px solid var(--iflynepal-line);
+	}
+
+	.iflynepal-404__link:last-child {
+		border-bottom: 1px solid var(--iflynepal-line);
+	}
+
+	/*
+	 * The arrow is the theme's own masked glyph rather than inline SVG, the
+	 * same as the gold button's, so the two move the same distance on the same
+	 * curve and there is one arrow shape on the site.
+	 */
+	.iflynepal-404__link-label {
+		@apply inline-flex items-center font-semibold;
+		gap: 10px;
+		color: var(--iflynepal-navy);
+		font-size: 16px;
+		line-height: 1.5;
+		text-decoration: none;
+	}
+
+	.iflynepal-404__link-label::after {
+		content: '';
+		@apply inline-block h-[15px] w-[15px] shrink-0;
+		background-color: currentColor;
+		-webkit-mask: var(--iflynepal-arrow) center / contain no-repeat;
+		mask: var(--iflynepal-arrow) center / contain no-repeat;
+		transition: transform 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-404__link-label:hover,
+	.iflynepal-404__link-label:focus-visible {
+		color: var(--iflynepal-navy-deep);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+
+	.iflynepal-404__link-label:hover::after,
+	.iflynepal-404__link-label:focus-visible::after {
+		transform: translateX(4px);
+	}
+
+	.iflynepal-404__link-desc {
+		margin: 4px 0 0;
+		color: var(--iflynepal-muted);
+		font-size: 15px;
+		line-height: 1.7;
+	}
+
+	/* ------------------------------------------------------- the right side */
+
+	.iflynepal-404__figure {
+		@apply grid place-items-center;
+	}
+
+	/*
+	 * The numeral in the serif accent face, washed back so it reads as paper
+	 * texture rather than as a second headline competing with the real one
+	 * beside it.
+	 */
+	.iflynepal-404__numeral {
+		@apply m-0 font-accent italic;
+		color: var(--iflynepal-navy);
+		font-size: clamp(140px, 16vw, 240px);
+		font-weight: 600;
+		line-height: 0.85;
+		letter-spacing: -0.04em;
+		opacity: 0.16;
+		user-select: none;
+	}
+
+	/* -------------------------------------------------------------- narrower */
+
+	@media (max-width: 900px) {
+		.iflynepal-404 {
+			padding: 84px 0 76px;
+		}
+
+		/*
+		 * The numeral goes above the copy rather than below it: stacked the
+		 * other way it is a scroll past everything useful to reach a
+		 * decoration, and it is the piece that signals "404" at a glance.
+		 */
+		.iflynepal-404__inner {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 28px;
+		}
+
+		.iflynepal-404__figure {
+			order: -1;
+			justify-items: start;
+		}
+
+		.iflynepal-404__numeral {
+			font-size: clamp(110px, 28vw, 170px);
+		}
+
+		.iflynepal-404__links {
+			margin-top: 34px;
+			max-width: none;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.iflynepal-404__actions .iflynepal-button {
+			@apply w-full;
+		}
+
+		.iflynepal-has-history .iflynepal-404__back {
+			@apply flex;
 		}
 	}
 

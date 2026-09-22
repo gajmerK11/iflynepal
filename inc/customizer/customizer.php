@@ -37,6 +37,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/footer.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/contact.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/whatsapp.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/visa.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/404.php';
 
 /**
  * Registers the theme's panels and sections.
@@ -251,6 +252,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/contact.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/whatsapp.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/visa.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/404.php';
 }
 add_action( 'customize_register', 'iflynepal_customize_register' );
 

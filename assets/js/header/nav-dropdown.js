@@ -33,17 +33,30 @@
 	/**
 	 * Opens or closes one dropdown.
 	 *
+	 * The panel's max-height is set from its own scrollHeight rather than a
+	 * fixed guess in CSS. A fixed cap large enough for every menu leaves most
+	 * of the collapse transition animating past empty space before the real
+	 * content height is even reached, which is what made it look instant. Set
+	 * from the element's own height, expand and collapse cover the same
+	 * distance and the CSS transition plays out over its full duration both
+	 * ways.
+	 *
 	 * @param {HTMLElement} item The nav item.
 	 * @param {boolean}     open Whether it should be open.
 	 * @return {void}
 	 */
 	function setOpen( item, open ) {
 		var trigger = item.querySelector( '.iflynepal-nav-trigger' );
+		var panel = item.querySelector( '.iflynepal-nav-panel' );
 
 		item.classList.toggle( 'is-open', open );
 
 		if ( trigger ) {
 			trigger.setAttribute( 'aria-expanded', String( open ) );
+		}
+
+		if ( panel ) {
+			panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0px';
 		}
 	}
 

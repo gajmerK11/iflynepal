@@ -262,6 +262,21 @@ function iflynepal_has_visa() {
 }
 
 /**
+ * Whether the current request renders the Not Found (404) template.
+ *
+ * A condition rather than a bare is_404() at each call site, for the same
+ * reason as the templates above: what counts as "this page" is decided in one
+ * place.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_404() {
+	return is_404();
+}
+
+/**
  * Whether the current request renders the Contact Us page template.
  *
  * @since 1.0.0

@@ -201,6 +201,11 @@
 				<element value="iflynepal_render_visa_cta_lead"/>
 				<element value="iflynepal_render_visa_cta_button"/>
 				<element value="iflynepal_render_visa_contact_lines"/>
+				<element value="iflynepal_render_404_kicker"/>
+				<element value="iflynepal_render_404_title"/>
+				<element value="iflynepal_render_404_lead"/>
+				<element value="iflynepal_render_404_actions"/>
+				<element value="iflynepal_render_404_links"/>
 				<element value="iflynepal_render_terms_index"/>
 				<element value="iflynepal_render_terms_clause_head"/>
 				<element value="iflynepal_render_terms_policy_link"/>
