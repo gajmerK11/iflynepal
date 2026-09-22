@@ -445,7 +445,7 @@
 	 * the 14px gap between the trigger and the panel, so the cursor can travel
 	 * down into the panel without passing over dead space and closing it.
 	 */
-	@media (min-width: 1081px) {
+	@media (min-width: 900px) {
 		.iflynepal-nav-item::after {
 			content: '';
 			@apply absolute left-1/2 w-[540px];
@@ -1079,6 +1079,8 @@
 
 		.iflynepal-hero__finder-submit.iflynepal-button {
 			width: 100%;
+			padding-top: 16px;
+			padding-bottom: 16px;
 		}
 	}
 
@@ -4435,7 +4437,44 @@
 	}
 
 	/* ------------------------------------------------------------ responsive */
-	@media (max-width: 1080px) {
+
+	/*
+	 * A laptop at 1024px is still a desktop, not a phone with a bigger screen —
+	 * the hamburger only takes over below 900px (next block down). Here the
+	 * link row, the CTA and the WhatsApp button share a narrower bar by
+	 * tightening gaps and type, not by collapsing anything.
+	 */
+	@media (max-width: 1120px) {
+		.iflynepal-nav {
+			gap: 16px;
+		}
+
+		.iflynepal-menu {
+			@apply gap-5 text-[12px];
+		}
+
+		.iflynepal-nav-trigger {
+			gap: 5px;
+		}
+
+		.iflynepal-nav-side {
+			@apply gap-2;
+		}
+
+		.iflynepal-nav-cta {
+			@apply px-[18px] text-[11px];
+		}
+
+		.iflynepal-brand .custom-logo {
+			height: 60px;
+		}
+
+		.site-header.is-docked .iflynepal-brand .custom-logo {
+			height: 48px;
+		}
+	}
+
+	@media (max-width: 899px) {
 		.iflynepal-nav {
 			grid-template-columns: 1fr auto;
 			min-height: 82px;
