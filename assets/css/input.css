@@ -1035,25 +1035,38 @@
 	}
 
 	/*
-	 * The design's own intermediate tier, which this picker did not need while
-	 * it had two fields: three of them plus a button in one row inside a
-	 * 1030px panel leaves each field too narrow to read its own label. Two
-	 * columns instead, the button stretching to fill the cell it shares the
-	 * second row with — `.trip-search` and `.trip-search .button` at
-	 * max-width:1080px in the design file, both verbatim.
+	 * The design's own intermediate tier stacked this to two columns here —
+	 * three fields plus a button in one row inside a 1030px panel leaves each
+	 * field too narrow to read its own label. Client-directed override:
+	 * tablet (768px) and laptop (1024px) should read as the same one-row
+	 * strip as desktop rather than the design's wrapped layout, so the single
+	 * row is kept and tightened instead — smaller type, tighter padding and
+	 * gaps — to fit the same three fields and button in less width.
 	 *
-	 * Bounded below at 761px so it stops exactly where the phone stack starts;
-	 * without that the two rules overlap and the flex column below inherits a
-	 * grid track list it has no use for.
+	 * Bounded below at 761px so it stops exactly where the phone stack starts.
 	 */
 	@media (min-width: 761px) and (max-width: 1080px) {
 
-		.iflynepal-hero__finder--fields-3 {
-			grid-template-columns: 1fr 1fr; /* .trip-search at 1080px */
+		.iflynepal-hero__finder {
+			gap: 6px;
+			padding: 8px;
 		}
 
-		.iflynepal-hero__finder--fields-3 .iflynepal-hero__finder-submit.iflynepal-button {
-			align-self: stretch; /* .trip-search .button at 1080px */
+		.iflynepal-hero__finder-field,
+		.iflynepal-hero__finder-field--select {
+			padding: 5px 10px;
+		}
+
+		.iflynepal-hero__finder-label {
+			font-size: 9px;
+		}
+
+		.iflynepal-hero__finder-value {
+			font-size: 14px;
+		}
+
+		.iflynepal-hero__finder-submit.iflynepal-button {
+			@apply px-4 text-[13px];
 		}
 	}
 
