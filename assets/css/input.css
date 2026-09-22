@@ -4915,22 +4915,17 @@
 
 	/*
 	 * Everything long on this page is set to one measure. The chapters vary
-	 * their shape; the reading does not. The first paragraph is set darker and
-	 * a shade larger, which is what carries the reader in.
+	 * their shape; the reading does not. Every paragraph is set at the same
+	 * darker, larger weight the lead paragraph used to have alone.
 	 */
 	.iflynepal-country-prose p {
-		color: var(--iflynepal-muted);
-		font-size: 15.5px;
+		color: var(--iflynepal-ink);
+		font-size: 17px;
 		line-height: 1.8;
 	}
 
 	.iflynepal-country-prose p + p {
 		margin-top: 20px;
-	}
-
-	.iflynepal-country-prose p:first-child {
-		color: var(--iflynepal-ink);
-		font-size: 17px;
 	}
 
 	/* The label that opens a paragraph is the source's own, so it stays inline
@@ -5452,7 +5447,7 @@
 			padding: 26px 24px;
 		}
 
-		.iflynepal-country-prose p:first-child {
+		.iflynepal-country-prose p {
 			font-size: 16px;
 		}
 	}
