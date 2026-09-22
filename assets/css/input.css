@@ -3680,9 +3680,9 @@
 	/* --------------------------------------------------------------- overview */
 
 	/*
-	 * The story reads as body copy rather than as a lead-in, so it sits at the
-	 * muted colour - with the first paragraph a step larger and in full ink, to
-	 * give the eye somewhere to start.
+	 * Every paragraph reads at the same weight as the first — full ink, the
+	 * larger size — rather than stepping down to a muted body-copy colour
+	 * after the lead-in.
 	 */
 	.iflynepal-about-overview__story {
 		@apply flex flex-col justify-center;
@@ -3690,18 +3690,13 @@
 
 	.iflynepal-about-overview__story p {
 		margin: 0;
-		color: var(--iflynepal-muted);
-		font-size: 15.5px;
+		color: var(--iflynepal-ink);
+		font-size: 17px;
 		line-height: 1.75;
 	}
 
 	.iflynepal-about-overview__story p + p {
 		margin-top: 18px;
-	}
-
-	.iflynepal-about-overview__story p:first-child {
-		color: var(--iflynepal-ink);
-		font-size: 17px;
 	}
 
 	/* ----------------------------------------------------------------- vision */
