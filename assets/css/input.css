@@ -5664,6 +5664,7 @@
 		color: #fff;
 		font-size: 12px;
 		letter-spacing: 0.12em;
+		white-space: nowrap;
 		transform: translateX(-50%);
 		animation: iflynepal-team-bounce 2s ease-in-out infinite;
 	}
@@ -5908,11 +5909,45 @@
 		}
 
 		/*
-		 * The cluster goes rather than stacking: the three frames overlap by
-		 * design and there is no arrangement of them that reads at this width.
+		 * The overlapping, absolutely-positioned arrangement is sized for the
+		 * wide column it no longer has, so below this width the three frames
+		 * drop out of that layout and into a plain centred row of equal
+		 * circles instead — still every portrait, just not the tilted collage.
+		 * A grid rather than a flex row so the handwritten "rooted in Nepal"
+		 * note (the row's fourth child) can drop onto its own line, spanning
+		 * all three columns, instead of needing the collage corner it was
+		 * anchored to for the wide layout.
 		 */
 		.iflynepal-team-hero__cluster {
-			@apply hidden;
+			@apply relative grid justify-center;
+			grid-template-columns: repeat(3, auto);
+			height: auto;
+			margin: 8px auto 0;
+			gap: 10px 14px;
+		}
+
+		/*
+		 * Smallest size, for mobile S (320px) and anything narrower than
+		 * mobile M. Each wider step below re-declares width/height only — the
+		 * shape, position and gap stay put — so the row grows in step with
+		 * the column instead of staying fixed at the narrowest phone's size
+		 * all the way up to tablet.
+		 */
+		.iflynepal-team-portrait {
+			position: static;
+			width: 76px;
+			height: 76px;
+			border-radius: 50%;
+			transform: none;
+			inset: auto;
+		}
+
+		.iflynepal-team-hero__script {
+			@apply static;
+			grid-column: 1 / -1;
+			justify-self: center;
+			right: auto;
+			bottom: auto;
 		}
 
 		.iflynepal-hero--team .iflynepal-hero__copy {
@@ -5920,6 +5955,46 @@
 			width: 100%;
 			max-width: 760px;
 			margin-left: auto;
+		}
+	}
+
+	/* Mobile M (375px) and up, still within the circle-row layout below 860px. */
+	@media (min-width: 375px) and (max-width: 860px) {
+		.iflynepal-team-hero__cluster {
+			gap: 12px 16px;
+		}
+
+		.iflynepal-team-portrait {
+			width: 88px;
+			height: 88px;
+		}
+	}
+
+	/* Mobile L (425px) and up. */
+	@media (min-width: 425px) and (max-width: 860px) {
+		.iflynepal-team-hero__cluster {
+			gap: 14px 18px;
+		}
+
+		.iflynepal-team-portrait {
+			width: 100px;
+			height: 100px;
+		}
+	}
+
+	/*
+	 * Tablet (768px) and up, still short of the 861px this whole layout hands
+	 * back to the wide collage — the biggest the circle row ever gets, well
+	 * clear of mobile L now that the column has real width to spare.
+	 */
+	@media (min-width: 768px) and (max-width: 860px) {
+		.iflynepal-team-hero__cluster {
+			gap: 18px 22px;
+		}
+
+		.iflynepal-team-portrait {
+			width: 130px;
+			height: 130px;
 		}
 	}
 
