@@ -367,10 +367,29 @@ function iflynepal_enqueue_assets() {
 			);
 		}
 
+		/*
+		 * Shrinks #hero-title to whatever size keeps it inside two lines — see
+		 * the file itself. A dependency of the motion script below rather than
+		 * just enqueued earlier, so the print order is guaranteed rather than
+		 * incidental: motion.js's GSAP timeline reads the headline's word
+		 * spans' positions for the entrance stagger, and those positions have
+		 * to already reflect the fitted size, not the clamp()'s raw one.
+		 */
+		wp_enqueue_script(
+			'iflynepal-articles-hero-title-fit',
+			IFLYNEPAL_URI . '/assets/js/articles/hero-title-fit.js',
+			array(),
+			iflynepal_asset_version( 'assets/js/articles/hero-title-fit.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+
 		wp_enqueue_script(
 			'iflynepal-articles-motion',
 			IFLYNEPAL_URI . '/assets/js/articles/motion.js',
-			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
+			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger', 'iflynepal-articles-hero-title-fit' ),
 			iflynepal_asset_version( 'assets/js/articles/motion.js' ),
 			array(
 				'strategy'  => 'defer',

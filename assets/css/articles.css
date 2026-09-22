@@ -317,31 +317,34 @@
 .share-menu .ico-line{fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
 .share-menu .ico-solid{fill:currentColor}
 .aside-toc{display:flex; flex-direction:column; min-height:0}
-.index-list{min-height:0; max-height:min(46vh,440px); overflow-y:auto; overscroll-behavior:contain; counter-reset:idx; scrollbar-width:thin; scrollbar-color:rgba(5,69,167,.3) transparent}
+.index-list{min-height:0; max-height:min(46vh,440px); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:rgba(5,69,167,.3) transparent}
 .index-list::-webkit-scrollbar{width:5px}
 .index-list::-webkit-scrollbar-track{background:transparent}
 .index-list::-webkit-scrollbar-thumb{border-radius:999px; background:rgba(5,69,167,.28)}
 .index-list::-webkit-scrollbar-thumb:hover{background:rgba(5,69,167,.5)}
 .index-list a{display:flex; gap:11px; padding:9px 11px; border-radius:11px; color:var(--muted); font-size:13.5px; font-weight:600; line-height:1.4; transition:background .2s ease,color .2s ease}
-.index-list a::before{counter-increment:idx; content:counter(idx,decimal-leading-zero); flex:0 0 auto; padding-top:2px; color:var(--navy); font-size:11px; font-weight:900; letter-spacing:.04em; opacity:.55}
 .index-list a:hover{background:var(--mist); color:var(--ink-deep)}
 .index-list a.is-current{background:var(--mist); color:var(--navy)}
-.index-list a.is-current::before{opacity:1}
 .toc-mobile{display:none; margin-bottom:34px; padding:22px 20px 18px; border:1px solid var(--line); border-radius:var(--r-md); background:#fff; box-shadow:0 14px 38px rgba(4,26,64,.07)}
 .toc-mobile .index-list{max-height:none; overflow:visible; overscroll-behavior:auto; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px}
 .post-col{min-width:0; max-width:800px}
-.post-content{counter-reset:sec; color:#2D3339; font-size:17px; line-height:1.8}
+.post-content{color:var(--ink-deep); font-size:19.5px; line-height:1.72}
 .post-content>*+*{margin-top:22px}
-.post-content .post-lede{color:var(--ink-deep); font-size:19.5px; line-height:1.72}
 .post-content .post-lede::first-letter{float:left; margin:6px 12px 0 0; color:var(--navy); font-family:var(--serif-alt); font-size:78px; font-style:italic; font-weight:600; line-height:.8}
 .post-content strong{color:var(--ink-deep); font-weight:700}
+/* Tailwind's preflight (@tailwind base, input.css) strips list-style and
+   padding off every ol/ul site-wide, bullets and numbers included — a post
+   body's own lists need them back, since a reader typed a bulleted list
+   expecting to see bullets. */
+.post-content ul{list-style:disc; padding-left:1.35em}
+.post-content ol{list-style:decimal; padding-left:1.35em}
+.post-content ul ul{list-style:circle}
+.post-content li+li{margin-top:8px}
+.post-content li>ul,.post-content li>ol{margin-top:8px}
 .post-content a{color:var(--navy); font-weight:600; background-image:linear-gradient(rgba(5,69,167,.28),rgba(5,69,167,.28)); background-size:100% 1.5px; background-position:0 100%; background-repeat:no-repeat; transition:background-size .3s var(--ease),color .2s ease,background-image .2s ease}
 .post-content a:hover{background-image:linear-gradient(var(--navy),var(--navy))}
-.post-content h2{position:relative; margin-top:68px; padding-top:30px; scroll-margin-top:32px; color:var(--ink-deep); font-size:clamp(28px,2.7vw,36px); line-height:1.14}
-.post-content h2::before{counter-increment:sec; content:counter(sec,decimal-leading-zero); position:absolute; top:0; left:0; color:var(--navy); font-size:12px; font-weight:900; letter-spacing:.16em}
-.post-content h2::after{content:""; position:absolute; top:7px; left:30px; width:34px; height:1px; background:var(--navy); opacity:.5}
-.post-content h3{display:flex; align-items:center; gap:12px; margin-top:40px; scroll-margin-top:32px; color:var(--ink-deep); font-size:22px; line-height:1.25}
-.post-content h3::before{content:""; width:9px; height:9px; flex:none; border-radius:50%; background:var(--gold); box-shadow:0 0 0 4px rgba(242,200,121,.25)}
+.post-content h2{margin-top:68px; scroll-margin-top:32px; color:var(--ink-deep); font-size:clamp(28px,2.7vw,36px); line-height:1.14}
+.post-content h3{margin-top:40px; scroll-margin-top:32px; color:var(--ink-deep); font-size:22px; line-height:1.25}
 .post-content h3+p{margin-top:12px}
 .post-content .post-pick{position:relative; margin-top:14px; padding:14px 18px 14px 52px; border-radius:14px; background:var(--mist); font-size:15.5px; line-height:1.65}
 .post-content .post-pick::before{content:""; position:absolute; left:18px; top:17px; width:20px; height:20px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230545A7' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 20l6.5-11 4 6.5 2.5-3.5L21 20z'/%3E%3Ccircle cx='17' cy='6' r='2'/%3E%3C/svg%3E") center/contain no-repeat}
@@ -380,8 +383,7 @@
   .post-meta-row{gap:8px 12px; font-size:12.5px}
   .post-meta-row .dot{display:none}
   .toc-mobile .index-list{grid-template-columns:1fr}
-  .post-content{font-size:16.5px}
-  .post-content .post-lede{font-size:18px}
+  .post-content{font-size:18px}
   .post-content .post-lede::first-letter{font-size:64px}
   .post-content .post-quote{padding:22px 20px 22px 24px}
   .related-grid{grid-template-columns:1fr}

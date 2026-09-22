@@ -1722,8 +1722,16 @@
 		letter-spacing: -0.025em;
 	}
 
+	/*
+	 * 360px wrapped this sentence to three lines with "travel." stranded alone
+	 * on the third — the card is 596px wide at its narrowest (the two-column
+	 * desktop tier), so there was room to spare. 420px is enough for the same
+	 * text to settle at two lines instead, measured directly rather than
+	 * guessed: the sentence's own unwrapped width is 741px, so it was always
+	 * going to wrap somewhere, just not with an orphan.
+	 */
 	.iflynepal-trust__promo-desc {
-		@apply max-w-[360px] text-[15px];
+		@apply max-w-[420px] text-[15px];
 		margin: 14px 0 22px;
 		color: rgba(255, 255, 255, 0.84);
 	}
