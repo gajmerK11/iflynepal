@@ -20,7 +20,18 @@ $iflynepal_authors = iflynepal_authors_list();
 
 <main id="primary" class="site-main ifn-retreats-page ifn-articles-page ifn-authors-page">
 
-	<section class="hero" aria-labelledby="hero-title">
+	<?php
+	/*
+	 * Suffixed the same way, and for the same reason, as the id in
+	 * template-parts/articles/hero-section.php: inc/customizer/sections/
+	 * articles.php and .../blogs.php both register a selective-refresh
+	 * partial for "#hero-title", loading before .../authors.php does, so a
+	 * bare id="hero-title" here would hand this page's pencil to whichever of
+	 * those two panels' partials the Customizer resolves first rather than to
+	 * Authors' own.
+	 */
+	?>
+	<section class="hero" aria-labelledby="hero-title-authors">
 		<div class="hero-media">
 			<img
 				src="<?php echo esc_url( iflynepal_authors_hero_image_url() ); ?>"
@@ -33,11 +44,11 @@ $iflynepal_authors = iflynepal_authors_list();
 		<div class="container hero-inner">
 			<div class="hero-copy">
 				<span class="eyebrow"><?php esc_html_e( 'Our writers', 'iflynepal' ); ?></span>
-				<h1 id="hero-title"><?php echo iflynepal_authors_hero_title_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- iflynepal_hero_title_words() escapes via iflynepal_kses_text(). ?></h1>
+				<h1 id="hero-title-authors"><?php echo iflynepal_authors_hero_title_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- iflynepal_hero_title_words() escapes via iflynepal_kses_text(). ?></h1>
 
 				<?php $iflynepal_lead = iflynepal_authors_hero_lead(); ?>
 				<?php if ( '' !== $iflynepal_lead || is_customize_preview() ) : ?>
-					<p class="lead" id="hero-lead"><?php echo esc_html( $iflynepal_lead ); ?></p>
+					<p class="lead" id="hero-lead-authors"><?php echo esc_html( $iflynepal_lead ); ?></p>
 				<?php endif; ?>
 			</div>
 		</div>

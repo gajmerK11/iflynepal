@@ -90,7 +90,7 @@ $wp_customize->add_control(
 $wp_customize->selective_refresh->add_partial(
 	'iflynepal_authors_hero_title',
 	array(
-		'selector'            => '#hero-title',
+		'selector'            => '#hero-title-authors',
 		'settings'            => array( 'iflynepal_authors_hero_title' ),
 		'render_callback'     => 'iflynepal_authors_hero_title_html',
 		'container_inclusive' => false,
@@ -100,7 +100,7 @@ $wp_customize->selective_refresh->add_partial(
 $wp_customize->selective_refresh->add_partial(
 	'iflynepal_authors_hero_lead',
 	array(
-		'selector'            => '#hero-lead',
+		'selector'            => '#hero-lead-authors',
 		'settings'            => array( 'iflynepal_authors_hero_lead' ),
 		'render_callback'     => 'iflynepal_authors_hero_lead',
 		'container_inclusive' => false,

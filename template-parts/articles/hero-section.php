@@ -33,8 +33,25 @@ $iflynepal_articles_search = iflynepal_articles_search_term();
 $iflynepal_articles_base   = iflynepal_section_archive_url();
 $iflynepal_articles_found  = (int) $GLOBALS['wp_query']->found_posts;
 $iflynepal_articles_labels = iflynepal_section_labels();
+
+/*
+ * Articles and Blogs are two different Customizer panels reading and writing
+ * two different theme mods, but this one template draws the hero for both —
+ * so a plain id="hero-title" would be the same id on every page either panel
+ * could be previewing. The Customizer's selective-refresh pencil resolves an
+ * edit shortcut by matching its registered CSS selector against the preview
+ * DOM, with no idea which panel's data actually produced the element it
+ * found: both inc/customizer/sections/articles.php and .../blogs.php
+ * register a partial for "#hero-title", so on every page — /blogs included —
+ * whichever of the two loads first (articles.php does, in customizer.php)
+ * wins the id and its pencil, regardless of which section is actually being
+ * viewed. Suffixing the id with the section key gives each panel a selector
+ * only its own pages ever contain.
+ */
+$iflynepal_hero_title_id = 'hero-title-' . iflynepal_section_key();
+$iflynepal_hero_lead_id  = 'hero-lead-' . iflynepal_section_key();
 ?>
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero" aria-labelledby="<?php echo esc_attr( $iflynepal_hero_title_id ); ?>">
 
 	<?php if ( $iflynepal_articles_image ) : ?>
 		<div class="hero-media">
@@ -52,14 +69,14 @@ $iflynepal_articles_labels = iflynepal_section_labels();
 
 			<?php if ( '' !== $iflynepal_articles_search ) : ?>
 
-				<h1 id="hero-title" class="is-search">
+				<h1 id="<?php echo esc_attr( $iflynepal_hero_title_id ); ?>" class="is-search">
 					<span class="w"><?php echo esc_html_x( 'You', 'search headline', 'iflynepal' ); ?></span>
 					<span class="w"><?php echo esc_html_x( 'searched', 'search headline', 'iflynepal' ); ?></span>
 					<span class="w"><?php echo esc_html_x( 'for:', 'search headline', 'iflynepal' ); ?></span>
 					<em><?php echo esc_html( $iflynepal_articles_search ); ?></em>
 				</h1>
 
-				<p class="lead" id="hero-lead">
+				<p class="lead" id="<?php echo esc_attr( $iflynepal_hero_lead_id ); ?>">
 					<?php if ( $iflynepal_articles_found ) : ?>
 						<?php
 						// Escaped inside the helper, which is where the plural is chosen.
@@ -74,10 +91,10 @@ $iflynepal_articles_labels = iflynepal_section_labels();
 
 			<?php else : ?>
 
-				<h1 id="hero-title"><?php echo iflynepal_section_hero_title_html(); ?></h1>
+				<h1 id="<?php echo esc_attr( $iflynepal_hero_title_id ); ?>"><?php echo iflynepal_section_hero_title_html(); ?></h1>
 
 				<?php if ( '' !== $iflynepal_articles_lead || is_customize_preview() ) : ?>
-					<p class="lead" id="hero-lead"><?php echo esc_html( $iflynepal_articles_lead ); ?></p>
+					<p class="lead" id="<?php echo esc_attr( $iflynepal_hero_lead_id ); ?>"><?php echo esc_html( $iflynepal_articles_lead ); ?></p>
 				<?php endif; ?>
 
 			<?php endif; ?>
