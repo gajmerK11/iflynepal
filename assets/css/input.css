@@ -465,6 +465,31 @@
 		.iflynepal-nav-item:focus-within .iflynepal-nav-chevron {
 			@apply rotate-180;
 		}
+
+		/*
+		 * A click both opens and closes the panel — the same as hover, but on
+		 * demand instead of automatic. The trouble is the mouse is still
+		 * sitting on the trigger the instant that closing click lands, so
+		 * :hover above is still true and would hold the panel open right
+		 * through it. nav-dropdown.js adds this class for exactly that click
+		 * and nothing else — never on the hover path — so it never fires
+		 * for a plain hover open/close, and it clears itself the moment the
+		 * pointer leaves or lands on the trigger again, so the next hover
+		 * is untouched by whatever the last click did. Higher specificity
+		 * than the plain :hover/:focus-within rule above is what lets it win
+		 * while the pointer has not moved.
+		 */
+		.iflynepal-nav-item.force-closed:hover > .iflynepal-nav-panel,
+		.iflynepal-nav-item.force-closed:focus-within > .iflynepal-nav-panel {
+			@apply invisible opacity-0;
+			pointer-events: none;
+			transform: translate(-50%, 10px);
+		}
+
+		.iflynepal-nav-item.force-closed:hover .iflynepal-nav-chevron,
+		.iflynepal-nav-item.force-closed:focus-within .iflynepal-nav-chevron {
+			@apply rotate-0;
+		}
 	}
 
 	.iflynepal-nav-side {
