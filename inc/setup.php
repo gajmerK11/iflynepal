@@ -86,6 +86,8 @@ function iflynepal_footer_menu_slots() {
 		'footer-1' => esc_html__( 'Footer-1', 'iflynepal' ),
 		'footer-2' => esc_html__( 'Footer-2', 'iflynepal' ),
 		'footer-3' => esc_html__( 'Footer-3', 'iflynepal' ),
+		'footer-4' => esc_html__( 'Footer-4', 'iflynepal' ),
+		'footer-5' => esc_html__( 'Footer-5', 'iflynepal' ),
 	);
 }
 

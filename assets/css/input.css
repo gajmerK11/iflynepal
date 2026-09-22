@@ -4032,7 +4032,16 @@
 
 	.iflynepal-footer__primary {
 		@apply grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
+		/*
+		 * Head Office carries the densest content of any column — a full
+		 * address, a phone number, opening hours and an email, against the
+		 * menu columns' short link words — so it gets a wider share of the
+		 * row (1.6fr against their 1fr) at every width this grid applies to,
+		 * not just the cramped laptop tier below. Splitting all six evenly
+		 * left Head Office too narrow to hold its own text without wrapping
+		 * or bleeding into the clipped edge of the row's last column.
+		 */
+		grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(0, 1.6fr);
 		gap: 56px;
 		padding: 44px 0 50px;
 	}
@@ -4100,7 +4109,7 @@
 		gap: 10px;
 		margin: 12px 0;
 		color: rgba(255, 255, 255, 0.68);
-		font-size: 15px;
+		font-size: 16px;
 	}
 
 	.iflynepal-footer__contact .iflynepal-ico {
@@ -4118,6 +4127,104 @@
 
 	.iflynepal-footer__contact a:hover {
 		@apply text-white;
+	}
+
+	/*
+	 * Six columns (five menus plus Head Office) leaves each one narrower than
+	 * a longer item label ("Terms and conditions"), which wraps to two lines
+	 * inside its own 1fr track — grid items default to min-width:0 here, so
+	 * the text shrinks with the column instead of forcing it wider. Keeping
+	 * each link on one line reads as the design intends; it is scoped to the
+	 * same width the 6-column row itself is scoped to (the query below it
+	 * switches to 2 columns, where every track is wide enough on its own),
+	 * so a long custom label never forces horizontal scroll on a narrow
+	 * screen — nowrap here would only bleed into the 56px column gap, not off
+	 * the page. These rules have to come after every unqualified rule above
+	 * for the same properties, not just after the ones they visually follow
+	 * in this file — a later plain rule beats an earlier @media rule of the
+	 * same specificity regardless of which one looks more specific, so a
+	 * responsive override placed above its own base rule is silently undone
+	 * by it every time the query matches.
+	 */
+	@media (min-width: 1021px) {
+		.iflynepal-footer__col a {
+			white-space: nowrap;
+		}
+
+		/*
+		 * The Head Office column sits in the same narrow 1fr track. "9:00 AM
+		 * to 5:00 PM" wraps for the same reason the link labels did, but a
+		 * flex row (.iflynepal-footer__contact) breaks worse than a block
+		 * would: the lone "PM" drops to a line of its own under the clock
+		 * icon instead of wrapping as a whole phrase. Same fix, same scope.
+		 */
+		.iflynepal-footer__contact span {
+			white-space: nowrap;
+		}
+
+		/*
+		 * An email has no space to break at, so it never wraps on its own —
+		 * left alone it just overflows the column as one solid run. That
+		 * overflow is invisible while the column has room to spare (it bleeds
+		 * a few px into the shell's own side margin, same as the link labels
+		 * above), but the same run is what got clipped by .iflynepal-footer's
+		 * overflow:hidden at 1024px before the tier below widened the column
+		 * enough to hold it on one line outright.
+		 */
+		.iflynepal-footer__contact a[href^='mailto:'] {
+			white-space: nowrap;
+		}
+	}
+
+	/*
+	 * 1021–1279px: the shell hasn't reached its 1240px cap yet (down to
+	 * ~981px at 1021px itself — see --iflynepal-shell above), so even with
+	 * Head Office's wider 1.6fr track (set on the base rule above, since it
+	 * helps at every width, not just this one) the full-size 56px gaps and
+	 * 16px/15px text still read as cramped here. Tightening the gap and
+	 * every footer text size together frees enough width for a comfortable
+	 * row without shrinking so far it's hard to read. Above 1279px the shell
+	 * is effectively fixed at 1240px either way, so the full-size row above
+	 * takes back over with no visible jump.
+	 */
+	@media (min-width: 1021px) and (max-width: 1279px) {
+		.iflynepal-footer__primary {
+			gap: 20px;
+		}
+
+		.iflynepal-footer__col-title {
+			font-size: 13px;
+			margin-bottom: 12px;
+		}
+
+		/*
+		 * One size for every sub-item — link, address, phone, hours, email —
+		 * so Head Office reads at the same weight as the five menu columns
+		 * beside it instead of standing out at the wider desktop size.
+		 */
+		.iflynepal-footer__col a,
+		.iflynepal-footer__office-address,
+		.iflynepal-footer__contact {
+			font-size: 13px;
+		}
+
+		.iflynepal-footer__col a {
+			margin: 6px 0;
+		}
+
+		.iflynepal-footer__office-address {
+			margin-bottom: 12px;
+		}
+
+		.iflynepal-footer__contact {
+			gap: 6px;
+			margin: 8px 0;
+		}
+
+		.iflynepal-footer__contact .iflynepal-ico {
+			width: 15px;
+			height: 15px;
+		}
 	}
 
 	/* ---------------------------------------------------------- brand row */
