@@ -175,6 +175,9 @@
 				<element value="iflynepal_render_csr_close_kicker"/>
 				<element value="iflynepal_render_csr_close_title"/>
 				<element value="iflynepal_render_csr_close_text"/>
+				<element value="iflynepal_render_packages_hero_kicker"/>
+				<element value="iflynepal_render_packages_hero_title"/>
+				<element value="iflynepal_render_packages_hero_lead"/>
 				<element value="iflynepal_render_visa_hero_kicker"/>
 				<element value="iflynepal_render_visa_hero_title"/>
 				<element value="iflynepal_render_visa_hero_lead"/>

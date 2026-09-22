@@ -70,6 +70,38 @@ function iflynepal_get_nav_cta_item() {
 }
 
 /**
+ * Whether the current request is the whole-catalogue packages archive.
+ *
+ * /packages/ is the booking plugin's post type archive, not a Page and not a
+ * term archive, so there is no template of the theme's to condition on — only
+ * the query. Guarded on the post type existing, so the theme goes on working
+ * with the plugin deactivated.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_packages_archive() {
+	return post_type_exists( 'iflynepal_package' ) && is_post_type_archive( 'iflynepal_package' );
+}
+
+/**
+ * Prints the packages archive hero.
+ *
+ * Called by the booking plugin's archive template — the markup, the copy and
+ * the Customizer section behind it are all the theme's, and the plugin only
+ * says where on its page the hero goes. Guarded there on this function
+ * existing, so the plugin renders its own page under any other theme.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_the_packages_hero() {
+	get_template_part( 'template-parts/packages/hero-section' );
+}
+
+/**
  * Whether the current request renders a hero.
  *
  * Three templates carry one: the front page, the About page and the About
@@ -93,7 +125,7 @@ function iflynepal_get_nav_cta_item() {
  * @return bool
  */
 function iflynepal_has_hero() {
-	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_visa() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie() || iflynepal_has_privacy() || iflynepal_has_sustainability() || iflynepal_has_articles() || iflynepal_has_article() || iflynepal_has_blogs() || iflynepal_has_blog() || iflynepal_has_news() || iflynepal_has_news_story() || iflynepal_has_authors_archive();
+	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_visa() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie() || iflynepal_has_privacy() || iflynepal_has_sustainability() || iflynepal_has_articles() || iflynepal_has_article() || iflynepal_has_blogs() || iflynepal_has_blog() || iflynepal_has_news() || iflynepal_has_news_story() || iflynepal_has_authors_archive() || iflynepal_has_packages_archive();
 
 	/**
 	 * Filters whether this request renders a hero.
@@ -381,6 +413,10 @@ function iflynepal_current_hero_image_url() {
 
 	if ( '' !== $filtered ) {
 		return $filtered;
+	}
+
+	if ( iflynepal_has_packages_archive() ) {
+		return iflynepal_packages_hero_image_url();
 	}
 
 	if ( iflynepal_has_news_story() ) {

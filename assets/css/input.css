@@ -6127,6 +6127,23 @@
 	}
 
 	/* ==========================================================================
+	   Packages archive — the hero on /packages/
+	   The page itself is the booking plugin's, and so is the type the hero is
+	   set in: catalogue.css sizes the title and the lead for both package
+	   archives, and this hero is listed there beside them so the three match.
+	   The kicker is the only thing left over — the type archives do not carry
+	   one, so nothing there has an opinion about it.
+	   ========================================================================== */
+
+	/*
+	 * White rather than the shared kicker's pale blue, for the same reason the
+	 * CSR hero sets it white: the line is a label over a photograph, not a link.
+	 */
+	.iflynepal-hero--packages .iflynepal-hero__kicker {
+		color: rgba(255, 255, 255, 0.78);
+	}
+
+	/* ==========================================================================
 	   CSR — the responsibility page
 	   Eight blocks down one column: a hero, the commitment, a pledge band, the
 	   sustainability pillars, the community projects, the ways tourism
