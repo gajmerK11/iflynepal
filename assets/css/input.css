@@ -4133,6 +4133,18 @@
 		transition: color 0.25s ease;
 	}
 
+	/*
+	 * An email has no space to break at, so a narrow column — any of the
+	 * mobile/tablet grid's multi-column tiers, not just the cramped desktop
+	 * laptop one this was first fixed for — just runs it past the column
+	 * edge, where .iflynepal-footer's own overflow:hidden clips it silently.
+	 * Unconditional rather than scoped to one breakpoint, since every tier
+	 * below full desktop width can be narrow enough to trigger it.
+	 */
+	.iflynepal-footer__contact a[href^='mailto:'] {
+		overflow-wrap: anywhere;
+	}
+
 	.iflynepal-footer__contact a:hover {
 		@apply text-white;
 	}
@@ -4544,6 +4556,57 @@
 		}
 	}
 
+	/*
+	 * Tablet (768px) only: wide enough for three columns of six items — Tour,
+	 * Trek, Retreat, Resources, Company, Head Office — to read as two even
+	 * rows instead of the phone width's three. Bounded above at 1020px,
+	 * where the 2-column rule it overrides stops applying anyway.
+	 */
+	@media (min-width: 768px) and (max-width: 1020px) {
+		.iflynepal-footer__primary {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+
+	/*
+	 * Mobile M and L (375–767px). Widening column 2 to fit Head Office (the
+	 * earlier fix here) solved the wrap, but it reserved that width for the
+	 * whole column — Trek and Resources, which share column 2 and only ever
+	 * hold short link words, then sat in front of a stretch of dead space
+	 * they had no content to fill, on every row, not just Head Office's own.
+	 *
+	 * Head Office spanning the full row instead removes that trade entirely:
+	 * Tour/Trek/Retreat/Resources/Company go back to a plain even 2-column
+	 * split with nothing to fill, and Head Office gets the whole row's width
+	 * for itself — far more than its own longest line needs, so nothing
+	 * wraps without having to lean on any other column's space to do it.
+	 */
+	@media (min-width: 375px) and (max-width: 767px) {
+		.iflynepal-footer__primary {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.iflynepal-footer__office {
+			grid-column: 1 / -1;
+		}
+
+		.iflynepal-footer__col a,
+		.iflynepal-footer__office-address,
+		.iflynepal-footer__contact {
+			font-size: 13px;
+		}
+
+		.iflynepal-footer__contact .iflynepal-ico {
+			width: 15px;
+			height: 15px;
+		}
+
+		.iflynepal-footer__contact a[href^='tel:'],
+		.iflynepal-footer__contact span {
+			white-space: nowrap;
+		}
+	}
+
 	@media (max-width: 760px) {
 		.iflynepal-footer__inner {
 			width: min(calc(100% - 28px), var(--iflynepal-shell));
@@ -4566,11 +4629,38 @@
 		}
 	}
 
-	@media (max-width: 520px) {
+	/*
+	 * Mobile S (320px) only — the two-column row at mobile M and up (375px,
+	 * from the 1020px rule above) still reads fine there, but a lone leftover
+	 * column (Head Office, the sixth item) in the last row looks stranded
+	 * against the left edge at this width. One column, and every column
+	 * centred rather than left-aligned, since a single centred stack is what
+	 * the design's narrowest tier uses everywhere else on the site.
+	 */
+	@media (max-width: 374px) {
 		.iflynepal-footer__primary {
 			grid-template-columns: 1fr;
+			justify-items: center;
 		}
 
+		.iflynepal-footer__col {
+			text-align: center;
+		}
+
+		.iflynepal-footer__col a {
+			@apply mx-auto;
+		}
+
+		.iflynepal-footer__office {
+			text-align: center;
+		}
+
+		.iflynepal-footer__contact {
+			@apply justify-center;
+		}
+	}
+
+	@media (max-width: 520px) {
 		.iflynepal-footer__review-list {
 			@apply flex-wrap;
 		}
