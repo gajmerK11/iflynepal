@@ -288,10 +288,10 @@ function iflynepal_contact_hero_button_markup( $type ) {
 	}
 
 	return sprintf(
-		'<a id="iflynepal-contact-hero-%1$s" class="iflynepal-button %2$s" href="%3$s">%4$s</a>',
+		'<a id="iflynepal-contact-hero-%1$s" class="iflynepal-button %2$s" %3$s>%4$s</a>',
 		esc_attr( $type ),
 		esc_attr( $modifier ),
-		esc_url( $url ),
+		iflynepal_anchor_attr( $url ),
 		esc_html( $label )
 	);
 }
@@ -316,14 +316,14 @@ function iflynepal_render_contact_office_phone() {
 	$phone = iflynepal_contact_plain( 'office_phone' );
 	$href  = preg_replace( '/[^0-9+]/', '', $phone );
 
-	return sprintf( '<a id="iflynepal-contact-office-phone" href="tel:%1$s">%2$s</a>', esc_attr( $href ), esc_html( $phone ) );
+	return sprintf( '<a id="iflynepal-contact-office-phone" %1$s>%2$s</a>', iflynepal_anchor_attr( 'tel:' . $href ), esc_html( $phone ) );
 }
 
 /** @return string Markup. */
 function iflynepal_render_contact_office_email() {
 	$email = sanitize_email( iflynepal_contact_plain( 'office_email' ) );
 
-	return sprintf( '<a id="iflynepal-contact-office-email" href="mailto:%1$s">%2$s</a>', esc_attr( $email ), esc_html( $email ) );
+	return sprintf( '<a id="iflynepal-contact-office-email" %1$s>%2$s</a>', iflynepal_anchor_attr( 'mailto:' . $email ), esc_html( $email ) );
 }
 
 /** @return string Markup. */
@@ -338,8 +338,8 @@ function iflynepal_render_contact_map_embed() {
 /** @return string Markup. */
 function iflynepal_render_contact_map_button() {
 	return sprintf(
-		'<a id="iflynepal-contact-map-button" class="iflynepal-button iflynepal-contact-submit" href="%1$s" target="_blank" rel="noopener noreferrer">%2$s %3$s</a>',
-		esc_url( iflynepal_contact_link( 'map_button_url' ) ),
+		'<a id="iflynepal-contact-map-button" class="iflynepal-button iflynepal-contact-submit" %1$s target="_blank" rel="noopener noreferrer">%2$s %3$s</a>',
+		iflynepal_anchor_attr( iflynepal_contact_link( 'map_button_url' ) ),
 		esc_html( iflynepal_contact_plain( 'map_button_label' ) ),
 		iflynepal_contact_icon( 'arrow-right' )
 	);
@@ -359,13 +359,13 @@ function iflynepal_contact_representative_card_markup( $card ) {
 	}
 
 	return sprintf(
-		'<article id="iflynepal-contact-rep-%1$d" class="iflynepal-team-card iflynepal-contact-rep" data-iflynepal-reveal><div class="iflynepal-team-card__photo"><img src="%2$s" alt="%3$s" loading="lazy"><span class="iflynepal-contact-rep__country">%4$s</span></div><div class="iflynepal-team-card__body"><h3 class="iflynepal-team-card__name">%5$s</h3><a class="iflynepal-contact-rep__phone" href="tel:%6$s">%7$s%8$s</a>%9$s</div></article>',
+		'<article id="iflynepal-contact-rep-%1$d" class="iflynepal-team-card iflynepal-contact-rep" data-iflynepal-reveal><div class="iflynepal-team-card__photo"><img src="%2$s" alt="%3$s" loading="lazy"><span class="iflynepal-contact-rep__country">%4$s</span></div><div class="iflynepal-team-card__body"><h3 class="iflynepal-team-card__name">%5$s</h3><a class="iflynepal-contact-rep__phone" %6$s>%7$s%8$s</a>%9$s</div></article>',
 		(int) $card['index'],
 		esc_url( iflynepal_contact_representative_image_url( $card['index'] ) ),
 		esc_attr( iflynepal_contact_representative_image_alt( $card ) ),
 		esc_html( $card['country'] ),
 		esc_html( $card['name'] ),
-		esc_attr( $card['phone'] ),
+		iflynepal_anchor_attr( 'tel:' . $card['phone'] ),
 		iflynepal_contact_icon( 'phone' ),
 		esc_html( $card['phone_label'] ),
 		$channel

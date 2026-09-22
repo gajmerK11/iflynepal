@@ -135,3 +135,44 @@ function iflynepal_sanitize_link( $value ) {
 
 	return esc_url_raw( $value );
 }
+
+/**
+ * Builds the attributes an `<a>` needs for a stored link field.
+ *
+ * A real URL prints as an ordinary `href`. An in-page anchor (`#id`) does not:
+ * a hash `href` always shows the resolved target in the status bar on hover,
+ * and every anchor on the site used to reveal exactly that — hovering "Explore
+ * Retreats" showed `.../retreat-nepal/#iflynepal-packages` in the chrome
+ * before a visitor ever clicked. There is no CSS or HTML way to keep an `href`
+ * and lose that preview, so an anchor gets no `href` at all: instead
+ * `data-iflynepal-scroll` carries the target id and
+ * assets/js/global/anchor-scroll.js does the scrolling on click (and on
+ * Enter/Space, since `role="button" tabindex="0"` is what makes the element
+ * focusable without one). The trade-off, accepted deliberately, is that these
+ * links need JavaScript — a bare `#` (a JS hook with no scroll target, same as
+ * a menu toggle) prints nothing at all rather than a dead attribute.
+ *
+ * @since 1.0.0
+ *
+ * @param string $url Stored link value, already run through iflynepal_sanitize_link().
+ * @return string Attribute markup, ready to print inside an `<a ...>` tag.
+ */
+function iflynepal_anchor_attr( $url ) {
+	$url = trim( (string) $url );
+
+	if ( '' === $url ) {
+		return '';
+	}
+
+	if ( '#' === $url[0] ) {
+		$target = ltrim( $url, '#' );
+
+		if ( '' === $target ) {
+			return '';
+		}
+
+		return sprintf( 'data-iflynepal-scroll="%s" role="button" tabindex="0"', esc_attr( $target ) );
+	}
+
+	return sprintf( 'href="%s"', esc_url( $url ) );
+}

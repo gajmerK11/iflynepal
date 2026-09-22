@@ -192,7 +192,7 @@ if ( ! $iflynepal_testimonials ) {
 
 						$iflynepal_slug = isset( $iflynepal_source['slug'] ) ? $iflynepal_source['slug'] : '';
 						?>
-						<a class="iflynepal-testimonials__source" href="<?php echo esc_url( $iflynepal_source['url'] ); ?>" rel="noopener">
+						<a class="iflynepal-testimonials__source" <?php echo iflynepal_anchor_attr( $iflynepal_source['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?> rel="noopener">
 							<?php
 							/*
 							 * The brand mark comes from the theme's own platform registry

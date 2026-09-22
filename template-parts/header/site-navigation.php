@@ -47,7 +47,7 @@ $iflynepal_cta = iflynepal_get_nav_cta_item();
 	?>
 
 	<?php if ( $iflynepal_cta ) : ?>
-		<a class="iflynepal-button iflynepal-button--outline iflynepal-nav-cta" href="<?php echo esc_url( $iflynepal_cta['url'] ); ?>">
+		<a class="iflynepal-button iflynepal-button--outline iflynepal-nav-cta" <?php echo iflynepal_anchor_attr( $iflynepal_cta['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>>
 			<?php echo esc_html( $iflynepal_cta['title'] ); ?>
 		</a>
 	<?php endif; ?>

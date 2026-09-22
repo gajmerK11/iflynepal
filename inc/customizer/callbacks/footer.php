@@ -271,8 +271,8 @@ function iflynepal_render_footer_office() {
 
 	if ( '' !== $phone ) {
 		$markup .= sprintf(
-			'<p class="iflynepal-footer__contact"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 3H5a2 2 0 0 0-2 2c0 8.84 7.16 16 16 16a2 2 0 0 0 2-2v-3l-5-1-1.5 2.5a13 13 0 0 1-8-8L9 8z"/></svg><a href="%1$s">%2$s</a></p>',
-			esc_url( 'tel:' . preg_replace( '/[^\d+]/', '', $phone ) ),
+			'<p class="iflynepal-footer__contact"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 3H5a2 2 0 0 0-2 2c0 8.84 7.16 16 16 16a2 2 0 0 0 2-2v-3l-5-1-1.5 2.5a13 13 0 0 1-8-8L9 8z"/></svg><a %1$s>%2$s</a></p>',
+			iflynepal_anchor_attr( 'tel:' . preg_replace( '/[^\d+]/', '', $phone ) ),
 			esc_html( $phone )
 		);
 	}
@@ -286,8 +286,8 @@ function iflynepal_render_footer_office() {
 
 	if ( '' !== $email ) {
 		$markup .= sprintf(
-			'<p class="iflynepal-footer__contact"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18v14H3z"/><path d="m3 7 9 6 9-6"/></svg><a href="%1$s">%2$s</a></p>',
-			esc_url( 'mailto:' . $email ),
+			'<p class="iflynepal-footer__contact"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18v14H3z"/><path d="m3 7 9 6 9-6"/></svg><a %1$s>%2$s</a></p>',
+			iflynepal_anchor_attr( 'mailto:' . $email ),
 			esc_html( $email )
 		);
 	}
@@ -307,8 +307,8 @@ function iflynepal_render_footer_reviews() {
 
 	foreach ( iflynepal_footer_reviews() as $review ) {
 		$markup .= sprintf(
-			'<a class="iflynepal-footer__chip" href="%1$s" target="_blank" rel="noopener"><span class="iflynepal-footer__chip-icon">%2$s</span>%3$s</a>',
-			esc_url( $review['url'] ),
+			'<a class="iflynepal-footer__chip" %1$s target="_blank" rel="noopener"><span class="iflynepal-footer__chip-icon">%2$s</span>%3$s</a>',
+			iflynepal_anchor_attr( $review['url'] ),
 			// Built from a fixed registry of inline SVG, no editor input in it.
 			iflynepal_render_testimonial_platform_icon( $review['slug'], 'iflynepal-footer__chip-mark' ),
 			esc_html( $review['name'] )
@@ -330,9 +330,9 @@ function iflynepal_render_footer_socials() {
 
 	foreach ( iflynepal_footer_socials() as $social ) {
 		$markup .= sprintf(
-			'<a class="iflynepal-footer__social" style="--iflynepal-brand:%1$s" href="%2$s" target="_blank" rel="noopener" aria-label="%3$s"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="%4$s"/></svg></a>',
+			'<a class="iflynepal-footer__social" style="--iflynepal-brand:%1$s" %2$s target="_blank" rel="noopener" aria-label="%3$s"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="%4$s"/></svg></a>',
 			esc_attr( $social['brand'] ),
-			esc_url( $social['url'] ),
+			iflynepal_anchor_attr( $social['url'] ),
 			esc_attr(
 				sprintf(
 					/* translators: 1: site name, 2: social network name. */

@@ -1229,9 +1229,9 @@ function iflynepal_render_visa_hero_actions() {
 		}
 
 		$markup .= sprintf(
-			'<div class="wp-block-button %1$s"><a class="wp-block-button__link wp-element-button" href="%2$s">%3$s</a></div>',
+			'<div class="wp-block-button %1$s"><a class="wp-block-button__link wp-element-button" %2$s>%3$s</a></div>',
 			esc_attr( $modifier ),
-			esc_url( $button['url'] ),
+			iflynepal_anchor_attr( $button['url'] ),
 			esc_html( $button['label'] )
 		);
 	}
@@ -1599,8 +1599,8 @@ function iflynepal_render_visa_cta_button() {
 	}
 
 	return sprintf(
-		'<div class="wp-block-button iflynepal-btn--primary"><a class="wp-block-button__link wp-element-button" href="%1$s">%2$s</a></div>',
-		esc_url( $button['url'] ),
+		'<div class="wp-block-button iflynepal-btn--primary"><a class="wp-block-button__link wp-element-button" %1$s>%2$s</a></div>',
+		iflynepal_anchor_attr( $button['url'] ),
 		esc_html( $button['label'] )
 	);
 }
@@ -1620,8 +1620,8 @@ function iflynepal_render_visa_contact_lines() {
 
 		if ( '' !== $line['href'] ) {
 			$value = sprintf(
-				'<a href="%1$s">%2$s</a>',
-				esc_url( $line['href'] ),
+				'<a %1$s>%2$s</a>',
+				iflynepal_anchor_attr( $line['href'] ),
 				esc_html( $line['value'] )
 			);
 		}

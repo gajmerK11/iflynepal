@@ -345,8 +345,8 @@ function iflynepal_render_explore_card_links( $index ) {
 
 	foreach ( iflynepal_explore_card_links( $index ) as $link ) {
 		$markup .= sprintf(
-			'<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="%1$s">%2$s</a></div>',
-			esc_url( $link['url'] ),
+			'<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" %1$s>%2$s</a></div>',
+			iflynepal_anchor_attr( $link['url'] ),
 			esc_html( $link['label'] )
 		);
 	}

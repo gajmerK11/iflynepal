@@ -278,8 +278,8 @@ function iflynepal_render_404_actions() {
 
 	if ( '' !== $home ) {
 		$markup .= sprintf(
-			'<a class="iflynepal-button iflynepal-button--gold" href="%1$s">%2$s</a>',
-			esc_url( home_url( '/' ) ),
+			'<a class="iflynepal-button iflynepal-button--gold" %1$s>%2$s</a>',
+			iflynepal_anchor_attr( home_url( '/' ) ),
 			esc_html( $home )
 		);
 	}
@@ -301,8 +301,8 @@ function iflynepal_render_404_links() {
 		$description = trim( $link['description'] );
 
 		$markup .= sprintf(
-			'<li class="iflynepal-404__link"><a class="iflynepal-404__link-label" href="%1$s">%2$s</a>%3$s</li>',
-			esc_url( $link['url'] ? $link['url'] : home_url( '/' ) ),
+			'<li class="iflynepal-404__link"><a class="iflynepal-404__link-label" %1$s>%2$s</a>%3$s</li>',
+			iflynepal_anchor_attr( $link['url'] ? $link['url'] : home_url( '/' ) ),
 			esc_html( $link['label'] ),
 			'' === $description
 				? ''

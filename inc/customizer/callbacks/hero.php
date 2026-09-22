@@ -422,9 +422,9 @@ function iflynepal_render_hero_actions() {
 		}
 
 		$markup .= sprintf(
-			'<div class="wp-block-button %1$s"><a class="wp-block-button__link wp-element-button" href="%2$s">%3$s</a></div>',
+			'<div class="wp-block-button %1$s"><a class="wp-block-button__link wp-element-button" %2$s>%3$s</a></div>',
 			esc_attr( $modifier ),
-			esc_url( $button['url'] ),
+			iflynepal_anchor_attr( $button['url'] ),
 			esc_html( $button['label'] )
 		);
 	}

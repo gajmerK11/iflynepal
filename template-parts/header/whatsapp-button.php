@@ -29,7 +29,7 @@ $iflynepal_wa_label = iflynepal_header_whatsapp_label();
 ?>
 <a
 	class="iflynepal-nav-wa"
-	href="<?php echo esc_url( $iflynepal_whatsapp ); ?>"
+	<?php echo iflynepal_anchor_attr( $iflynepal_whatsapp ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>
 	target="_blank"
 	rel="noopener noreferrer"
 	title="<?php echo esc_attr( $iflynepal_wa_label ); ?>"

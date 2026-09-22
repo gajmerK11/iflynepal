@@ -179,8 +179,8 @@ function iflynepal_render_terms_cta_actions() {
 
 	if ( '' !== $contact_label ) {
 		$markup .= sprintf(
-			'<a class="iflynepal-button iflynepal-button--light" href="%1$s">%2$s<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>',
-			esc_url( iflynepal_terms_cta_url( $contact_url ) ),
+			'<a class="iflynepal-button iflynepal-button--light" %1$s>%2$s<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>',
+			iflynepal_anchor_attr( iflynepal_terms_cta_url( $contact_url ) ),
 			esc_html( $contact_label )
 		);
 	}
@@ -196,8 +196,8 @@ function iflynepal_render_terms_cta_actions() {
 
 	if ( '' !== $whatsapp_label && '' !== $whatsapp_digits ) {
 		$markup .= sprintf(
-			'<a class="iflynepal-button iflynepal-button--outline" href="%1$s" target="_blank" rel="noopener">%2$s</a>',
-			esc_url( 'https://wa.me/' . $whatsapp_digits ),
+			'<a class="iflynepal-button iflynepal-button--outline" %1$s target="_blank" rel="noopener">%2$s</a>',
+			iflynepal_anchor_attr( 'https://wa.me/' . $whatsapp_digits ),
 			esc_html( $whatsapp_label )
 		);
 	}
@@ -223,8 +223,8 @@ function iflynepal_render_terms_cta_lines() {
 
 	if ( '' !== $phone ) {
 		$markup .= sprintf(
-			'<p class="iflynepal-legal-accept__line"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 3H5a2 2 0 0 0-2 2c0 8.84 7.16 16 16 16a2 2 0 0 0 2-2v-3l-5-1-1.5 2.5a13 13 0 0 1-8-8L9 8z"/></svg><a href="%1$s">%2$s</a></p>',
-			esc_url( 'tel:' . preg_replace( '/[^\d+]/', '', $phone ) ),
+			'<p class="iflynepal-legal-accept__line"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 3H5a2 2 0 0 0-2 2c0 8.84 7.16 16 16 16a2 2 0 0 0 2-2v-3l-5-1-1.5 2.5a13 13 0 0 1-8-8L9 8z"/></svg><a %1$s>%2$s</a></p>',
+			iflynepal_anchor_attr( 'tel:' . preg_replace( '/[^\d+]/', '', $phone ) ),
 			esc_html( '' === $phone_note ? $phone : $phone . ' (' . $phone_note . ')' )
 		);
 	}
@@ -233,8 +233,8 @@ function iflynepal_render_terms_cta_lines() {
 
 	if ( is_email( $email ) ) {
 		$markup .= sprintf(
-			'<p class="iflynepal-legal-accept__line"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18v14H3z"/><path d="m3 7 9 6 9-6"/></svg><a href="%1$s">%2$s</a></p>',
-			esc_url( 'mailto:' . $email ),
+			'<p class="iflynepal-legal-accept__line"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h18v14H3z"/><path d="m3 7 9 6 9-6"/></svg><a %1$s>%2$s</a></p>',
+			iflynepal_anchor_attr( 'mailto:' . $email ),
 			esc_html( $email )
 		);
 	}

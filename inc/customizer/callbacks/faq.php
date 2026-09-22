@@ -251,8 +251,8 @@ function iflynepal_render_faq_cta() {
 	}
 
 	return sprintf(
-		'<a class="iflynepal-guides__link" href="%1$s">%2$s<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>',
-		esc_url( iflynepal_faq_cta_field( 'url' ) ),
+		'<a class="iflynepal-guides__link" %1$s>%2$s<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>',
+		iflynepal_anchor_attr( iflynepal_faq_cta_field( 'url' ) ),
 		esc_html( $label )
 	);
 }

@@ -97,16 +97,16 @@ function iflynepal_render_sustainability_coordinator() {
 
 	if ( $email ) {
 		$links .= sprintf(
-			'<a href="%1$s"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>%2$s</a>',
-			esc_url( 'mailto:' . $email ),
+			'<a %1$s><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>%2$s</a>',
+			iflynepal_anchor_attr( 'mailto:' . $email ),
 			esc_html( $email )
 		);
 	}
 
 	if ( '' !== $phone ) {
 		$links .= sprintf(
-			'<a href="%1$s"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z"/></svg>%2$s</a>',
-			esc_url( 'tel:' . preg_replace( '/[^\d+]/', '', $phone ) ),
+			'<a %1$s><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z"/></svg>%2$s</a>',
+			iflynepal_anchor_attr( 'tel:' . preg_replace( '/[^\d+]/', '', $phone ) ),
 			esc_html( $phone )
 		);
 	}

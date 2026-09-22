@@ -264,8 +264,8 @@ function iflynepal_render_guide_posts() {
 			: '<span class="iflynepal-guides__card-image iflynepal-guides__card-image--empty" aria-hidden="true"></span>';
 
 		$markup .= sprintf(
-			'<a class="iflynepal-guides__card" href="%1$s">%2$s<span class="iflynepal-guides__card-copy">%3$s<strong>%4$s</strong></span></a>',
-			esc_url( $guide['url'] ),
+			'<a class="iflynepal-guides__card" %1$s>%2$s<span class="iflynepal-guides__card-copy">%3$s<strong>%4$s</strong></span></a>',
+			iflynepal_anchor_attr( $guide['url'] ),
 			$image,
 			'' === $guide['category'] ? '' : '<small>' . esc_html( $guide['category'] ) . '</small>',
 			esc_html( $guide['title'] )
@@ -293,8 +293,8 @@ function iflynepal_render_guide_cta() {
 	}
 
 	return sprintf(
-		'<a class="iflynepal-guides__link" href="%1$s">%2$s<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>',
-		esc_url( $url ),
+		'<a class="iflynepal-guides__link" %1$s>%2$s<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>',
+		iflynepal_anchor_attr( $url ),
 		esc_html( $label )
 	);
 }

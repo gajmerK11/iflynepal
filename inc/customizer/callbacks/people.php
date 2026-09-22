@@ -317,7 +317,7 @@ function iflynepal_render_people_cta() {
 	$note = trim( iflynepal_people_cta_field( 'note' ) );
 
 	return sprintf(
-		'<a class="iflynepal-people__cta" href="%1$s">
+		'<a class="iflynepal-people__cta" %1$s>
 			<span class="iflynepal-people__cta-icon">
 				<svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.6 8.6 0 0 1-3.9-.9L3 20.5l1.6-5A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z"/></svg>
 				<span class="iflynepal-people__cta-dot" aria-hidden="true"></span>
@@ -325,7 +325,7 @@ function iflynepal_render_people_cta() {
 			<span class="iflynepal-people__cta-text"><strong>%2$s</strong>%3$s</span>
 			<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
 		</a>',
-		esc_url( iflynepal_people_cta_field( 'url' ) ),
+		iflynepal_anchor_attr( iflynepal_people_cta_field( 'url' ) ),
 		esc_html( $label ),
 		'' === $note ? '' : '<em>' . esc_html( $note ) . '</em>'
 	);

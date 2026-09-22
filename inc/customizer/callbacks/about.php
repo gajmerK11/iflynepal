@@ -655,9 +655,9 @@ function iflynepal_render_about_hero_actions() {
 		}
 
 		$markup .= sprintf(
-			'<div class="wp-block-button %1$s"><a class="wp-block-button__link wp-element-button" href="%2$s">%3$s</a></div>',
+			'<div class="wp-block-button %1$s"><a class="wp-block-button__link wp-element-button" %2$s>%3$s</a></div>',
 			esc_attr( $modifier ),
-			esc_url( $button['url'] ),
+			iflynepal_anchor_attr( $button['url'] ),
 			esc_html( $button['label'] )
 		);
 	}
@@ -756,8 +756,8 @@ function iflynepal_render_about_promo_button() {
 	}
 
 	return sprintf(
-		'<a class="iflynepal-button iflynepal-button--light iflynepal-trust__promo-button" href="%1$s">%2$s<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>',
-		esc_url( iflynepal_about_promo_field( 'button_url' ) ),
+		'<a class="iflynepal-button iflynepal-button--light iflynepal-trust__promo-button" %1$s>%2$s<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>',
+		iflynepal_anchor_attr( iflynepal_about_promo_field( 'button_url' ) ),
 		esc_html( $label )
 	);
 }
