@@ -132,5 +132,51 @@ $iflynepal_reasons_filters = iflynepal_reasons_filters();
 			<?php endforeach; ?>
 		</div>
 
+		<?php
+		/*
+		 * One "view all X packages" link per type, matching the catalogue
+		 * archive's own filter row (ifn-booking's templates/parts/archive/
+		 * listing.php): every link is rendered and all but the active
+		 * filter's are hidden by assets/js/homepage/reasons/filters.js, so
+		 * the URL is that type's own archive and nothing is assembled in
+		 * JavaScript. "All" carries no link — that is this whole grid, not
+		 * a single type's catalogue — so nothing shows until a real type is
+		 * chosen, on a page without JavaScript included.
+		 *
+		 * `iflynepal-reasons__type-links`, not `__foot`: a card's own footer
+		 * (the price/Explore row) already answers to `.iflynepal-reasons__foot`
+		 * with its own border-top, and reusing that name here pulled that
+		 * border onto this block by accident the first time.
+		 *
+		 * "All" is not skipped here the way ifn-booking's own filter row skips
+		 * it (that link would just be the page already on screen) — its link
+		 * points at the whole catalogue instead, since a homepage visitor is
+		 * not already standing on it. See iflynepal_reasons_all_url().
+		 */
+		?>
+		<?php if ( count( $iflynepal_reasons_filters ) > 1 ) : ?>
+			<div class="iflynepal-reasons__type-links">
+				<?php foreach ( $iflynepal_reasons_filters as $iflynepal_filter ) : ?>
+					<?php if ( '' === $iflynepal_filter['url'] ) : ?>
+						<?php continue; ?>
+					<?php endif; ?>
+					<a class="iflynepal-reasons__all" href="<?php echo esc_url( $iflynepal_filter['url'] ); ?>" data-filter="<?php echo esc_attr( $iflynepal_filter['slug'] ); ?>">
+						<?php if ( '' === $iflynepal_filter['slug'] ) : ?>
+							<?php esc_html_e( 'View all packages', 'iflynepal' ); ?>
+						<?php else : ?>
+							<?php
+							printf(
+								/* translators: %s: package type name. */
+								esc_html__( 'View all %s packages', 'iflynepal' ),
+								esc_html( $iflynepal_filter['label'] )
+							);
+							?>
+						<?php endif; ?>
+						<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+					</a>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
+
 	</div>
 </section>

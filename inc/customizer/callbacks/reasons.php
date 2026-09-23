@@ -155,16 +155,39 @@ function iflynepal_reasons_cards() {
 }
 
 /**
+ * The whole catalogue's own archive — /packages/ — for the "All" filter's
+ * "view all" link.
+ *
+ * @since 1.0.0
+ *
+ * @return string URL, or '' when the booking plugin isn't active to register
+ *                 the post type this reads.
+ */
+function iflynepal_reasons_all_url() {
+	if ( ! defined( 'IFLYNEPAL_PACKAGE_POST_TYPE' ) ) {
+		return '';
+	}
+
+	$url = get_post_type_archive_link( IFLYNEPAL_PACKAGE_POST_TYPE );
+
+	return $url ? $url : '';
+}
+
+/**
  * The filter buttons above the grid, "All" included.
  *
  * "All" carries no slug of its own — it is the unfiltered view, so there is
  * nothing for a card to match against, the same rule the catalogue's own
  * "All" button follows (it is deliberately not "All retreats" either: see
- * ifn-booking's iflynepal_archive_filter_terms()).
+ * ifn-booking's iflynepal_archive_filter_terms()). Its "view all" link is the
+ * one exception to "a type's own archive": with no single type chosen there
+ * is no one archive to send a visitor to, so it points at the whole
+ * catalogue instead — see the "view all" link in
+ * template-parts/home/reasons-section.php.
  *
  * @since 1.0.0
  *
- * @return array[] Each with 'slug' (empty for "All") and 'label'.
+ * @return array[] Each with 'slug' (empty for "All"), 'label' and 'url'.
  */
 function iflynepal_reasons_filters() {
 	$filters = iflynepal_reasons_payload()['filters'];
@@ -178,6 +201,7 @@ function iflynepal_reasons_filters() {
 		array(
 			'slug'  => '',
 			'label' => __( 'All', 'iflynepal' ),
+			'url'   => iflynepal_reasons_all_url(),
 		)
 	);
 

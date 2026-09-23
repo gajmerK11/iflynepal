@@ -2822,6 +2822,40 @@
 		color: #fff;
 	}
 
+	/*
+	 * One link per type-filter button, all but the active one hidden by
+	 * assets/js/homepage/reasons/filters.js — the same "every link rendered,
+	 * only the current one shown" rule the catalogue archive's own filter row
+	 * follows (ifn-booking's catalogue.css, .iflynepal-listing__all). "All"
+	 * has no link of its own, so nothing shows until a real type is chosen.
+	 *
+	 * Named `__type-links` rather than reusing `__foot` — that class already
+	 * belongs to a card's own price/Explore row, border-top and all, and
+	 * sharing the name pulled that border onto this block too.
+	 */
+	.iflynepal-reasons__type-links {
+		display: flex;
+		justify-content: flex-start;
+		margin-top: 26px;
+	}
+
+	.iflynepal-reasons__all {
+		display: none;
+		align-items: center;
+		gap: 6px;
+		color: var(--iflynepal-navy);
+		font-size: 13px;
+		font-weight: 800;
+	}
+
+	.iflynepal-reasons__all.is-current {
+		@apply inline-flex;
+	}
+
+	.iflynepal-reasons__all:hover .iflynepal-ico-arr {
+		transform: translateX(4px);
+	}
+
 	/* ---------------------------------------------------------------- grid */
 
 	.iflynepal-reasons__grid {

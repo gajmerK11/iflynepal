@@ -23,6 +23,7 @@
 
 	var filters = section.querySelector( '.iflynepal-reasons__filters' );
 	var cards   = Array.prototype.slice.call( section.querySelectorAll( '.iflynepal-reasons__card' ) );
+	var links   = Array.prototype.slice.call( section.querySelectorAll( '.iflynepal-reasons__all' ) );
 
 	if ( ! filters || ! cards.length ) {
 		return;
@@ -55,6 +56,17 @@
 			var hidden     = '' !== filter && categories.indexOf( filter ) === -1;
 
 			card.classList.toggle( 'is-hidden', hidden );
+		} );
+
+		/*
+		 * Same rule the catalogue archive's own filter row follows (ifn-booking's
+		 * assets/js/archive/filters.js): only the link matching the button just
+		 * pressed is shown, and pressing "All" (filter === '') shows none, since
+		 * no link carries an empty data-filter — that button has no link of its
+		 * own to reveal.
+		 */
+		links.forEach( function ( link ) {
+			link.classList.toggle( 'is-current', link.getAttribute( 'data-filter' ) === filter );
 		} );
 	} );
 }() );
