@@ -25,18 +25,23 @@
  *
  * @var array $args {
  *     @type string $variant   One of 'top', 'list' or 'related'. Default 'list'.
- *     @type string $type_pill Corner badge on the picture, e.g. "News". Only
+ *     @type string $type_pill  Corner badge on the picture, e.g. "News". Only
  *                             the mixed grid on an author's own page passes
  *                             one (see template-parts/authors/author-layout.php)
  *                             and only for the 'related' variant — 'top'
  *                             already carries its own "Top news" pill.
+ *     @type string $avatar_url The author's own uploaded photo, replacing the
+ *                             initials disc. Same author-grid-only condition
+ *                             as $type_pill; see articles/card.php's own copy
+ *                             of this doc for why.
  * }
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_news_card_variant   = isset( $args['variant'] ) ? (string) $args['variant'] : 'list';
-$iflynepal_news_card_type_pill = 'related' === $iflynepal_news_card_variant && isset( $args['type_pill'] ) ? (string) $args['type_pill'] : '';
+$iflynepal_news_card_variant    = isset( $args['variant'] ) ? (string) $args['variant'] : 'list';
+$iflynepal_news_card_type_pill  = 'related' === $iflynepal_news_card_variant && isset( $args['type_pill'] ) ? (string) $args['type_pill'] : '';
+$iflynepal_news_card_avatar_url = 'related' === $iflynepal_news_card_variant && isset( $args['avatar_url'] ) ? (string) $args['avatar_url'] : '';
 $iflynepal_news_card_link    = get_permalink();
 $iflynepal_news_card_author  = get_the_author();
 $iflynepal_news_card_avatar  = iflynepal_article_initials( $iflynepal_news_card_author );
@@ -80,7 +85,12 @@ $iflynepal_news_card_read = sprintf( __( 'Read: %s', 'iflynepal' ), iflynepal_ar
 		<h3 class="post-title"><a href="<?php echo esc_url( $iflynepal_news_card_link ); ?>"><?php echo esc_html( iflynepal_article_plain_title() ); ?></a></h3>
 		<p class="post-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 30, '&hellip;' ) ); ?></p>
 		<div class="trip-foot post-foot"><span class="post-author"><?php
-			if ( '' !== $iflynepal_news_card_avatar ) {
+			if ( '' !== $iflynepal_news_card_avatar_url ) {
+				printf(
+					'<span class="post-avatar post-avatar--photo" aria-hidden="true"><img src="%s" alt="" loading="lazy"></span>',
+					esc_url( $iflynepal_news_card_avatar_url )
+				);
+			} elseif ( '' !== $iflynepal_news_card_avatar ) {
 				printf(
 					'<span class="post-avatar" aria-hidden="true">%s</span>',
 					esc_html( $iflynepal_news_card_avatar )

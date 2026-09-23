@@ -172,7 +172,9 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 	$iflynepal_posts = iflynepal_author_posts( $iflynepal_author->ID );
 
 	if ( ! empty( $iflynepal_posts ) ) :
-		$iflynepal_post_flags = iflynepal_author_post_type_flags( $iflynepal_author->ID );
+		$iflynepal_post_flags      = iflynepal_author_post_type_flags( $iflynepal_author->ID );
+		$iflynepal_post_photo_id   = iflynepal_author_photo_id( $iflynepal_author->ID );
+		$iflynepal_post_avatar_url = $iflynepal_post_photo_id ? (string) wp_get_attachment_image_url( $iflynepal_post_photo_id, 'thumbnail' ) : '';
 		?>
 		<section class="section section--mist author-posts" id="posts" aria-labelledby="posts-title">
 			<div class="container">
@@ -202,8 +204,9 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 								'template-parts/news/card',
 								null,
 								array(
-									'variant'   => 'related',
-									'type_pill' => __( 'News', 'iflynepal' ),
+									'variant'    => 'related',
+									'type_pill'  => __( 'News', 'iflynepal' ),
+									'avatar_url' => $iflynepal_post_avatar_url,
 								)
 							);
 						} elseif ( IFLYNEPAL_ARTICLE_POST_TYPE === get_post_type() ) {
@@ -211,8 +214,9 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 								'template-parts/articles/card',
 								null,
 								array(
-									'heading'   => 'h2',
-									'type_pill' => __( 'Article', 'iflynepal' ),
+									'heading'    => 'h2',
+									'type_pill'  => __( 'Article', 'iflynepal' ),
+									'avatar_url' => $iflynepal_post_avatar_url,
 								)
 							);
 						} else {
@@ -220,8 +224,9 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 								'template-parts/articles/card',
 								null,
 								array(
-									'heading'   => 'h2',
-									'type_pill' => __( 'Blog', 'iflynepal' ),
+									'heading'    => 'h2',
+									'type_pill'  => __( 'Blog', 'iflynepal' ),
+									'avatar_url' => $iflynepal_post_avatar_url,
 								)
 							);
 						}
