@@ -246,16 +246,14 @@ function iflynepal_author_contribution_html( $author_id ) {
 }
 
 /**
- * The expertise pills, each linking to the real Article Category it names.
- *
- * A slug that does not match a real, existing category is silently dropped:
- * an admin field is not the place to validate against a taxonomy that can
- * change after the field was last saved.
+ * The expertise pills: free-text, comma-separated, display only. Not tied to
+ * a taxonomy — whatever an admin types in the field is shown verbatim, one
+ * pill per piece.
  *
  * @since 1.0.0
  *
  * @param int $author_id Author.
- * @return array<int,array{name:string,url:string}> Pills, in the order typed.
+ * @return array<int,array{name:string}> Pills, in the order typed.
  */
 function iflynepal_author_expertise_pills( $author_id ) {
 	$raw = trim( (string) get_user_meta( $author_id, 'iflynepal_author_expertise', true ) );
@@ -267,28 +265,11 @@ function iflynepal_author_expertise_pills( $author_id ) {
 	$pills = array();
 
 	foreach ( explode( ',', $raw ) as $piece ) {
-		$slug = sanitize_title( trim( $piece ) );
+		$piece = trim( $piece );
 
-		if ( '' === $slug ) {
-			continue;
+		if ( '' !== $piece ) {
+			$pills[] = array( 'name' => $piece );
 		}
-
-		$term = get_term_by( 'slug', $slug, IFLYNEPAL_ARTICLE_CATEGORY );
-
-		if ( ! $term instanceof WP_Term ) {
-			continue;
-		}
-
-		$url = get_term_link( $term );
-
-		if ( is_wp_error( $url ) ) {
-			continue;
-		}
-
-		$pills[] = array(
-			'name' => $term->name,
-			'url'  => $url,
-		);
 	}
 
 	return $pills;

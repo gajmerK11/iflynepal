@@ -114,7 +114,7 @@ function iflynepal_render_author_profile_fields( $user ) {
 					name="iflynepal_author_expertise"
 					value="<?php echo esc_attr( get_user_meta( $user_id, 'iflynepal_author_expertise', true ) ); ?>"
 					class="regular-text">
-				<p class="description"><?php esc_html_e( 'Comma-separated Article Category slugs, e.g. "trekking, peak-climbing, wellness-retreats". Shown as pills linking to each category. A slug that does not match a real category is skipped.', 'iflynepal' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Comma-separated, e.g. "Trekking, Peak Climbing, Wellness Retreats". Shown as static pills, not linked to anything.', 'iflynepal' ); ?></p>
 			</td>
 		</tr>
 

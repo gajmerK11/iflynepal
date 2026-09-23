@@ -118,18 +118,6 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 					<div class="bio-lede" data-anim><?php echo $iflynepal_bio; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- iflynepal_author_bio_html() escapes. ?></div>
 				<?php endif; ?>
 
-				<?php $iflynepal_pills = iflynepal_author_expertise_pills( $iflynepal_author->ID ); ?>
-				<?php if ( ! empty( $iflynepal_pills ) ) : ?>
-					<div class="bio-card" data-anim>
-						<h2><?php esc_html_e( 'Expertise', 'iflynepal' ); ?></h2>
-						<div class="bio-pills">
-							<?php foreach ( $iflynepal_pills as $iflynepal_pill ) : ?>
-								<a href="<?php echo esc_url( $iflynepal_pill['url'] ); ?>"><?php echo esc_html( $iflynepal_pill['name'] ); ?></a>
-							<?php endforeach; ?>
-						</div>
-					</div>
-				<?php endif; ?>
-
 				<?php $iflynepal_experience = iflynepal_author_experience_html( $iflynepal_author->ID ); ?>
 				<?php if ( '' !== $iflynepal_experience ) : ?>
 					<div class="bio-block" data-anim>
@@ -162,6 +150,18 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 							?>
 						</h2>
 						<?php echo $iflynepal_contribution; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- iflynepal_author_contribution_html() escapes. ?>
+					</div>
+				<?php endif; ?>
+
+				<?php $iflynepal_pills = iflynepal_author_expertise_pills( $iflynepal_author->ID ); ?>
+				<?php if ( ! empty( $iflynepal_pills ) ) : ?>
+					<div class="bio-block bio-expertise" data-anim>
+						<h2><?php esc_html_e( 'Expertise:', 'iflynepal' ); ?></h2>
+						<div class="bio-pills">
+							<?php foreach ( $iflynepal_pills as $iflynepal_pill ) : ?>
+								<span class="bio-pill"><?php echo esc_html( $iflynepal_pill['name'] ); ?></span>
+							<?php endforeach; ?>
+						</div>
 					</div>
 				<?php endif; ?>
 			</div>

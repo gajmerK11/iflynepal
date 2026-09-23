@@ -291,28 +291,22 @@
 .bio-lede p:last-child { margin: 0; }
 .bio-lede em { color: var(--navy); }
 
-.bio-card {
-	padding: 24px 26px;
-	margin-bottom: 32px;
-	border: 1px solid var(--line);
-	border-radius: var(--r-lg);
-	background: var(--mist);
-}
-.bio-card h2 { margin: 0 0 14px; font-size: 19px; letter-spacing: -.01em; color: var(--ink-deep); }
-.bio-pills { display: flex; flex-wrap: wrap; gap: 9px; }
-.bio-pills a {
+.bio-expertise { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.bio-expertise h2 { margin: 0; }
+.bio-pills { display: flex; flex-wrap: wrap; gap: 9px; margin-top: -10px; }
+.bio-pill {
 	display: inline-flex;
 	align-items: center;
 	padding: 7px 15px;
 	border: 1px solid rgba(5, 69, 167, .2);
 	border-radius: 999px;
-	background: #fff;
 	color: var(--navy);
 	font-size: 13px;
 	font-weight: 600;
-	transition: background .2s ease, border-color .2s ease, transform .2s ease;
+	cursor: default;
+	transition: background .2s ease, border-color .2s ease, color .2s ease;
 }
-.bio-pills a:hover { background: var(--navy); border-color: var(--navy); color: #fff; transform: translateY(-2px); }
+.bio-pill:hover { background: var(--mist); border-color: var(--navy); color: var(--ink-deep); }
 
 .bio-block { margin-bottom: 30px; }
 .bio-block:last-child { margin-bottom: 0; }
