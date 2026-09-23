@@ -352,6 +352,15 @@
 /* The author's posts. */
 .author-posts { padding: 76px 0 96px; }
 .author-posts .section-head { margin-bottom: 38px; }
+
+/*
+ * articles.css caps a section-head's lead at 700px, sized for the multi-line
+ * standfirsts other sections carry. This one is a single sentence the design
+ * draws as one line; on a two-card grid (an author with only two of the three
+ * families) that width still wraps it, so both caps are lifted here.
+ */
+.author-posts .section-head { max-width: none; }
+.author-posts .section-head .lead { max-width: none; }
 .author-posts .post-grid { margin-top: 0; }
 .author-posts-foot {
 	display: flex;

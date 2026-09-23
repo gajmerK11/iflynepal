@@ -368,28 +368,6 @@ function iflynepal_article_author_line( $author_id ) {
 }
 
 /**
- * One of the site's own social profiles, as the footer has it.
- *
- * The four buttons beside the share control are the site's accounts, not this
- * article's, so they read the same settings the footer's follow row does
- * rather than growing a second set to keep in step.
- *
- * @since 1.0.0
- *
- * @param string $slug Network slug, as inc/customizer/callbacks/footer.php keys them.
- * @return string URL, empty when the network is unknown or the field cleared.
- */
-function iflynepal_article_social_url( $slug ) {
-	$networks = iflynepal_footer_social_networks();
-
-	if ( ! isset( $networks[ $slug ] ) ) {
-		return '';
-	}
-
-	return trim( (string) get_theme_mod( 'iflynepal_footer_social_' . $slug, $networks[ $slug ]['placeholder'] ) );
-}
-
-/**
  * Where the share menu points, for the article being viewed.
  *
  * @since 1.0.0

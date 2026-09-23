@@ -17,18 +17,12 @@
  *                            grid, where the card is a top-level item; 'h3' in
  *                            the related row, which sits under an h2 of its own.
  *     @type bool   $anim     Whether the card opts into the scroll reveal.
- *     @type string $type_pill  Corner badge on the picture, e.g. "Article" or
- *                             "Blog". Only the mixed grid on an author's own
- *                             page passes one — see template-parts/authors/
- *                             author-layout.php; everywhere else the grid is
- *                             already all one type, so a label would repeat
- *                             what the page already says.
- *     @type string $avatar_url The author's own uploaded photo, replacing the
- *                             initials disc. Passed only from that same
- *                             author-layout.php grid, where every card is
- *                             this one person's own writing; everywhere else
- *                             the byline names whoever wrote that particular
- *                             post, so no single photo would be right.
+ *     @type string $type_pill Corner badge on the picture, e.g. "Article" or
+ *                            "Blog". Only the mixed grid on an author's own
+ *                            page passes one — see template-parts/authors/
+ *                            author-layout.php; everywhere else the grid is
+ *                            already all one type, so a label would repeat
+ *                            what the page already says.
  * }
  */
 
@@ -37,12 +31,13 @@ defined( 'ABSPATH' ) || exit;
 $iflynepal_card_heading   = isset( $args['heading'] ) && 'h3' === $args['heading'] ? 'h3' : 'h2';
 $iflynepal_card_anim      = ! empty( $args['anim'] );
 $iflynepal_card_type_pill = isset( $args['type_pill'] ) ? (string) $args['type_pill'] : '';
-$iflynepal_card_avatar    = isset( $args['avatar_url'] ) ? (string) $args['avatar_url'] : '';
-$iflynepal_card_id       = get_the_ID();
-$iflynepal_card_link     = get_permalink();
-$iflynepal_card_category = iflynepal_article_primary_category( $iflynepal_card_id );
-$iflynepal_card_author   = get_the_author();
-$iflynepal_card_initials = iflynepal_article_initials( $iflynepal_card_author );
+$iflynepal_card_id        = get_the_ID();
+$iflynepal_card_link      = get_permalink();
+$iflynepal_card_category  = iflynepal_article_primary_category( $iflynepal_card_id );
+$iflynepal_card_author    = get_the_author();
+$iflynepal_card_initials  = iflynepal_article_initials( $iflynepal_card_author );
+$iflynepal_card_photo_id  = iflynepal_author_photo_id( (int) get_the_author_meta( 'ID' ) );
+$iflynepal_card_avatar    = $iflynepal_card_photo_id ? (string) wp_get_attachment_image_url( $iflynepal_card_photo_id, 'thumbnail' ) : '';
 ?>
 <article class="trip-card post-card"<?php echo $iflynepal_card_category ? ' data-cat="' . esc_attr( $iflynepal_card_category->slug ) . '"' : ''; ?><?php echo $iflynepal_card_anim ? ' data-anim' : ''; ?>>
 	<a class="trip-img post-img" href="<?php echo esc_url( $iflynepal_card_link ); ?>" tabindex="-1" aria-hidden="true"><?php

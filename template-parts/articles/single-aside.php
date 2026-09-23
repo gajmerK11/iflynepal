@@ -22,28 +22,29 @@ $iflynepal_aside_headings = isset( $args['headings'] ) ? (array) $args['headings
 $iflynepal_aside_author   = (int) get_the_author_meta( 'ID' );
 $iflynepal_aside_name     = get_the_author();
 $iflynepal_aside_initials = iflynepal_article_initials( $iflynepal_aside_name );
+$iflynepal_aside_role     = iflynepal_author_role( $iflynepal_aside_author );
 $iflynepal_aside_share    = iflynepal_article_share_links();
-$iflynepal_aside_socials  = array_filter(
-	array(
-		'facebook'  => iflynepal_article_social_url( 'facebook' ),
-		'instagram' => iflynepal_article_social_url( 'instagram' ),
-		'youtube'   => iflynepal_article_social_url( 'youtube' ),
-		'x'         => iflynepal_article_social_url( 'x' ),
-	)
-);
 
+/*
+ * The author's own photo (iFly Nepal Author Profile), same field the Authors
+ * pages read, not a Gravatar: this team's accounts are a house byline as
+ * often as a person, so there is nothing to request one for.
+ */
+$iflynepal_aside_photo_id = iflynepal_author_photo_id( $iflynepal_aside_author );
+$iflynepal_aside_avatar   = $iflynepal_aside_photo_id ? (string) wp_get_attachment_image_url( $iflynepal_aside_photo_id, 'thumbnail' ) : '';
+
+/*
+ * This author's own social links (iFly Nepal Author Profile), not the site's
+ * own brand accounts the footer's follow row reads — see inc/authors.php's
+ * iflynepal_author_social_links(), which already leaves out whichever
+ * networks this author left blank.
+ */
+$iflynepal_aside_socials = iflynepal_author_social_links( $iflynepal_aside_author );
+
+/* The share menu's own two brand icons; the follow row above uses each social's own icon. */
 $iflynepal_aside_icons = array(
-	'facebook'  => '<svg viewBox="0 0 24 24" class="ico-solid" aria-hidden="true"><path d="M24 12.07C24 5.44 18.63.07 12 .07S0 5.44 0 12.07c0 5.99 4.39 10.95 10.13 11.85v-8.38H7.08v-3.47h3.05V9.43c0-3 1.79-4.67 4.53-4.67 1.31 0 2.69.24 2.69.24v2.95h-1.52c-1.49 0-1.95.92-1.95 1.87v2.25h3.33l-.53 3.47h-2.8v8.38C19.61 23.03 24 18.06 24 12.07z"/></svg>',
-	'instagram' => '<svg viewBox="0 0 24 24" class="ico-line" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r=".6" fill="currentColor"/></svg>',
-	'youtube'   => '<svg viewBox="0 0 24 24" class="ico-line" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10.2 9.4 4.6 2.6-4.6 2.6z" fill="currentColor"/></svg>',
-	'x'         => '<svg viewBox="0 0 24 24" class="ico-solid" aria-hidden="true"><path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24H16.17l-4.71-6.23-5.4 6.23H2.74l7.73-8.84L1.25 2.25H8.08l4.26 5.63 5.9-5.63zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64z"/></svg>',
-);
-
-$iflynepal_aside_labels = array(
-	'facebook'  => __( 'iFly Nepal on Facebook', 'iflynepal' ),
-	'instagram' => __( 'iFly Nepal on Instagram', 'iflynepal' ),
-	'youtube'   => __( 'iFly Nepal on YouTube', 'iflynepal' ),
-	'x'         => __( 'iFly Nepal on X', 'iflynepal' ),
+	'facebook' => '<svg viewBox="0 0 24 24" class="ico-solid" aria-hidden="true"><path d="M24 12.07C24 5.44 18.63.07 12 .07S0 5.44 0 12.07c0 5.99 4.39 10.95 10.13 11.85v-8.38H7.08v-3.47h3.05V9.43c0-3 1.79-4.67 4.53-4.67 1.31 0 2.69.24 2.69.24v2.95h-1.52c-1.49 0-1.95.92-1.95 1.87v2.25h3.33l-.53 3.47h-2.8v8.38C19.61 23.03 24 18.06 24 12.07z"/></svg>',
+	'x'        => '<svg viewBox="0 0 24 24" class="ico-solid" aria-hidden="true"><path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24H16.17l-4.71-6.23-5.4 6.23H2.74l7.73-8.84L1.25 2.25H8.08l4.26 5.63 5.9-5.63zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64z"/></svg>',
 );
 ?>
 <aside class="post-aside" aria-label="<?php echo esc_attr( iflynepal_section_labels()['aside_about'] ); ?>">
@@ -52,10 +53,12 @@ $iflynepal_aside_labels = array(
 		<div class="aside-block">
 			<h2 class="aside-label"><?php esc_html_e( 'Contributors', 'iflynepal' ); ?></h2>
 			<a class="aside-author" href="<?php echo esc_url( get_author_posts_url( $iflynepal_aside_author ) ); ?>">
-				<?php if ( '' !== $iflynepal_aside_initials ) : ?>
+				<?php if ( '' !== $iflynepal_aside_avatar ) : ?>
+					<span class="post-avatar post-avatar--photo" aria-hidden="true"><img src="<?php echo esc_url( $iflynepal_aside_avatar ); ?>" alt="" loading="lazy"></span>
+				<?php elseif ( '' !== $iflynepal_aside_initials ) : ?>
 					<span class="post-avatar" aria-hidden="true"><?php echo esc_html( $iflynepal_aside_initials ); ?></span>
 				<?php endif; ?>
-				<span><strong><?php echo esc_html( $iflynepal_aside_name ); ?></strong><small><?php echo esc_html( iflynepal_article_author_line( $iflynepal_aside_author ) ); ?></small></span>
+				<span><strong><?php echo esc_html( $iflynepal_aside_name ); ?></strong><small><?php echo esc_html( $iflynepal_aside_role ); ?></small></span>
 			</a>
 		</div>
 
@@ -72,9 +75,10 @@ $iflynepal_aside_labels = array(
 					<a role="menuitem" href="<?php echo esc_url( $iflynepal_aside_share['linkedin'] ); ?>" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" class="ico-solid" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zm1.78 13.02H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg><?php esc_html_e( 'LinkedIn', 'iflynepal' ); ?></a>
 				</div>
 			</div>
-			<?php foreach ( $iflynepal_aside_socials as $iflynepal_aside_key => $iflynepal_aside_url ) : ?>
-				<a class="icon-btn" href="<?php echo esc_url( $iflynepal_aside_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( $iflynepal_aside_labels[ $iflynepal_aside_key ] ); ?>"><?php
-					echo $iflynepal_aside_icons[ $iflynepal_aside_key ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fixed markup declared above.
+			<?php foreach ( $iflynepal_aside_socials as $iflynepal_aside_social ) : ?>
+				<a class="icon-btn" href="<?php echo esc_url( $iflynepal_aside_social['url'] ); ?>" target="_blank" rel="noopener noreferrer"
+					aria-label="<?php echo esc_attr( sprintf( /* translators: 1: author's name, 2: social network. */ __( '%1$s on %2$s', 'iflynepal' ), $iflynepal_aside_name, $iflynepal_aside_social['label'] ) ); ?>"><?php
+					echo $iflynepal_aside_social['icon']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- iflynepal_author_social_links() returns fixed markup, no input.
 				?></a>
 			<?php endforeach; ?>
 		</div>

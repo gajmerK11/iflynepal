@@ -172,14 +172,12 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 	$iflynepal_posts = iflynepal_author_posts( $iflynepal_author->ID );
 
 	if ( ! empty( $iflynepal_posts ) ) :
-		$iflynepal_post_flags      = iflynepal_author_post_type_flags( $iflynepal_author->ID );
-		$iflynepal_post_photo_id   = iflynepal_author_photo_id( $iflynepal_author->ID );
-		$iflynepal_post_avatar_url = $iflynepal_post_photo_id ? (string) wp_get_attachment_image_url( $iflynepal_post_photo_id, 'thumbnail' ) : '';
+		$iflynepal_post_flags = iflynepal_author_post_type_flags( $iflynepal_author->ID );
 		?>
 		<section class="section section--mist author-posts" id="posts" aria-labelledby="posts-title">
 			<div class="container">
 				<div class="section-head" data-anim>
-					<span class="eyebrow"><?php esc_html_e( 'From this author', 'iflynepal' ); ?></span>
+					<span class="eyebrow" id="author-posts-eyebrow"><?php echo esc_html( iflynepal_author_posts_eyebrow() ); ?></span>
 					<h2 id="posts-title">
 						<?php
 						printf(
@@ -189,7 +187,10 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 						);
 						?>
 					</h2>
-					<p class="lead"><?php esc_html_e( 'Trek guides, retreat stories and trip news, written by the people who plan the journeys.', 'iflynepal' ); ?></p>
+					<?php $iflynepal_posts_lead = iflynepal_author_posts_lead(); ?>
+					<?php if ( '' !== $iflynepal_posts_lead || is_customize_preview() ) : ?>
+						<p class="lead" id="author-posts-lead"><?php echo esc_html( $iflynepal_posts_lead ); ?></p>
+					<?php endif; ?>
 				</div>
 
 				<div class="post-grid">
@@ -204,9 +205,8 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 								'template-parts/news/card',
 								null,
 								array(
-									'variant'    => 'related',
-									'type_pill'  => __( 'News', 'iflynepal' ),
-									'avatar_url' => $iflynepal_post_avatar_url,
+									'variant'   => 'related',
+									'type_pill' => __( 'News', 'iflynepal' ),
 								)
 							);
 						} elseif ( IFLYNEPAL_ARTICLE_POST_TYPE === get_post_type() ) {
@@ -214,9 +214,8 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 								'template-parts/articles/card',
 								null,
 								array(
-									'heading'    => 'h2',
-									'type_pill'  => __( 'Article', 'iflynepal' ),
-									'avatar_url' => $iflynepal_post_avatar_url,
+									'heading'   => 'h2',
+									'type_pill' => __( 'Article', 'iflynepal' ),
 								)
 							);
 						} else {
@@ -224,9 +223,8 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 								'template-parts/articles/card',
 								null,
 								array(
-									'heading'    => 'h2',
-									'type_pill'  => __( 'Blog', 'iflynepal' ),
-									'avatar_url' => $iflynepal_post_avatar_url,
+									'heading'   => 'h2',
+									'type_pill' => __( 'Blog', 'iflynepal' ),
 								)
 							);
 						}

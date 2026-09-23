@@ -185,3 +185,47 @@ function iflynepal_authors_list_heading() {
 function iflynepal_authors_list_lead() {
 	return trim( (string) get_theme_mod( 'iflynepal_authors_list_lead', IFLYNEPAL_AUTHORS_LIST_LEAD_DEFAULT ) );
 }
+
+/**
+ * The single author page's posts section eyebrow, until one is written.
+ *
+ * @since 1.0.0
+ * @var string
+ */
+define( 'IFLYNEPAL_AUTHOR_POSTS_EYEBROW_DEFAULT', 'From this author' );
+
+/**
+ * The single author page's posts section standfirst, until one is written.
+ *
+ * @since 1.0.0
+ * @var string
+ */
+define( 'IFLYNEPAL_AUTHOR_POSTS_LEAD_DEFAULT', 'Trek guides, retreat stories and trip news, written by the people who plan the journeys.' );
+
+/**
+ * The eyebrow over "Read my …" on a single author page.
+ *
+ * @since 1.0.0
+ *
+ * @return string Sanitized text, falling back to the design's own words.
+ */
+function iflynepal_author_posts_eyebrow() {
+	$eyebrow = trim( (string) get_theme_mod( 'iflynepal_author_posts_eyebrow', IFLYNEPAL_AUTHOR_POSTS_EYEBROW_DEFAULT ) );
+
+	if ( '' === $eyebrow ) {
+		$eyebrow = IFLYNEPAL_AUTHOR_POSTS_EYEBROW_DEFAULT;
+	}
+
+	return iflynepal_kses_text( $eyebrow );
+}
+
+/**
+ * The standfirst under "Read my …" on a single author page.
+ *
+ * @since 1.0.0
+ *
+ * @return string The line, empty when the editor has cleared it.
+ */
+function iflynepal_author_posts_lead() {
+	return trim( (string) get_theme_mod( 'iflynepal_author_posts_lead', IFLYNEPAL_AUTHOR_POSTS_LEAD_DEFAULT ) );
+}

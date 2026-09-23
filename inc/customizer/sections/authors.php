@@ -215,3 +215,60 @@ $wp_customize->add_control(
 		)
 	)
 );
+
+$wp_customize->add_setting(
+	'iflynepal_author_posts_eyebrow',
+	array(
+		'default'           => IFLYNEPAL_AUTHOR_POSTS_EYEBROW_DEFAULT,
+		'sanitize_callback' => 'iflynepal_kses_text',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_author_posts_eyebrow',
+	array(
+		'label'       => __( 'Posts section eyebrow', 'iflynepal' ),
+		'description' => __( 'Above "Read my …", over the grid of this author\'s own writing.', 'iflynepal' ),
+		'section'     => 'iflynepal_author_banner',
+		'priority'    => 20,
+	)
+);
+
+$wp_customize->add_setting(
+	'iflynepal_author_posts_lead',
+	array(
+		'default'           => IFLYNEPAL_AUTHOR_POSTS_LEAD_DEFAULT,
+		'sanitize_callback' => 'iflynepal_kses_text',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_author_posts_lead',
+	array(
+		'label'       => __( 'Posts section line', 'iflynepal' ),
+		'description' => __( 'One sentence under "Read my …". Empty removes it.', 'iflynepal' ),
+		'section'     => 'iflynepal_author_banner',
+		'priority'    => 30,
+		'type'        => 'textarea',
+	)
+);
+
+$wp_customize->selective_refresh->add_partial(
+	'iflynepal_author_posts_eyebrow',
+	array(
+		'selector'            => '#author-posts-eyebrow',
+		'settings'            => array( 'iflynepal_author_posts_eyebrow' ),
+		'render_callback'     => 'iflynepal_author_posts_eyebrow',
+		'container_inclusive' => false,
+	)
+);
+
+$wp_customize->selective_refresh->add_partial(
+	'iflynepal_author_posts_lead',
+	array(
+		'selector'            => '#author-posts-lead',
+		'settings'            => array( 'iflynepal_author_posts_lead' ),
+		'render_callback'     => 'iflynepal_author_posts_lead',
+		'container_inclusive' => false,
+	)
+);

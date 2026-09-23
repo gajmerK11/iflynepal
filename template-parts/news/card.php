@@ -25,27 +25,24 @@
  *
  * @var array $args {
  *     @type string $variant   One of 'top', 'list' or 'related'. Default 'list'.
- *     @type string $type_pill  Corner badge on the picture, e.g. "News". Only
- *                             the mixed grid on an author's own page passes
- *                             one (see template-parts/authors/author-layout.php)
- *                             and only for the 'related' variant — 'top'
- *                             already carries its own "Top news" pill.
- *     @type string $avatar_url The author's own uploaded photo, replacing the
- *                             initials disc. Same author-grid-only condition
- *                             as $type_pill; see articles/card.php's own copy
- *                             of this doc for why.
+ *     @type string $type_pill Corner badge on the picture, e.g. "News". Only
+ *                            the mixed grid on an author's own page passes
+ *                            one (see template-parts/authors/author-layout.php)
+ *                            and only for the 'related' variant — 'top'
+ *                            already carries its own "Top news" pill.
  * }
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_news_card_variant    = isset( $args['variant'] ) ? (string) $args['variant'] : 'list';
-$iflynepal_news_card_type_pill  = 'related' === $iflynepal_news_card_variant && isset( $args['type_pill'] ) ? (string) $args['type_pill'] : '';
-$iflynepal_news_card_avatar_url = 'related' === $iflynepal_news_card_variant && isset( $args['avatar_url'] ) ? (string) $args['avatar_url'] : '';
-$iflynepal_news_card_link    = get_permalink();
-$iflynepal_news_card_author  = get_the_author();
-$iflynepal_news_card_avatar  = iflynepal_article_initials( $iflynepal_news_card_author );
-$iflynepal_news_card_classes = 'trip-card post-card';
+$iflynepal_news_card_variant   = isset( $args['variant'] ) ? (string) $args['variant'] : 'list';
+$iflynepal_news_card_type_pill = 'related' === $iflynepal_news_card_variant && isset( $args['type_pill'] ) ? (string) $args['type_pill'] : '';
+$iflynepal_news_card_link      = get_permalink();
+$iflynepal_news_card_author    = get_the_author();
+$iflynepal_news_card_avatar    = iflynepal_article_initials( $iflynepal_news_card_author );
+$iflynepal_news_card_photo_id  = iflynepal_author_photo_id( (int) get_the_author_meta( 'ID' ) );
+$iflynepal_news_card_avatar_url = $iflynepal_news_card_photo_id ? (string) wp_get_attachment_image_url( $iflynepal_news_card_photo_id, 'thumbnail' ) : '';
+$iflynepal_news_card_classes   = 'trip-card post-card';
 
 if ( 'top' === $iflynepal_news_card_variant ) {
 	$iflynepal_news_card_classes .= ' top-card';
