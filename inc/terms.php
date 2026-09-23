@@ -111,8 +111,9 @@ function iflynepal_terms_clause_number( $anchor ) {
 /**
  * Renders the "On this page" index.
  *
- * Ordinary fragment links, so they work with JavaScript off; the active mark
- * is added by assets/js/terms/index.js.
+ * No `href` — see iflynepal_render_cookie_index()'s docblock for why. The
+ * active mark and the glide are added by assets/js/legal/index.js, which is
+ * also what makes the entry do anything at all now.
  *
  * @since 1.0.0
  *
@@ -123,8 +124,8 @@ function iflynepal_render_terms_index() {
 
 	foreach ( iflynepal_terms_clauses() as $anchor => $clause ) {
 		$markup .= sprintf(
-			'<a class="iflynepal-legal-index__link" href="#%1$s">%2$s</a>',
-			esc_attr( $anchor ),
+			'<a class="iflynepal-legal-index__link" %1$s>%2$s</a>',
+			iflynepal_anchor_attr( '#' . $anchor ),
 			esc_html( $clause['title'] )
 		);
 	}

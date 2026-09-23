@@ -89,7 +89,7 @@ $iflynepal_aside_icons = array(
 				<h2 class="aside-label" id="toc-title"><?php esc_html_e( 'On this page', 'iflynepal' ); ?></h2>
 				<nav class="index-list" id="cc-toc-list" aria-labelledby="toc-title">
 					<?php foreach ( $iflynepal_aside_headings as $iflynepal_aside_heading ) : ?>
-						<a href="#<?php echo esc_attr( $iflynepal_aside_heading['id'] ); ?>"><?php echo esc_html( $iflynepal_aside_heading['text'] ); ?></a>
+						<a <?php echo iflynepal_anchor_attr( '#' . $iflynepal_aside_heading['id'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>><?php echo esc_html( $iflynepal_aside_heading['text'] ); ?></a>
 					<?php endforeach; ?>
 				</nav>
 			</div>

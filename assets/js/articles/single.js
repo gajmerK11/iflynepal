@@ -44,7 +44,7 @@
 	var sections = [];
 
 	tocLinks.forEach( function ( link ) {
-		var el = document.querySelector( link.getAttribute( 'href' ) );
+		var el = document.getElementById( link.getAttribute( 'data-iflynepal-scroll' ) );
 
 		if ( el && sections.indexOf( el ) === -1 ) {
 			sections.push( el );
@@ -56,7 +56,7 @@
 
 	var setCurrent = function ( target ) {
 		tocLinks.forEach( function ( link ) {
-			var on = link.getAttribute( 'href' ) === '#' + target.id;
+			var on = link.getAttribute( 'data-iflynepal-scroll' ) === target.id;
 			var was = link.classList.contains( 'is-current' );
 
 			link.classList.toggle( 'is-current', on );
@@ -106,7 +106,7 @@
 
 	tocLinks.forEach( function ( link ) {
 		link.addEventListener( 'click', function () {
-			var target = document.querySelector( link.getAttribute( 'href' ) );
+			var target = document.getElementById( link.getAttribute( 'data-iflynepal-scroll' ) );
 
 			if ( ! target ) {
 				return;

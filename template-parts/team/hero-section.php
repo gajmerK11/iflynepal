@@ -86,7 +86,7 @@ $iflynepal_team_scroll     = iflynepal_team_hero_scroll_label();
 	</div>
 
 	<?php if ( '' !== $iflynepal_team_scroll && iflynepal_team_has_reps() ) : ?>
-		<a class="iflynepal-team-hero__scroll" href="#representatives">
+		<a class="iflynepal-team-hero__scroll" <?php echo iflynepal_anchor_attr( '#representatives' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>>
 			<?php echo esc_html( $iflynepal_team_scroll ); ?>
 			<span aria-hidden="true">&#8595;</span>
 		</a>

@@ -1075,6 +1075,11 @@ function iflynepal_render_country_hero_lead() {
  * chapter by emptying its heading drops its link here too rather than leaving
  * an anchor pointing at nothing.
  *
+ * No `href`: a real `#id` href shows the resolved target in the browser's
+ * status bar on hover and gains the URL bar the fragment on click, which
+ * this bar's own in-page glide (assets/js/about-country/index-bar.js) should
+ * not do either of. That script is what makes the entry do anything at all.
+ *
  * @since 1.0.0
  *
  * @return string Markup.
@@ -1084,8 +1089,8 @@ function iflynepal_render_country_index() {
 
 	foreach ( iflynepal_country_visible_chapters() as $chapter ) {
 		$markup .= sprintf(
-			'<a class="iflynepal-country-index__link" href="#%1$s">%2$s</a>',
-			esc_attr( $chapter['slug'] ),
+			'<a class="iflynepal-country-index__link" %1$s>%2$s</a>',
+			iflynepal_anchor_attr( '#' . $chapter['slug'] ),
 			esc_html( $chapter['label'] )
 		);
 	}

@@ -47,7 +47,7 @@ defined( 'ABSPATH' ) || exit;
 		</div>
 	</div>
 
-	<a class="iflynepal-legal-hero__scroll" href="#policy">
+	<a class="iflynepal-legal-hero__scroll" <?php echo iflynepal_anchor_attr( '#policy' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>>
 		<?php esc_html_e( 'Read the policy', 'iflynepal' ); ?>
 		<span aria-hidden="true">&#8595;</span>
 	</a>

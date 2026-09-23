@@ -34,7 +34,7 @@ $iflynepal_main_body = iflynepal_article_body();
 					<h2 class="aside-label" id="toc-title-m"><?php esc_html_e( 'On this page', 'iflynepal' ); ?></h2>
 					<nav class="index-list" aria-labelledby="toc-title-m">
 						<?php foreach ( $iflynepal_main_body['headings'] as $iflynepal_main_heading ) : ?>
-							<a href="#<?php echo esc_attr( $iflynepal_main_heading['id'] ); ?>"><?php echo esc_html( $iflynepal_main_heading['text'] ); ?></a>
+							<a <?php echo iflynepal_anchor_attr( '#' . $iflynepal_main_heading['id'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>><?php echo esc_html( $iflynepal_main_heading['text'] ); ?></a>
 						<?php endforeach; ?>
 					</nav>
 				</div>

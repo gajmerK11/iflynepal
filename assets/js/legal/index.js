@@ -7,10 +7,13 @@
  * class rather than by a per-page id. One index per page; the first one found
  * is it.
  *
- * The links are ordinary fragment links and still navigate without this file;
- * what it adds is the "you are here" mark, keeping that entry in view inside
- * the index's own scroller, and a glide to the clause instead of the browser's
- * one-frame jump.
+ * The links carry no `href` — see iflynepal_render_cookie_index()'s docblock
+ * in inc/cookie.php for why — so this file is what makes them do anything at
+ * all: the "you are here" mark, keeping that entry in view inside the index's
+ * own scroller, and the glide to the clause. Each click stops the event from
+ * reaching assets/js/global/anchor-scroll.js's own document-level listener
+ * (which would otherwise also match `[data-iflynepal-scroll]` and fire a
+ * second, plainer scroll on top of the glide here).
  *
  * ⚠️ A scroll position rather than an IntersectionObserver, unlike the About
  * Nepal index bar (assets/js/about-country/index-bar.js). A clause here can be
@@ -45,7 +48,7 @@
 	var byId = {};
 
 	links.forEach( function ( link ) {
-		var id = link.getAttribute( 'href' ).slice( 1 );
+		var id = link.getAttribute( 'data-iflynepal-scroll' );
 		var clause = document.getElementById( id );
 
 		if ( ! clause ) {
@@ -294,12 +297,13 @@
 
 	/*
 	 * Clicking an entry marks it at once rather than waiting for the scroll,
-	 * then glides there. The address still gains the fragment, so the link a
-	 * reader copies afterwards opens on that clause.
+	 * then glides there. The address bar is left alone on purpose — see the
+	 * file docblock — so a reader copying the URL afterwards copies the plain
+	 * page, not a clause fragment nobody asked to share.
 	 */
 	links.forEach( function ( link ) {
 		link.addEventListener( 'click', function ( event ) {
-			var id = link.getAttribute( 'href' ).slice( 1 );
+			var id = link.getAttribute( 'data-iflynepal-scroll' );
 			var clause = document.getElementById( id );
 
 			if ( ! clause ) {
@@ -307,12 +311,9 @@
 			}
 
 			event.preventDefault();
+			event.stopPropagation();
 			mark( clause );
 			glideTo( clause );
-
-			if ( window.history && window.history.pushState ) {
-				window.history.pushState( null, '', '#' + id );
-			}
 
 			/*
 			 * Keyboard and screen-reader users are carried to the clause as

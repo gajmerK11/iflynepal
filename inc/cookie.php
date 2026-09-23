@@ -71,8 +71,13 @@ function iflynepal_cookie_clause_number( $anchor ) {
 /**
  * Renders the "On this page" index.
  *
- * Ordinary fragment links, so they work with JavaScript off; the active mark
- * is added by assets/js/legal/index.js.
+ * No `href`, on the same rule iflynepal_anchor_attr() documents for a stored
+ * CTA: a real `#id` href always shows the resolved target in the browser's
+ * status bar on hover, and previews the URL bar gaining the fragment on
+ * click, which an index meant to feel like in-page navigation rather than
+ * a set of pages should not do. assets/js/legal/index.js is what makes the
+ * entry do anything at all — see its own comment — and also adds the active
+ * mark.
  *
  * @since 1.0.0
  *
@@ -83,8 +88,8 @@ function iflynepal_render_cookie_index() {
 
 	foreach ( iflynepal_cookie_clauses() as $anchor => $clause ) {
 		$markup .= sprintf(
-			'<a class="iflynepal-legal-index__link" href="#%1$s">%2$s</a>',
-			esc_attr( $anchor ),
+			'<a class="iflynepal-legal-index__link" %1$s>%2$s</a>',
+			iflynepal_anchor_attr( '#' . $anchor ),
 			esc_html( $clause['title'] )
 		);
 	}

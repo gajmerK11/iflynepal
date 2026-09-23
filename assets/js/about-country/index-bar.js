@@ -1,10 +1,10 @@
 /**
  * About Nepal index bar: marks which chapter the reader is in.
  *
- * The links themselves are ordinary fragment links and still navigate without
- * this file; what it adds is the "you are here" state, the smooth glide to a
- * clicked chapter, and scrolling the active link into view when the bar is too
- * narrow to show them all.
+ * The links carry no `href` — see iflynepal_render_country_index()'s docblock
+ * for why — so this file is what makes them do anything at all: the "you are
+ * here" state, the smooth glide to a clicked chapter, and scrolling the
+ * active link into view when the bar is too narrow to show them all.
  *
  * An IntersectionObserver rather than a scroll handler: the question is which
  * chapter is on screen, which is what the observer answers directly, and it
@@ -36,7 +36,7 @@
 	var reduced = window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 
 	links.forEach( function ( link ) {
-		var id = link.getAttribute( 'href' ).slice( 1 );
+		var id = link.getAttribute( 'data-iflynepal-scroll' );
 		var section = document.getElementById( id );
 
 		if ( ! section ) {
@@ -47,13 +47,15 @@
 		sections.push( section );
 
 		/*
-		 * A plain fragment link jumps instantly; the whole point of a "you are
-		 * here" bar is that moving to a new "here" should be seen. `scrollIntoView`
-		 * honours the chapter's own `scroll-margin-top`, so it already clears the
-		 * docked header and the bar without any offset math here.
+		 * `scrollIntoView` honours the chapter's own `scroll-margin-top`, so it
+		 * already clears the docked header and the bar without any offset math
+		 * here. stopPropagation keeps assets/js/global/anchor-scroll.js's own
+		 * document-level listener from also matching this click and firing a
+		 * second, identical scroll.
 		 */
 		link.addEventListener( 'click', function ( event ) {
 			event.preventDefault();
+			event.stopPropagation();
 			section.scrollIntoView( {
 				behavior: reduced ? 'auto' : 'smooth',
 				block: 'start'

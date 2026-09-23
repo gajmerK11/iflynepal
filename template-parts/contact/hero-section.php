@@ -39,6 +39,6 @@ defined( 'ABSPATH' ) || exit;
 	</div>
 
 	<?php if ( iflynepal_contact_plain( 'hero_scroll_label' ) ) : ?>
-		<a class="iflynepal-contact-hero__scroll" id="iflynepal-contact-hero-scroll" href="#enquiry"><?php echo iflynepal_render_contact_hero_scroll_label(); ?></a>
+		<a class="iflynepal-contact-hero__scroll" id="iflynepal-contact-hero-scroll" <?php echo iflynepal_anchor_attr( '#enquiry' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>><?php echo iflynepal_render_contact_hero_scroll_label(); ?></a>
 	<?php endif; ?>
 </section>

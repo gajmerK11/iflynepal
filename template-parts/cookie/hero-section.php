@@ -47,7 +47,7 @@ defined( 'ABSPATH' ) || exit;
 		</div>
 	</div>
 
-	<a class="iflynepal-legal-hero__scroll" href="#types">
+	<a class="iflynepal-legal-hero__scroll" <?php echo iflynepal_anchor_attr( '#types' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>>
 		<?php esc_html_e( 'Types of cookies', 'iflynepal' ); ?>
 		<span aria-hidden="true">&#8595;</span>
 	</a>
