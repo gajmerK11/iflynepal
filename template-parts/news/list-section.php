@@ -28,8 +28,8 @@ $iflynepal_news_list_pages = (int) $wp_query->max_num_pages;
 
 		<div class="news-head" data-anim>
 			<div>
-				<span class="eyebrow"><?php esc_html_e( 'Recent news', 'iflynepal' ); ?></span>
-				<h2 id="recent-news-title"><?php esc_html_e( 'Latest from Kathmandu', 'iflynepal' ); ?></h2>
+				<span class="eyebrow"><?php echo esc_html( iflynepal_news_recent_eyebrow() ); ?></span>
+				<h2 id="recent-news-title"><?php echo iflynepal_news_recent_heading_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses filtered. ?></h2>
 			</div>
 		</div>
 
