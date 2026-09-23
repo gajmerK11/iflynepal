@@ -37,9 +37,10 @@ document.addEventListener( 'DOMContentLoaded', function () {
 	var selectedLabel = ( window.iflynepalHeroFinder && window.iflynepalHeroFinder.selected ) || '%d selected';
 
 	pickers.forEach( function ( picker ) {
-		var valueEl = picker.querySelector( '.iflynepal-hero__finder-value' );
-		var inputs  = picker.querySelectorAll( 'input[type="checkbox"], input[type="radio"]' );
-		var list    = picker.querySelector( '.iflynepal-hero__finder-list' );
+		var valueEl   = picker.querySelector( '.iflynepal-hero__finder-value' );
+		var inputs    = picker.querySelectorAll( 'input[type="checkbox"], input[type="radio"]' );
+		var list      = picker.querySelector( '.iflynepal-hero__finder-list' );
+		var clearBtn  = picker.querySelector( '[data-iflynepal-finder-clear]' );
 
 		if ( ! valueEl || ! inputs.length ) {
 			return;
@@ -72,6 +73,9 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			} else {
 				valueEl.textContent = selectedLabel.replace( '%d', labels.length );
 			}
+
+			// Swaps the chevron for the clear button once anything is picked.
+			picker.classList.toggle( 'has-value', labels.length > 0 );
 		}
 
 		inputs.forEach( function ( input ) {
@@ -83,6 +87,26 @@ document.addEventListener( 'DOMContentLoaded', function () {
 				}
 			} );
 		} );
+
+		/*
+		 * Lives in the <summary> row, so a plain click would also fire the
+		 * browser's native "toggle this <details>" action — stopped before it
+		 * bubbles there, same as the outside-click listener below has to work
+		 * around <details> having no such hook of its own.
+		 */
+		if ( clearBtn ) {
+			clearBtn.addEventListener( 'click', function ( event ) {
+				event.preventDefault();
+				event.stopPropagation();
+
+				inputs.forEach( function ( input ) {
+					input.checked = false;
+				} );
+
+				updateValue();
+				picker.open = false;
+			} );
+		}
 
 		// Native <details> has no "click outside to close" of its own.
 		document.addEventListener( 'click', function ( event ) {
