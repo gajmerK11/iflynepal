@@ -17,6 +17,48 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Renders one of the profile's long-form fields as a rich editor.
+ *
+ * The three fields this draws are paragraphs of prose that end up on the
+ * author page as written, so they get the same editor the rest of the site's
+ * long-form fields get rather than a bare textarea: bold, italic, underline,
+ * lists and links, and nothing else. The media buttons and the Text tab are
+ * both off, because neither belongs in a biography — an image would have no
+ * place to sit in the author page's layout, and hand-written HTML is what
+ * the toolbar exists to avoid.
+ *
+ * The editor id doubles as the field name, which is safe here in a way it is
+ * not in a repeater: there is exactly one of each of these on the screen.
+ *
+ * `editor_height` is deliberately generous. These fields were textareas of
+ * four and five rows, small enough that a real biography scrolled inside a
+ * letterbox; a person writing several paragraphs should be able to see them.
+ *
+ * @since 1.0.0
+ *
+ * @param string $field Meta key, used as both the editor id and the field name.
+ * @param string $value Stored value.
+ * @return void
+ */
+function iflynepal_render_author_profile_editor( $field, $value ) {
+	wp_editor(
+		$value,
+		$field,
+		array(
+			'textarea_name' => $field,
+			'media_buttons' => false,
+			'quicktags'     => false,
+			'editor_height' => 320,
+			'tinymce'       => array(
+				'toolbar1' => 'bold,italic,underline,bullist,numlist,link,unlink,undo,redo',
+				'toolbar2' => '',
+				'wpautop'  => true,
+			),
+		)
+	);
+}
+
+/**
  * Renders the "iFly Nepal Author Profile" section on a user's edit screen.
  *
  * @since 1.0.0
@@ -59,11 +101,8 @@ function iflynepal_render_author_profile_fields( $user ) {
 		<tr>
 			<th><label for="iflynepal_author_bio"><?php esc_html_e( 'Long biography', 'iflynepal' ); ?></label></th>
 			<td>
-				<textarea id="iflynepal_author_bio"
-					name="iflynepal_author_bio"
-					rows="5"
-					class="large-text"><?php echo esc_textarea( get_user_meta( $user_id, 'iflynepal_author_bio', true ) ); ?></textarea>
-				<p class="description"><?php esc_html_e( 'The opening paragraphs on the full author page. A blank line starts a new paragraph. This is separate from the short Biographical Info field above, which is used in card bylines elsewhere on the site.', 'iflynepal' ); ?></p>
+				<?php iflynepal_render_author_profile_editor( 'iflynepal_author_bio', (string) get_user_meta( $user_id, 'iflynepal_author_bio', true ) ); ?>
+				<p class="description"><?php esc_html_e( 'The opening paragraphs on the full author page. Press Enter for a new paragraph, and use the toolbar for bold, italic, underline, lists and links. This is separate from the short Biographical Info field above, which is used in card bylines elsewhere on the site.', 'iflynepal' ); ?></p>
 			</td>
 		</tr>
 
@@ -82,21 +121,15 @@ function iflynepal_render_author_profile_fields( $user ) {
 		<tr>
 			<th><label for="iflynepal_author_experience"><?php esc_html_e( 'Experience', 'iflynepal' ); ?></label></th>
 			<td>
-				<textarea id="iflynepal_author_experience"
-					name="iflynepal_author_experience"
-					rows="4"
-					class="large-text"><?php echo esc_textarea( get_user_meta( $user_id, 'iflynepal_author_experience', true ) ); ?></textarea>
+				<?php iflynepal_render_author_profile_editor( 'iflynepal_author_experience', (string) get_user_meta( $user_id, 'iflynepal_author_experience', true ) ); ?>
 			</td>
 		</tr>
 
 		<tr>
 			<th><label for="iflynepal_author_contribution"><?php esc_html_e( 'Contribution at iFly Nepal', 'iflynepal' ); ?></label></th>
 			<td>
-				<textarea id="iflynepal_author_contribution"
-					name="iflynepal_author_contribution"
-					rows="4"
-					class="large-text"><?php echo esc_textarea( get_user_meta( $user_id, 'iflynepal_author_contribution', true ) ); ?></textarea>
-				<p class="description"><?php esc_html_e( 'Experience and Contribution may both include a link, written as ordinary text, e.g. https://wa.me/9779800000000. It is turned into a clickable link automatically.', 'iflynepal' ); ?></p>
+				<?php iflynepal_render_author_profile_editor( 'iflynepal_author_contribution', (string) get_user_meta( $user_id, 'iflynepal_author_contribution', true ) ); ?>
+				<p class="description"><?php esc_html_e( 'Experience and Contribution may both carry links: select the words the link belongs on and use the link button in the toolbar.', 'iflynepal' ); ?></p>
 			</td>
 		</tr>
 
@@ -237,9 +270,9 @@ function iflynepal_save_author_profile_fields( $user_id ) {
 		return;
 	}
 
-	$text_fields     = array( 'iflynepal_author_role', 'iflynepal_author_hand', 'iflynepal_author_expertise' );
-	$textarea_fields = array( 'iflynepal_author_bio', 'iflynepal_author_experience', 'iflynepal_author_contribution' );
-	$url_fields      = array_keys( iflynepal_author_social_field_defs() );
+	$text_fields  = array( 'iflynepal_author_role', 'iflynepal_author_hand', 'iflynepal_author_expertise' );
+	$prose_fields = array( 'iflynepal_author_bio', 'iflynepal_author_experience', 'iflynepal_author_contribution' );
+	$url_fields   = array_keys( iflynepal_author_social_field_defs() );
 
 	foreach ( $text_fields as $field ) {
 		if ( isset( $_POST[ $field ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Core's own user-edit.php screen supplies the nonce this hook fires behind.
@@ -247,9 +280,27 @@ function iflynepal_save_author_profile_fields( $user_id ) {
 		}
 	}
 
-	foreach ( $textarea_fields as $field ) {
+	/*
+	 * The prose fields come from a wp_editor(), so they are saved the way the
+	 * rest of the site's long-form fields are: wp_kses_post() keeps the
+	 * paragraphs, the lists, the emphasis and the links the toolbar can
+	 * produce and drops everything else. sanitize_textarea_field() would
+	 * strip the markup the editor exists to write.
+	 *
+	 * An editor emptied in TinyMCE posts back a paragraph holding a
+	 * non-breaking space rather than nothing at all, so a value with no words
+	 * left in it is stored as empty — otherwise the author page would think
+	 * there was a biography and draw an empty section for it.
+	 */
+	foreach ( $prose_fields as $field ) {
 		if ( isset( $_POST[ $field ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			update_user_meta( $user_id, $field, sanitize_textarea_field( wp_unslash( $_POST[ $field ] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$value = wp_kses_post( wp_unslash( $_POST[ $field ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+			if ( '' === trim( wp_strip_all_tags( str_replace( '&nbsp;', ' ', $value ) ) ) ) {
+				$value = '';
+			}
+
+			update_user_meta( $user_id, $field, $value );
 		}
 	}
 

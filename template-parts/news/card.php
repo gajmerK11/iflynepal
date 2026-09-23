@@ -24,13 +24,19 @@
  * @package IFly_Nepal
  *
  * @var array $args {
- *     @type string $variant One of 'top', 'list' or 'related'. Default 'list'.
+ *     @type string $variant   One of 'top', 'list' or 'related'. Default 'list'.
+ *     @type string $type_pill Corner badge on the picture, e.g. "News". Only
+ *                             the mixed grid on an author's own page passes
+ *                             one (see template-parts/authors/author-layout.php)
+ *                             and only for the 'related' variant — 'top'
+ *                             already carries its own "Top news" pill.
  * }
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_news_card_variant = isset( $args['variant'] ) ? (string) $args['variant'] : 'list';
+$iflynepal_news_card_variant   = isset( $args['variant'] ) ? (string) $args['variant'] : 'list';
+$iflynepal_news_card_type_pill = 'related' === $iflynepal_news_card_variant && isset( $args['type_pill'] ) ? (string) $args['type_pill'] : '';
 $iflynepal_news_card_link    = get_permalink();
 $iflynepal_news_card_author  = get_the_author();
 $iflynepal_news_card_avatar  = iflynepal_article_initials( $iflynepal_news_card_author );
@@ -63,6 +69,8 @@ $iflynepal_news_card_read = sprintf( __( 'Read: %s', 'iflynepal' ), iflynepal_ar
 				'<span class="pill pill--gold">%s</span>',
 				esc_html__( 'Top news', 'iflynepal' )
 			);
+		} elseif ( '' !== $iflynepal_news_card_type_pill ) {
+			printf( '<span class="pill">%s</span>', esc_html( $iflynepal_news_card_type_pill ) );
 		}
 	?></a>
 	<div class="trip-body post-body">

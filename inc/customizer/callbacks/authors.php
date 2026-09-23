@@ -57,6 +57,24 @@ define( 'IFLYNEPAL_AUTHORS_HERO_LEAD_DEFAULT', 'The trip planners and guides who
 define( 'IFLYNEPAL_AUTHOR_BANNER_IMAGE_DEFAULT', IFLYNEPAL_ARTICLES_HERO_IMAGE_DEFAULT );
 
 /**
+ * The authors grid's heading, until one is written.
+ *
+ * The approved design's own words, the accent on the last word.
+ *
+ * @since 1.0.0
+ * @var string
+ */
+define( 'IFLYNEPAL_AUTHORS_LIST_HEADING_DEFAULT', 'Written in <span class="ink-mark">Kathmandu<i class="ink-line"></i></span>' );
+
+/**
+ * The authors grid's standfirst, until one is written.
+ *
+ * @since 1.0.0
+ * @var string
+ */
+define( 'IFLYNEPAL_AUTHORS_LIST_LEAD_DEFAULT', 'Every article carries the byline of the desk it came from. Follow one to read everything they have published.' );
+
+/**
  * The Authors archive hero photograph's URL.
  *
  * @since 1.0.0
@@ -138,4 +156,32 @@ function iflynepal_author_banner_image_url() {
 	}
 
 	return IFLYNEPAL_AUTHOR_BANNER_IMAGE_DEFAULT;
+}
+
+/**
+ * The authors grid's heading, ready to print.
+ *
+ * @since 1.0.0
+ *
+ * @return string Sanitized HTML, falling back to the design's own words.
+ */
+function iflynepal_authors_list_heading() {
+	$heading = trim( (string) get_theme_mod( 'iflynepal_authors_list_heading', IFLYNEPAL_AUTHORS_LIST_HEADING_DEFAULT ) );
+
+	if ( '' === $heading ) {
+		$heading = IFLYNEPAL_AUTHORS_LIST_HEADING_DEFAULT;
+	}
+
+	return iflynepal_kses_ink_heading( $heading );
+}
+
+/**
+ * The authors grid's standfirst.
+ *
+ * @since 1.0.0
+ *
+ * @return string The line, empty when the editor has cleared it.
+ */
+function iflynepal_authors_list_lead() {
+	return trim( (string) get_theme_mod( 'iflynepal_authors_list_lead', IFLYNEPAL_AUTHORS_LIST_LEAD_DEFAULT ) );
 }

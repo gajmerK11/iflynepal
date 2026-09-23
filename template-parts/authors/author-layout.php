@@ -85,20 +85,6 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 				</div>
 			<?php endif; ?>
 
-			<?php
-			$iflynepal_stats = iflynepal_author_stats( $iflynepal_author->ID );
-
-			if ( ! empty( $iflynepal_stats ) ) :
-				?>
-				<div class="author-stats">
-					<?php foreach ( $iflynepal_stats as $iflynepal_stat ) : ?>
-						<div>
-							<b><?php echo esc_html( number_format_i18n( $iflynepal_stat['value'] ) ); ?></b>
-							<span><?php echo esc_html( $iflynepal_stat['label'] ); ?></span>
-						</div>
-					<?php endforeach; ?>
-				</div>
-			<?php endif; ?>
 		</div>
 	</section>
 
@@ -186,6 +172,7 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 	$iflynepal_posts = iflynepal_author_posts( $iflynepal_author->ID );
 
 	if ( ! empty( $iflynepal_posts ) ) :
+		$iflynepal_post_flags = iflynepal_author_post_type_flags( $iflynepal_author->ID );
 		?>
 		<section class="section section--mist author-posts" id="posts" aria-labelledby="posts-title">
 			<div class="container">
@@ -193,12 +180,10 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 					<span class="eyebrow"><?php esc_html_e( 'From this author', 'iflynepal' ); ?></span>
 					<h2 id="posts-title">
 						<?php
-						echo wp_kses( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_kses escapes.
-							__( 'Articles and news from <span class="ink-mark">this desk<i class="ink-line"></i></span>', 'iflynepal' ),
-							array(
-								'span' => array( 'class' => array() ),
-								'i'    => array( 'class' => array() ),
-							)
+						printf(
+							'%1$s <span class="ink-mark">%2$s<i class="ink-line"></i></span>', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Both pieces are escaped below.
+							esc_html__( 'Read my', 'iflynepal' ),
+							esc_html( iflynepal_author_content_label( $iflynepal_post_flags ) )
 						);
 						?>
 					</h2>
@@ -213,9 +198,32 @@ if ( ! $iflynepal_author instanceof WP_User ) {
 						setup_postdata( $post );
 
 						if ( IFLYNEPAL_NEWS_POST_TYPE === get_post_type() ) {
-							get_template_part( 'template-parts/news/card', null, array( 'variant' => 'related' ) );
+							get_template_part(
+								'template-parts/news/card',
+								null,
+								array(
+									'variant'   => 'related',
+									'type_pill' => __( 'News', 'iflynepal' ),
+								)
+							);
+						} elseif ( IFLYNEPAL_ARTICLE_POST_TYPE === get_post_type() ) {
+							get_template_part(
+								'template-parts/articles/card',
+								null,
+								array(
+									'heading'   => 'h2',
+									'type_pill' => __( 'Article', 'iflynepal' ),
+								)
+							);
 						} else {
-							get_template_part( 'template-parts/articles/card', null, array( 'heading' => 'h2' ) );
+							get_template_part(
+								'template-parts/articles/card',
+								null,
+								array(
+									'heading'   => 'h2',
+									'type_pill' => __( 'Blog', 'iflynepal' ),
+								)
+							);
 						}
 					endforeach;
 

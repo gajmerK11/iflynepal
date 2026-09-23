@@ -222,6 +222,12 @@
 .post-card{display:flex; flex-direction:column}
 .post-card.is-off{display:none}
 .post-img{display:block; height:236px; background:var(--mist)}
+/* The corner badge a card's media wrapper carries — a News card's "Top news"
+   (news.css's .pill--gold) and, on the mixed grid under an author, the type
+   a card actually is. Same shape as the booking plugin's own package-card
+   pill (assets/css/catalogue.css's .iflynepal-pill): this site draws every
+   card's corner badge identically. */
+.pill{position:absolute; left:16px; top:16px; padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.94); color:var(--navy); font-size:10px; font-weight:900; letter-spacing:.08em; text-transform:uppercase}
 .post-body{display:flex; flex-direction:column; flex:1}
 .post-meta{align-items:center; justify-content:space-between; gap:12px}
 .post-cat{color:var(--navy); transition:color .25s ease}

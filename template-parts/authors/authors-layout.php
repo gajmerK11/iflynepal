@@ -43,7 +43,6 @@ $iflynepal_authors = iflynepal_authors_list();
 
 		<div class="container hero-inner">
 			<div class="hero-copy">
-				<span class="eyebrow"><?php esc_html_e( 'Our writers', 'iflynepal' ); ?></span>
 				<h1 id="hero-title-authors"><?php echo iflynepal_authors_hero_title_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- iflynepal_hero_title_words() escapes via iflynepal_kses_text(). ?></h1>
 
 				<?php $iflynepal_lead = iflynepal_authors_hero_lead(); ?>
@@ -59,17 +58,12 @@ $iflynepal_authors = iflynepal_authors_list();
 			<div class="section-head" data-anim>
 				<span class="eyebrow"><?php esc_html_e( 'Authors', 'iflynepal' ); ?></span>
 				<h2 id="authors-title">
-					<?php
-					echo wp_kses( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_kses escapes.
-						__( 'Written in <span class="ink-mark">Kathmandu<i class="ink-line"></i></span>', 'iflynepal' ),
-						array(
-							'span' => array( 'class' => array() ),
-							'i'    => array( 'class' => array() ),
-						)
-					);
-					?>
+					<?php echo iflynepal_authors_list_heading(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- iflynepal_authors_list_heading() escapes via iflynepal_kses_ink_heading(). ?>
 				</h2>
-				<p class="lead"><?php esc_html_e( 'Every article carries the byline of the desk it came from. Follow one to read everything they have published.', 'iflynepal' ); ?></p>
+				<?php $iflynepal_list_lead = iflynepal_authors_list_lead(); ?>
+				<?php if ( '' !== $iflynepal_list_lead || is_customize_preview() ) : ?>
+					<p class="lead" id="authors-list-lead"><?php echo esc_html( $iflynepal_list_lead ); ?></p>
+				<?php endif; ?>
 			</div>
 
 			<?php if ( ! empty( $iflynepal_authors ) ) : ?>
@@ -114,22 +108,10 @@ $iflynepal_authors = iflynepal_authors_list();
 									<?php endforeach; ?>
 								</div>
 							<?php endif; ?>
-
-							<a class="author-card-link" href="<?php echo esc_url( $iflynepal_author_url ); ?>">
-								<?php esc_html_e( 'Read their articles', 'iflynepal' ); ?>
-								<svg class="link-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
-							</a>
 						</article>
 					<?php endforeach; ?>
 				</div>
 			<?php endif; ?>
-
-			<div class="authors-foot">
-				<a class="button button--primary" href="<?php echo esc_url( iflynepal_articles_archive_url() ); ?>">
-					<?php esc_html_e( 'Browse all articles', 'iflynepal' ); ?>
-					<svg class="link-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
-				</a>
-			</div>
 		</div>
 	</section>
 

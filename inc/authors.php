@@ -169,6 +169,29 @@ function iflynepal_author_has_bio( $author_id ) {
 }
 
 /**
+ * One of the profile's long-form fields, ready to print.
+ *
+ * These are written in a rich editor, so what is stored is already markup:
+ * paragraphs, lists, emphasis and links. wp_kses_post() is the matching
+ * reader for wp_kses_post() on the way in, and it is wider than
+ * iflynepal_kses_rich(), which allows no <p> at all and so would flatten a
+ * biography into one run-on block.
+ *
+ * wpautop() stays in front of it for the sake of the profiles written before
+ * the editor landed here: those hold plain text with line breaks, which would
+ * otherwise print as a single paragraph. It leaves text that already carries
+ * block tags alone, so it costs the new ones nothing.
+ *
+ * @since 1.0.0
+ *
+ * @param string $value Stored value, already known to be non-empty.
+ * @return string HTML, already escaped.
+ */
+function iflynepal_author_prose_html( $value ) {
+	return wp_kses_post( wpautop( $value ) );
+}
+
+/**
  * The opening paragraphs, ready to print.
  *
  * @since 1.0.0
@@ -183,7 +206,7 @@ function iflynepal_author_bio_html( $author_id ) {
 		return '';
 	}
 
-	return iflynepal_kses_rich( wpautop( $bio ) );
+	return iflynepal_author_prose_html( $bio );
 }
 
 /**
@@ -201,7 +224,7 @@ function iflynepal_author_experience_html( $author_id ) {
 		return '';
 	}
 
-	return iflynepal_kses_rich( wpautop( $value ) );
+	return iflynepal_author_prose_html( $value );
 }
 
 /**
@@ -219,7 +242,7 @@ function iflynepal_author_contribution_html( $author_id ) {
 		return '';
 	}
 
-	return iflynepal_kses_rich( wpautop( $value ) );
+	return iflynepal_author_prose_html( $value );
 }
 
 /**
@@ -364,82 +387,6 @@ function iflynepal_author_photo_id( $author_id ) {
 	return (int) get_user_meta( $author_id, 'iflynepal_author_photo', true );
 }
 
-/* ---------------------------------------------------------------- stats */
-
-/**
- * How many distinct Article Categories an author's articles are filed under.
- *
- * @since 1.0.0
- *
- * @param int $author_id Author.
- * @return int
- */
-function iflynepal_author_topic_count( $author_id ) {
-	$ids = get_posts(
-		array(
-			'post_type'        => IFLYNEPAL_ARTICLE_POST_TYPE,
-			'author'           => $author_id,
-			'posts_per_page'   => -1,
-			'fields'           => 'ids',
-			'no_found_rows'    => true,
-			'suppress_filters' => false,
-		)
-	);
-
-	if ( empty( $ids ) ) {
-		return 0;
-	}
-
-	$terms = wp_get_object_terms( $ids, IFLYNEPAL_ARTICLE_CATEGORY, array( 'fields' => 'ids' ) );
-
-	return is_wp_error( $terms ) ? 0 : count( array_unique( $terms ) );
-}
-
-/**
- * The counts under the social row on the full author page.
- *
- * Each stat is left out when it is zero. The design's three facts (Articles,
- * News stories, Topics covered) all assume the author has articles; a
- * blogs-only author has no topics to report and no news either, and a stats
- * row of zeroes is not a stat.
- *
- * @since 1.0.0
- *
- * @param int $author_id Author.
- * @return array<int,array{value:int,label:string}>
- */
-function iflynepal_author_stats( $author_id ) {
-	$stats = array();
-
-	$articles = (int) count_user_posts( $author_id, IFLYNEPAL_ARTICLE_POST_TYPE, true );
-	$news     = (int) count_user_posts( $author_id, IFLYNEPAL_NEWS_POST_TYPE, true );
-	$topics   = iflynepal_author_topic_count( $author_id );
-
-	if ( $articles ) {
-		$stats[] = array(
-			'value' => $articles,
-			/* translators: %s: number of articles, already formatted. */
-			'label' => _n( 'Article', 'Articles', $articles, 'iflynepal' ),
-		);
-	}
-
-	if ( $news ) {
-		$stats[] = array(
-			'value' => $news,
-			'label' => _n( 'News story', 'News stories', $news, 'iflynepal' ),
-		);
-	}
-
-	if ( $topics ) {
-		$stats[] = array(
-			'value' => $topics,
-			'label' => _n( 'Topic covered', 'Topics covered', $topics, 'iflynepal' ),
-		);
-	}
-
-	return $stats;
-}
-
 /* ----------------------------------------------------------------- posts */
 
 /**
@@ -456,6 +403,41 @@ function iflynepal_author_post_type_flags( $author_id ) {
 		'articles' => count_user_posts( $author_id, IFLYNEPAL_ARTICLE_POST_TYPE, true ) > 0,
 		'news'     => count_user_posts( $author_id, IFLYNEPAL_NEWS_POST_TYPE, true ) > 0,
 	);
+}
+
+/**
+ * "Read my …": the families an author actually has, joined without the
+ * Oxford comma wp_sprintf_l() would add ("articles", "articles and news",
+ * "articles, news and blogs"), always in this same articles/news/blogs order.
+ *
+ * @since 1.0.0
+ *
+ * @param array{blogs:bool,articles:bool,news:bool} $flags iflynepal_author_post_type_flags()'s return.
+ * @return string
+ */
+function iflynepal_author_content_label( $flags ) {
+	$labels = array();
+
+	if ( $flags['articles'] ) {
+		$labels[] = __( 'articles', 'iflynepal' );
+	}
+
+	if ( $flags['news'] ) {
+		$labels[] = __( 'news', 'iflynepal' );
+	}
+
+	if ( $flags['blogs'] ) {
+		$labels[] = __( 'blogs', 'iflynepal' );
+	}
+
+	if ( count( $labels ) < 2 ) {
+		return implode( '', $labels );
+	}
+
+	$last = array_pop( $labels );
+
+	/* translators: 1: comma-separated list of content types (or a single one), 2: the final content type. */
+	return sprintf( __( '%1$s and %2$s', 'iflynepal' ), implode( ', ', $labels ), $last );
 }
 
 /**
@@ -541,6 +523,10 @@ function iflynepal_author_post_type_actions( $author_id ) {
  * reliable question is the one that actually matters: has this person
  * published something a visitor can read.
  *
+ * `admin` is the one login excluded regardless — the site's own technical
+ * account, not a byline anybody meant to publish under, even on the rare
+ * post it is still technically the author of record for.
+ *
  * @since 1.0.0
  *
  * @return WP_User[]
@@ -549,6 +535,7 @@ function iflynepal_authors_list() {
 	return get_users(
 		array(
 			'has_published_posts' => array( 'post', IFLYNEPAL_ARTICLE_POST_TYPE, IFLYNEPAL_NEWS_POST_TYPE ),
+			'login__not_in'       => array( 'admin' ),
 			'orderby'             => 'display_name',
 			'order'               => 'ASC',
 		)

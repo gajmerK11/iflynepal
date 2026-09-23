@@ -13,10 +13,16 @@
  * @package IFly_Nepal
  *
  * @var array $args {
- *     @type string $heading Heading level for the title. 'h2' in the archive
- *                           grid, where the card is a top-level item; 'h3' in
- *                           the related row, which sits under an h2 of its own.
- *     @type bool   $anim    Whether the card opts into the scroll reveal.
+ *     @type string $heading  Heading level for the title. 'h2' in the archive
+ *                            grid, where the card is a top-level item; 'h3' in
+ *                            the related row, which sits under an h2 of its own.
+ *     @type bool   $anim     Whether the card opts into the scroll reveal.
+ *     @type string $type_pill Corner badge on the picture, e.g. "Article" or
+ *                            "Blog". Only the mixed grid on an author's own
+ *                            page passes one — see template-parts/authors/
+ *                            author-layout.php; everywhere else the grid is
+ *                            already all one type, so a label would repeat
+ *                            what the page already says.
  * }
  */
 
@@ -24,6 +30,7 @@ defined( 'ABSPATH' ) || exit;
 
 $iflynepal_card_heading  = isset( $args['heading'] ) && 'h3' === $args['heading'] ? 'h3' : 'h2';
 $iflynepal_card_anim     = ! empty( $args['anim'] );
+$iflynepal_card_type_pill = isset( $args['type_pill'] ) ? (string) $args['type_pill'] : '';
 $iflynepal_card_id       = get_the_ID();
 $iflynepal_card_link     = get_permalink();
 $iflynepal_card_category = iflynepal_article_primary_category( $iflynepal_card_id );
@@ -41,6 +48,10 @@ $iflynepal_card_initials = iflynepal_article_initials( $iflynepal_card_author );
 					'sizes'   => '(max-width: 680px) 100vw, (max-width: 1020px) 50vw, 33vw',
 				)
 			);
+		}
+
+		if ( '' !== $iflynepal_card_type_pill ) {
+			printf( '<span class="pill">%s</span>', esc_html( $iflynepal_card_type_pill ) );
 		}
 	?></a>
 	<div class="trip-body post-body">

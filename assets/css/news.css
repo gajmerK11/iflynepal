@@ -7,10 +7,12 @@
  * Articles stylesheet with one block appended. This file is that block, so
  * inc/enqueue.php loads articles.css first and this after it.
  *
- * Two rules at the head are not from that block. They are Articles-design
- * rules that only the News pages use — the hero's eyebrow colour, and the
- * corner pill the Top News cards carry — so they were never picked up into
- * articles.css. They are the designs' own, unchanged.
+ * One rule at the head is not from that block: the hero's eyebrow colour, an
+ * Articles-design rule that only the News pages use, so it was never picked
+ * up into articles.css. It is the design's own, unchanged. The corner pill
+ * itself (.pill) moved to articles.css, since author-layout.php's mixed grid
+ * now needs it on an Article/Blog card too; .pill--gold, the Top News cards'
+ * own colour on it, stays here.
  *
  * Everything here is class-scoped, so nothing needs the :where() wrapper
  * articles.css puts around the designs' bare element rules.
@@ -21,9 +23,8 @@
 
 /* ----------------------------------------------- from the Articles design
    Used on the News pages alone: the archive hero carries an eyebrow above its
-   headline, and a Top News card carries a corner pill. */
+   headline. */
 .hero .eyebrow{color:#BBD4F7}
-.pill{position:absolute;left:16px;top:16px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.94);color:var(--navy);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
 
 /* ==========================================================================
    NEWS — cloudcolleague's news-archive-layout.php (hero with "News Center"

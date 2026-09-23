@@ -41,6 +41,36 @@ function iflynepal_kses_text( $value ) {
 }
 
 /**
+ * Sanitizes a heading that carries the site's "ink" underline accent.
+ *
+ * The accent is `<span class="ink-mark">word<i class="ink-line"></i></span>`
+ * (template-parts/authors/authors-layout.php and its siblings), one tag wider
+ * than iflynepal_kses_text() allows: that filter has no `<i>`, since nowhere
+ * else in the theme needs one.
+ *
+ * @since 1.0.0
+ *
+ * @param string $value Raw value.
+ * @return string Sanitized HTML.
+ */
+function iflynepal_kses_ink_heading( $value ) {
+	return wp_kses(
+		(string) $value,
+		array(
+			'span'   => array(
+				'class' => array(),
+			),
+			'i'      => array(
+				'class' => array(),
+			),
+			'br'     => array(),
+			'em'     => array(),
+			'strong' => array(),
+		)
+	);
+}
+
+/**
  * Sanitizes copy that is allowed to carry a link.
  *
  * The text filter above deliberately does not allow `<a>`: nearly every field

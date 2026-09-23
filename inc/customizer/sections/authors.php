@@ -108,6 +108,77 @@ $wp_customize->selective_refresh->add_partial(
 );
 
 /*
+ * The heading and standfirst over the authors grid, under the hero.
+ */
+$wp_customize->add_section(
+	'iflynepal_authors_list',
+	array(
+		'title'       => __( 'Grid heading', 'iflynepal' ),
+		'description' => __( 'The heading and line above the grid of author cards.', 'iflynepal' ),
+		'panel'       => 'iflynepal_authors',
+		'priority'    => 15,
+	)
+);
+
+$wp_customize->add_setting(
+	'iflynepal_authors_list_heading',
+	array(
+		'default'           => IFLYNEPAL_AUTHORS_LIST_HEADING_DEFAULT,
+		'sanitize_callback' => 'iflynepal_kses_ink_heading',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_authors_list_heading',
+	array(
+		'label'       => __( 'Heading', 'iflynepal' ),
+		'description' => __( 'Wrap a word in &lt;span class="ink-mark"&gt;word&lt;i class="ink-line"&gt;&lt;/i&gt;&lt;/span&gt; to give it the underline accent.', 'iflynepal' ),
+		'section'     => 'iflynepal_authors_list',
+		'priority'    => 10,
+		'type'        => 'textarea',
+	)
+);
+
+$wp_customize->add_setting(
+	'iflynepal_authors_list_lead',
+	array(
+		'default'           => IFLYNEPAL_AUTHORS_LIST_LEAD_DEFAULT,
+		'sanitize_callback' => 'iflynepal_kses_text',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_authors_list_lead',
+	array(
+		'label'       => __( 'Line under the heading', 'iflynepal' ),
+		'description' => __( 'One sentence. Empty removes it.', 'iflynepal' ),
+		'section'     => 'iflynepal_authors_list',
+		'priority'    => 15,
+		'type'        => 'textarea',
+	)
+);
+
+$wp_customize->selective_refresh->add_partial(
+	'iflynepal_authors_list_heading',
+	array(
+		'selector'            => '#authors-title',
+		'settings'            => array( 'iflynepal_authors_list_heading' ),
+		'render_callback'     => 'iflynepal_authors_list_heading',
+		'container_inclusive' => false,
+	)
+);
+
+$wp_customize->selective_refresh->add_partial(
+	'iflynepal_authors_list_lead',
+	array(
+		'selector'            => '#authors-list-lead',
+		'settings'            => array( 'iflynepal_authors_list_lead' ),
+		'render_callback'     => 'iflynepal_authors_list_lead',
+		'container_inclusive' => false,
+	)
+);
+
+/*
  * The single-author banner. One photograph for every author's page, the way
  * CloudColleague's "Author Profile" section works. An individual's own
  * photo is the Profile Photo field on their user profile, which sits over
