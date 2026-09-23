@@ -160,7 +160,20 @@ $iflynepal_reasons_filters = iflynepal_reasons_filters();
 					<?php if ( '' === $iflynepal_filter['url'] ) : ?>
 						<?php continue; ?>
 					<?php endif; ?>
-					<a class="iflynepal-reasons__all" href="<?php echo esc_url( $iflynepal_filter['url'] ); ?>" data-filter="<?php echo esc_attr( $iflynepal_filter['slug'] ); ?>">
+					<?php
+					/*
+					 * "All" is the filter every visitor already sees on
+					 * load — the first button is rendered `is-active`
+					 * unconditionally below — so its own link starts
+					 * showing too, rather than waiting for a click on a
+					 * button that is already selected. filters.js keeps
+					 * this in sync from here on; a visitor with no
+					 * JavaScript keeps exactly this one link, which is
+					 * correct, since every other filter needs a click
+					 * (and a script) to ever become the active one.
+					 */
+					?>
+					<a class="iflynepal-reasons__all<?php echo '' === $iflynepal_filter['slug'] ? ' is-current' : ''; ?>" href="<?php echo esc_url( $iflynepal_filter['url'] ); ?>" data-filter="<?php echo esc_attr( $iflynepal_filter['slug'] ); ?>">
 						<?php if ( '' === $iflynepal_filter['slug'] ) : ?>
 							<?php esc_html_e( 'View all packages', 'iflynepal' ); ?>
 						<?php else : ?>
