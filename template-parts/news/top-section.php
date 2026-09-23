@@ -26,14 +26,8 @@ $iflynepal_top_note = iflynepal_news_top_note();
 
 		<div class="news-head" data-anim>
 			<div>
-				<span class="eyebrow"><?php esc_html_e( 'Top news', 'iflynepal' ); ?></span>
-				<h2 id="top-news-title"><?php
-					printf(
-						/* translators: %s: the word "new", which carries the drawn underline. */
-						esc_html__( 'What’s %s this season.', 'iflynepal' ),
-						'<span class="ink-mark">' . esc_html__( 'new', 'iflynepal' ) . '<i class="ink-line"></i></span>'
-					);
-				?></h2>
+				<span class="eyebrow"><?php echo esc_html( iflynepal_news_top_eyebrow() ); ?></span>
+				<h2 id="top-news-title"><?php echo iflynepal_news_top_heading_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses filtered. ?></h2>
 			</div>
 			<?php if ( '' !== $iflynepal_top_note ) : ?>
 				<p><?php echo esc_html( $iflynepal_top_note ); ?></p>

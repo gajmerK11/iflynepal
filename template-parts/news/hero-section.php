@@ -72,10 +72,7 @@ $iflynepal_news_found  = (int) $GLOBALS['wp_query']->found_posts;
 			<?php else : ?>
 
 				<h1 id="hero-title">
-					<span class="w"><?php echo esc_html_x( 'Stay', 'archive headline', 'iflynepal' ); ?></span>
-					<span class="w"><?php echo esc_html_x( 'updated', 'archive headline', 'iflynepal' ); ?></span>
-					<span class="w"><?php echo esc_html_x( 'with', 'archive headline', 'iflynepal' ); ?></span>
-					<em><?php echo esc_html_x( 'iFly Nepal', 'archive headline', 'iflynepal' ); ?></em>
+					<?php echo iflynepal_news_hero_title_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- kses filtered. ?>
 				</h1>
 
 				<?php if ( '' !== $iflynepal_news_lead || is_customize_preview() ) : ?>

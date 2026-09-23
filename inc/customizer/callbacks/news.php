@@ -24,12 +24,35 @@ defined( 'ABSPATH' ) || exit;
 define( 'IFLYNEPAL_NEWS_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/news/hero-news-prayer-wheels.jpg' );
 
 /**
+ * The headline, until one is written.
+ *
+ * `<em>` marks the word that carries the gold accent, the same convention
+ * every other editable headline in the site uses.
+ *
+ * @since 1.0.0
+ * @var string
+ */
+define( 'IFLYNEPAL_NEWS_HERO_TITLE_DEFAULT', 'Stay updated with <em>iFly Nepal</em>' );
+
+/**
  * The standfirst under the headline, until one is written.
  *
  * @since 1.0.0
  * @var string
  */
 define( 'IFLYNEPAL_NEWS_HERO_LEAD_DEFAULT', 'New departures, festival dates and trip news, straight from our team in Kathmandu.' );
+
+/**
+ * The Top News heading, until one is written.
+ *
+ * `<em>` again marks the accent word — see iflynepal_news_top_heading_html(),
+ * which is what turns it into this heading's own hand-inked underline rather
+ * than the usual gold colour.
+ *
+ * @since 1.0.0
+ * @var string
+ */
+define( 'IFLYNEPAL_NEWS_TOP_HEADING_DEFAULT', 'What’s <em>new</em> this season.' );
 
 /**
  * The hero photograph's URL.
@@ -53,6 +76,34 @@ function iflynepal_news_archive_hero_image_url() {
 }
 
 /**
+ * The headline, as the editor typed it.
+ *
+ * @since 1.0.0
+ *
+ * @return string Sanitized HTML, falling back to the design's own words.
+ */
+function iflynepal_news_hero_title() {
+	$title = trim( (string) get_theme_mod( 'iflynepal_news_hero_title', IFLYNEPAL_NEWS_HERO_TITLE_DEFAULT ) );
+
+	if ( '' === $title ) {
+		$title = IFLYNEPAL_NEWS_HERO_TITLE_DEFAULT;
+	}
+
+	return iflynepal_kses_text( $title );
+}
+
+/**
+ * The headline with each plain word wrapped for the entrance.
+ *
+ * @since 1.0.0
+ *
+ * @return string Ready-to-print HTML.
+ */
+function iflynepal_news_hero_title_html() {
+	return iflynepal_hero_title_words( iflynepal_news_hero_title() );
+}
+
+/**
  * The standfirst under the headline.
  *
  * @since 1.0.0
@@ -72,6 +123,60 @@ function iflynepal_news_hero_lead() {
  */
 function iflynepal_news_search_placeholder() {
 	return trim( (string) get_theme_mod( 'iflynepal_news_search_placeholder', __( 'Search news…', 'iflynepal' ) ) );
+}
+
+/**
+ * The eyebrow above the Top News heading.
+ *
+ * @since 1.0.0
+ *
+ * @return string
+ */
+function iflynepal_news_top_eyebrow() {
+	$eyebrow = trim( (string) get_theme_mod( 'iflynepal_news_top_eyebrow', __( 'Top news', 'iflynepal' ) ) );
+
+	return '' === $eyebrow ? __( 'Top news', 'iflynepal' ) : $eyebrow;
+}
+
+/**
+ * The Top News heading, as the editor typed it.
+ *
+ * @since 1.0.0
+ *
+ * @return string Sanitized HTML, falling back to the design's own words.
+ */
+function iflynepal_news_top_heading() {
+	$heading = trim( (string) get_theme_mod( 'iflynepal_news_top_heading', IFLYNEPAL_NEWS_TOP_HEADING_DEFAULT ) );
+
+	if ( '' === $heading ) {
+		$heading = IFLYNEPAL_NEWS_TOP_HEADING_DEFAULT;
+	}
+
+	return iflynepal_kses_text( $heading );
+}
+
+/**
+ * The Top News heading, ready to print.
+ *
+ * The design draws its accent word with a hand-inked underline (`.ink-mark`
+ * plus the `.ink-line` stroke inside it) rather than the gold `<em>` every
+ * other headline uses, so an editor still marks it the familiar way — wrap
+ * it in `<em>` — and this is what turns that into the structural markup the
+ * underline needs. Generated rather than authored because wp_kses() (inside
+ * iflynepal_kses_text()) does not allow an `<i>` tag through at all, so a
+ * `<span class="ink-mark"><i class="ink-line">` typed directly into the
+ * Customizer would lose its stroke on save.
+ *
+ * @since 1.0.0
+ *
+ * @return string Ready-to-print HTML.
+ */
+function iflynepal_news_top_heading_html() {
+	return preg_replace(
+		'#<em\b[^>]*>(.*?)</em>#is',
+		'<span class="ink-mark">$1<i class="ink-line"></i></span>',
+		iflynepal_news_top_heading()
+	);
 }
 
 /**

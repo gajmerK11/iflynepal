@@ -49,6 +49,25 @@ $wp_customize->add_control(
 );
 
 $wp_customize->add_setting(
+	'iflynepal_news_hero_title',
+	array(
+		'default'           => IFLYNEPAL_NEWS_HERO_TITLE_DEFAULT,
+		'sanitize_callback' => 'iflynepal_kses_text',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_news_hero_title',
+	array(
+		'label'       => __( 'Headline', 'iflynepal' ),
+		'description' => __( 'Wrap a word in &lt;em&gt;word&lt;/em&gt; to give it the gold accent. Each of the other words arrives on its own as the page opens.', 'iflynepal' ),
+		'section'     => 'iflynepal_news_hero',
+		'priority'    => 15,
+		'type'        => 'textarea',
+	)
+);
+
+$wp_customize->add_setting(
 	'iflynepal_news_hero_lead',
 	array(
 		'default'           => IFLYNEPAL_NEWS_HERO_LEAD_DEFAULT,
@@ -87,6 +106,43 @@ $wp_customize->add_control(
 );
 
 $wp_customize->add_setting(
+	'iflynepal_news_top_eyebrow',
+	array(
+		'default'           => __( 'Top news', 'iflynepal' ),
+		'sanitize_callback' => 'sanitize_text_field',
+		'transport'         => 'refresh',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_news_top_eyebrow',
+	array(
+		'label'       => __( 'Label above the Top News heading', 'iflynepal' ),
+		'section'     => 'iflynepal_news_hero',
+		'priority'    => 35,
+		'type'        => 'text',
+	)
+);
+
+$wp_customize->add_setting(
+	'iflynepal_news_top_heading',
+	array(
+		'default'           => IFLYNEPAL_NEWS_TOP_HEADING_DEFAULT,
+		'sanitize_callback' => 'iflynepal_kses_text',
+		'transport'         => 'refresh',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_news_top_heading',
+	array(
+		'label'       => __( 'Top News heading', 'iflynepal' ),
+		'description' => __( 'Wrap a word in &lt;em&gt;word&lt;/em&gt; to give it the hand-drawn underline.', 'iflynepal' ),
+		'section'     => 'iflynepal_news_hero',
+		'priority'    => 37,
+		'type'        => 'textarea',
+	)
+);
+
+$wp_customize->add_setting(
 	'iflynepal_news_top_note',
 	array(
 		'default'           => __( 'The stories our trip planners are fielding the most questions about right now.', 'iflynepal' ),
@@ -102,5 +158,22 @@ $wp_customize->add_control(
 		'section'     => 'iflynepal_news_hero',
 		'priority'    => 40,
 		'type'        => 'textarea',
+	)
+);
+
+/*
+ * The headline refreshes in place rather than reloading the preview, the
+ * same treatment the Articles archive's own headline gets — see that
+ * section file's comment on why a search view is not a conflict for this
+ * partial even though the hero renders a different headline while
+ * searching.
+ */
+$wp_customize->selective_refresh->add_partial(
+	'iflynepal_news_hero_title',
+	array(
+		'selector'            => '#hero-title',
+		'settings'            => array( 'iflynepal_news_hero_title' ),
+		'render_callback'     => 'iflynepal_news_hero_title_html',
+		'container_inclusive' => false,
 	)
 );

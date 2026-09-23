@@ -5483,10 +5483,12 @@
 		line-height: 1.6;
 	}
 
-	/* The clause letter is what the clauses cross-reference each other by, so
-	   it is set apart from the sentence rather than running into it. */
+	/* A bullet, set apart from the sentence rather than running into it —
+	   the clauses still cross-reference each other by position (e.g.
+	   "1(a)", "2(c)") in visa-after.php's own text, this is only the
+	   marker beside each one. */
 	.iflynepal-country-fee__key {
-		@apply shrink-0 font-semibold italic;
+		@apply shrink-0 font-semibold;
 		min-width: 22px;
 		color: var(--iflynepal-navy);
 		font-size: 19px;

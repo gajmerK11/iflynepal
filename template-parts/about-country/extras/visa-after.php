@@ -28,27 +28,27 @@ defined( 'ABSPATH' ) || exit;
 		<summary><?php esc_html_e( 'Tourist visa', 'iflynepal' ); ?></summary>
 		<p><?php esc_html_e( 'Foreigner who intends to visit Nepal must hold valid passport or any travel document equivalent to passport issued by the government. for visiting a foreign country prior to apply for visa.', 'iflynepal' ); ?></p>
 		<p><b><?php esc_html_e( 'a. Entry:', 'iflynepal' ); ?></b> <?php esc_html_e( 'No foreigner is entitled to enter into and stay in Nepal without valid visa. Tourist entry visa can be obtained for the following duration from Nepalese Embassy or Consulate or other mission offices or immigration offices located on entry points in Nepal.', 'iflynepal' ); ?></p>
-		<p><?php esc_html_e( 'b. Chinese citizen are requested to apply in Nepalese Embassy or other Nepalese diplomatic missions as there is no provision of on arrival visa for them.', 'iflynepal' ); ?></p>
+		<p><b><?php esc_html_e( 'b. Chinese citizen', 'iflynepal' ); ?></b> <?php esc_html_e( 'are requested to apply in Nepalese Embassy or other Nepalese diplomatic missions as there is no provision of on arrival visa for them.', 'iflynepal' ); ?></p>
 	</details>
 
 	<details>
-		<summary><?php esc_html_e( 'c. Visa Fee', 'iflynepal' ); ?></summary>
+		<summary><?php esc_html_e( 'Visa Fee', 'iflynepal' ); ?></summary>
 
 		<h4><?php esc_html_e( '1. Fee required to obtain Tourist Visa from Nepalese diplomatic agencies and entry points:', 'iflynepal' ); ?></h4>
 		<ul class="iflynepal-country-fee">
-			<li><span class="iflynepal-country-fee__key">a</span><span><?php esc_html_e( 'US $ 25 or equivalent foreign currency for Tourist Visa with Multiple Entry for 15 days.', 'iflynepal' ); ?></span></li>
-			<li><span class="iflynepal-country-fee__key">b</span><span><?php esc_html_e( 'US $ 40 or equivalent foreign currency for Tourist Visa with Multiple Entry for 30 days.', 'iflynepal' ); ?></span></li>
-			<li><span class="iflynepal-country-fee__key">c</span><span><?php esc_html_e( 'US $ 100 or equivalent foreign currency for Tourist Visa with Multiple Entry for 100 days.', 'iflynepal' ); ?></span></li>
-			<li><span class="iflynepal-country-fee__key">d</span><span><?php esc_html_e( 'Regardless of the provision stated in 1(a) and 1(b), tourists with passport from South Asian Association for Regional Cooperation (SAARC) nations aren’t required to pay visa fee for 30 days.', 'iflynepal' ); ?></span></li>
+			<li><span class="iflynepal-country-fee__key">&bull;</span><span><?php esc_html_e( 'US $ 25 or equivalent foreign currency for Tourist Visa with Multiple Entry for 15 days.', 'iflynepal' ); ?></span></li>
+			<li><span class="iflynepal-country-fee__key">&bull;</span><span><?php esc_html_e( 'US $ 40 or equivalent foreign currency for Tourist Visa with Multiple Entry for 30 days.', 'iflynepal' ); ?></span></li>
+			<li><span class="iflynepal-country-fee__key">&bull;</span><span><?php esc_html_e( 'US $ 100 or equivalent foreign currency for Tourist Visa with Multiple Entry for 100 days.', 'iflynepal' ); ?></span></li>
+			<li><span class="iflynepal-country-fee__key">&bull;</span><span><?php esc_html_e( 'Regardless of the provision stated in 1(a) and 1(b), tourists with passport from South Asian Association for Regional Cooperation (SAARC) nations aren’t required to pay visa fee for 30 days.', 'iflynepal' ); ?></span></li>
 		</ul>
 
 		<h4><?php esc_html_e( '2. Fee to be levied for renewal or regularization of tourist visa', 'iflynepal' ); ?></h4>
 		<ul class="iflynepal-country-fee">
-			<li><span class="iflynepal-country-fee__key">a</span><span><?php esc_html_e( 'Nepalese currency equivalent to US $ 2 per day to renew the validity of tourist visa.', 'iflynepal' ); ?></span></li>
-			<li><span class="iflynepal-country-fee__key">b</span><span><?php esc_html_e( 'If multiple entry facility is required to be valid for the renewed period, additional US $ 20 along with fees prescribed in 2 (a) has to be paid.', 'iflynepal' ); ?></span></li>
-			<li><span class="iflynepal-country-fee__key">c</span><span><?php esc_html_e( 'Foreigner who have stayed here without renewing visa, need to pay Nepalese currency equivalent to US $ 3 per day along with the reqired extension fee.', 'iflynepal' ); ?></span></li>
-			<li><span class="iflynepal-country-fee__key">d</span><span><?php esc_html_e( 'Foreigners, who have already overstayed for more than 150 days without renewing tourist visa shall be levied the fees referred in clause 2(c) and a penalty of Rs 50,000 as per the Immigration Act.', 'iflynepal' ); ?></span></li>
-			<li><span class="iflynepal-country-fee__key">e</span><span><?php esc_html_e( 'Regardless of provision stated in 2(a), 15 days is counted as minimum extension period and visa fee is charged accordingly. For extension period more than 15 days, visa fee is charged as per the provision of 2(a).', 'iflynepal' ); ?></span></li>
+			<li><span class="iflynepal-country-fee__key">&bull;</span><span><?php esc_html_e( 'Nepalese currency equivalent to US $ 2 per day to renew the validity of tourist visa.', 'iflynepal' ); ?></span></li>
+			<li><span class="iflynepal-country-fee__key">&bull;</span><span><?php esc_html_e( 'If multiple entry facility is required to be valid for the renewed period, additional US $ 20 along with fees prescribed in 2 (a) has to be paid.', 'iflynepal' ); ?></span></li>
+			<li><span class="iflynepal-country-fee__key">&bull;</span><span><?php esc_html_e( 'Foreigner who have stayed here without renewing visa, need to pay Nepalese currency equivalent to US $ 3 per day along with the reqired extension fee.', 'iflynepal' ); ?></span></li>
+			<li><span class="iflynepal-country-fee__key">&bull;</span><span><?php esc_html_e( 'Foreigners, who have already overstayed for more than 150 days without renewing tourist visa shall be levied the fees referred in clause 2(c) and a penalty of Rs 50,000 as per the Immigration Act.', 'iflynepal' ); ?></span></li>
+			<li><span class="iflynepal-country-fee__key">&bull;</span><span><?php esc_html_e( 'Regardless of provision stated in 2(a), 15 days is counted as minimum extension period and visa fee is charged accordingly. For extension period more than 15 days, visa fee is charged as per the provision of 2(a).', 'iflynepal' ); ?></span></li>
 		</ul>
 	</details>
 
