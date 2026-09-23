@@ -194,3 +194,33 @@ function iflynepal_news_top_note() {
 		)
 	);
 }
+
+/**
+ * The eyebrow above the recent-news heading.
+ *
+ * @since 1.0.0
+ *
+ * @return string
+ */
+function iflynepal_news_recent_eyebrow() {
+	$eyebrow = trim( (string) get_theme_mod( 'iflynepal_news_recent_eyebrow', __( 'Recent news', 'iflynepal' ) ) );
+
+	return '' === $eyebrow ? __( 'Recent news', 'iflynepal' ) : $eyebrow;
+}
+
+/**
+ * The recent-news heading, ready to print.
+ *
+ * @since 1.0.0
+ *
+ * @return string Sanitized HTML, falling back to the design's own words.
+ */
+function iflynepal_news_recent_heading_html() {
+	$heading = trim( (string) get_theme_mod( 'iflynepal_news_recent_heading', __( 'Latest from Kathmandu', 'iflynepal' ) ) );
+
+	if ( '' === $heading ) {
+		$heading = __( 'Latest from Kathmandu', 'iflynepal' );
+	}
+
+	return iflynepal_kses_text( $heading );
+}

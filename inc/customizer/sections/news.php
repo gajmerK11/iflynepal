@@ -161,6 +161,43 @@ $wp_customize->add_control(
 	)
 );
 
+$wp_customize->add_setting(
+	'iflynepal_news_recent_eyebrow',
+	array(
+		'default'           => __( 'Recent news', 'iflynepal' ),
+		'sanitize_callback' => 'sanitize_text_field',
+		'transport'         => 'refresh',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_news_recent_eyebrow',
+	array(
+		'label'       => __( 'Label above the recent-news heading', 'iflynepal' ),
+		'section'     => 'iflynepal_news_hero',
+		'priority'    => 45,
+		'type'        => 'text',
+	)
+);
+
+$wp_customize->add_setting(
+	'iflynepal_news_recent_heading',
+	array(
+		'default'           => __( 'Latest from Kathmandu', 'iflynepal' ),
+		'sanitize_callback' => 'iflynepal_kses_text',
+		'transport'         => 'refresh',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_news_recent_heading',
+	array(
+		'label'       => __( 'Recent-news heading', 'iflynepal' ),
+		'description' => __( 'The heading above the run of stories under Top News.', 'iflynepal' ),
+		'section'     => 'iflynepal_news_hero',
+		'priority'    => 47,
+		'type'        => 'textarea',
+	)
+);
+
 /*
  * The headline refreshes in place rather than reloading the preview, the
  * same treatment the Articles archive's own headline gets — see that
