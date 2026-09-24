@@ -37,6 +37,11 @@ $iflynepal_cta = iflynepal_get_nav_cta_item();
 <div class="iflynepal-nav-side">
 
 	<?php
+	// Draws nothing when Polylang isn't active or only one language is set up.
+	iflynepal_render_language_switcher();
+	?>
+
+	<?php
 	/*
 	 * Client-directed: the WhatsApp action sits at the right-hand end of the
 	 * bar, before the call to action rather than after it — the CTA is still

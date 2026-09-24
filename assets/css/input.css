@@ -602,6 +602,62 @@
 		@apply block;
 	}
 
+	/*
+	 * Language switcher. Sits on the dark header bar next to the menu toggle,
+	 * so it borrows that control's chrome: white text, a translucent border,
+	 * no fill until hovered. Renders only when Polylang is active with more
+	 * than one language (see iflynepal_render_language_switcher()), so this
+	 * costs nothing when the plugin is off.
+	 */
+	.iflynepal-lang-switch {
+		@apply relative;
+	}
+
+	.iflynepal-lang-switch__toggle {
+		@apply flex h-11 items-center gap-1 whitespace-nowrap rounded-full border border-white/30 bg-white/[.08] px-4 text-[12px] font-semibold uppercase tracking-[.04em] text-white;
+		transition: background 0.3s var(--iflynepal-ease), border-color 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-lang-switch__toggle:hover,
+	.iflynepal-lang-switch__toggle:focus-visible {
+		@apply border-white/50 bg-white/20;
+	}
+
+	.iflynepal-lang-switch__toggle .iflynepal-ico {
+		@apply h-[14px] w-[14px];
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		transition: transform 0.3s var(--iflynepal-ease);
+	}
+
+	.iflynepal-lang-switch.is-open .iflynepal-lang-switch__toggle .iflynepal-ico {
+		transform: rotate(180deg);
+	}
+
+	.iflynepal-lang-switch__list {
+		@apply absolute right-0 z-20 mt-2 min-w-[140px] list-none rounded-[14px] border border-black/5 bg-white p-1.5;
+		top: 100%;
+		box-shadow: var(--iflynepal-shadow);
+	}
+
+	.iflynepal-lang-switch__link {
+		@apply block rounded-[9px] px-3 py-2 text-[13px] font-medium;
+		color: var(--iflynepal-ink);
+	}
+
+	.iflynepal-lang-switch__link:hover,
+	.iflynepal-lang-switch__link:focus-visible {
+		background: #f0f5ff;
+	}
+
+	.iflynepal-lang-switch__link.is-current {
+		color: var(--iflynepal-navy);
+		font-weight: 700;
+	}
+
 	/* ----------------------------------------------------------------- hero */
 
 	/*

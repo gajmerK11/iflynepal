@@ -778,6 +778,36 @@ function iflynepal_enqueue_navigation() {
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_navigation' );
 
 /**
+ * Enqueues the language switcher's dropdown behaviour.
+ *
+ * Gated on Polylang being active with more than one language, the same
+ * condition iflynepal_render_language_switcher() uses to decide whether to
+ * print the markup at all — no point loading the script for a button that
+ * isn't on the page.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_enqueue_language_switcher() {
+	if ( ! function_exists( 'pll_languages_list' ) || count( pll_languages_list() ) < 2 ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'iflynepal-language-switcher',
+		IFLYNEPAL_URI . '/assets/js/header/language-switcher.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/header/language-switcher.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_language_switcher' );
+
+/**
  * Enqueues the back-to-top button.
  *
  * On every template, because the footer is. Needs no GSAP: the scroll is
