@@ -26,3 +26,6 @@ desktop.ini
 # PHPCS cache
 .phpcs-cache
 phpcs.cache
+
+# Loco Translate's own autosave backups
+languages/*~

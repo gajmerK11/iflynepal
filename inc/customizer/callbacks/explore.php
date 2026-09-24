@@ -154,7 +154,13 @@ function iflynepal_explore_card_default( $index ) {
  * @return string Kicker HTML.
  */
 function iflynepal_explore_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_explore_kicker', IFLYNEPAL_EXPLORE_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_explore_kicker', IFLYNEPAL_EXPLORE_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -165,7 +171,13 @@ function iflynepal_explore_kicker() {
  * @return string Heading HTML.
  */
 function iflynepal_explore_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_explore_title', IFLYNEPAL_EXPLORE_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_explore_title', IFLYNEPAL_EXPLORE_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -178,8 +190,13 @@ function iflynepal_explore_title() {
  */
 function iflynepal_explore_card_eyebrow( $index ) {
 	$default = iflynepal_explore_card_default( $index );
+	$eyebrow = (string) get_theme_mod( 'iflynepal_explore_card_' . $index . '_eyebrow', $default['eyebrow'] );
 
-	return (string) get_theme_mod( 'iflynepal_explore_card_' . $index . '_eyebrow', $default['eyebrow'] );
+	if ( function_exists( 'pll__' ) ) {
+		$eyebrow = pll__( $eyebrow );
+	}
+
+	return $eyebrow;
 }
 
 /**
@@ -192,8 +209,13 @@ function iflynepal_explore_card_eyebrow( $index ) {
  */
 function iflynepal_explore_card_title( $index ) {
 	$default = iflynepal_explore_card_default( $index );
+	$title   = get_theme_mod( 'iflynepal_explore_card_' . $index . '_title', $default['title'] );
 
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_explore_card_' . $index . '_title', $default['title'] ) );
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -205,9 +227,14 @@ function iflynepal_explore_card_title( $index ) {
  * @return string Description HTML.
  */
 function iflynepal_explore_card_description( $index ) {
-	$default = iflynepal_explore_card_default( $index );
+	$default     = iflynepal_explore_card_default( $index );
+	$description = get_theme_mod( 'iflynepal_explore_card_' . $index . '_description', $default['description'] );
 
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_explore_card_' . $index . '_description', $default['description'] ) );
+	if ( function_exists( 'pll__' ) ) {
+		$description = pll__( $description );
+	}
+
+	return iflynepal_kses_text( $description );
 }
 
 /**
@@ -235,6 +262,10 @@ function iflynepal_explore_card_links( $index ) {
 
 		if ( '' === $label ) {
 			continue;
+		}
+
+		if ( function_exists( 'pll__' ) ) {
+			$label = pll__( $label );
 		}
 
 		$links[] = array(
@@ -353,3 +384,41 @@ function iflynepal_render_explore_card_links( $index ) {
 
 	return $markup;
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the Explore section's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_explore_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string( 'Explore kicker', get_theme_mod( 'iflynepal_explore_kicker', IFLYNEPAL_EXPLORE_KICKER_DEFAULT ), 'iFlyNepal — Homepage / Explore' );
+	pll_register_string( 'Explore title', get_theme_mod( 'iflynepal_explore_title', IFLYNEPAL_EXPLORE_TITLE_DEFAULT ), 'iFlyNepal — Homepage / Explore', true );
+
+	for ( $index = 1; $index <= IFLYNEPAL_EXPLORE_CARDS; $index++ ) {
+		$default = iflynepal_explore_card_default( $index );
+
+		pll_register_string( "Explore card $index eyebrow", get_theme_mod( "iflynepal_explore_card_{$index}_eyebrow", $default['eyebrow'] ), 'iFlyNepal — Homepage / Explore' );
+		pll_register_string( "Explore card $index title", get_theme_mod( "iflynepal_explore_card_{$index}_title", $default['title'] ), 'iFlyNepal — Homepage / Explore', true );
+		pll_register_string( "Explore card $index description", get_theme_mod( "iflynepal_explore_card_{$index}_description", $default['description'] ), 'iFlyNepal — Homepage / Explore' );
+
+		for ( $i = 1; $i <= IFLYNEPAL_EXPLORE_LINK_MAX; $i++ ) {
+			$link_default = isset( $default['links'][ $i ] ) ? $default['links'][ $i ] : array( 'label' => '' );
+
+			pll_register_string( "Explore card $index link $i label", get_theme_mod( "iflynepal_explore_card_{$index}_link_{$i}_label", $link_default['label'] ), 'iFlyNepal — Homepage / Explore' );
+		}
+	}
+}
+add_action( 'admin_init', 'iflynepal_register_explore_pll_strings', 11 );

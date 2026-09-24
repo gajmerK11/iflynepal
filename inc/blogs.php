@@ -68,6 +68,61 @@ const IFLYNEPAL_BLOGS_PER_PAGE = 12;
 /* ------------------------------------------------------------------- URLs */
 
 /**
+ * The path a given language's blog URLs sit under.
+ *
+ * Taken from the slug of that language's own Posts page — Polylang translates
+ * `page_for_posts` per language, so French's page (however it is named) gives
+ * back its own base rather than the English constant. Falls back to
+ * IFLYNEPAL_BLOGS_BASE when Polylang is inactive, the language is unknown, or
+ * that language has no Posts page of its own, which keeps a single-language
+ * install on the plain constant.
+ *
+ * @since 1.0.0
+ *
+ * @param string $lang Optional. A Polylang language slug. Defaults to the
+ *                      current language.
+ * @return string The base segment, without slashes.
+ */
+function iflynepal_blogs_base( $lang = '' ) {
+	$page_id = (int) get_option( 'page_for_posts' );
+
+	if ( ! $page_id ) {
+		return IFLYNEPAL_BLOGS_BASE;
+	}
+
+	if ( function_exists( 'pll_get_post' ) ) {
+		if ( '' === $lang && function_exists( 'pll_current_language' ) ) {
+			$lang = pll_current_language();
+		}
+
+		if ( $lang ) {
+			$translated_id = pll_get_post( $page_id, $lang );
+
+			if ( $translated_id ) {
+				$page_id = $translated_id;
+			}
+		}
+	}
+
+	$permalink = get_permalink( $page_id );
+
+	if ( ! $permalink ) {
+		return IFLYNEPAL_BLOGS_BASE;
+	}
+
+	$path = trim( (string) wp_parse_url( $permalink, PHP_URL_PATH ), '/' );
+
+	if ( '' === $path ) {
+		return IFLYNEPAL_BLOGS_BASE;
+	}
+
+	$segments = explode( '/', $path );
+	$base     = end( $segments );
+
+	return '' !== $base ? $base : IFLYNEPAL_BLOGS_BASE;
+}
+
+/**
  * Moves the category and tag archives under the Blogs section.
  *
  * Core registers both taxonomies itself, early and without a way to pass
@@ -118,20 +173,94 @@ add_filter( 'register_taxonomy_args', 'iflynepal_blog_taxonomy_args', 10, 2 );
  * evaluated in order and a shorter pattern would swallow the paths the longer
  * ones are for.
  *
+ * Core's own taxonomy registration (iflynepal_blog_taxonomy_args() above) only
+ * ever writes a category rule for IFLYNEPAL_BLOGS_BASE with no language prefix
+ * — Polylang prefixes that one for every other language itself, because it is
+ * a rule core generated through the taxonomy machinery Polylang watches. These
+ * rules are not: add_rewrite_rule() has no such hook, so both the language
+ * prefix (Polylang's "/fr/") and the localized base ("blogues") have to be
+ * written into the pattern here by hand, one set per language.
+ *
  * @since 1.0.0
  *
  * @return void
  */
 function iflynepal_blog_rewrites() {
-	$base = '^' . IFLYNEPAL_BLOGS_BASE . '/[^/]+/([^/]+)';
+	$languages = function_exists( 'pll_languages_list' ) ? pll_languages_list() : array( '' );
 
-	// A post split across pages with <!--nextpage-->, and its comment pages.
-	add_rewrite_rule( $base . '/page/?([0-9]{1,})/?$', 'index.php?name=$matches[1]&page=$matches[2]', 'top' );
-	add_rewrite_rule( $base . '/comment-page-([0-9]{1,})/?$', 'index.php?name=$matches[1]&cpage=$matches[2]', 'top' );
-	add_rewrite_rule( $base . '/embed/?$', 'index.php?name=$matches[1]&embed=true', 'top' );
-	add_rewrite_rule( $base . '/?$', 'index.php?name=$matches[1]', 'top' );
+	foreach ( $languages as $lang ) {
+		$lang_prefix = '';
+
+		if ( $lang && function_exists( 'pll_home_url' ) ) {
+			$lang_prefix = trim( (string) wp_parse_url( pll_home_url( $lang ), PHP_URL_PATH ), '/' );
+		}
+
+		$blogs_base = iflynepal_blogs_base( $lang );
+		$base       = ( '' !== $lang_prefix ? $lang_prefix . '/' : '' ) . $blogs_base;
+
+		$post_base = '^' . $base . '/[^/]+/([^/]+)';
+
+		// A post split across pages with <!--nextpage-->, and its comment pages.
+		add_rewrite_rule( $post_base . '/page/?([0-9]{1,})/?$', 'index.php?name=$matches[1]&page=$matches[2]', 'top' );
+		add_rewrite_rule( $post_base . '/comment-page-([0-9]{1,})/?$', 'index.php?name=$matches[1]&cpage=$matches[2]', 'top' );
+		add_rewrite_rule( $post_base . '/embed/?$', 'index.php?name=$matches[1]&embed=true', 'top' );
+		add_rewrite_rule( $post_base . '/?$', 'index.php?name=$matches[1]', 'top' );
+
+		// Core already writes this one for the default language's own base,
+		// unprefixed, and Polylang prefixes it for every other language.
+		if ( '' === $lang_prefix && IFLYNEPAL_BLOGS_BASE === $blogs_base ) {
+			continue;
+		}
+
+		$cat_base = '^' . $base . '/([^/]+)';
+
+		add_rewrite_rule( $cat_base . '/page/?([0-9]{1,})/?$', 'index.php?category_name=$matches[1]&paged=$matches[2]', 'top' );
+		add_rewrite_rule( $cat_base . '/embed/?$', 'index.php?category_name=$matches[1]&embed=true', 'top' );
+		add_rewrite_rule( $cat_base . '/?$', 'index.php?category_name=$matches[1]', 'top' );
+	}
 }
 add_action( 'init', 'iflynepal_blog_rewrites' );
+
+/**
+ * Localizes a category archive's URL to the current language's blogs base.
+ *
+ * Get_term_link() builds every category URL from the one slug core's taxonomy
+ * registration was given — IFLYNEPAL_BLOGS_BASE — because that registration
+ * cannot itself vary per request. This swaps that leading segment for the
+ * current language's own base after the fact, which is what the extra rules
+ * iflynepal_blog_rewrites() adds are there to answer.
+ *
+ * @since 1.0.0
+ *
+ * @param string  $url      The category's URL.
+ * @param WP_Term $term     The category.
+ * @param string  $taxonomy The term's taxonomy.
+ * @return string Filtered URL.
+ */
+function iflynepal_blog_term_link( $url, $term, $taxonomy ) {
+	if ( 'category' !== $taxonomy ) {
+		return $url;
+	}
+
+	$term_id = is_object( $term ) ? (int) $term->term_id : (int) $term;
+	$lang    = function_exists( 'pll_get_term_language' ) ? pll_get_term_language( $term_id ) : '';
+	$base    = iflynepal_blogs_base( (string) $lang );
+
+	if ( IFLYNEPAL_BLOGS_BASE === $base ) {
+		return $url;
+	}
+
+	$path = (string) wp_parse_url( $url, PHP_URL_PATH );
+
+	if ( 0 !== strpos( $path, '/' . IFLYNEPAL_BLOGS_BASE . '/' ) ) {
+		return $url;
+	}
+
+	$rest = substr( $path, strlen( '/' . IFLYNEPAL_BLOGS_BASE ) );
+
+	return str_replace( $path, '/' . $base . $rest, $url );
+}
+add_filter( 'term_link', 'iflynepal_blog_term_link', 10, 3 );
 
 /**
  * Builds a post's permalink under its category.
@@ -163,8 +292,14 @@ function iflynepal_blog_permalink( $permalink, $post ) {
 	$terms = get_the_terms( $post->ID, 'category' );
 	$slug  = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->slug : 'uncategorized';
 
+	// The post's own language, not whichever language the current request
+	// happens to be in — a French post's link stays under the French base
+	// even when it is printed on an English page (a "same post in other
+	// languages" widget, say).
+	$lang = function_exists( 'pll_get_post_language' ) ? pll_get_post_language( $post->ID ) : '';
+
 	return user_trailingslashit(
-		home_url( IFLYNEPAL_BLOGS_BASE . '/' . $slug . '/' . $post->post_name )
+		home_url( iflynepal_blogs_base( (string) $lang ) . '/' . $slug . '/' . $post->post_name )
 	);
 }
 add_filter( 'post_link', 'iflynepal_blog_permalink', 10, 2 );

@@ -101,7 +101,13 @@ function iflynepal_guide_cta_defaults() {
  * @return string Kicker HTML.
  */
 function iflynepal_guide_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_guide_kicker', IFLYNEPAL_GUIDE_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_guide_kicker', IFLYNEPAL_GUIDE_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -112,7 +118,13 @@ function iflynepal_guide_kicker() {
  * @return string Heading HTML.
  */
 function iflynepal_guide_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_guide_title', IFLYNEPAL_GUIDE_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_guide_title', IFLYNEPAL_GUIDE_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -131,10 +143,18 @@ function iflynepal_guide_cta_field( $field ) {
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
 	$value    = (string) get_theme_mod( 'iflynepal_guide_cta_' . $field, $default );
 
-	if ( 'url' === $field && '' === trim( $value ) ) {
-		$posts_page = (int) get_option( 'page_for_posts' );
+	if ( 'url' === $field ) {
+		if ( '' === trim( $value ) ) {
+			$posts_page = (int) get_option( 'page_for_posts' );
 
-		return $posts_page ? (string) get_permalink( $posts_page ) : '';
+			return $posts_page ? (string) get_permalink( $posts_page ) : '';
+		}
+
+		return $value;
+	}
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
 	}
 
 	return $value;
@@ -298,3 +318,33 @@ function iflynepal_render_guide_cta() {
 		esc_html( $label )
 	);
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the Travel Guide column's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end. The guide cards themselves
+ * are real posts, not Customizer text, so they translate through Polylang's
+ * ordinary post-translation flow instead of this.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_guide_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string( 'Guide kicker', get_theme_mod( 'iflynepal_guide_kicker', IFLYNEPAL_GUIDE_KICKER_DEFAULT ), 'iFlyNepal — Homepage / Travel Guide' );
+	pll_register_string( 'Guide title', get_theme_mod( 'iflynepal_guide_title', IFLYNEPAL_GUIDE_TITLE_DEFAULT ), 'iFlyNepal — Homepage / Travel Guide', true );
+
+	$cta_defaults = iflynepal_guide_cta_defaults();
+
+	pll_register_string( 'Guide CTA label', get_theme_mod( 'iflynepal_guide_cta_label', $cta_defaults['label'] ), 'iFlyNepal — Homepage / Travel Guide' );
+}
+add_action( 'admin_init', 'iflynepal_register_guide_pll_strings', 17 );

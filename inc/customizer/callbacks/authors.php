@@ -103,7 +103,13 @@ function iflynepal_authors_hero_image_url() {
  * @return string The line, empty when the editor has cleared it.
  */
 function iflynepal_authors_hero_lead() {
-	return trim( (string) get_theme_mod( 'iflynepal_authors_hero_lead', IFLYNEPAL_AUTHORS_HERO_LEAD_DEFAULT ) );
+	$lead = trim( (string) get_theme_mod( 'iflynepal_authors_hero_lead', IFLYNEPAL_AUTHORS_HERO_LEAD_DEFAULT ) );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return $lead;
 }
 
 /**
@@ -118,6 +124,10 @@ function iflynepal_authors_hero_title() {
 
 	if ( '' === $title ) {
 		$title = IFLYNEPAL_AUTHORS_HERO_TITLE_DEFAULT;
+	}
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
 	}
 
 	return iflynepal_kses_text( $title );
@@ -172,6 +182,10 @@ function iflynepal_authors_list_heading() {
 		$heading = IFLYNEPAL_AUTHORS_LIST_HEADING_DEFAULT;
 	}
 
+	if ( function_exists( 'pll__' ) ) {
+		$heading = pll__( $heading );
+	}
+
 	return iflynepal_kses_ink_heading( $heading );
 }
 
@@ -183,8 +197,60 @@ function iflynepal_authors_list_heading() {
  * @return string The line, empty when the editor has cleared it.
  */
 function iflynepal_authors_list_lead() {
-	return trim( (string) get_theme_mod( 'iflynepal_authors_list_lead', IFLYNEPAL_AUTHORS_LIST_LEAD_DEFAULT ) );
+	$lead = trim( (string) get_theme_mod( 'iflynepal_authors_list_lead', IFLYNEPAL_AUTHORS_LIST_LEAD_DEFAULT ) );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return $lead;
 }
+
+/**
+ * Registers the Authors archive's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (it no-ops on the front
+ * end, see polylang/src/api.php), so registration can't live inside the
+ * display functions above — they run on the front end. Hooked to admin_init
+ * instead, so the strings are always registered whenever wp-admin loads, no
+ * dependency on the Authors page having been viewed first.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_authors_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string(
+		'Authors hero title',
+		trim( (string) get_theme_mod( 'iflynepal_authors_hero_title', IFLYNEPAL_AUTHORS_HERO_TITLE_DEFAULT ) ),
+		'iFlyNepal — Authors',
+		true
+	);
+
+	pll_register_string(
+		'Authors hero lead',
+		trim( (string) get_theme_mod( 'iflynepal_authors_hero_lead', IFLYNEPAL_AUTHORS_HERO_LEAD_DEFAULT ) ),
+		'iFlyNepal — Authors'
+	);
+
+	pll_register_string(
+		'Authors list heading',
+		trim( (string) get_theme_mod( 'iflynepal_authors_list_heading', IFLYNEPAL_AUTHORS_LIST_HEADING_DEFAULT ) ),
+		'iFlyNepal — Authors',
+		true
+	);
+
+	pll_register_string(
+		'Authors list lead',
+		trim( (string) get_theme_mod( 'iflynepal_authors_list_lead', IFLYNEPAL_AUTHORS_LIST_LEAD_DEFAULT ) ),
+		'iFlyNepal — Authors'
+	);
+}
+add_action( 'admin_init', 'iflynepal_register_authors_pll_strings', 30 );
 
 /**
  * The single author page's posts section eyebrow, until one is written.

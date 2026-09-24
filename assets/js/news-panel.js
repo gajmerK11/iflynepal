@@ -6,8 +6,9 @@
  * beside the News flag in the hero, and the place the story is filed from,
  * which prints both in the details row and at the head of the standfirst.
  *
- * The Top News toggle is capped at three, which is a fact about the whole
- * post type rather than about this post, so it has to be asked of the server:
+ * The Top News toggle is capped at three per language, which is a fact about
+ * the whole post type rather than about this post, so it has to be asked of
+ * the server:
  * /iflynepal/v1/top-news answers with the count and with the three stories
  * holding the places, so an editor who has run out is told which to free
  * rather than left to hunt for them. It is asked again whenever the window is
@@ -46,6 +47,9 @@
 			}, [] );
 
 			var editPost = useDispatch( 'core/editor' ).editPost;
+			var postId = useSelect( function ( select ) {
+				return select( 'core/editor' ).getCurrentPostId();
+			}, [] );
 
 			var isTop = Boolean( meta && meta[ TOP ] );
 			var topic = ( meta && meta[ TOPIC ] ) || '';
@@ -59,7 +63,7 @@
 				var alive = true;
 
 				function read() {
-					apiFetch( { path: '/iflynepal/v1/top-news' } ).then( function ( data ) {
+					apiFetch( { path: '/iflynepal/v1/top-news?post=' + postId } ).then( function ( data ) {
 						if ( alive ) {
 							setTop( { count: data.count, posts: data.posts } );
 						}
@@ -73,7 +77,7 @@
 					alive = false;
 					window.removeEventListener( 'focus', read );
 				};
-			}, [] );
+			}, [ postId ] );
 
 			var full = top.count >= LIMIT && ! isTop;
 

@@ -62,7 +62,13 @@ const IFLYNEPAL_REASONS_ANNOTATION_WORDS_DEFAULT = "Experiences\nTravel\nRetreat
  * @return string Heading HTML.
  */
 function iflynepal_reasons_heading() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_reasons_heading', IFLYNEPAL_REASONS_HEADING_DEFAULT ) );
+	$heading = get_theme_mod( 'iflynepal_reasons_heading', IFLYNEPAL_REASONS_HEADING_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$heading = pll__( $heading );
+	}
+
+	return iflynepal_kses_text( $heading );
 }
 
 /**
@@ -73,7 +79,13 @@ function iflynepal_reasons_heading() {
  * @return string Description HTML.
  */
 function iflynepal_reasons_description() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_reasons_description', IFLYNEPAL_REASONS_DESCRIPTION_DEFAULT ) );
+	$description = get_theme_mod( 'iflynepal_reasons_description', IFLYNEPAL_REASONS_DESCRIPTION_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$description = pll__( $description );
+	}
+
+	return iflynepal_kses_text( $description );
 }
 
 /**
@@ -84,7 +96,20 @@ function iflynepal_reasons_description() {
  * @return string Plain text.
  */
 function iflynepal_reasons_annotation_static() {
-	return (string) get_theme_mod( 'iflynepal_reasons_annotation_static', IFLYNEPAL_REASONS_ANNOTATION_STATIC_DEFAULT );
+	$static = (string) get_theme_mod( 'iflynepal_reasons_annotation_static', IFLYNEPAL_REASONS_ANNOTATION_STATIC_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$static = pll__( $static );
+	}
+
+	/*
+	 * assets/js/homepage/reasons/annotation.js types this text and the
+	 * cycling word back to back with nothing in between, so the space has to
+	 * be part of this string. Re-added here rather than trusted to survive
+	 * storage: the Polylang Strings screen's textarea trims trailing
+	 * whitespace on save, so a translator's space was silently lost.
+	 */
+	return '' === trim( $static ) ? $static : rtrim( $static ) . ' ';
 }
 
 /**
@@ -95,7 +120,12 @@ function iflynepal_reasons_annotation_static() {
  * @return string[] Non-empty words, in order.
  */
 function iflynepal_reasons_annotation_words() {
-	$raw   = get_theme_mod( 'iflynepal_reasons_annotation_words', IFLYNEPAL_REASONS_ANNOTATION_WORDS_DEFAULT );
+	$raw = get_theme_mod( 'iflynepal_reasons_annotation_words', IFLYNEPAL_REASONS_ANNOTATION_WORDS_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$raw = pll__( $raw );
+	}
+
 	$lines = preg_split( '/\R/', (string) $raw );
 
 	return array_values( array_filter( array_map( 'trim', (array) $lines ), 'strlen' ) );
@@ -245,3 +275,29 @@ function iflynepal_render_reasons_heading() {
 function iflynepal_render_reasons_description() {
 	return iflynepal_reasons_description();
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the "A few good reasons" section's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_reasons_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string( 'Reasons heading', get_theme_mod( 'iflynepal_reasons_heading', IFLYNEPAL_REASONS_HEADING_DEFAULT ), 'iFlyNepal — Homepage / Reasons', true );
+	pll_register_string( 'Reasons description', get_theme_mod( 'iflynepal_reasons_description', IFLYNEPAL_REASONS_DESCRIPTION_DEFAULT ), 'iFlyNepal — Homepage / Reasons' );
+	pll_register_string( 'Reasons annotation static text', get_theme_mod( 'iflynepal_reasons_annotation_static', IFLYNEPAL_REASONS_ANNOTATION_STATIC_DEFAULT ), 'iFlyNepal — Homepage / Reasons' );
+	pll_register_string( 'Reasons annotation words', get_theme_mod( 'iflynepal_reasons_annotation_words', IFLYNEPAL_REASONS_ANNOTATION_WORDS_DEFAULT ), 'iFlyNepal — Homepage / Reasons', true );
+}
+add_action( 'admin_init', 'iflynepal_register_reasons_pll_strings', 13 );

@@ -116,7 +116,13 @@ define( 'IFLYNEPAL_TEAM_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/tea
  * @return string Kicker HTML.
  */
 function iflynepal_team_hero_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_team_hero_kicker', IFLYNEPAL_TEAM_HERO_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_team_hero_kicker', IFLYNEPAL_TEAM_HERO_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -127,7 +133,13 @@ function iflynepal_team_hero_kicker() {
  * @return string Headline HTML.
  */
 function iflynepal_team_hero_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_team_hero_title', IFLYNEPAL_TEAM_HERO_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_team_hero_title', IFLYNEPAL_TEAM_HERO_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -149,7 +161,13 @@ function iflynepal_team_hero_brand() {
  * @return string Sub-title HTML.
  */
 function iflynepal_team_hero_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_team_hero_lead', IFLYNEPAL_TEAM_HERO_LEAD_DEFAULT ) );
+	$lead = get_theme_mod( 'iflynepal_team_hero_lead', IFLYNEPAL_TEAM_HERO_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return iflynepal_kses_text( $lead );
 }
 
 /**
@@ -160,7 +178,13 @@ function iflynepal_team_hero_lead() {
  * @return string Note text. Empty hides it.
  */
 function iflynepal_team_hero_script() {
-	return trim( (string) get_theme_mod( 'iflynepal_team_hero_script', IFLYNEPAL_TEAM_HERO_SCRIPT_DEFAULT ) );
+	$script = (string) get_theme_mod( 'iflynepal_team_hero_script', IFLYNEPAL_TEAM_HERO_SCRIPT_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$script = pll__( $script );
+	}
+
+	return trim( $script );
 }
 
 /**
@@ -171,7 +195,13 @@ function iflynepal_team_hero_script() {
  * @return string Label. Empty removes the button.
  */
 function iflynepal_team_hero_scroll_label() {
-	return trim( (string) get_theme_mod( 'iflynepal_team_hero_scroll_label', IFLYNEPAL_TEAM_HERO_SCROLL_DEFAULT ) );
+	$label = (string) get_theme_mod( 'iflynepal_team_hero_scroll_label', IFLYNEPAL_TEAM_HERO_SCROLL_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$label = pll__( $label );
+	}
+
+	return trim( $label );
 }
 
 /**
@@ -364,7 +394,13 @@ const IFLYNEPAL_TEAM_REPS_LABEL_DEFAULT = 'Global representative';
  * @return string Kicker HTML.
  */
 function iflynepal_team_reps_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_team_reps_kicker', IFLYNEPAL_TEAM_REPS_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_team_reps_kicker', IFLYNEPAL_TEAM_REPS_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -375,7 +411,13 @@ function iflynepal_team_reps_kicker() {
  * @return string Heading HTML. Empty hides the whole section.
  */
 function iflynepal_team_reps_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_team_reps_title', IFLYNEPAL_TEAM_REPS_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_team_reps_title', IFLYNEPAL_TEAM_REPS_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -386,7 +428,13 @@ function iflynepal_team_reps_title() {
  * @return string Sub-title HTML.
  */
 function iflynepal_team_reps_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_team_reps_lead', IFLYNEPAL_TEAM_REPS_LEAD_DEFAULT ) );
+	$lead = get_theme_mod( 'iflynepal_team_reps_lead', IFLYNEPAL_TEAM_REPS_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return iflynepal_kses_text( $lead );
 }
 
 /**
@@ -397,7 +445,13 @@ function iflynepal_team_reps_lead() {
  * @return string Label. Empty leaves the line off every card.
  */
 function iflynepal_team_reps_label() {
-	return trim( (string) get_theme_mod( 'iflynepal_team_reps_label', IFLYNEPAL_TEAM_REPS_LABEL_DEFAULT ) );
+	$label = (string) get_theme_mod( 'iflynepal_team_reps_label', IFLYNEPAL_TEAM_REPS_LABEL_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$label = pll__( $label );
+	}
+
+	return trim( $label );
 }
 
 /**
@@ -612,7 +666,13 @@ const IFLYNEPAL_TEAM_EXECUTIVE_LEAD_DEFAULT = 'The people responsible for planni
  * @return string Heading HTML. Empty hides the whole section.
  */
 function iflynepal_team_executive_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_team_executive_title', IFLYNEPAL_TEAM_EXECUTIVE_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_team_executive_title', IFLYNEPAL_TEAM_EXECUTIVE_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -623,7 +683,13 @@ function iflynepal_team_executive_title() {
  * @return string Sub-title HTML.
  */
 function iflynepal_team_executive_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_team_executive_lead', IFLYNEPAL_TEAM_EXECUTIVE_LEAD_DEFAULT ) );
+	$lead = get_theme_mod( 'iflynepal_team_executive_lead', IFLYNEPAL_TEAM_EXECUTIVE_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return iflynepal_kses_text( $lead );
 }
 
 /**
@@ -1092,3 +1158,45 @@ function iflynepal_render_team_members() {
 
 	return $markup;
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the Team page's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end.
+ *
+ * The hero's company line ("iFly Nepal") and every card's name are left
+ * unregistered: they are the brand name and real people's names, not text to
+ * translate. Country and role text is registered elsewhere already, via the
+ * ordinary __() calls in the card defaults above.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_team_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	$group = 'iFlyNepal — About / Team';
+
+	pll_register_string( 'Team hero kicker', get_theme_mod( 'iflynepal_team_hero_kicker', IFLYNEPAL_TEAM_HERO_KICKER_DEFAULT ), $group );
+	pll_register_string( 'Team hero title', get_theme_mod( 'iflynepal_team_hero_title', IFLYNEPAL_TEAM_HERO_TITLE_DEFAULT ), $group );
+	pll_register_string( 'Team hero lead', get_theme_mod( 'iflynepal_team_hero_lead', IFLYNEPAL_TEAM_HERO_LEAD_DEFAULT ), $group, true );
+	pll_register_string( 'Team hero script', get_theme_mod( 'iflynepal_team_hero_script', IFLYNEPAL_TEAM_HERO_SCRIPT_DEFAULT ), $group );
+	pll_register_string( 'Team hero scroll label', get_theme_mod( 'iflynepal_team_hero_scroll_label', IFLYNEPAL_TEAM_HERO_SCROLL_DEFAULT ), $group );
+
+	pll_register_string( 'Team reps kicker', get_theme_mod( 'iflynepal_team_reps_kicker', IFLYNEPAL_TEAM_REPS_KICKER_DEFAULT ), $group );
+	pll_register_string( 'Team reps title', get_theme_mod( 'iflynepal_team_reps_title', IFLYNEPAL_TEAM_REPS_TITLE_DEFAULT ), $group );
+	pll_register_string( 'Team reps lead', get_theme_mod( 'iflynepal_team_reps_lead', IFLYNEPAL_TEAM_REPS_LEAD_DEFAULT ), $group );
+	pll_register_string( 'Team reps label', get_theme_mod( 'iflynepal_team_reps_label', IFLYNEPAL_TEAM_REPS_LABEL_DEFAULT ), $group );
+
+	pll_register_string( 'Team executive title', get_theme_mod( 'iflynepal_team_executive_title', IFLYNEPAL_TEAM_EXECUTIVE_TITLE_DEFAULT ), $group );
+	pll_register_string( 'Team executive lead', get_theme_mod( 'iflynepal_team_executive_lead', IFLYNEPAL_TEAM_EXECUTIVE_LEAD_DEFAULT ), $group );
+}
+add_action( 'admin_init', 'iflynepal_register_team_pll_strings', 22 );

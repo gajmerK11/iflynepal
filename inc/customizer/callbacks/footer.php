@@ -118,8 +118,39 @@ function iflynepal_footer_social_networks() {
  * @return string Blurb HTML.
  */
 function iflynepal_footer_blurb() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_footer_blurb', IFLYNEPAL_FOOTER_BLURB_DEFAULT ) );
+	$blurb = get_theme_mod( 'iflynepal_footer_blurb', IFLYNEPAL_FOOTER_BLURB_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$blurb = pll__( $blurb );
+	}
+
+	return iflynepal_kses_text( $blurb );
 }
+
+/**
+ * Registers the footer blurb with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * iflynepal_footer_blurb() above — that runs on the front end.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_footer_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string(
+		'Footer blurb',
+		get_theme_mod( 'iflynepal_footer_blurb', IFLYNEPAL_FOOTER_BLURB_DEFAULT ),
+		'iFlyNepal — Footer'
+	);
+}
+add_action( 'admin_init', 'iflynepal_register_footer_pll_strings', 40 );
 
 /**
  * Default head office details, as the design has them.

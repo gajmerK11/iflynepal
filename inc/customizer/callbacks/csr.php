@@ -89,7 +89,13 @@ define( 'IFLYNEPAL_CSR_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/csr/
  * @return string Kicker HTML.
  */
 function iflynepal_csr_hero_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_hero_kicker', IFLYNEPAL_CSR_HERO_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_csr_hero_kicker', IFLYNEPAL_CSR_HERO_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -100,7 +106,13 @@ function iflynepal_csr_hero_kicker() {
  * @return string Headline HTML.
  */
 function iflynepal_csr_hero_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_hero_title', IFLYNEPAL_CSR_HERO_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_csr_hero_title', IFLYNEPAL_CSR_HERO_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -111,7 +123,13 @@ function iflynepal_csr_hero_title() {
  * @return string Sub-title HTML.
  */
 function iflynepal_csr_hero_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_hero_lead', IFLYNEPAL_CSR_HERO_LEAD_DEFAULT ) );
+	$lead = get_theme_mod( 'iflynepal_csr_hero_lead', IFLYNEPAL_CSR_HERO_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return iflynepal_kses_text( $lead );
 }
 
 /**
@@ -193,7 +211,13 @@ function iflynepal_csr_commitment_default( $index ) {
  * @return string Kicker HTML.
  */
 function iflynepal_csr_commitment_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_commitment_kicker', IFLYNEPAL_CSR_COMMITMENT_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_csr_commitment_kicker', IFLYNEPAL_CSR_COMMITMENT_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -204,7 +228,13 @@ function iflynepal_csr_commitment_kicker() {
  * @return string Heading HTML. Empty hides the section.
  */
 function iflynepal_csr_commitment_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_commitment_title', IFLYNEPAL_CSR_COMMITMENT_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_csr_commitment_title', IFLYNEPAL_CSR_COMMITMENT_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -310,7 +340,13 @@ const IFLYNEPAL_CSR_PLEDGE_DEFAULT = '&ldquo;Leave Only Footprints, Take Only <e
  * @return string Kicker HTML.
  */
 function iflynepal_csr_pledge_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_pledge_kicker', IFLYNEPAL_CSR_PLEDGE_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_csr_pledge_kicker', IFLYNEPAL_CSR_PLEDGE_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -321,7 +357,13 @@ function iflynepal_csr_pledge_kicker() {
  * @return string Pledge HTML. Empty hides the band.
  */
 function iflynepal_csr_pledge() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_pledge', IFLYNEPAL_CSR_PLEDGE_DEFAULT ) );
+	$pledge = get_theme_mod( 'iflynepal_csr_pledge', IFLYNEPAL_CSR_PLEDGE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$pledge = pll__( $pledge );
+	}
+
+	return iflynepal_kses_text( $pledge );
 }
 
 /**
@@ -486,7 +528,13 @@ const IFLYNEPAL_CSR_COMMUNITY_TITLE_DEFAULT = 'Empowering Lives, Transforming Co
  * @return string Kicker HTML.
  */
 function iflynepal_csr_community_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_community_kicker', IFLYNEPAL_CSR_COMMUNITY_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_csr_community_kicker', IFLYNEPAL_CSR_COMMUNITY_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -497,7 +545,13 @@ function iflynepal_csr_community_kicker() {
  * @return string Heading HTML. Empty hides the section.
  */
 function iflynepal_csr_community_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_community_title', IFLYNEPAL_CSR_COMMUNITY_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_csr_community_title', IFLYNEPAL_CSR_COMMUNITY_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -664,7 +718,13 @@ const IFLYNEPAL_CSR_TOURISM_TITLE_DEFAULT = 'Building Futures, Enriching Communi
  * @return string Kicker HTML.
  */
 function iflynepal_csr_tourism_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_tourism_kicker', IFLYNEPAL_CSR_TOURISM_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_csr_tourism_kicker', IFLYNEPAL_CSR_TOURISM_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -675,7 +735,13 @@ function iflynepal_csr_tourism_kicker() {
  * @return string Heading HTML. Empty hides the section.
  */
 function iflynepal_csr_tourism_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_tourism_title', IFLYNEPAL_CSR_TOURISM_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_csr_tourism_title', IFLYNEPAL_CSR_TOURISM_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -804,8 +870,13 @@ function iflynepal_csr_accountability_field( $field ) {
 	);
 
 	$default = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
+	$value   = get_theme_mod( 'iflynepal_csr_accountability_' . $field, $default );
 
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_accountability_' . $field, $default ) );
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -906,7 +977,13 @@ const IFLYNEPAL_CSR_CLOSE_TEXT_DEFAULT = 'Join us on our journey towards respons
  * @return string Kicker HTML.
  */
 function iflynepal_csr_close_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_close_kicker', IFLYNEPAL_CSR_CLOSE_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_csr_close_kicker', IFLYNEPAL_CSR_CLOSE_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -917,7 +994,13 @@ function iflynepal_csr_close_kicker() {
  * @return string Headline HTML.
  */
 function iflynepal_csr_close_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_close_title', IFLYNEPAL_CSR_CLOSE_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_csr_close_title', IFLYNEPAL_CSR_CLOSE_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -928,7 +1011,13 @@ function iflynepal_csr_close_title() {
  * @return string Headline HTML.
  */
 function iflynepal_csr_close_title_two() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_csr_close_title_two', IFLYNEPAL_CSR_CLOSE_TITLE_TWO_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_csr_close_title_two', IFLYNEPAL_CSR_CLOSE_TITLE_TWO_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -939,7 +1028,13 @@ function iflynepal_csr_close_title_two() {
  * @return string Paragraph HTML, links included.
  */
 function iflynepal_csr_close_text() {
-	return iflynepal_kses_rich( get_theme_mod( 'iflynepal_csr_close_text', IFLYNEPAL_CSR_CLOSE_TEXT_DEFAULT ) );
+	$text = get_theme_mod( 'iflynepal_csr_close_text', IFLYNEPAL_CSR_CLOSE_TEXT_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$text = pll__( $text );
+	}
+
+	return iflynepal_kses_rich( $text );
 }
 
 /**
@@ -1270,3 +1365,56 @@ function iflynepal_render_csr_close_title() {
 function iflynepal_render_csr_close_text() {
 	return iflynepal_csr_close_text();
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the CSR page's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end.
+ *
+ * Repeater fields (commitment paragraphs, pillars, community projects,
+ * tourism panels, and their image alt text) are left out: their defaults are
+ * already wrapped in __() and translated through the theme's .po file, not
+ * through Polylang Strings.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_csr_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	$group = 'iFlyNepal — CSR';
+
+	pll_register_string( 'CSR hero kicker', get_theme_mod( 'iflynepal_csr_hero_kicker', IFLYNEPAL_CSR_HERO_KICKER_DEFAULT ), $group );
+	pll_register_string( 'CSR hero title', get_theme_mod( 'iflynepal_csr_hero_title', IFLYNEPAL_CSR_HERO_TITLE_DEFAULT ), $group );
+	pll_register_string( 'CSR hero lead', get_theme_mod( 'iflynepal_csr_hero_lead', IFLYNEPAL_CSR_HERO_LEAD_DEFAULT ), $group );
+
+	pll_register_string( 'CSR commitment kicker', get_theme_mod( 'iflynepal_csr_commitment_kicker', IFLYNEPAL_CSR_COMMITMENT_KICKER_DEFAULT ), $group );
+	pll_register_string( 'CSR commitment title', get_theme_mod( 'iflynepal_csr_commitment_title', IFLYNEPAL_CSR_COMMITMENT_TITLE_DEFAULT ), $group );
+
+	pll_register_string( 'CSR pledge kicker', get_theme_mod( 'iflynepal_csr_pledge_kicker', IFLYNEPAL_CSR_PLEDGE_KICKER_DEFAULT ), $group );
+	pll_register_string( 'CSR pledge', get_theme_mod( 'iflynepal_csr_pledge', IFLYNEPAL_CSR_PLEDGE_DEFAULT ), $group );
+
+	pll_register_string( 'CSR community kicker', get_theme_mod( 'iflynepal_csr_community_kicker', IFLYNEPAL_CSR_COMMUNITY_KICKER_DEFAULT ), $group );
+	pll_register_string( 'CSR community title', get_theme_mod( 'iflynepal_csr_community_title', IFLYNEPAL_CSR_COMMUNITY_TITLE_DEFAULT ), $group );
+
+	pll_register_string( 'CSR tourism kicker', get_theme_mod( 'iflynepal_csr_tourism_kicker', IFLYNEPAL_CSR_TOURISM_KICKER_DEFAULT ), $group );
+	pll_register_string( 'CSR tourism title', get_theme_mod( 'iflynepal_csr_tourism_title', IFLYNEPAL_CSR_TOURISM_TITLE_DEFAULT ), $group );
+
+	pll_register_string( 'CSR accountability kicker', get_theme_mod( 'iflynepal_csr_accountability_kicker', IFLYNEPAL_CSR_ACCOUNTABILITY_KICKER_DEFAULT ), $group );
+	pll_register_string( 'CSR accountability title', get_theme_mod( 'iflynepal_csr_accountability_title', IFLYNEPAL_CSR_ACCOUNTABILITY_TITLE_DEFAULT ), $group );
+	pll_register_string( 'CSR accountability text', get_theme_mod( 'iflynepal_csr_accountability_text', IFLYNEPAL_CSR_ACCOUNTABILITY_TEXT_DEFAULT ), $group, true );
+
+	pll_register_string( 'CSR close kicker', get_theme_mod( 'iflynepal_csr_close_kicker', IFLYNEPAL_CSR_CLOSE_KICKER_DEFAULT ), $group );
+	pll_register_string( 'CSR close title', get_theme_mod( 'iflynepal_csr_close_title', IFLYNEPAL_CSR_CLOSE_TITLE_DEFAULT ), $group );
+	pll_register_string( 'CSR close title two', get_theme_mod( 'iflynepal_csr_close_title_two', IFLYNEPAL_CSR_CLOSE_TITLE_TWO_DEFAULT ), $group );
+	pll_register_string( 'CSR close text', get_theme_mod( 'iflynepal_csr_close_text', IFLYNEPAL_CSR_CLOSE_TEXT_DEFAULT ), $group, true );
+}
+add_action( 'admin_init', 'iflynepal_register_csr_pll_strings', 23 );

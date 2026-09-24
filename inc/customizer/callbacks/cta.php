@@ -105,7 +105,13 @@ function iflynepal_cta_button_defaults() {
  * @return string Kicker HTML.
  */
 function iflynepal_cta_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_cta_kicker', IFLYNEPAL_CTA_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_cta_kicker', IFLYNEPAL_CTA_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -116,7 +122,13 @@ function iflynepal_cta_kicker() {
  * @return string Heading HTML.
  */
 function iflynepal_cta_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_cta_title', IFLYNEPAL_CTA_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_cta_title', IFLYNEPAL_CTA_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -127,7 +139,13 @@ function iflynepal_cta_title() {
  * @return string Paragraph HTML.
  */
 function iflynepal_cta_description() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_cta_description', IFLYNEPAL_CTA_DESCRIPTION_DEFAULT ) );
+	$description = get_theme_mod( 'iflynepal_cta_description', IFLYNEPAL_CTA_DESCRIPTION_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$description = pll__( $description );
+	}
+
+	return iflynepal_kses_text( $description );
 }
 
 /**
@@ -145,8 +163,14 @@ function iflynepal_cta_button( $index ) {
 		'url'   => '',
 	);
 
+	$label = (string) get_theme_mod( 'iflynepal_cta_button_' . $index . '_label', $default['label'] );
+
+	if ( function_exists( 'pll__' ) ) {
+		$label = pll__( $label );
+	}
+
 	return array(
-		'label' => (string) get_theme_mod( 'iflynepal_cta_button_' . $index . '_label', $default['label'] ),
+		'label' => $label,
 		'url'   => (string) get_theme_mod( 'iflynepal_cta_button_' . $index . '_url', $default['url'] ),
 	);
 }
@@ -245,3 +269,36 @@ function iflynepal_render_cta_actions() {
 
 	return $markup;
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the final CTA's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_cta_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string( 'CTA kicker', get_theme_mod( 'iflynepal_cta_kicker', IFLYNEPAL_CTA_KICKER_DEFAULT ), 'iFlyNepal — Homepage / CTA' );
+	pll_register_string( 'CTA title', get_theme_mod( 'iflynepal_cta_title', IFLYNEPAL_CTA_TITLE_DEFAULT ), 'iFlyNepal — Homepage / CTA', true );
+	pll_register_string( 'CTA description', get_theme_mod( 'iflynepal_cta_description', IFLYNEPAL_CTA_DESCRIPTION_DEFAULT ), 'iFlyNepal — Homepage / CTA' );
+
+	$button_defaults = iflynepal_cta_button_defaults();
+
+	for ( $index = 1; $index <= IFLYNEPAL_CTA_BUTTONS; $index++ ) {
+		$default = isset( $button_defaults[ $index ] ) ? $button_defaults[ $index ] : array( 'label' => '' );
+
+		pll_register_string( "CTA button $index label", get_theme_mod( "iflynepal_cta_button_{$index}_label", $default['label'] ), 'iFlyNepal — Homepage / CTA' );
+	}
+}
+add_action( 'admin_init', 'iflynepal_register_cta_pll_strings', 18 );

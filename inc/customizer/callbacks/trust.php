@@ -74,62 +74,62 @@ define( 'IFLYNEPAL_TRUST_PROMO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/h
  */
 function iflynepal_trust_icons() {
 	return array(
-		'globe'    => array(
+		'globe'      => array(
 			'label' => __( 'Globe', 'iflynepal' ),
 			'path'  => 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z',
 			'fill'  => true,
 		),
-		'thumb-up' => array(
+		'thumb-up'   => array(
 			'label' => __( 'Thumbs up', 'iflynepal' ),
 			'path'  => 'M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z',
 			'fill'  => true,
 		),
-		'card'     => array(
+		'card'       => array(
 			'label' => __( 'Payment card', 'iflynepal' ),
 			'path'  => 'M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z',
 			'fill'  => true,
 		),
-		'badge'    => array(
+		'badge'      => array(
 			'label' => __( 'Award badge', 'iflynepal' ),
 			'path'  => 'M9.68 13.69L12 11.93l2.31 1.76-.88-2.85L15.75 9h-2.84L12 6.19 11.09 9H8.25l1.87 1.84-.44 2.85zM20 10c0-4.42-3.58-8-8-8s-8 3.58-8 8c0 2.03.76 3.87 2 5.28V23l6-2 6 2v-7.72c1.24-1.41 2-3.25 2-5.28zm-8-6c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6 2.69-6 6-6z',
 			'fill'  => true,
 		),
-		'shield'   => array(
+		'shield'     => array(
 			'label' => __( 'Shield', 'iflynepal' ),
 			'path'  => 'M12 3l7 3v5.4c0 4.3-2.9 7.6-7 9.6-4.1-2-7-5.3-7-9.6V6l7-3z',
 			'fill'  => false,
 		),
-		'check'    => array(
+		'check'      => array(
 			'label' => __( 'Tick', 'iflynepal' ),
 			'path'  => 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM7.8 12.2l2.9 2.9 5.5-6',
 			'fill'  => false,
 		),
-		'mountain' => array(
+		'mountain'   => array(
 			'label' => __( 'Mountain', 'iflynepal' ),
 			'path'  => 'M2.8 18.6l6.2-10.4 4.1 6.6 2.6-4 5.5 7.8z',
 			'fill'  => false,
 		),
-		'pin'      => array(
+		'pin'        => array(
 			'label' => __( 'Map pin', 'iflynepal' ),
 			'path'  => 'M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11zM14.4 10a2.4 2.4 0 1 1-4.8 0 2.4 2.4 0 0 1 4.8 0z',
 			'fill'  => false,
 		),
-		'calendar' => array(
+		'calendar'   => array(
 			'label' => __( 'Calendar', 'iflynepal' ),
 			'path'  => 'M4.8 6.2h14.4v14H4.8zM4.8 10.4h14.4M8.6 3.6v4M15.4 3.6v4',
 			'fill'  => false,
 		),
-		'chat'     => array(
+		'chat'       => array(
 			'label' => __( 'Message', 'iflynepal' ),
 			'path'  => 'M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.6 8.6 0 0 1-3.9-.9L3 20.5l1.6-5A8.4 8.4 0 0 1 12.5 3 8.4 8.4 0 0 1 21 11.5z',
 			'fill'  => false,
 		),
-		'people'   => array(
+		'people'     => array(
 			'label' => __( 'People', 'iflynepal' ),
 			'path'  => 'M9 11.4a3.7 3.7 0 1 0 0-7.4 3.7 3.7 0 0 0 0 7.4zM2.6 20.4c0-3.5 2.9-5.8 6.4-5.8s6.4 2.3 6.4 5.8M16.6 4.5a3.7 3.7 0 0 1 0 6.9M18.2 15c2.2.6 3.6 2.4 3.6 4.7',
 			'fill'  => false,
 		),
-		'clock'    => array(
+		'clock'      => array(
 			'label' => __( 'Clock', 'iflynepal' ),
 			'path'  => 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7.4V12l3.2 2',
 			'fill'  => false,
@@ -139,22 +139,22 @@ function iflynepal_trust_icons() {
 			'path'  => 'M6 4h12a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-6.2l-4.1 3.1a.6.6 0 0 1-.96-.48V17H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z',
 			'fill'  => true,
 		),
-		'tag'      => array(
+		'tag'        => array(
 			'label' => __( 'Price tag', 'iflynepal' ),
 			'path'  => 'M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.59 1.41.59.55 0 1.05-.23 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z',
 			'fill'  => true,
 		),
-		'dollar'   => array(
+		'dollar'     => array(
 			'label' => __( 'Dollar sign', 'iflynepal' ),
 			'path'  => 'M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z',
 			'fill'  => true,
 		),
-		'phone'    => array(
+		'phone'      => array(
 			'label' => __( 'Phone', 'iflynepal' ),
 			'path'  => 'M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z',
 			'fill'  => true,
 		),
-		'leaf'     => array(
+		'leaf'       => array(
 			'label' => __( 'Leaf', 'iflynepal' ),
 			'path'  => 'M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.39 9.32 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05z',
 			'fill'  => true,
@@ -271,7 +271,13 @@ function iflynepal_sanitize_trust_icon( $value ) {
  * @return string Kicker HTML.
  */
 function iflynepal_trust_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_trust_kicker', IFLYNEPAL_TRUST_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_trust_kicker', IFLYNEPAL_TRUST_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -282,7 +288,13 @@ function iflynepal_trust_kicker() {
  * @return string Heading HTML.
  */
 function iflynepal_trust_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_trust_title', IFLYNEPAL_TRUST_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_trust_title', IFLYNEPAL_TRUST_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -312,8 +324,13 @@ function iflynepal_trust_feature_icon( $index ) {
  */
 function iflynepal_trust_feature_title( $index ) {
 	$default = iflynepal_trust_feature_default( $index );
+	$title   = (string) get_theme_mod( 'iflynepal_trust_feature_' . $index . '_title', $default['title'] );
 
-	return (string) get_theme_mod( 'iflynepal_trust_feature_' . $index . '_title', $default['title'] );
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return $title;
 }
 
 /**
@@ -325,9 +342,14 @@ function iflynepal_trust_feature_title( $index ) {
  * @return string Description HTML.
  */
 function iflynepal_trust_feature_description( $index ) {
-	$default = iflynepal_trust_feature_default( $index );
+	$default     = iflynepal_trust_feature_default( $index );
+	$description = get_theme_mod( 'iflynepal_trust_feature_' . $index . '_description', $default['description'] );
 
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_trust_feature_' . $index . '_description', $default['description'] ) );
+	if ( function_exists( 'pll__' ) ) {
+		$description = pll__( $description );
+	}
+
+	return iflynepal_kses_text( $description );
 }
 
 /**
@@ -341,8 +363,13 @@ function iflynepal_trust_feature_description( $index ) {
 function iflynepal_trust_promo_field( $field ) {
 	$defaults = iflynepal_trust_promo_defaults();
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
+	$value    = (string) get_theme_mod( 'iflynepal_trust_promo_' . $field, $default );
 
-	return (string) get_theme_mod( 'iflynepal_trust_promo_' . $field, $default );
+	if ( 'button_url' !== $field && function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return $value;
 }
 
 /* ------------------------------------------------------------------- media */
@@ -528,6 +555,43 @@ function iflynepal_render_trust_promo_button() {
 		esc_html( $label )
 	);
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the trust section's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_trust_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string( 'Trust kicker', get_theme_mod( 'iflynepal_trust_kicker', IFLYNEPAL_TRUST_KICKER_DEFAULT ), 'iFlyNepal — Homepage / Trust' );
+	pll_register_string( 'Trust title', get_theme_mod( 'iflynepal_trust_title', IFLYNEPAL_TRUST_TITLE_DEFAULT ), 'iFlyNepal — Homepage / Trust', true );
+
+	for ( $index = 1; $index <= IFLYNEPAL_TRUST_FEATURES; $index++ ) {
+		$default = iflynepal_trust_feature_default( $index );
+
+		pll_register_string( "Trust feature $index title", get_theme_mod( "iflynepal_trust_feature_{$index}_title", $default['title'] ), 'iFlyNepal — Homepage / Trust' );
+		pll_register_string( "Trust feature $index description", get_theme_mod( "iflynepal_trust_feature_{$index}_description", $default['description'] ), 'iFlyNepal — Homepage / Trust', true );
+	}
+
+	$promo_defaults = iflynepal_trust_promo_defaults();
+
+	foreach ( array( 'kicker', 'title', 'description', 'button_label' ) as $field ) {
+		pll_register_string( 'Trust promo ' . $field, get_theme_mod( 'iflynepal_trust_promo_' . $field, $promo_defaults[ $field ] ), 'iFlyNepal — Homepage / Trust', 'description' === $field || 'title' === $field );
+	}
+}
+add_action( 'admin_init', 'iflynepal_register_trust_pll_strings', 14 );
 
 /**
  * Renders one logo band's track, with the run duplicated.

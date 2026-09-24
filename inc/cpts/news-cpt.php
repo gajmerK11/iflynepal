@@ -194,6 +194,12 @@ function iflynepal_register_news_rest_routes() {
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => 'iflynepal_news_top_rest',
 			'permission_callback' => 'iflynepal_news_can_edit',
+			'args'                => array(
+				'post' => array(
+					'type'    => 'integer',
+					'default' => 0,
+				),
+			),
 		)
 	);
 }
@@ -204,14 +210,30 @@ add_action( 'rest_api_init', 'iflynepal_register_news_rest_routes' );
  *
  * The panel needs two things: how many there are, so it can grey the toggle
  * out at three, and a way to reach them, so the editor can free a place up
- * without hunting for which three they were.
+ * without hunting for which three they were — both scoped to the story being
+ * edited's own language, the same way the row on the front end is scoped to
+ * whichever language a visitor is reading. Without this, a French story
+ * would find the toggle greyed out by three English stories that hold no
+ * place on its own language's row at all.
  *
  * @since 1.0.0
  *
+ * @param WP_REST_Request $request The request, carrying the story's post id.
  * @return WP_REST_Response Count and the flagged stories.
  */
-function iflynepal_news_top_rest() {
-	$posts = iflynepal_news_top_stories();
+function iflynepal_news_top_rest( $request ) {
+	$post_id = (int) $request->get_param( 'post' );
+	$lang    = '';
+
+	if ( $post_id && function_exists( 'pll_get_post_language' ) ) {
+		$lang = (string) pll_get_post_language( $post_id );
+	}
+
+	if ( '' === $lang && function_exists( 'pll_current_language' ) ) {
+		$lang = (string) pll_current_language();
+	}
+
+	$posts = iflynepal_news_top_stories( $lang );
 	$out   = array();
 
 	foreach ( $posts as $post ) {
@@ -235,31 +257,44 @@ function iflynepal_news_top_rest() {
  *
  * Capped at three whatever the database says: the toggle is the only way to
  * set the flag and it stops at three, but a story flagged and then re-dated
- * should not be able to push the row to four.
+ * should not be able to push the row to four. Three per language, not three
+ * site-wide — French and English each hold their own row, the same as any
+ * other translated content.
  *
  * @since 1.0.0
  *
+ * @param string $lang Optional. A Polylang language slug to scope the row
+ *                      to. Defaults to the current language; every language
+ *                      when Polylang is inactive or the slug is unknown.
  * @return WP_Post[] Stories.
  */
-function iflynepal_news_top_stories() {
-	return get_posts(
-		array(
-			'post_type'              => IFLYNEPAL_NEWS_POST_TYPE,
-			'post_status'            => 'publish',
-			'posts_per_page'         => IFLYNEPAL_NEWS_TOP_LIMIT,
-			'orderby'                => 'date',
-			'order'                  => 'DESC',
-			'ignore_sticky_posts'    => true,
-			'no_found_rows'          => true,
-			'update_post_meta_cache' => false,
-			'meta_query'             => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- One key, three rows, once per archive.
+function iflynepal_news_top_stories( $lang = '' ) {
+	if ( '' === $lang && function_exists( 'pll_current_language' ) ) {
+		$lang = (string) pll_current_language();
+	}
+
+	$args = array(
+		'post_type'              => IFLYNEPAL_NEWS_POST_TYPE,
+		'post_status'            => 'publish',
+		'posts_per_page'         => IFLYNEPAL_NEWS_TOP_LIMIT,
+		'orderby'                => 'date',
+		'order'                  => 'DESC',
+		'ignore_sticky_posts'    => true,
+		'no_found_rows'          => true,
+		'update_post_meta_cache' => false,
+		'meta_query'             => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- One key, three rows, once per archive.
 				array(
 					'key'   => IFLYNEPAL_NEWS_TOP_META,
 					'value' => '1',
 				),
-			),
-		)
+		),
 	);
+
+	if ( $lang && function_exists( 'pll_current_language' ) ) {
+		$args['lang'] = $lang;
+	}
+
+	return get_posts( $args );
 }
 
 /* ------------------------------------------------------------ the list table */

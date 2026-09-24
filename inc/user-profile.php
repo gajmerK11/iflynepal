@@ -59,6 +59,73 @@ function iflynepal_render_author_profile_editor( $field, $value ) {
 }
 
 /**
+ * Renders a translated-text row under one of the profile's plain-text fields.
+ *
+ * Stored under the base field's meta key suffixed `_fr` (e.g.
+ * `iflynepal_author_role_fr`); see iflynepal_author_meta_localized() in
+ * inc/authors.php, which is what reads it back on the front end. Draws
+ * nothing when Polylang isn't active — French-only for now, by design; a
+ * second language later means one more call like this one, not a rewrite.
+ *
+ * @since 1.0.0
+ *
+ * @param int    $user_id    User being edited.
+ * @param string $base_field Bare (English) meta key this field translates.
+ * @param string $label      Row label.
+ * @return void
+ */
+function iflynepal_render_author_profile_text_field_fr( $user_id, $base_field, $label ) {
+	if ( ! function_exists( 'pll_languages_list' ) || ! in_array( 'fr', pll_languages_list(), true ) ) {
+		return;
+	}
+
+	$field = $base_field . '_fr';
+	?>
+	<tr>
+		<th><label for="<?php echo esc_attr( $field ); ?>"><?php echo esc_html( $label ); ?></label></th>
+		<td>
+			<input type="text"
+				id="<?php echo esc_attr( $field ); ?>"
+				name="<?php echo esc_attr( $field ); ?>"
+				value="<?php echo esc_attr( get_user_meta( $user_id, $field, true ) ); ?>"
+				class="regular-text">
+			<p class="description"><?php esc_html_e( 'Leave blank to show the English value on the French pages.', 'iflynepal' ); ?></p>
+		</td>
+	</tr>
+	<?php
+}
+
+/**
+ * Renders a translated-text row under one of the profile's rich-editor fields.
+ *
+ * Same purpose as iflynepal_render_author_profile_text_field_fr(), for the
+ * three prose fields (Long biography, Experience, Contribution).
+ *
+ * @since 1.0.0
+ *
+ * @param int    $user_id    User being edited.
+ * @param string $base_field Bare (English) meta key this field translates.
+ * @param string $label      Row label.
+ * @return void
+ */
+function iflynepal_render_author_profile_editor_field_fr( $user_id, $base_field, $label ) {
+	if ( ! function_exists( 'pll_languages_list' ) || ! in_array( 'fr', pll_languages_list(), true ) ) {
+		return;
+	}
+
+	$field = $base_field . '_fr';
+	?>
+	<tr>
+		<th><label for="<?php echo esc_attr( $field ); ?>"><?php echo esc_html( $label ); ?></label></th>
+		<td>
+			<?php iflynepal_render_author_profile_editor( $field, (string) get_user_meta( $user_id, $field, true ) ); ?>
+			<p class="description"><?php esc_html_e( 'Leave blank to show the English value on the French pages.', 'iflynepal' ); ?></p>
+		</td>
+	</tr>
+	<?php
+}
+
+/**
  * Renders the "iFly Nepal Author Profile" section on a user's edit screen.
  *
  * @since 1.0.0
@@ -86,6 +153,8 @@ function iflynepal_render_author_profile_fields( $user ) {
 			</td>
 		</tr>
 
+		<?php iflynepal_render_author_profile_text_field_fr( $user_id, 'iflynepal_author_role', __( 'Role (Français)', 'iflynepal' ) ); ?>
+
 		<tr>
 			<th><label for="iflynepal_author_hand"><?php esc_html_e( 'Handwritten note', 'iflynepal' ); ?></label></th>
 			<td>
@@ -98,6 +167,8 @@ function iflynepal_render_author_profile_fields( $user ) {
 			</td>
 		</tr>
 
+		<?php iflynepal_render_author_profile_text_field_fr( $user_id, 'iflynepal_author_hand', __( 'Handwritten note (Français)', 'iflynepal' ) ); ?>
+
 		<tr>
 			<th><label for="iflynepal_author_bio"><?php esc_html_e( 'Long biography', 'iflynepal' ); ?></label></th>
 			<td>
@@ -105,6 +176,8 @@ function iflynepal_render_author_profile_fields( $user ) {
 				<p class="description"><?php esc_html_e( 'The opening paragraphs on the full author page. Press Enter for a new paragraph, and use the toolbar for bold, italic, underline, lists and links. This is separate from the short Biographical Info field above, which is used in card bylines elsewhere on the site.', 'iflynepal' ); ?></p>
 			</td>
 		</tr>
+
+		<?php iflynepal_render_author_profile_editor_field_fr( $user_id, 'iflynepal_author_bio', __( 'Long biography (Français)', 'iflynepal' ) ); ?>
 
 		<tr>
 			<th><label for="iflynepal_author_expertise"><?php esc_html_e( 'Expertise', 'iflynepal' ); ?></label></th>
@@ -118,12 +191,16 @@ function iflynepal_render_author_profile_fields( $user ) {
 			</td>
 		</tr>
 
+		<?php iflynepal_render_author_profile_text_field_fr( $user_id, 'iflynepal_author_expertise', __( 'Expertise (Français)', 'iflynepal' ) ); ?>
+
 		<tr>
 			<th><label for="iflynepal_author_experience"><?php esc_html_e( 'Experience', 'iflynepal' ); ?></label></th>
 			<td>
 				<?php iflynepal_render_author_profile_editor( 'iflynepal_author_experience', (string) get_user_meta( $user_id, 'iflynepal_author_experience', true ) ); ?>
 			</td>
 		</tr>
+
+		<?php iflynepal_render_author_profile_editor_field_fr( $user_id, 'iflynepal_author_experience', __( 'Experience (Français)', 'iflynepal' ) ); ?>
 
 		<tr>
 			<th><label for="iflynepal_author_contribution"><?php esc_html_e( 'Contribution at iFly Nepal', 'iflynepal' ); ?></label></th>
@@ -132,6 +209,8 @@ function iflynepal_render_author_profile_fields( $user ) {
 				<p class="description"><?php esc_html_e( 'Experience and Contribution may both carry links: select the words the link belongs on and use the link button in the toolbar.', 'iflynepal' ); ?></p>
 			</td>
 		</tr>
+
+		<?php iflynepal_render_author_profile_editor_field_fr( $user_id, 'iflynepal_author_contribution', __( 'Contribution at iFly Nepal (Français)', 'iflynepal' ) ); ?>
 
 		<?php
 		$iflynepal_social_fields = iflynepal_author_social_field_defs();
@@ -273,6 +352,22 @@ function iflynepal_save_author_profile_fields( $user_id ) {
 	$text_fields  = array( 'iflynepal_author_role', 'iflynepal_author_hand', 'iflynepal_author_expertise' );
 	$prose_fields = array( 'iflynepal_author_bio', 'iflynepal_author_experience', 'iflynepal_author_contribution' );
 	$url_fields   = array_keys( iflynepal_author_social_field_defs() );
+
+	/*
+	 * The French rows (inc/user-profile.php's *_field_fr() renderers) post
+	 * back under the same field names with a `_fr` suffix, so they save
+	 * through the exact same two loops below — sanitized the same way as the
+	 * English value, no separate handling needed.
+	 */
+	if ( function_exists( 'pll_languages_list' ) && in_array( 'fr', pll_languages_list(), true ) ) {
+		foreach ( array( 'iflynepal_author_role', 'iflynepal_author_hand', 'iflynepal_author_expertise' ) as $field ) {
+			$text_fields[] = $field . '_fr';
+		}
+
+		foreach ( array( 'iflynepal_author_bio', 'iflynepal_author_experience', 'iflynepal_author_contribution' ) as $field ) {
+			$prose_fields[] = $field . '_fr';
+		}
+	}
 
 	foreach ( $text_fields as $field ) {
 		if ( isset( $_POST[ $field ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Core's own user-edit.php screen supplies the nonce this hook fires behind.

@@ -108,7 +108,13 @@ function iflynepal_faq_cta_defaults() {
  * @return string Kicker HTML.
  */
 function iflynepal_faq_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_faq_kicker', IFLYNEPAL_FAQ_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_faq_kicker', IFLYNEPAL_FAQ_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -119,7 +125,13 @@ function iflynepal_faq_kicker() {
  * @return string Heading HTML.
  */
 function iflynepal_faq_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_faq_title', IFLYNEPAL_FAQ_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_faq_title', IFLYNEPAL_FAQ_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -133,8 +145,13 @@ function iflynepal_faq_title() {
 function iflynepal_faq_cta_field( $field ) {
 	$defaults = iflynepal_faq_cta_defaults();
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
+	$value    = (string) get_theme_mod( 'iflynepal_faq_cta_' . $field, $default );
 
-	return (string) get_theme_mod( 'iflynepal_faq_cta_' . $field, $default );
+	if ( 'url' !== $field && function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return $value;
 }
 
 /**
@@ -158,10 +175,20 @@ function iflynepal_faq_items() {
 			continue;
 		}
 
+		if ( function_exists( 'pll__' ) ) {
+			$question = pll__( $question );
+		}
+
+		$answer = (string) get_theme_mod( 'iflynepal_faq_' . $i . '_answer', $default['answer'] );
+
+		if ( function_exists( 'pll__' ) ) {
+			$answer = pll__( $answer );
+		}
+
 		$items[] = array(
 			'index'    => $i,
 			'question' => $question,
-			'answer'   => (string) get_theme_mod( 'iflynepal_faq_' . $i . '_answer', $default['answer'] ),
+			'answer'   => $answer,
 		);
 	}
 
@@ -256,3 +283,47 @@ function iflynepal_render_faq_cta() {
 		esc_html( $label )
 	);
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the FAQ section's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end. Re-reads the live
+ * theme_mod values on every wp-admin load, so a question the editor adds or
+ * edits in the Customizer shows up here to translate without any code
+ * change — up to IFLYNEPAL_FAQ_MAX questions, the same cap the Customizer
+ * itself has.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_faq_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string( 'FAQ kicker', get_theme_mod( 'iflynepal_faq_kicker', IFLYNEPAL_FAQ_KICKER_DEFAULT ), 'iFlyNepal — Homepage / FAQ' );
+	pll_register_string( 'FAQ title', get_theme_mod( 'iflynepal_faq_title', IFLYNEPAL_FAQ_TITLE_DEFAULT ), 'iFlyNepal — Homepage / FAQ', true );
+
+	$cta_defaults = iflynepal_faq_cta_defaults();
+
+	pll_register_string( 'FAQ CTA label', get_theme_mod( 'iflynepal_faq_cta_label', $cta_defaults['label'] ), 'iFlyNepal — Homepage / FAQ' );
+
+	for ( $i = 1; $i <= IFLYNEPAL_FAQ_MAX; $i++ ) {
+		$default  = iflynepal_faq_default( $i );
+		$question = trim( (string) get_theme_mod( 'iflynepal_faq_' . $i . '_question', $default['question'] ) );
+
+		if ( '' === $question ) {
+			continue;
+		}
+
+		pll_register_string( "FAQ $i question", $question, 'iFlyNepal — Homepage / FAQ' );
+		pll_register_string( "FAQ $i answer", get_theme_mod( 'iflynepal_faq_' . $i . '_answer', $default['answer'] ), 'iFlyNepal — Homepage / FAQ', true );
+	}
+}
+add_action( 'admin_init', 'iflynepal_register_faq_pll_strings', 16 );

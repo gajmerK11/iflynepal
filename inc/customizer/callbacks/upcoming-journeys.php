@@ -54,7 +54,13 @@ const IFLYNEPAL_UPCOMING_DESCRIPTION_DEFAULT = 'Real dates you can join, travel 
  * @return string Eyebrow text.
  */
 function iflynepal_upcoming_eyebrow() {
-	return (string) get_theme_mod( 'iflynepal_upcoming_eyebrow', IFLYNEPAL_UPCOMING_EYEBROW_DEFAULT );
+	$eyebrow = (string) get_theme_mod( 'iflynepal_upcoming_eyebrow', IFLYNEPAL_UPCOMING_EYEBROW_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$eyebrow = pll__( $eyebrow );
+	}
+
+	return $eyebrow;
 }
 
 /**
@@ -65,7 +71,13 @@ function iflynepal_upcoming_eyebrow() {
  * @return string Heading HTML.
  */
 function iflynepal_upcoming_heading() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_upcoming_heading', IFLYNEPAL_UPCOMING_HEADING_DEFAULT ) );
+	$heading = get_theme_mod( 'iflynepal_upcoming_heading', IFLYNEPAL_UPCOMING_HEADING_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$heading = pll__( $heading );
+	}
+
+	return iflynepal_kses_text( $heading );
 }
 
 /**
@@ -76,7 +88,13 @@ function iflynepal_upcoming_heading() {
  * @return string Description HTML.
  */
 function iflynepal_upcoming_description() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_upcoming_description', IFLYNEPAL_UPCOMING_DESCRIPTION_DEFAULT ) );
+	$description = get_theme_mod( 'iflynepal_upcoming_description', IFLYNEPAL_UPCOMING_DESCRIPTION_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$description = pll__( $description );
+	}
+
+	return iflynepal_kses_text( $description );
 }
 
 /* ---------------------------------------------------------------- packages */
@@ -242,3 +260,28 @@ function iflynepal_render_upcoming_heading() {
 function iflynepal_render_upcoming_description() {
 	return iflynepal_upcoming_description();
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the Upcoming Journeys section's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_upcoming_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string( 'Upcoming journeys eyebrow', get_theme_mod( 'iflynepal_upcoming_eyebrow', IFLYNEPAL_UPCOMING_EYEBROW_DEFAULT ), 'iFlyNepal — Homepage / Upcoming Journeys' );
+	pll_register_string( 'Upcoming journeys heading', get_theme_mod( 'iflynepal_upcoming_heading', IFLYNEPAL_UPCOMING_HEADING_DEFAULT ), 'iFlyNepal — Homepage / Upcoming Journeys', true );
+	pll_register_string( 'Upcoming journeys description', get_theme_mod( 'iflynepal_upcoming_description', IFLYNEPAL_UPCOMING_DESCRIPTION_DEFAULT ), 'iFlyNepal — Homepage / Upcoming Journeys' );
+}
+add_action( 'admin_init', 'iflynepal_register_upcoming_pll_strings', 12 );

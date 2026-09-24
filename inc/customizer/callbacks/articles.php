@@ -71,7 +71,13 @@ function iflynepal_articles_hero_image_url() {
  * @return string The line, empty when the editor has cleared it.
  */
 function iflynepal_articles_hero_lead() {
-	return trim( (string) get_theme_mod( 'iflynepal_articles_hero_lead', IFLYNEPAL_ARTICLES_HERO_LEAD_DEFAULT ) );
+	$lead = (string) get_theme_mod( 'iflynepal_articles_hero_lead', IFLYNEPAL_ARTICLES_HERO_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return trim( $lead );
 }
 
 /**
@@ -86,6 +92,10 @@ function iflynepal_articles_hero_title() {
 
 	if ( '' === $title ) {
 		$title = IFLYNEPAL_ARTICLES_HERO_TITLE_DEFAULT;
+	}
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
 	}
 
 	return iflynepal_kses_text( $title );
@@ -159,5 +169,38 @@ function iflynepal_hero_title_words( $title ) {
  * @return string
  */
 function iflynepal_articles_search_placeholder() {
-	return trim( (string) get_theme_mod( 'iflynepal_articles_search_placeholder', __( 'Search treks, retreats…', 'iflynepal' ) ) );
+	$placeholder = (string) get_theme_mod( 'iflynepal_articles_search_placeholder', __( 'Search treks, retreats…', 'iflynepal' ) );
+
+	if ( function_exists( 'pll__' ) ) {
+		$placeholder = pll__( $placeholder );
+	}
+
+	return trim( $placeholder );
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the Articles archive hero's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_articles_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	$group = 'iFlyNepal — Articles';
+
+	pll_register_string( 'Articles hero title', get_theme_mod( 'iflynepal_articles_hero_title', IFLYNEPAL_ARTICLES_HERO_TITLE_DEFAULT ), $group );
+	pll_register_string( 'Articles hero lead', get_theme_mod( 'iflynepal_articles_hero_lead', IFLYNEPAL_ARTICLES_HERO_LEAD_DEFAULT ), $group );
+	pll_register_string( 'Articles search placeholder', get_theme_mod( 'iflynepal_articles_search_placeholder', __( 'Search treks, retreats…', 'iflynepal' ) ), $group );
+}
+add_action( 'admin_init', 'iflynepal_register_articles_pll_strings', 25 );

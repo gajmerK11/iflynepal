@@ -96,7 +96,13 @@ define( 'IFLYNEPAL_COUNTRY_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/
  * @return string Headline HTML.
  */
 function iflynepal_country_hero_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_country_hero_title', IFLYNEPAL_COUNTRY_HERO_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_country_hero_title', IFLYNEPAL_COUNTRY_HERO_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -107,7 +113,13 @@ function iflynepal_country_hero_title() {
  * @return string Sub-title HTML.
  */
 function iflynepal_country_hero_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_country_hero_lead', IFLYNEPAL_COUNTRY_HERO_LEAD_DEFAULT ) );
+	$lead = get_theme_mod( 'iflynepal_country_hero_lead', IFLYNEPAL_COUNTRY_HERO_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return iflynepal_kses_text( $lead );
 }
 
 /**
@@ -310,8 +322,13 @@ function iflynepal_country_chapter_has_prose( $slug ) {
  */
 function iflynepal_country_chapter_eyebrow( $slug ) {
 	$chapter = iflynepal_country_chapter( $slug );
+	$eyebrow = get_theme_mod( 'iflynepal_country_' . $slug . '_eyebrow', $chapter['eyebrow'] );
 
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_country_' . $slug . '_eyebrow', $chapter['eyebrow'] ) );
+	if ( function_exists( 'pll__' ) ) {
+		$eyebrow = pll__( $eyebrow );
+	}
+
+	return iflynepal_kses_text( $eyebrow );
 }
 
 /**
@@ -324,8 +341,13 @@ function iflynepal_country_chapter_eyebrow( $slug ) {
  */
 function iflynepal_country_chapter_title( $slug ) {
 	$chapter = iflynepal_country_chapter( $slug );
+	$title   = get_theme_mod( 'iflynepal_country_' . $slug . '_title', $chapter['title'] );
 
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_country_' . $slug . '_title', $chapter['title'] ) );
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -359,9 +381,15 @@ function iflynepal_country_visible_chapters() {
 			continue;
 		}
 
+		$label = (string) get_theme_mod( 'iflynepal_country_' . $slug . '_label', $chapter['label'] );
+
+		if ( function_exists( 'pll__' ) ) {
+			$label = pll__( $label );
+		}
+
 		$visible[] = array(
 			'slug'  => $slug,
-			'label' => (string) get_theme_mod( 'iflynepal_country_' . $slug . '_label', $chapter['label'] ),
+			'label' => $label,
 		);
 	}
 
@@ -416,8 +444,13 @@ function iflynepal_country_chapter_image_alt( $slug ) {
 	}
 
 	$chapter = iflynepal_country_chapter( $slug );
+	$alt     = $chapter['banner_alt'];
 
-	return $chapter['banner_alt'];
+	if ( function_exists( 'pll__' ) ) {
+		$alt = pll__( $alt );
+	}
+
+	return $alt;
 }
 
 /**
@@ -441,6 +474,10 @@ function iflynepal_country_chapter_paragraphs( $slug ) {
 
 		if ( '' === $value ) {
 			continue;
+		}
+
+		if ( function_exists( 'pll__' ) ) {
+			$value = pll__( $value );
 		}
 
 		$paragraphs[] = $value;
@@ -477,8 +514,13 @@ function iflynepal_country_note_defaults() {
 function iflynepal_country_note_field( $field ) {
 	$defaults = iflynepal_country_note_defaults();
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
+	$value    = (string) get_theme_mod( 'iflynepal_country_note_' . $field, $default );
 
-	return (string) get_theme_mod( 'iflynepal_country_note_' . $field, $default );
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return $value;
 }
 
 /* --------------------------------------------------------- people: bands */
@@ -587,8 +629,13 @@ function iflynepal_country_band_image_alt( $index ) {
 	}
 
 	$default = iflynepal_country_band_default( $index );
+	$alt     = $default['image_alt'];
 
-	return $default['image_alt'];
+	if ( function_exists( 'pll__' ) ) {
+		$alt = pll__( $alt );
+	}
+
+	return $alt;
 }
 
 /**
@@ -610,6 +657,10 @@ function iflynepal_country_bands() {
 
 		if ( '' === $title ) {
 			continue;
+		}
+
+		if ( function_exists( 'pll__' ) ) {
+			$title = pll__( $title );
 		}
 
 		$cards[] = array(
@@ -737,8 +788,13 @@ function iflynepal_country_region_image_alt( $index ) {
 	}
 
 	$default = iflynepal_country_region_default( $index );
+	$alt     = $default['image_alt'];
 
-	return $default['image_alt'];
+	if ( function_exists( 'pll__' ) ) {
+		$alt = pll__( $alt );
+	}
+
+	return $alt;
 }
 
 /**
@@ -759,11 +815,21 @@ function iflynepal_country_regions() {
 			continue;
 		}
 
+		if ( function_exists( 'pll__' ) ) {
+			$title = pll__( $title );
+		}
+
+		$description = (string) get_theme_mod( 'iflynepal_country_region_' . $i . '_description', $default['description'] );
+
+		if ( function_exists( 'pll__' ) ) {
+			$description = pll__( $description );
+		}
+
 		$rows[] = array(
 			'index'       => $i,
 			'number'      => (string) get_theme_mod( 'iflynepal_country_region_' . $i . '_number', $default['number'] ),
 			'title'       => $title,
-			'description' => (string) get_theme_mod( 'iflynepal_country_region_' . $i . '_description', $default['description'] ),
+			'description' => $description,
 		);
 	}
 
@@ -895,10 +961,20 @@ function iflynepal_country_sectors() {
 			continue;
 		}
 
+		if ( function_exists( 'pll__' ) ) {
+			$title = pll__( $title );
+		}
+
+		$description = (string) get_theme_mod( 'iflynepal_country_sector_' . $i . '_description', $default['description'] );
+
+		if ( function_exists( 'pll__' ) ) {
+			$description = pll__( $description );
+		}
+
 		$sectors[] = array(
 			'icon'        => iflynepal_sanitize_country_sector_icon( (string) get_theme_mod( 'iflynepal_country_sector_' . $i . '_icon', $default['icon'] ) ),
 			'title'       => $title,
-			'description' => (string) get_theme_mod( 'iflynepal_country_sector_' . $i . '_description', $default['description'] ),
+			'description' => $description,
 		);
 	}
 
@@ -949,6 +1025,10 @@ function iflynepal_country_safety_items() {
 			continue;
 		}
 
+		if ( function_exists( 'pll__' ) ) {
+			$value = pll__( $value );
+		}
+
 		$items[] = $value;
 	}
 
@@ -985,7 +1065,13 @@ function iflynepal_country_bring_defaults() {
  * @return string Heading HTML.
  */
 function iflynepal_country_bring_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_country_bring_title', IFLYNEPAL_COUNTRY_BRING_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_country_bring_title', IFLYNEPAL_COUNTRY_BRING_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -1005,6 +1091,10 @@ function iflynepal_country_bring_paragraphs() {
 
 		if ( '' === $value ) {
 			continue;
+		}
+
+		if ( function_exists( 'pll__' ) ) {
+			$value = pll__( $value );
 		}
 
 		$paragraphs[] = $value;
@@ -1040,8 +1130,13 @@ function iflynepal_country_permit_defaults() {
 function iflynepal_country_permit_field( $field ) {
 	$defaults = iflynepal_country_permit_defaults();
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
+	$value    = (string) get_theme_mod( 'iflynepal_country_permit_' . $field, $default );
 
-	return (string) get_theme_mod( 'iflynepal_country_permit_' . $field, $default );
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return $value;
 }
 
 /* -------------------------------------------------------- render callbacks */
@@ -1351,3 +1446,141 @@ function iflynepal_render_country_permit_title() {
 function iflynepal_render_country_permit_text() {
 	return iflynepal_kses_text( iflynepal_country_permit_field( 'text' ) );
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the About Nepal page's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end. Re-reads the live
+ * theme_mod values on every wp-admin load, so a paragraph added or edited in
+ * the Customizer shows up here to translate without any code change, up to
+ * each field's own Customizer cap.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_about_country_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	$group = 'iFlyNepal — About / Nepal';
+
+	pll_register_string( 'Country hero title', get_theme_mod( 'iflynepal_country_hero_title', IFLYNEPAL_COUNTRY_HERO_TITLE_DEFAULT ), $group, true );
+	pll_register_string( 'Country hero lead', get_theme_mod( 'iflynepal_country_hero_lead', IFLYNEPAL_COUNTRY_HERO_LEAD_DEFAULT ), $group );
+
+	foreach ( iflynepal_country_chapters() as $slug => $chapter ) {
+		$title = trim( (string) get_theme_mod( 'iflynepal_country_' . $slug . '_title', $chapter['title'] ) );
+
+		if ( '' === $title ) {
+			continue;
+		}
+
+		pll_register_string( "Country $slug label", get_theme_mod( 'iflynepal_country_' . $slug . '_label', $chapter['label'] ), $group );
+		pll_register_string( "Country $slug eyebrow", get_theme_mod( 'iflynepal_country_' . $slug . '_eyebrow', $chapter['eyebrow'] ), $group );
+		pll_register_string( "Country $slug title", $title, $group );
+
+		if ( '' !== $chapter['banner_alt'] || get_theme_mod( 'iflynepal_country_' . $slug . '_image', 0 ) ) {
+			pll_register_string( "Country $slug banner alt", $chapter['banner_alt'], $group );
+		}
+
+		for ( $i = 1; $i <= IFLYNEPAL_COUNTRY_PARAGRAPH_MAX; $i++ ) {
+			$default = isset( $chapter['paragraphs'][ $i ] ) ? $chapter['paragraphs'][ $i ] : '';
+			$value   = trim( (string) get_theme_mod( 'iflynepal_country_' . $slug . '_paragraph_' . $i, $default ) );
+
+			if ( '' === $value ) {
+				continue;
+			}
+
+			pll_register_string( "Country $slug paragraph $i", $value, $group, true );
+		}
+	}
+
+	$note_defaults = iflynepal_country_note_defaults();
+
+	foreach ( array( 'label', 'title', 'text' ) as $field ) {
+		pll_register_string( 'Country geography note ' . $field, get_theme_mod( 'iflynepal_country_note_' . $field, $note_defaults[ $field ] ), $group, 'text' === $field );
+	}
+
+	for ( $i = 1; $i <= IFLYNEPAL_COUNTRY_BAND_MAX; $i++ ) {
+		$default = iflynepal_country_band_default( $i );
+		$title   = trim( (string) get_theme_mod( 'iflynepal_country_band_' . $i . '_title', $default['title'] ) );
+
+		if ( '' === $title ) {
+			continue;
+		}
+
+		pll_register_string( "Country people band $i title", $title, $group );
+
+		if ( '' !== $default['image_alt'] ) {
+			pll_register_string( "Country people band $i image alt", $default['image_alt'], $group );
+		}
+	}
+
+	for ( $i = 1; $i <= IFLYNEPAL_COUNTRY_REGION_MAX; $i++ ) {
+		$default = iflynepal_country_region_default( $i );
+		$title   = trim( (string) get_theme_mod( 'iflynepal_country_region_' . $i . '_title', $default['title'] ) );
+
+		if ( '' === $title ) {
+			continue;
+		}
+
+		pll_register_string( "Country flora region $i title", $title, $group );
+		pll_register_string( "Country flora region $i description", get_theme_mod( 'iflynepal_country_region_' . $i . '_description', $default['description'] ), $group, true );
+
+		if ( '' !== $default['image_alt'] ) {
+			pll_register_string( "Country flora region $i image alt", $default['image_alt'], $group );
+		}
+	}
+
+	for ( $i = 1; $i <= IFLYNEPAL_COUNTRY_SECTOR_MAX; $i++ ) {
+		$default = iflynepal_country_sector_default( $i );
+		$title   = trim( (string) get_theme_mod( 'iflynepal_country_sector_' . $i . '_title', $default['title'] ) );
+
+		if ( '' === $title ) {
+			continue;
+		}
+
+		pll_register_string( "Country economy sector $i title", $title, $group );
+		pll_register_string( "Country economy sector $i description", get_theme_mod( 'iflynepal_country_sector_' . $i . '_description', $default['description'] ), $group, true );
+	}
+
+	$safety_defaults = iflynepal_country_safety_defaults();
+
+	for ( $i = 1; $i <= IFLYNEPAL_COUNTRY_SAFETY_MAX; $i++ ) {
+		$default = isset( $safety_defaults[ $i ] ) ? $safety_defaults[ $i ] : '';
+		$value   = trim( (string) get_theme_mod( 'iflynepal_country_safety_' . $i, $default ) );
+
+		if ( '' === $value ) {
+			continue;
+		}
+
+		pll_register_string( "Country safety point $i", $value, $group, true );
+	}
+
+	pll_register_string( 'Country bring title', get_theme_mod( 'iflynepal_country_bring_title', IFLYNEPAL_COUNTRY_BRING_TITLE_DEFAULT ), $group );
+
+	$bring_defaults = iflynepal_country_bring_defaults();
+
+	for ( $i = 1; $i <= IFLYNEPAL_COUNTRY_PARAGRAPH_MAX; $i++ ) {
+		$default = isset( $bring_defaults[ $i ] ) ? $bring_defaults[ $i ] : '';
+		$value   = trim( (string) get_theme_mod( 'iflynepal_country_bring_paragraph_' . $i, $default ) );
+
+		if ( '' === $value ) {
+			continue;
+		}
+
+		pll_register_string( "Country bring paragraph $i", $value, $group, true );
+	}
+
+	$permit_defaults = iflynepal_country_permit_defaults();
+
+	pll_register_string( 'Country permit title', get_theme_mod( 'iflynepal_country_permit_title', $permit_defaults['title'] ), $group );
+	pll_register_string( 'Country permit text', get_theme_mod( 'iflynepal_country_permit_text', $permit_defaults['text'] ), $group, true );
+}
+add_action( 'admin_init', 'iflynepal_register_about_country_pll_strings', 21 );

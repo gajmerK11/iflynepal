@@ -6416,7 +6416,7 @@
 	 */
 	.iflynepal-csr-pledge__quote {
 		@apply mx-auto font-display font-semibold;
-		width: max-content;
+		width: 100%;
 		max-width: 100%;
 		margin-top: 24px;
 		margin-bottom: 0;
@@ -6426,7 +6426,8 @@
 		font-size: clamp(36px, calc(5vw - 2px), 63px);
 		line-height: 1.08;
 		letter-spacing: -0.035em;
-		white-space: nowrap;
+		white-space: normal;
+		overflow-wrap: break-word;
 	}
 
 	.iflynepal-csr-pledge__quote em {
@@ -6638,7 +6639,8 @@
 
 	.iflynepal-csr-close__title > span {
 		@apply block;
-		white-space: nowrap;
+		white-space: normal;
+		overflow-wrap: break-word;
 	}
 
 	.iflynepal-csr-close__title em {
@@ -6752,18 +6754,6 @@
 			margin-bottom: 34px;
 		}
 
-		/*
-		 * Both of these are held to one line on a wide screen and have to be
-		 * let go on a narrow one, or they run off the side.
-		 */
-		.iflynepal-csr-close__title > span,
-		.iflynepal-csr-pledge__quote {
-			white-space: normal;
-		}
-
-		.iflynepal-csr-pledge__quote {
-			width: auto;
-		}
 	}
 
 	/* ======================================================================

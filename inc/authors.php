@@ -113,6 +113,37 @@ function iflynepal_authors_archive_url() {
 	return home_url( '/' );
 }
 
+/**
+ * An author profile field's value in the current Polylang language.
+ *
+ * The profile fields (Role, Handwritten note, Long biography, Expertise,
+ * Experience, Contribution) are stored once in English under their bare meta
+ * key; a translated language gets its own key suffixed `_{lang}` (e.g.
+ * `iflynepal_author_role_fr`), written by the matching field on the user's
+ * profile screen (inc/user-profile.php). An author who has not been
+ * translated yet simply has no suffixed key, so this always falls back to
+ * the English value rather than printing blank.
+ *
+ * @since 1.0.0
+ *
+ * @param int    $author_id  Author.
+ * @param string $base_field Bare (English) meta key.
+ * @return string Stored value, trimmed; empty when neither language has one.
+ */
+function iflynepal_author_meta_localized( $author_id, $base_field ) {
+	$lang = function_exists( 'pll_current_language' ) ? pll_current_language() : '';
+
+	if ( $lang && 'en' !== $lang ) {
+		$value = trim( (string) get_user_meta( $author_id, $base_field . '_' . $lang, true ) );
+
+		if ( '' !== $value ) {
+			return $value;
+		}
+	}
+
+	return trim( (string) get_user_meta( $author_id, $base_field, true ) );
+}
+
 /* ------------------------------------------------------------------- role */
 
 /**
@@ -130,7 +161,7 @@ function iflynepal_authors_archive_url() {
  * @return string
  */
 function iflynepal_author_role( $author_id ) {
-	$role = trim( (string) get_user_meta( $author_id, 'iflynepal_author_role', true ) );
+	$role = iflynepal_author_meta_localized( $author_id, 'iflynepal_author_role' );
 
 	if ( '' !== $role ) {
 		return $role;
@@ -148,7 +179,7 @@ function iflynepal_author_role( $author_id ) {
  * @return string Empty when the editor left it blank.
  */
 function iflynepal_author_hand_note( $author_id ) {
-	return trim( (string) get_user_meta( $author_id, 'iflynepal_author_hand', true ) );
+	return iflynepal_author_meta_localized( $author_id, 'iflynepal_author_hand' );
 }
 
 /* -------------------------------------------------------------------- bio */
@@ -162,10 +193,10 @@ function iflynepal_author_hand_note( $author_id ) {
  * @return bool
  */
 function iflynepal_author_has_bio( $author_id ) {
-	return '' !== trim( (string) get_user_meta( $author_id, 'iflynepal_author_bio', true ) )
+	return '' !== iflynepal_author_meta_localized( $author_id, 'iflynepal_author_bio' )
 		|| array() !== iflynepal_author_expertise_pills( $author_id )
-		|| '' !== trim( (string) get_user_meta( $author_id, 'iflynepal_author_experience', true ) )
-		|| '' !== trim( (string) get_user_meta( $author_id, 'iflynepal_author_contribution', true ) );
+		|| '' !== iflynepal_author_meta_localized( $author_id, 'iflynepal_author_experience' )
+		|| '' !== iflynepal_author_meta_localized( $author_id, 'iflynepal_author_contribution' );
 }
 
 /**
@@ -200,7 +231,7 @@ function iflynepal_author_prose_html( $value ) {
  * @return string HTML, already escaped; empty when nothing is written.
  */
 function iflynepal_author_bio_html( $author_id ) {
-	$bio = trim( (string) get_user_meta( $author_id, 'iflynepal_author_bio', true ) );
+	$bio = iflynepal_author_meta_localized( $author_id, 'iflynepal_author_bio' );
 
 	if ( '' === $bio ) {
 		return '';
@@ -218,7 +249,7 @@ function iflynepal_author_bio_html( $author_id ) {
  * @return string HTML, already escaped; empty when nothing is written.
  */
 function iflynepal_author_experience_html( $author_id ) {
-	$value = trim( (string) get_user_meta( $author_id, 'iflynepal_author_experience', true ) );
+	$value = iflynepal_author_meta_localized( $author_id, 'iflynepal_author_experience' );
 
 	if ( '' === $value ) {
 		return '';
@@ -236,7 +267,7 @@ function iflynepal_author_experience_html( $author_id ) {
  * @return string HTML, already escaped; empty when nothing is written.
  */
 function iflynepal_author_contribution_html( $author_id ) {
-	$value = trim( (string) get_user_meta( $author_id, 'iflynepal_author_contribution', true ) );
+	$value = iflynepal_author_meta_localized( $author_id, 'iflynepal_author_contribution' );
 
 	if ( '' === $value ) {
 		return '';
@@ -256,7 +287,7 @@ function iflynepal_author_contribution_html( $author_id ) {
  * @return array<int,array{name:string}> Pills, in the order typed.
  */
 function iflynepal_author_expertise_pills( $author_id ) {
-	$raw = trim( (string) get_user_meta( $author_id, 'iflynepal_author_expertise', true ) );
+	$raw = iflynepal_author_meta_localized( $author_id, 'iflynepal_author_expertise' );
 
 	if ( '' === $raw ) {
 		return array();

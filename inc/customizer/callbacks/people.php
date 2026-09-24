@@ -145,7 +145,13 @@ function iflynepal_people_card_default( $index ) {
  * @return string Kicker HTML.
  */
 function iflynepal_people_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_people_kicker', IFLYNEPAL_PEOPLE_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_people_kicker', IFLYNEPAL_PEOPLE_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -156,7 +162,13 @@ function iflynepal_people_kicker() {
  * @return string Heading HTML.
  */
 function iflynepal_people_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_people_title', IFLYNEPAL_PEOPLE_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_people_title', IFLYNEPAL_PEOPLE_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -167,7 +179,13 @@ function iflynepal_people_title() {
  * @return string Standfirst HTML.
  */
 function iflynepal_people_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_people_lead', IFLYNEPAL_PEOPLE_LEAD_DEFAULT ) );
+	$lead = get_theme_mod( 'iflynepal_people_lead', IFLYNEPAL_PEOPLE_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return iflynepal_kses_text( $lead );
 }
 
 /**
@@ -181,8 +199,13 @@ function iflynepal_people_lead() {
 function iflynepal_people_cta_field( $field ) {
 	$defaults = iflynepal_people_cta_defaults();
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
+	$value    = (string) get_theme_mod( 'iflynepal_people_cta_' . $field, $default );
 
-	return (string) get_theme_mod( 'iflynepal_people_cta_' . $field, $default );
+	if ( 'url' !== $field && function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return $value;
 }
 
 /**
@@ -196,13 +219,18 @@ function iflynepal_people_cta_field( $field ) {
  */
 function iflynepal_people_card_field( $index, $field ) {
 	$default = iflynepal_people_card_default( $index );
-
-	return trim(
+	$value   = trim(
 		(string) get_theme_mod(
 			'iflynepal_people_card_' . $index . '_' . $field,
 			isset( $default[ $field ] ) ? $default[ $field ] : ''
 		)
 	);
+
+	if ( 'name' !== $field && function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return $value;
 }
 
 /**
@@ -408,3 +436,45 @@ function iflynepal_render_people_card_name( $index ) {
 function iflynepal_render_people_card_country( $index ) {
 	return esc_html( iflynepal_people_card_field( $index, 'country' ) );
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the People section's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end. Card names are not
+ * registered: they are people's actual names, not copy to translate.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_people_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string( 'People kicker', get_theme_mod( 'iflynepal_people_kicker', IFLYNEPAL_PEOPLE_KICKER_DEFAULT ), 'iFlyNepal — Homepage / People' );
+	pll_register_string( 'People title', get_theme_mod( 'iflynepal_people_title', IFLYNEPAL_PEOPLE_TITLE_DEFAULT ), 'iFlyNepal — Homepage / People', true );
+	pll_register_string( 'People lead', get_theme_mod( 'iflynepal_people_lead', IFLYNEPAL_PEOPLE_LEAD_DEFAULT ), 'iFlyNepal — Homepage / People' );
+
+	$cta_defaults = iflynepal_people_cta_defaults();
+
+	pll_register_string( 'People CTA label', get_theme_mod( 'iflynepal_people_cta_label', $cta_defaults['label'] ), 'iFlyNepal — Homepage / People' );
+	pll_register_string( 'People CTA note', get_theme_mod( 'iflynepal_people_cta_note', $cta_defaults['note'] ), 'iFlyNepal — Homepage / People' );
+
+	for ( $index = 1; $index <= IFLYNEPAL_PEOPLE_CARD_MAX; $index++ ) {
+		$default = iflynepal_people_card_default( $index );
+
+		if ( '' === $default['title'] && '' === $default['country'] ) {
+			continue;
+		}
+
+		pll_register_string( "People card $index title", get_theme_mod( "iflynepal_people_card_{$index}_title", $default['title'] ), 'iFlyNepal — Homepage / People' );
+		pll_register_string( "People card $index country", get_theme_mod( "iflynepal_people_card_{$index}_country", $default['country'] ), 'iFlyNepal — Homepage / People' );
+	}
+}
+add_action( 'admin_init', 'iflynepal_register_people_pll_strings', 15 );

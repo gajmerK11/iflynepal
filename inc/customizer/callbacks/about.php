@@ -100,7 +100,13 @@ function iflynepal_about_hero_button_defaults() {
  * @return string Headline HTML.
  */
 function iflynepal_about_hero_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_about_hero_title', IFLYNEPAL_ABOUT_HERO_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_about_hero_title', IFLYNEPAL_ABOUT_HERO_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -111,7 +117,13 @@ function iflynepal_about_hero_title() {
  * @return string Sub-title HTML.
  */
 function iflynepal_about_hero_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_about_hero_lead', IFLYNEPAL_ABOUT_HERO_LEAD_DEFAULT ) );
+	$lead = get_theme_mod( 'iflynepal_about_hero_lead', IFLYNEPAL_ABOUT_HERO_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return iflynepal_kses_text( $lead );
 }
 
 /**
@@ -129,8 +141,14 @@ function iflynepal_about_hero_button( $index ) {
 		'url'   => '',
 	);
 
+	$label = (string) get_theme_mod( 'iflynepal_about_hero_button_' . $index . '_label', $default['label'] );
+
+	if ( function_exists( 'pll__' ) ) {
+		$label = pll__( $label );
+	}
+
 	return array(
-		'label' => (string) get_theme_mod( 'iflynepal_about_hero_button_' . $index . '_label', $default['label'] ),
+		'label' => $label,
 		'url'   => (string) get_theme_mod( 'iflynepal_about_hero_button_' . $index . '_url', $default['url'] ),
 	);
 }
@@ -209,7 +227,13 @@ function iflynepal_about_story_default( $index ) {
  * @return string Kicker HTML.
  */
 function iflynepal_about_overview_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_about_overview_kicker', IFLYNEPAL_ABOUT_OVERVIEW_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_about_overview_kicker', IFLYNEPAL_ABOUT_OVERVIEW_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -220,7 +244,13 @@ function iflynepal_about_overview_kicker() {
  * @return string Heading HTML.
  */
 function iflynepal_about_overview_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_about_overview_title', IFLYNEPAL_ABOUT_OVERVIEW_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_about_overview_title', IFLYNEPAL_ABOUT_OVERVIEW_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -241,6 +271,10 @@ function iflynepal_about_story_paragraphs() {
 
 		if ( '' === $value ) {
 			continue;
+		}
+
+		if ( function_exists( 'pll__' ) ) {
+			$value = pll__( $value );
 		}
 
 		$paragraphs[] = $value;
@@ -270,10 +304,10 @@ define( 'IFLYNEPAL_ABOUT_PROMO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/a
  */
 function iflynepal_about_promo_defaults() {
 	return array(
-		'kicker'       => __( 'Start planning', 'iflynepal' ),
+		'kicker'       => __( 'Ready to plan', 'iflynepal' ),
 		'title'        => __( 'Tell us how you want to travel', 'iflynepal' ),
 		'description'  => __( 'Talk to a Kathmandu-based expert and shape a trek, tour, retreat or volunteer placement around you.', 'iflynepal' ),
-		'button_label' => __( 'Plan Your Trip', 'iflynepal' ),
+		'button_label' => __( 'Chat With Us', 'iflynepal' ),
 		'button_url'   => 'https://wa.me/9841771010',
 		'image_alt'    => __( 'A traveller looking out over the Himalaya in Nepal', 'iflynepal' ),
 	);
@@ -290,8 +324,13 @@ function iflynepal_about_promo_defaults() {
 function iflynepal_about_promo_field( $field ) {
 	$defaults = iflynepal_about_promo_defaults();
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
+	$value    = (string) get_theme_mod( 'iflynepal_about_promo_' . $field, $default );
 
-	return (string) get_theme_mod( 'iflynepal_about_promo_' . $field, $default );
+	if ( 'button_url' !== $field && function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return $value;
 }
 
 /**
@@ -338,8 +377,13 @@ function iflynepal_about_promo_image_alt() {
 	}
 
 	$defaults = iflynepal_about_promo_defaults();
+	$alt      = $defaults['image_alt'];
 
-	return $defaults['image_alt'];
+	if ( function_exists( 'pll__' ) ) {
+		$alt = pll__( $alt );
+	}
+
+	return $alt;
 }
 
 /* ------------------------------------------------------------------ vision */
@@ -369,7 +413,13 @@ const IFLYNEPAL_ABOUT_VISION_CONTENT_DEFAULT = 'To redefine the way people exper
  * @return string Kicker HTML.
  */
 function iflynepal_about_vision_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_about_vision_title', IFLYNEPAL_ABOUT_VISION_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_about_vision_title', IFLYNEPAL_ABOUT_VISION_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -380,7 +430,13 @@ function iflynepal_about_vision_title() {
  * @return string Statement HTML.
  */
 function iflynepal_about_vision_content() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_about_vision_content', IFLYNEPAL_ABOUT_VISION_CONTENT_DEFAULT ) );
+	$content = get_theme_mod( 'iflynepal_about_vision_content', IFLYNEPAL_ABOUT_VISION_CONTENT_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$content = pll__( $content );
+	}
+
+	return iflynepal_kses_text( $content );
 }
 
 /* ------------------------------------------------------------------ offers */
@@ -501,7 +557,13 @@ function iflynepal_about_offer_default( $index ) {
  * @return string Kicker HTML.
  */
 function iflynepal_about_offer_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_about_offer_kicker', IFLYNEPAL_ABOUT_OFFER_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_about_offer_kicker', IFLYNEPAL_ABOUT_OFFER_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -512,7 +574,13 @@ function iflynepal_about_offer_kicker() {
  * @return string Heading HTML.
  */
 function iflynepal_about_offer_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_about_offer_title', IFLYNEPAL_ABOUT_OFFER_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_about_offer_title', IFLYNEPAL_ABOUT_OFFER_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -523,7 +591,13 @@ function iflynepal_about_offer_title() {
  * @return string Lead HTML.
  */
 function iflynepal_about_offer_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_about_offer_lead', IFLYNEPAL_ABOUT_OFFER_LEAD_DEFAULT ) );
+	$lead = get_theme_mod( 'iflynepal_about_offer_lead', IFLYNEPAL_ABOUT_OFFER_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return iflynepal_kses_text( $lead );
 }
 
 /**
@@ -570,8 +644,13 @@ function iflynepal_about_offer_image_alt( $index ) {
 	}
 
 	$default = iflynepal_about_offer_default( $index );
+	$alt     = $default['image_alt'];
 
-	return $default['image_alt'];
+	if ( function_exists( 'pll__' ) ) {
+		$alt = pll__( $alt );
+	}
+
+	return $alt;
 }
 
 /**
@@ -595,11 +674,21 @@ function iflynepal_about_offers() {
 			continue;
 		}
 
+		if ( function_exists( 'pll__' ) ) {
+			$title = pll__( $title );
+		}
+
+		$description = (string) get_theme_mod( 'iflynepal_about_offer_' . $i . '_description', $default['description'] );
+
+		if ( function_exists( 'pll__' ) ) {
+			$description = pll__( $description );
+		}
+
 		$rows[] = array(
 			'index'       => $i,
 			'number'      => (string) get_theme_mod( 'iflynepal_about_offer_' . $i . '_number', $default['number'] ),
 			'title'       => $title,
-			'description' => (string) get_theme_mod( 'iflynepal_about_offer_' . $i . '_description', $default['description'] ),
+			'description' => $description,
 		);
 	}
 
@@ -854,3 +943,78 @@ function iflynepal_render_about_offers() {
 
 	return $markup;
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the About page's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end. Re-reads the live
+ * theme_mod values on every wp-admin load, so an Overview paragraph or Offer
+ * row added or edited in the Customizer shows up here to translate without
+ * any code change, up to each field's own Customizer cap.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_about_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	$group = 'iFlyNepal — About / Company';
+
+	pll_register_string( 'About hero title', get_theme_mod( 'iflynepal_about_hero_title', IFLYNEPAL_ABOUT_HERO_TITLE_DEFAULT ), $group, true );
+	pll_register_string( 'About hero lead', get_theme_mod( 'iflynepal_about_hero_lead', IFLYNEPAL_ABOUT_HERO_LEAD_DEFAULT ), $group, true );
+
+	$hero_button_defaults = iflynepal_about_hero_button_defaults();
+
+	for ( $index = 1; $index <= IFLYNEPAL_ABOUT_HERO_BUTTONS; $index++ ) {
+		$default = isset( $hero_button_defaults[ $index ] ) ? $hero_button_defaults[ $index ] : array( 'label' => '' );
+		pll_register_string( "About hero button $index label", get_theme_mod( "iflynepal_about_hero_button_{$index}_label", $default['label'] ), $group );
+	}
+
+	pll_register_string( 'About overview kicker', get_theme_mod( 'iflynepal_about_overview_kicker', IFLYNEPAL_ABOUT_OVERVIEW_KICKER_DEFAULT ), $group );
+	pll_register_string( 'About overview title', get_theme_mod( 'iflynepal_about_overview_title', IFLYNEPAL_ABOUT_OVERVIEW_TITLE_DEFAULT ), $group );
+
+	for ( $i = 1; $i <= IFLYNEPAL_ABOUT_STORY_MAX; $i++ ) {
+		$value = trim( (string) get_theme_mod( 'iflynepal_about_story_' . $i, iflynepal_about_story_default( $i ) ) );
+
+		if ( '' === $value ) {
+			continue;
+		}
+
+		pll_register_string( "About overview paragraph $i", $value, $group, true );
+	}
+
+	$promo_defaults = iflynepal_about_promo_defaults();
+
+	foreach ( array( 'kicker', 'title', 'description', 'button_label', 'image_alt' ) as $field ) {
+		pll_register_string( 'About promo ' . $field, get_theme_mod( 'iflynepal_about_promo_' . $field, $promo_defaults[ $field ] ), $group, 'description' === $field );
+	}
+
+	pll_register_string( 'About vision title', get_theme_mod( 'iflynepal_about_vision_title', IFLYNEPAL_ABOUT_VISION_TITLE_DEFAULT ), $group );
+	pll_register_string( 'About vision content', get_theme_mod( 'iflynepal_about_vision_content', IFLYNEPAL_ABOUT_VISION_CONTENT_DEFAULT ), $group, true );
+
+	pll_register_string( 'About offer kicker', get_theme_mod( 'iflynepal_about_offer_kicker', IFLYNEPAL_ABOUT_OFFER_KICKER_DEFAULT ), $group );
+	pll_register_string( 'About offer title', get_theme_mod( 'iflynepal_about_offer_title', IFLYNEPAL_ABOUT_OFFER_TITLE_DEFAULT ), $group, true );
+	pll_register_string( 'About offer lead', get_theme_mod( 'iflynepal_about_offer_lead', IFLYNEPAL_ABOUT_OFFER_LEAD_DEFAULT ), $group );
+
+	for ( $i = 1; $i <= IFLYNEPAL_ABOUT_OFFER_MAX; $i++ ) {
+		$default = iflynepal_about_offer_default( $i );
+		$title   = trim( (string) get_theme_mod( 'iflynepal_about_offer_' . $i . '_title', $default['title'] ) );
+
+		if ( '' === $title ) {
+			continue;
+		}
+
+		pll_register_string( "About offer $i title", $title, $group );
+		pll_register_string( "About offer $i description", get_theme_mod( 'iflynepal_about_offer_' . $i . '_description', $default['description'] ), $group, true );
+		pll_register_string( "About offer $i image alt", $default['image_alt'], $group );
+	}
+}
+add_action( 'admin_init', 'iflynepal_register_about_pll_strings', 20 );
