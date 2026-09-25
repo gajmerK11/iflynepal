@@ -17,6 +17,12 @@
  * file only winds elements back once it is certain it can play them forward
  * again.
  *
+ * It also carries one unrelated, opt-out-free guard: any
+ * `.iflynepal-csr-head__title` inside an opted-in section gets its font-size
+ * shrunk at runtime if it still overflows after the stylesheet's own wrapping
+ * rules, so a CSR page head can never force a horizontal scrollbar. See
+ * shrinkCsrHeadTitleToFit() below.
+ *
  * @package IFly_Nepal
  * @since   1.0.0
  */
@@ -107,6 +113,56 @@
 			}
 		} );
 	} );
+
+	/* ------------------------------------------------------ shrink to fit */
+
+	/*
+	 * Last-resort guard for the CSR section heads. CSS already wraps and
+	 * breaks these titles at any width, in any language — this only
+	 * engages if one still overflows its own box regardless (an extra-long
+	 * editor-entered phrase, a language whose words run longer than the
+	 * clamp() ceiling was sized for). It steps the font-size down in 1px
+	 * increments, from whatever the stylesheet set, until the title fits.
+	 *
+	 * @param {Element} el The heading to check.
+	 * @return {void}
+	 */
+	function shrinkCsrHeadTitleToFit( el ) {
+		el.style.fontSize = '';
+
+		var floor = 22;
+		var tries = 0;
+
+		while ( el.scrollWidth > el.clientWidth + 1 && tries < 40 ) {
+			var size = parseFloat( getComputedStyle( el ).fontSize );
+
+			if ( ! size || size <= floor ) {
+				break;
+			}
+
+			el.style.fontSize = ( size - 1 ) + 'px';
+			tries++;
+		}
+	}
+
+	var csrTitles = collect( '.iflynepal-csr-head__title' );
+
+	if ( csrTitles.length ) {
+		var resizeTimer;
+
+		var recheckCsrTitles = function () {
+			csrTitles.forEach( shrinkCsrHeadTitleToFit );
+		};
+
+		recheckCsrTitles();
+
+		window.addEventListener( 'load', recheckCsrTitles );
+
+		window.addEventListener( 'resize', function () {
+			clearTimeout( resizeTimer );
+			resizeTimer = setTimeout( recheckCsrTitles, 150 );
+		} );
+	}
 
 	window.addEventListener( 'load', function () {
 		ScrollTrigger.refresh();

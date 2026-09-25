@@ -6294,11 +6294,13 @@
 	.iflynepal-csr-section {
 		padding: 96px 0;
 		scroll-margin-top: 90px;
+		overflow-x: hidden;
 	}
 
 	.iflynepal-csr-section__inner {
 		@apply relative mx-auto;
 		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		max-width: 100%;
 		z-index: 1;
 	}
 
@@ -6313,8 +6315,9 @@
 	.iflynepal-csr-head {
 		@apply mx-auto text-center;
 		margin-bottom: 46px;
-		max-width: 100%;
-		overflow-wrap: break-word;
+		max-width: 100% !important;
+		width: 100% !important;
+		overflow-wrap: anywhere !important;
 	}
 
 	.iflynepal-csr-head__kicker {
@@ -6338,9 +6341,14 @@
 	 * the 1240px shell holds, so it wrapped however the width happened to fall.
 	 * At 58 it sits on one line from roughly 760px upward.
 	 *
-	 * `text-wrap: balance` is the safety net below that, and for any heading an
-	 * editor writes longer than these: when it does wrap it splits evenly
-	 * instead of leaving one word stranded on the second line.
+	 * No `text-wrap: balance` here on purpose: this head sits inside
+	 * `[data-iflynepal-reveal]`, which section-motion.js transforms on scroll
+	 * in (see assets/js/sections/motion.js). Chromium can mis-measure a
+	 * `balance`d heading's available width inside a transformed ancestor and
+	 * render it as one unwrapped, overflowing line — reproduced on French
+	 * strings, which run longer than the English defaults. Plain wrapping
+	 * plus `overflow-wrap: break-word` below is the safe, boring choice: it
+	 * never overflows, in any language, at any width.
 	 */
 	.iflynepal-csr-head__title {
 		@apply m-0 font-display font-semibold;
@@ -6348,10 +6356,12 @@
 		font-size: clamp(38px, 4.6vw, 58px);
 		line-height: 1.07;
 		letter-spacing: -0.03em;
-		text-wrap: balance;
-		max-width: 100%;
-		white-space: normal;
-		overflow-wrap: break-word;
+		display: block !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		white-space: normal !important;
+		overflow-wrap: anywhere !important;
+		word-break: break-word !important;
 	}
 
 	/* ---------------------------------------------------------- commitment */
