@@ -6313,6 +6313,8 @@
 	.iflynepal-csr-head {
 		@apply mx-auto text-center;
 		margin-bottom: 46px;
+		max-width: 100%;
+		overflow-wrap: break-word;
 	}
 
 	.iflynepal-csr-head__kicker {
@@ -6347,6 +6349,9 @@
 		line-height: 1.07;
 		letter-spacing: -0.03em;
 		text-wrap: balance;
+		max-width: 100%;
+		white-space: normal;
+		overflow-wrap: break-word;
 	}
 
 	/* ---------------------------------------------------------- commitment */
