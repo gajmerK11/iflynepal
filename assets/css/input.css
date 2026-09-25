@@ -5714,6 +5714,25 @@
 	}
 
 	/*
+	 * The shared hero title (§ .iflynepal-hero) has no width or wrap safety of
+	 * its own, and a French headline here runs longer than the English default
+	 * this grid was sized against. Scoped to this page's title rather than the
+	 * shared class, so the homepage/About/Contact heroes are untouched.
+	 * `!important` because plain wrapping properties were not enough to make
+	 * this title actually wrap at every width tried — see
+	 * assets/js/sections/motion.js's shrinkHeroTitleToFit() for the runtime
+	 * half of this same guard.
+	 */
+	.iflynepal-team-hero__title {
+		min-width: 0;
+		max-width: 100% !important;
+		width: 100% !important;
+		white-space: normal !important;
+		overflow-wrap: anywhere !important;
+		word-break: break-word !important;
+	}
+
+	/*
 	 * The copy column pulls left out of the shell on a wide screen, so the
 	 * headline sits against the edge of the frame rather than in a column of
 	 * its own. Nothing to pull on a narrow one, where the shift resolves to 0.
@@ -5721,6 +5740,7 @@
 	.iflynepal-hero--team .iflynepal-hero__copy {
 		--iflynepal-hero-shift: clamp(0px, calc((100vw - 1280px) / 2), 220px);
 		@apply max-w-none;
+		min-width: 0;
 		width: calc(100% + var(--iflynepal-hero-shift));
 		margin-left: calc(-1 * var(--iflynepal-hero-shift));
 	}
@@ -5775,8 +5795,14 @@
 	 * sentence, with the size easing down just enough to fit the column at the
 	 * bottom of that range and reaching the design's full 18px by ~1565px.
 	 *
-	 * The <br> between the two sentences still breaks under `nowrap` — only
-	 * automatic wrapping is suppressed — so this is two lines, not one.
+	 * The <br> between the two sentences still breaks regardless — this only
+	 * ever suppressed automatic wrapping.
+	 *
+	 * `white-space: nowrap` was dropped here: it was tuned tight enough
+	 * against the English default ("761px against a 717px column") that a
+	 * longer translation — French's second sentence runs wider still — had
+	 * nowhere to go and ran under the portraits instead of wrapping. Letting
+	 * it wrap is the safe, boring choice for every language, at every width.
 	 *
 	 * Below 1300px nothing here applies and the shared rule wraps it as the
 	 * design does.
@@ -5785,7 +5811,8 @@
 		.iflynepal-hero--team .iflynepal-hero__lead {
 			@apply max-w-none;
 			font-size: clamp(15px, 1.15vw, 18px);
-			white-space: nowrap;
+			white-space: normal;
+			overflow-wrap: break-word;
 		}
 	}
 

@@ -237,6 +237,51 @@
 	var proof = hero.querySelectorAll( '.iflynepal-hero__proof p' );
 	var portraits = hero.querySelectorAll( '.iflynepal-team-portrait' );
 
+	/* ------------------------------------------------------ shrink to fit */
+
+	/*
+	 * Team's headline sits in a two-column grid beside the portrait cluster.
+	 * The shared title class carries CSS wrap/width safety (see
+	 * .iflynepal-team-hero__title in input.css), but that alone was not
+	 * enough to make a long French headline wrap onto a second line at
+	 * every width tried — it ran behind the portraits instead. This is the
+	 * runtime fallback: if the title still overflows its own box after
+	 * everything else, its font-size steps down until it fits. Runs
+	 * regardless of motion preference, so it applies even with GSAP absent
+	 * or reduced motion on. Scoped to Team only — the other heroes sharing
+	 * this title class are not reported broken and are left alone.
+	 */
+	if ( title && hero.classList.contains( 'iflynepal-hero--team' ) ) {
+		( function () {
+			var floor = 28;
+			var resizeTimer;
+
+			function shrinkTeamTitleToFit() {
+				title.style.fontSize = '';
+
+				var tries = 0;
+
+				while ( title.scrollWidth > title.clientWidth + 1 && tries < 40 ) {
+					var size = parseFloat( getComputedStyle( title ).fontSize );
+
+					if ( ! size || size <= floor ) {
+						break;
+					}
+
+					title.style.fontSize = ( size - 1 ) + 'px';
+					tries++;
+				}
+			}
+
+			shrinkTeamTitleToFit();
+			window.addEventListener( 'load', shrinkTeamTitleToFit );
+			window.addEventListener( 'resize', function () {
+				clearTimeout( resizeTimer );
+				resizeTimer = setTimeout( shrinkTeamTitleToFit, 150 );
+			} );
+		}() );
+	}
+
 	// No GSAP, or motion is unwelcome: show everything and stop.
 	if ( ! hasGsap || reduced ) {
 		root.classList.remove( 'iflynepal-anim' );
