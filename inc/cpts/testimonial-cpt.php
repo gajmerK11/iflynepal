@@ -101,6 +101,29 @@ function iflynepal_register_testimonial_cpt() {
 }
 add_action( 'init', 'iflynepal_register_testimonial_cpt' );
 
+/**
+ * Tells Polylang the Testimonials post type is translated.
+ *
+ * Polylang's settings screen only offers `'public' => true` post types for
+ * language management, because that is the list it builds the checkbox
+ * options from. Testimonials is deliberately `public => false` — a review has
+ * no page of its own — so it would never appear there and would stay
+ * language-less forever without this. Adding it through the filter's
+ * `$is_settings = false` branch makes it translated unconditionally, the same
+ * bypass Polylang's own WPML-config importer uses for non-public types.
+ *
+ * @since 1.0.0
+ *
+ * @param string[] $post_types Post type names, as both keys and values.
+ * @return string[] Filtered.
+ */
+function iflynepal_testimonial_pll_translated( $post_types ) {
+	$post_types[ IFLYNEPAL_TESTIMONIAL_POST_TYPE ] = IFLYNEPAL_TESTIMONIAL_POST_TYPE;
+
+	return $post_types;
+}
+add_filter( 'pll_get_post_types', 'iflynepal_testimonial_pll_translated' );
+
 /* --------------------------------------------------------------- admin list */
 
 /**

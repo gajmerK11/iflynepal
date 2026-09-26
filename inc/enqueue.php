@@ -563,6 +563,34 @@ function iflynepal_enqueue_upcoming_departures_rail() {
 			'in_footer' => true,
 		)
 	);
+
+	/*
+	 * The status line under the chips is rebuilt in JS on every chip press
+	 * (see the doc comment on iflynepal_upcoming_status_text()), so the
+	 * wording it recounts with has to travel here as data rather than be
+	 * typed again in the script — a second English-only copy would silently
+	 * overwrite the server-rendered, translated line the instant the page
+	 * loads, which is exactly what shipped before this existed.
+	 */
+	wp_localize_script(
+		'iflynepal-upcoming-departures-rail',
+		'iflynepalUpcomingDeparturesI18n',
+		array(
+			/* translators: %s: month label, e.g. "Sep 2026". */
+			'none'     => __( 'No departures listed for %s', 'iflynepal' ),
+			/*
+			 * Pulled through _n() with fixed counts (1 and 2) rather than __(),
+			 * because a plural form only exists in the .po/.mo file as half of
+			 * one _n() entry — looking up '%1$d departures in %2$s' on its own
+			 * with __() finds nothing and falls back to the untranslated
+			 * English, same bug as this whole thing was written to fix.
+			 */
+			/* translators: 1: number of departures (always 1 here), 2: month label, e.g. "Sep 2026". */
+			'singular' => _n( '%1$d departure in %2$s', '%1$d departures in %2$s', 1, 'iflynepal' ),
+			/* translators: 1: number of departures, 2: month label, e.g. "Sep 2026". */
+			'plural'   => _n( '%1$d departure in %2$s', '%1$d departures in %2$s', 2, 'iflynepal' ),
+		)
+	);
 }
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_upcoming_departures_rail' );
 

@@ -125,10 +125,17 @@
 
 		var chip  = chips.filter( function ( c ) { return c.getAttribute( 'data-month' ) === month; } )[ 0 ];
 		var label = chip ? chip.textContent : month;
+		var i18n  = window.iflynepalUpcomingDeparturesI18n || {};
 
-		status.textContent = 0 === shown
-			? 'No departures listed for ' + label
-			: shown + ( 1 === shown ? ' departure' : ' departures' ) + ' in ' + label;
+		if ( 0 === shown ) {
+			status.textContent = ( i18n.none || 'No departures listed for %s' ).replace( '%s', label );
+		} else {
+			var template = 1 === shown
+				? ( i18n.singular || '%1$d departure in %2$s' )
+				: ( i18n.plural || '%1$d departures in %2$s' );
+
+			status.textContent = template.replace( '%1$d', shown ).replace( '%2$s', label );
+		}
 
 		// The rail just changed length, so jump it back and re-check the arrows.
 		rail.scrollLeft = 0;
