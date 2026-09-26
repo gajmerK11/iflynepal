@@ -62,7 +62,13 @@ define( 'IFLYNEPAL_PACKAGES_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images
  * @return string Kicker HTML.
  */
 function iflynepal_packages_hero_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_packages_hero_kicker', IFLYNEPAL_PACKAGES_HERO_KICKER_DEFAULT ) );
+	$kicker = get_theme_mod( 'iflynepal_packages_hero_kicker', IFLYNEPAL_PACKAGES_HERO_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$kicker = pll__( $kicker );
+	}
+
+	return iflynepal_kses_text( $kicker );
 }
 
 /**
@@ -73,7 +79,13 @@ function iflynepal_packages_hero_kicker() {
  * @return string Headline HTML.
  */
 function iflynepal_packages_hero_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_packages_hero_title', IFLYNEPAL_PACKAGES_HERO_TITLE_DEFAULT ) );
+	$title = get_theme_mod( 'iflynepal_packages_hero_title', IFLYNEPAL_PACKAGES_HERO_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
 }
 
 /**
@@ -84,8 +96,39 @@ function iflynepal_packages_hero_title() {
  * @return string Sub-title HTML.
  */
 function iflynepal_packages_hero_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_packages_hero_lead', IFLYNEPAL_PACKAGES_HERO_LEAD_DEFAULT ) );
+	$lead = get_theme_mod( 'iflynepal_packages_hero_lead', IFLYNEPAL_PACKAGES_HERO_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$lead = pll__( $lead );
+	}
+
+	return iflynepal_kses_text( $lead );
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the packages-archive hero's Customizer text with Polylang.
+ *
+ * pll_register_string() only takes effect in wp-admin (see the identical
+ * note on iflynepal_register_hero_pll_strings() in
+ * inc/customizer/callbacks/hero.php), so registration can't live inside the
+ * getters above — those run on the front end.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_packages_hero_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	pll_register_string( 'Packages hero kicker', get_theme_mod( 'iflynepal_packages_hero_kicker', IFLYNEPAL_PACKAGES_HERO_KICKER_DEFAULT ), 'iFlyNepal — Packages Archive / Hero' );
+	pll_register_string( 'Packages hero title', get_theme_mod( 'iflynepal_packages_hero_title', IFLYNEPAL_PACKAGES_HERO_TITLE_DEFAULT ), 'iFlyNepal — Packages Archive / Hero', true );
+	pll_register_string( 'Packages hero lead', get_theme_mod( 'iflynepal_packages_hero_lead', IFLYNEPAL_PACKAGES_HERO_LEAD_DEFAULT ), 'iFlyNepal — Packages Archive / Hero' );
+}
+add_action( 'admin_init', 'iflynepal_register_packages_hero_pll_strings', 10 );
 
 /**
  * Hero photograph URL.
