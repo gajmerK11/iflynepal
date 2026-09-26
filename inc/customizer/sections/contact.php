@@ -73,9 +73,35 @@ $iflynepal_contact_add_field( 'hero_kicker', __( 'Kicker', 'iflynepal' ), 'iflyn
 $iflynepal_contact_add_field( 'hero_title', __( 'Heading', 'iflynepal' ), 'iflynepal_contact_hero', 20, 'textarea', 'iflynepal_kses_text', __( 'Wrap a word in <em>word</em> for the gold serif accent.', 'iflynepal' ) );
 $iflynepal_contact_add_field( 'hero_lead', __( 'Introduction', 'iflynepal' ), 'iflynepal_contact_hero', 30, 'textarea', 'iflynepal_kses_text' );
 $iflynepal_contact_add_field( 'hero_primary_label', __( 'Primary button label', 'iflynepal' ), 'iflynepal_contact_hero', 40 );
-$iflynepal_contact_add_field( 'hero_primary_url', __( 'Primary button link', 'iflynepal' ), 'iflynepal_contact_hero', 41, 'text', 'iflynepal_sanitize_link' );
+iflynepal_customizer_add_link_field(
+	$wp_customize,
+	'iflynepal_contact_hero_primary_url',
+	array(
+		'default'           => isset( $iflynepal_contact_defaults['hero_primary_url'] ) ? $iflynepal_contact_defaults['hero_primary_url'] : '',
+		'sanitize_callback' => 'iflynepal_sanitize_link',
+	),
+	array(
+		'label'   => __( 'Primary button link', 'iflynepal' ),
+		'section' => 'iflynepal_contact_hero',
+		'priority' => 41,
+		'type'    => 'text',
+	)
+);
 $iflynepal_contact_add_field( 'hero_secondary_label', __( 'Secondary button label', 'iflynepal' ), 'iflynepal_contact_hero', 50 );
-$iflynepal_contact_add_field( 'hero_secondary_url', __( 'Secondary button link', 'iflynepal' ), 'iflynepal_contact_hero', 51, 'text', 'iflynepal_sanitize_link' );
+iflynepal_customizer_add_link_field(
+	$wp_customize,
+	'iflynepal_contact_hero_secondary_url',
+	array(
+		'default'           => isset( $iflynepal_contact_defaults['hero_secondary_url'] ) ? $iflynepal_contact_defaults['hero_secondary_url'] : '',
+		'sanitize_callback' => 'iflynepal_sanitize_link',
+	),
+	array(
+		'label'   => __( 'Secondary button link', 'iflynepal' ),
+		'section' => 'iflynepal_contact_hero',
+		'priority' => 51,
+		'type'    => 'text',
+	)
+);
 $iflynepal_contact_add_field( 'hero_script', __( 'Handwritten note', 'iflynepal' ), 'iflynepal_contact_hero', 60 );
 $iflynepal_contact_add_field( 'hero_scroll_label', __( 'Scroll button label', 'iflynepal' ), 'iflynepal_contact_hero', 70 );
 

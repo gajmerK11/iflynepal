@@ -63,16 +63,13 @@ foreach ( iflynepal_hero_button_defaults() as $iflynepal_index => $iflynepal_but
 		)
 	);
 
-	$wp_customize->add_setting(
+	iflynepal_customizer_add_link_field(
+		$wp_customize,
 		'iflynepal_hero_button_' . $iflynepal_index . '_url',
 		array(
 			'default'           => $iflynepal_button['url'],
 			'sanitize_callback' => 'iflynepal_sanitize_link',
-			'transport'         => 'postMessage',
-		)
-	);
-	$wp_customize->add_control(
-		'iflynepal_hero_button_' . $iflynepal_index . '_url',
+		),
 		array(
 			/* translators: %d: button number. */
 			'label'       => sprintf( __( 'Button %d link', 'iflynepal' ), $iflynepal_index ),

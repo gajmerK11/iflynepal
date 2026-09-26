@@ -181,16 +181,13 @@ for ( $iflynepal_link = 1; $iflynepal_link <= IFLYNEPAL_404_LINKS; $iflynepal_li
 		)
 	);
 
-	$wp_customize->add_setting(
+	iflynepal_customizer_add_link_field(
+		$wp_customize,
 		'iflynepal_404_link_' . $iflynepal_link . '_url',
 		array(
 			'default'           => $iflynepal_default['url'],
 			'sanitize_callback' => 'iflynepal_sanitize_link',
-			'transport'         => 'postMessage',
-		)
-	);
-	$wp_customize->add_control(
-		'iflynepal_404_link_' . $iflynepal_link . '_url',
+		),
 		array(
 			'label'       => __( 'Link', 'iflynepal' ),
 			'description' => __( 'A full URL, or a path such as /packages/.', 'iflynepal' ),

@@ -149,7 +149,7 @@ function iflynepal_about_hero_button( $index ) {
 
 	return array(
 		'label' => $label,
-		'url'   => (string) get_theme_mod( 'iflynepal_about_hero_button_' . $index . '_url', $default['url'] ),
+		'url'   => iflynepal_customizer_get_link( 'iflynepal_about_hero_button_' . $index . '_url', $default['url'] ),
 	);
 }
 
@@ -324,9 +324,14 @@ function iflynepal_about_promo_defaults() {
 function iflynepal_about_promo_field( $field ) {
 	$defaults = iflynepal_about_promo_defaults();
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
-	$value    = (string) get_theme_mod( 'iflynepal_about_promo_' . $field, $default );
 
-	if ( 'button_url' !== $field && function_exists( 'pll__' ) ) {
+	if ( 'button_url' === $field ) {
+		return iflynepal_customizer_get_link( 'iflynepal_about_promo_button_url', $default );
+	}
+
+	$value = (string) get_theme_mod( 'iflynepal_about_promo_' . $field, $default );
+
+	if ( function_exists( 'pll__' ) ) {
 		$value = pll__( $value );
 	}
 

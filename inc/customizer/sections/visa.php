@@ -156,16 +156,13 @@ for ( $iflynepal_button = 1; $iflynepal_button <= IFLYNEPAL_VISA_HERO_BUTTONS; $
 		)
 	);
 
-	$wp_customize->add_setting(
+	iflynepal_customizer_add_link_field(
+		$wp_customize,
 		'iflynepal_visa_hero_button_' . $iflynepal_button . '_url',
 		array(
 			'default'           => $iflynepal_button_default['url'],
 			'sanitize_callback' => 'iflynepal_sanitize_link',
-			'transport'         => 'postMessage',
-		)
-	);
-	$wp_customize->add_control(
-		'iflynepal_visa_hero_button_' . $iflynepal_button . '_url',
+		),
 		array(
 			/* translators: %d: button number. */
 			'label'       => sprintf( __( 'Button %d link', 'iflynepal' ), $iflynepal_button ),
@@ -860,16 +857,13 @@ $wp_customize->add_control(
 	)
 );
 
-$wp_customize->add_setting(
+iflynepal_customizer_add_link_field(
+	$wp_customize,
 	'iflynepal_visa_cta_button_url',
 	array(
 		'default'           => IFLYNEPAL_VISA_CTA_BUTTON_URL_DEFAULT,
 		'sanitize_callback' => 'iflynepal_sanitize_link',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	'iflynepal_visa_cta_button_url',
+	),
 	array(
 		'label'       => __( 'Button link', 'iflynepal' ),
 		'description' => __( 'The phone number, email and address printed under this button are the Contact Us ones — edit them in Customize &gt; Contact Us.', 'iflynepal' ),

@@ -167,6 +167,99 @@ function iflynepal_sanitize_link( $value ) {
 }
 
 /**
+ * Whether the site currently has more than one Polylang language.
+ *
+ * Gates every per-language Customizer link field below: on a single-language
+ * install there is nothing to switch between, so the field stays exactly as
+ * it always was — one setting, one control, no migration to worry about.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_customizer_is_multilingual() {
+	return function_exists( 'pll_languages_list' ) && count( pll_languages_list() ) > 1;
+}
+
+/**
+ * Registers a link-type Customizer setting/control, once per language.
+ *
+ * A Customizer setting is one value; there is no built-in way to hold "one
+ * URL per language" behind a single control. So instead this registers one
+ * plain-suffixed setting per language (`{$id}_en`, `{$id}_fr`, ...), each
+ * with its own control labelled with the language name, and always on
+ * 'refresh' transport — splitting the value per language means the existing
+ * postMessage preview JS, which listens for the un-suffixed id, can no
+ * longer bind to it, so a full preview reload replaces the instant update.
+ * On a single-language site this registers the one setting/control exactly
+ * as before, untouched.
+ *
+ * @since 1.0.0
+ *
+ * @param WP_Customize_Manager $wp_customize  Customizer manager.
+ * @param string               $id            Base setting/control id, e.g. 'iflynepal_hero_button_1_url'.
+ * @param array                $setting_args  Args for add_setting(), same for every language.
+ * @param array                $control_args  Args for add_control(); 'label' gets the language name appended.
+ * @return void
+ */
+function iflynepal_customizer_add_link_field( $wp_customize, $id, $setting_args, $control_args ) {
+	$setting_args['transport'] = 'refresh';
+
+	if ( ! iflynepal_customizer_is_multilingual() ) {
+		$wp_customize->add_setting( $id, $setting_args );
+		$wp_customize->add_control( $id, $control_args );
+		return;
+	}
+
+	/*
+	 * Seeds every language's field with today's already-saved single value
+	 * (falling back to the theme's own default only if nothing was ever
+	 * saved), rather than the theme default outright — otherwise opening the
+	 * Customizer for the first time after this split would show a site that
+	 * had been customized as if it had just been reset to defaults.
+	 */
+	$setting_args['default'] = get_theme_mod( $id, isset( $setting_args['default'] ) ? $setting_args['default'] : '' );
+
+	foreach ( PLL()->model->get_languages_list() as $iflynepal_lang ) {
+		$lang_control_args          = $control_args;
+		$lang_control_args['label'] = sprintf( '%s (%s)', $control_args['label'], $iflynepal_lang->name );
+
+		$wp_customize->add_setting( $id . '_' . $iflynepal_lang->slug, $setting_args );
+		$wp_customize->add_control( $id . '_' . $iflynepal_lang->slug, $lang_control_args );
+	}
+}
+
+/**
+ * Reads a per-language link Customizer setting for the current front-end language.
+ *
+ * Pairs with iflynepal_customizer_add_link_field(). Falls back to the plain,
+ * un-suffixed mod when nothing has been saved yet for the current language —
+ * the state every one of these fields is in immediately after this per-language
+ * split ships, since the old single value never gets copied automatically.
+ *
+ * @since 1.0.0
+ *
+ * @param string $id      Base setting id, e.g. 'iflynepal_hero_button_1_url'.
+ * @param string $default Default when nothing is stored at all.
+ * @return string
+ */
+function iflynepal_customizer_get_link( $id, $default = '' ) {
+	if ( iflynepal_customizer_is_multilingual() ) {
+		$lang = function_exists( 'pll_current_language' ) ? pll_current_language() : '';
+
+		if ( $lang ) {
+			$mod = get_theme_mod( $id . '_' . $lang, null );
+
+			if ( null !== $mod && '' !== $mod ) {
+				return (string) $mod;
+			}
+		}
+	}
+
+	return (string) get_theme_mod( $id, $default );
+}
+
+/**
  * Builds the attributes an `<a>` needs for a stored link field.
  *
  * A real URL prints as an ordinary `href`. An in-page anchor (`#id`) does not:

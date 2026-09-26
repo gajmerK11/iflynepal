@@ -145,9 +145,14 @@ function iflynepal_faq_title() {
 function iflynepal_faq_cta_field( $field ) {
 	$defaults = iflynepal_faq_cta_defaults();
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
-	$value    = (string) get_theme_mod( 'iflynepal_faq_cta_' . $field, $default );
 
-	if ( 'url' !== $field && function_exists( 'pll__' ) ) {
+	if ( 'url' === $field ) {
+		return iflynepal_customizer_get_link( 'iflynepal_faq_cta_url', $default );
+	}
+
+	$value = (string) get_theme_mod( 'iflynepal_faq_cta_' . $field, $default );
+
+	if ( function_exists( 'pll__' ) ) {
 		$value = pll__( $value );
 	}
 

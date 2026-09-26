@@ -270,7 +270,7 @@ function iflynepal_explore_card_links( $index ) {
 
 		$links[] = array(
 			'label' => $label,
-			'url'   => (string) get_theme_mod( 'iflynepal_explore_card_' . $index . '_link_' . $i . '_url', $link_default['url'] ),
+			'url'   => iflynepal_customizer_get_link( 'iflynepal_explore_card_' . $index . '_link_' . $i . '_url', $link_default['url'] ),
 		);
 	}
 

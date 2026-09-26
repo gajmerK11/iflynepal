@@ -171,7 +171,7 @@ function iflynepal_cta_button( $index ) {
 
 	return array(
 		'label' => $label,
-		'url'   => (string) get_theme_mod( 'iflynepal_cta_button_' . $index . '_url', $default['url'] ),
+		'url'   => iflynepal_customizer_get_link( 'iflynepal_cta_button_' . $index . '_url', $default['url'] ),
 	);
 }
 

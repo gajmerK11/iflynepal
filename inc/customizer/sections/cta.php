@@ -139,16 +139,13 @@ for ( $iflynepal_button = 1; $iflynepal_button <= IFLYNEPAL_CTA_BUTTONS; $iflyne
 		)
 	);
 
-	$wp_customize->add_setting(
+	iflynepal_customizer_add_link_field(
+		$wp_customize,
 		'iflynepal_cta_button_' . $iflynepal_button . '_url',
 		array(
 			'default'           => $iflynepal_default['url'],
 			'sanitize_callback' => 'iflynepal_sanitize_link',
-			'transport'         => 'postMessage',
-		)
-	);
-	$wp_customize->add_control(
-		'iflynepal_cta_button_' . $iflynepal_button . '_url',
+		),
 		array(
 			'label'       => __( 'Link', 'iflynepal' ),
 			'description' => __( 'A full URL, or an on-page anchor such as #explore.', 'iflynepal' ),

@@ -84,6 +84,13 @@ function iflynepal_contact_plain( $key ) {
  * @return string
  */
 function iflynepal_contact_link( $key ) {
+	if ( in_array( $key, array( 'hero_primary_url', 'hero_secondary_url' ), true ) ) {
+		$defaults = iflynepal_contact_defaults();
+		$default  = isset( $defaults[ $key ] ) ? $defaults[ $key ] : '';
+
+		return iflynepal_sanitize_link( iflynepal_customizer_get_link( 'iflynepal_contact_' . $key, $default ) );
+	}
+
 	return iflynepal_sanitize_link( iflynepal_contact_plain( $key ) );
 }
 

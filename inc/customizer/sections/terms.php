@@ -172,16 +172,13 @@ $wp_customize->add_control(
 	)
 );
 
-$wp_customize->add_setting(
+iflynepal_customizer_add_link_field(
+	$wp_customize,
 	'iflynepal_terms_cta_contact_url',
 	array(
 		'default'           => IFLYNEPAL_TERMS_CTA_CONTACT_URL_DEFAULT,
 		'sanitize_callback' => 'iflynepal_sanitize_link',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	'iflynepal_terms_cta_contact_url',
+	),
 	array(
 		'label'       => __( 'First button link', 'iflynepal' ),
 		'description' => __( 'A path on this site, such as /contact-us, or a full address.', 'iflynepal' ),

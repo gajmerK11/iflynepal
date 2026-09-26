@@ -164,16 +164,13 @@ $wp_customize->add_control(
 	)
 );
 
-$wp_customize->add_setting(
+iflynepal_customizer_add_link_field(
+	$wp_customize,
 	'iflynepal_faq_cta_url',
 	array(
 		'default'           => $iflynepal_faq_cta['url'],
 		'sanitize_callback' => 'iflynepal_sanitize_link',
-		'transport'         => 'postMessage',
-	)
-);
-$wp_customize->add_control(
-	'iflynepal_faq_cta_url',
+	),
 	array(
 		'label'       => __( 'Link', 'iflynepal' ),
 		'description' => __( 'A full URL, or an on-page anchor such as #people.', 'iflynepal' ),

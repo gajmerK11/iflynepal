@@ -185,16 +185,13 @@ for ( $iflynepal_card = 1; $iflynepal_card <= IFLYNEPAL_EXPLORE_CARDS; $iflynepa
 			)
 		);
 
-		$wp_customize->add_setting(
+		iflynepal_customizer_add_link_field(
+			$wp_customize,
 			$iflynepal_prefix . 'link_' . $iflynepal_link . '_url',
 			array(
 				'default'           => $iflynepal_link_default['url'],
 				'sanitize_callback' => 'iflynepal_sanitize_link',
-				'transport'         => 'postMessage',
-			)
-		);
-		$wp_customize->add_control(
-			$iflynepal_prefix . 'link_' . $iflynepal_link . '_url',
+			),
 			array(
 				/* translators: %d: link number. */
 				'label'       => sprintf( __( 'Link %d URL', 'iflynepal' ), $iflynepal_link ),

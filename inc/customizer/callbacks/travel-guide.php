@@ -141,9 +141,10 @@ function iflynepal_guide_title() {
 function iflynepal_guide_cta_field( $field ) {
 	$defaults = iflynepal_guide_cta_defaults();
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
-	$value    = (string) get_theme_mod( 'iflynepal_guide_cta_' . $field, $default );
 
 	if ( 'url' === $field ) {
+		$value = iflynepal_customizer_get_link( 'iflynepal_guide_cta_url', $default );
+
 		if ( '' === trim( $value ) ) {
 			$posts_page = (int) get_option( 'page_for_posts' );
 
@@ -152,6 +153,8 @@ function iflynepal_guide_cta_field( $field ) {
 
 		return $value;
 	}
+
+	$value = (string) get_theme_mod( 'iflynepal_guide_cta_' . $field, $default );
 
 	if ( function_exists( 'pll__' ) ) {
 		$value = pll__( $value );

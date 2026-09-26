@@ -363,9 +363,14 @@ function iflynepal_trust_feature_description( $index ) {
 function iflynepal_trust_promo_field( $field ) {
 	$defaults = iflynepal_trust_promo_defaults();
 	$default  = isset( $defaults[ $field ] ) ? $defaults[ $field ] : '';
-	$value    = (string) get_theme_mod( 'iflynepal_trust_promo_' . $field, $default );
 
-	if ( 'button_url' !== $field && function_exists( 'pll__' ) ) {
+	if ( 'button_url' === $field ) {
+		return iflynepal_customizer_get_link( 'iflynepal_trust_promo_button_url', $default );
+	}
+
+	$value = (string) get_theme_mod( 'iflynepal_trust_promo_' . $field, $default );
+
+	if ( function_exists( 'pll__' ) ) {
 		$value = pll__( $value );
 	}
 

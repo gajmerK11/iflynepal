@@ -184,7 +184,7 @@ function iflynepal_404_link( $index ) {
 
 	return array(
 		'label'       => (string) get_theme_mod( 'iflynepal_404_link_' . $index . '_label', $default['label'] ),
-		'url'         => iflynepal_sanitize_link( get_theme_mod( 'iflynepal_404_link_' . $index . '_url', $default['url'] ) ),
+		'url'         => iflynepal_sanitize_link( iflynepal_customizer_get_link( 'iflynepal_404_link_' . $index . '_url', $default['url'] ) ),
 		'description' => (string) get_theme_mod( 'iflynepal_404_link_' . $index . '_description', $default['description'] ),
 	);
 }

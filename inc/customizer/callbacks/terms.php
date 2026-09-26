@@ -175,7 +175,7 @@ function iflynepal_render_terms_cta_actions() {
 	$markup = '';
 
 	$contact_label = trim( (string) get_theme_mod( 'iflynepal_terms_cta_contact_label', IFLYNEPAL_TERMS_CTA_CONTACT_LABEL_DEFAULT ) );
-	$contact_url   = trim( (string) get_theme_mod( 'iflynepal_terms_cta_contact_url', IFLYNEPAL_TERMS_CTA_CONTACT_URL_DEFAULT ) );
+	$contact_url   = trim( iflynepal_customizer_get_link( 'iflynepal_terms_cta_contact_url', IFLYNEPAL_TERMS_CTA_CONTACT_URL_DEFAULT ) );
 
 	if ( '' !== $contact_label ) {
 		$markup .= sprintf(

@@ -235,7 +235,7 @@ function iflynepal_visa_hero_button( $index ) {
 
 	return array(
 		'label' => (string) get_theme_mod( 'iflynepal_visa_hero_button_' . $index . '_label', $default['label'] ),
-		'url'   => iflynepal_sanitize_link( get_theme_mod( 'iflynepal_visa_hero_button_' . $index . '_url', $default['url'] ) ),
+		'url'   => iflynepal_sanitize_link( iflynepal_customizer_get_link( 'iflynepal_visa_hero_button_' . $index . '_url', $default['url'] ) ),
 	);
 }
 
@@ -1103,7 +1103,7 @@ function iflynepal_visa_has_cta() {
 function iflynepal_visa_cta_button() {
 	return array(
 		'label' => (string) get_theme_mod( 'iflynepal_visa_cta_button_label', IFLYNEPAL_VISA_CTA_BUTTON_LABEL_DEFAULT ),
-		'url'   => iflynepal_sanitize_link( get_theme_mod( 'iflynepal_visa_cta_button_url', IFLYNEPAL_VISA_CTA_BUTTON_URL_DEFAULT ) ),
+		'url'   => iflynepal_sanitize_link( iflynepal_customizer_get_link( 'iflynepal_visa_cta_button_url', IFLYNEPAL_VISA_CTA_BUTTON_URL_DEFAULT ) ),
 	);
 }
 
