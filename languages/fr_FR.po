@@ -6598,6 +6598,38 @@ msgstr "© %1$s %2$s. %3$s"
 msgid "— Select a guide —"
 msgstr "— Choisissez un guide —"
 
+#: ../plugins/ifn-booking/includes/frontend/type-explorer.php:588
+msgid "Trip finder"
+msgstr "Trouver un voyage"
+
+#: ../plugins/ifn-booking/includes/frontend/type-explorer.php:414
+msgid "Trips"
+msgstr "Voyages"
+
+#. %s: an ink-marked, "and"-joined list of package type names, e.g. "Retreat and Tour". Already escaped HTML.
+#: ../plugins/ifn-booking/includes/frontend/type-explorer.php:409
+#, php-format
+msgid "Your %s trips"
+msgstr "Vos voyages %s"
+
+#: ../plugins/ifn-booking/includes/frontend/type-explorer.php:478
+msgid "Nothing matches, yet"
+msgstr "Rien ne correspond, pour l'instant"
+
+#. %s: an "and"-joined list of what was asked for, e.g. "10-14 days and USD 0-1,000".
+#: ../plugins/ifn-booking/includes/frontend/type-explorer.php:484
+#, php-format
+msgid "We do not have a trip matching %s just yet. Our team adds new departures often, so it is worth checking back, or get in touch and we will help you find one."
+msgstr "Nous n'avons pas encore de voyage correspondant à %s. Notre équipe ajoute souvent de nouveaux départs, il vaut donc la peine de revenir vérifier, ou contactez-nous et nous vous aiderons à en trouver un."
+
+#: ../plugins/ifn-booking/includes/frontend/type-explorer.php:490
+msgid "Nothing matches that just yet. Try a different combination, or browse everything we offer."
+msgstr "Rien ne correspond pour l'instant. Essayez une autre combinaison, ou parcourez tout ce que nous proposons."
+
+#: ../plugins/ifn-booking/includes/frontend/type-explorer.php:497
+msgid "Browse all packages"
+msgstr "Parcourir tous les forfaits"
+
 #: inc/enqueue.php
 msgid "No departures listed for %s"
 msgstr "Aucun départ prévu pour %s"
