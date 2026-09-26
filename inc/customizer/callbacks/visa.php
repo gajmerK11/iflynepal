@@ -150,7 +150,13 @@ define( 'IFLYNEPAL_VISA_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/abo
  * @return string Kicker HTML.
  */
 function iflynepal_visa_hero_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_hero_kicker', IFLYNEPAL_VISA_HERO_KICKER_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_hero_kicker', IFLYNEPAL_VISA_HERO_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -161,7 +167,13 @@ function iflynepal_visa_hero_kicker() {
  * @return string Headline HTML.
  */
 function iflynepal_visa_hero_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_hero_title', IFLYNEPAL_VISA_HERO_TITLE_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_hero_title', IFLYNEPAL_VISA_HERO_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -172,7 +184,13 @@ function iflynepal_visa_hero_title() {
  * @return string Sub-title HTML.
  */
 function iflynepal_visa_hero_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_hero_lead', IFLYNEPAL_VISA_HERO_LEAD_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_hero_lead', IFLYNEPAL_VISA_HERO_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -232,9 +250,14 @@ function iflynepal_visa_hero_button_default( $index ) {
  */
 function iflynepal_visa_hero_button( $index ) {
 	$default = iflynepal_visa_hero_button_default( $index );
+	$label   = (string) get_theme_mod( 'iflynepal_visa_hero_button_' . $index . '_label', $default['label'] );
+
+	if ( function_exists( 'pll__' ) ) {
+		$label = pll__( $label );
+	}
 
 	return array(
-		'label' => (string) get_theme_mod( 'iflynepal_visa_hero_button_' . $index . '_label', $default['label'] ),
+		'label' => $label,
 		'url'   => iflynepal_sanitize_link( iflynepal_customizer_get_link( 'iflynepal_visa_hero_button_' . $index . '_url', $default['url'] ) ),
 	);
 }
@@ -308,7 +331,13 @@ function iflynepal_visa_service_default( $index ) {
  * @return string Kicker HTML.
  */
 function iflynepal_visa_services_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_services_kicker', IFLYNEPAL_VISA_SERVICES_KICKER_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_services_kicker', IFLYNEPAL_VISA_SERVICES_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -319,7 +348,13 @@ function iflynepal_visa_services_kicker() {
  * @return string Heading HTML. Empty hides the section.
  */
 function iflynepal_visa_services_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_services_title', IFLYNEPAL_VISA_SERVICES_TITLE_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_services_title', IFLYNEPAL_VISA_SERVICES_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -356,10 +391,17 @@ function iflynepal_visa_services() {
 			continue;
 		}
 
+		$description = (string) get_theme_mod( 'iflynepal_visa_service_' . $i . '_description', $default['description'] );
+
+		if ( function_exists( 'pll__' ) ) {
+			$title       = pll__( $title );
+			$description = pll__( $description );
+		}
+
 		$rows[] = array(
 			'index'       => $i,
 			'title'       => $title,
-			'description' => (string) get_theme_mod( 'iflynepal_visa_service_' . $i . '_description', $default['description'] ),
+			'description' => $description,
 		);
 	}
 
@@ -439,7 +481,13 @@ function iflynepal_visa_type_default( $index ) {
  * @return string Kicker HTML.
  */
 function iflynepal_visa_types_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_types_kicker', IFLYNEPAL_VISA_TYPES_KICKER_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_types_kicker', IFLYNEPAL_VISA_TYPES_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -450,7 +498,13 @@ function iflynepal_visa_types_kicker() {
  * @return string Heading HTML. Empty hides the section.
  */
 function iflynepal_visa_types_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_types_title', IFLYNEPAL_VISA_TYPES_TITLE_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_types_title', IFLYNEPAL_VISA_TYPES_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -482,10 +536,17 @@ function iflynepal_visa_types() {
 			continue;
 		}
 
+		$description = (string) get_theme_mod( 'iflynepal_visa_type_' . $i . '_description', $default['description'] );
+
+		if ( function_exists( 'pll__' ) ) {
+			$title       = pll__( $title );
+			$description = pll__( $description );
+		}
+
 		$rows[] = array(
 			'index'       => $i,
 			'title'       => $title,
-			'description' => (string) get_theme_mod( 'iflynepal_visa_type_' . $i . '_description', $default['description'] ),
+			'description' => $description,
 		);
 	}
 
@@ -600,7 +661,13 @@ function iflynepal_visa_destination_default( $index ) {
  * @return string Kicker HTML.
  */
 function iflynepal_visa_destinations_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_destinations_kicker', IFLYNEPAL_VISA_DESTINATIONS_KICKER_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_destinations_kicker', IFLYNEPAL_VISA_DESTINATIONS_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -611,7 +678,13 @@ function iflynepal_visa_destinations_kicker() {
  * @return string Heading HTML. Empty hides the section.
  */
 function iflynepal_visa_destinations_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_destinations_title', IFLYNEPAL_VISA_DESTINATIONS_TITLE_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_destinations_title', IFLYNEPAL_VISA_DESTINATIONS_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -622,7 +695,13 @@ function iflynepal_visa_destinations_title() {
  * @return string Note HTML. Empty prints no note.
  */
 function iflynepal_visa_destinations_note() {
-	return iflynepal_kses_rich( get_theme_mod( 'iflynepal_visa_destinations_note', IFLYNEPAL_VISA_DESTINATIONS_NOTE_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_destinations_note', IFLYNEPAL_VISA_DESTINATIONS_NOTE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_rich( $value );
 }
 
 /**
@@ -656,6 +735,10 @@ function iflynepal_visa_destinations() {
 
 		if ( '' === $name ) {
 			continue;
+		}
+
+		if ( function_exists( 'pll__' ) ) {
+			$name = pll__( $name );
 		}
 
 		$rows[] = array(
@@ -749,7 +832,13 @@ function iflynepal_visa_step_default( $index ) {
  * @return string Kicker HTML.
  */
 function iflynepal_visa_process_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_process_kicker', IFLYNEPAL_VISA_PROCESS_KICKER_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_process_kicker', IFLYNEPAL_VISA_PROCESS_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -760,7 +849,13 @@ function iflynepal_visa_process_kicker() {
  * @return string Heading HTML. Empty hides the section.
  */
 function iflynepal_visa_process_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_process_title', IFLYNEPAL_VISA_PROCESS_TITLE_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_process_title', IFLYNEPAL_VISA_PROCESS_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -792,10 +887,17 @@ function iflynepal_visa_steps() {
 			continue;
 		}
 
+		$description = (string) get_theme_mod( 'iflynepal_visa_step_' . $i . '_description', $default['description'] );
+
+		if ( function_exists( 'pll__' ) ) {
+			$title       = pll__( $title );
+			$description = pll__( $description );
+		}
+
 		$rows[] = array(
 			'index'       => $i,
 			'title'       => $title,
-			'description' => (string) get_theme_mod( 'iflynepal_visa_step_' . $i . '_description', $default['description'] ),
+			'description' => $description,
 		);
 	}
 
@@ -924,7 +1026,13 @@ function iflynepal_visa_package_default( $index ) {
  * @return string Kicker HTML.
  */
 function iflynepal_visa_packages_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_packages_kicker', IFLYNEPAL_VISA_PACKAGES_KICKER_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_packages_kicker', IFLYNEPAL_VISA_PACKAGES_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -935,7 +1043,13 @@ function iflynepal_visa_packages_kicker() {
  * @return string Heading HTML. Empty hides the section.
  */
 function iflynepal_visa_packages_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_packages_title', IFLYNEPAL_VISA_PACKAGES_TITLE_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_packages_title', IFLYNEPAL_VISA_PACKAGES_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -968,13 +1082,33 @@ function iflynepal_visa_packages() {
 			continue;
 		}
 
+		$tagline  = (string) get_theme_mod( 'iflynepal_visa_package_' . $i . '_tagline', $default['tagline'] );
+		$badge    = trim( (string) get_theme_mod( 'iflynepal_visa_package_' . $i . '_badge', $default['badge'] ) );
+		$carries  = trim( (string) get_theme_mod( 'iflynepal_visa_package_' . $i . '_carries', $default['carries'] ) );
+		$features = (string) get_theme_mod( 'iflynepal_visa_package_' . $i . '_features', $default['features'] );
+
+		if ( function_exists( 'pll__' ) ) {
+			$name    = pll__( $name );
+			$tagline = pll__( $tagline );
+
+			if ( '' !== $badge ) {
+				$badge = pll__( $badge );
+			}
+
+			if ( '' !== $carries ) {
+				$carries = pll__( $carries );
+			}
+
+			$features = pll__( $features );
+		}
+
 		$rows[] = array(
 			'index'    => $i,
 			'name'     => $name,
-			'tagline'  => (string) get_theme_mod( 'iflynepal_visa_package_' . $i . '_tagline', $default['tagline'] ),
-			'badge'    => trim( (string) get_theme_mod( 'iflynepal_visa_package_' . $i . '_badge', $default['badge'] ) ),
-			'carries'  => trim( (string) get_theme_mod( 'iflynepal_visa_package_' . $i . '_carries', $default['carries'] ) ),
-			'features' => iflynepal_visa_lines( get_theme_mod( 'iflynepal_visa_package_' . $i . '_features', $default['features'] ) ),
+			'tagline'  => $tagline,
+			'badge'    => $badge,
+			'carries'  => $carries,
+			'features' => iflynepal_visa_lines( $features ),
 		);
 	}
 
@@ -1005,7 +1139,13 @@ const IFLYNEPAL_VISA_NOTICE_BODY_DEFAULT = "Government visa fees, VFS or biometr
  * @return string Heading HTML. Empty hides the band.
  */
 function iflynepal_visa_notice_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_notice_title', IFLYNEPAL_VISA_NOTICE_TITLE_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_notice_title', IFLYNEPAL_VISA_NOTICE_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -1027,7 +1167,13 @@ function iflynepal_visa_has_notice() {
  * @return string[] Non-empty paragraphs, in order.
  */
 function iflynepal_visa_notice_paragraphs() {
-	return iflynepal_visa_lines( get_theme_mod( 'iflynepal_visa_notice_body', IFLYNEPAL_VISA_NOTICE_BODY_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_notice_body', IFLYNEPAL_VISA_NOTICE_BODY_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_visa_lines( $value );
 }
 
 /* --------------------------------------------------------------------- cta */
@@ -1068,7 +1214,13 @@ const IFLYNEPAL_VISA_CTA_BUTTON_URL_DEFAULT = '/contact-us/';
  * @return string Heading HTML. Empty hides the band.
  */
 function iflynepal_visa_cta_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_cta_title', IFLYNEPAL_VISA_CTA_TITLE_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_cta_title', IFLYNEPAL_VISA_CTA_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -1079,7 +1231,13 @@ function iflynepal_visa_cta_title() {
  * @return string Copy HTML.
  */
 function iflynepal_visa_cta_lead() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_visa_cta_lead', IFLYNEPAL_VISA_CTA_LEAD_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_visa_cta_lead', IFLYNEPAL_VISA_CTA_LEAD_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -1101,8 +1259,14 @@ function iflynepal_visa_has_cta() {
  * @return array{label:string,url:string} The button, label empty when unused.
  */
 function iflynepal_visa_cta_button() {
+	$label = (string) get_theme_mod( 'iflynepal_visa_cta_button_label', IFLYNEPAL_VISA_CTA_BUTTON_LABEL_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$label = pll__( $label );
+	}
+
 	return array(
-		'label' => (string) get_theme_mod( 'iflynepal_visa_cta_button_label', IFLYNEPAL_VISA_CTA_BUTTON_LABEL_DEFAULT ),
+		'label' => $label,
 		'url'   => iflynepal_sanitize_link( iflynepal_customizer_get_link( 'iflynepal_visa_cta_button_url', IFLYNEPAL_VISA_CTA_BUTTON_URL_DEFAULT ) ),
 	);
 }
@@ -1166,6 +1330,113 @@ function iflynepal_visa_contact_lines() {
 
 	return $lines;
 }
+
+/**
+ * Registers the Visa Services page's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin (see the identical note
+ * on iflynepal_register_authors_pll_strings() in
+ * inc/customizer/callbacks/authors.php), so registration can't live inside
+ * the getters above — those run on the front end.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_visa_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	/* -------------------------------------------------------------- hero */
+
+	pll_register_string( 'Visa hero kicker', get_theme_mod( 'iflynepal_visa_hero_kicker', IFLYNEPAL_VISA_HERO_KICKER_DEFAULT ), 'iFlyNepal — Visa Services / Hero' );
+	pll_register_string( 'Visa hero title', get_theme_mod( 'iflynepal_visa_hero_title', IFLYNEPAL_VISA_HERO_TITLE_DEFAULT ), 'iFlyNepal — Visa Services / Hero', true );
+	pll_register_string( 'Visa hero lead', get_theme_mod( 'iflynepal_visa_hero_lead', IFLYNEPAL_VISA_HERO_LEAD_DEFAULT ), 'iFlyNepal — Visa Services / Hero' );
+
+	for ( $i = 1; $i <= IFLYNEPAL_VISA_HERO_BUTTONS; $i++ ) {
+		$default = iflynepal_visa_hero_button_default( $i );
+		pll_register_string( "Visa hero button $i label", get_theme_mod( "iflynepal_visa_hero_button_{$i}_label", $default['label'] ), 'iFlyNepal — Visa Services / Hero' );
+	}
+
+	/* ---------------------------------------------------------- services */
+
+	pll_register_string( 'Visa services kicker', get_theme_mod( 'iflynepal_visa_services_kicker', IFLYNEPAL_VISA_SERVICES_KICKER_DEFAULT ), 'iFlyNepal — Visa Services / Services' );
+	pll_register_string( 'Visa services title', get_theme_mod( 'iflynepal_visa_services_title', IFLYNEPAL_VISA_SERVICES_TITLE_DEFAULT ), 'iFlyNepal — Visa Services / Services', true );
+
+	for ( $i = 1; $i <= IFLYNEPAL_VISA_SERVICE_MAX; $i++ ) {
+		$default = iflynepal_visa_service_default( $i );
+		pll_register_string( "Visa service $i title", get_theme_mod( "iflynepal_visa_service_{$i}_title", $default['title'] ), 'iFlyNepal — Visa Services / Services' );
+		pll_register_string( "Visa service $i description", get_theme_mod( "iflynepal_visa_service_{$i}_description", $default['description'] ), 'iFlyNepal — Visa Services / Services', true );
+	}
+
+	/* --------------------------------------------------------- categories */
+
+	pll_register_string( 'Visa types kicker', get_theme_mod( 'iflynepal_visa_types_kicker', IFLYNEPAL_VISA_TYPES_KICKER_DEFAULT ), 'iFlyNepal — Visa Services / Categories' );
+	pll_register_string( 'Visa types title', get_theme_mod( 'iflynepal_visa_types_title', IFLYNEPAL_VISA_TYPES_TITLE_DEFAULT ), 'iFlyNepal — Visa Services / Categories', true );
+
+	for ( $i = 1; $i <= IFLYNEPAL_VISA_TYPE_MAX; $i++ ) {
+		$default = iflynepal_visa_type_default( $i );
+		pll_register_string( "Visa type $i title", get_theme_mod( "iflynepal_visa_type_{$i}_title", $default['title'] ), 'iFlyNepal — Visa Services / Categories' );
+		pll_register_string( "Visa type $i description", get_theme_mod( "iflynepal_visa_type_{$i}_description", $default['description'] ), 'iFlyNepal — Visa Services / Categories', true );
+	}
+
+	/* -------------------------------------------------------- destinations */
+
+	pll_register_string( 'Visa destinations kicker', get_theme_mod( 'iflynepal_visa_destinations_kicker', IFLYNEPAL_VISA_DESTINATIONS_KICKER_DEFAULT ), 'iFlyNepal — Visa Services / Destinations' );
+	pll_register_string( 'Visa destinations title', get_theme_mod( 'iflynepal_visa_destinations_title', IFLYNEPAL_VISA_DESTINATIONS_TITLE_DEFAULT ), 'iFlyNepal — Visa Services / Destinations', true );
+	pll_register_string( 'Visa destinations note', get_theme_mod( 'iflynepal_visa_destinations_note', IFLYNEPAL_VISA_DESTINATIONS_NOTE_DEFAULT ), 'iFlyNepal — Visa Services / Destinations' );
+
+	for ( $i = 1; $i <= IFLYNEPAL_VISA_DESTINATION_MAX; $i++ ) {
+		$default = iflynepal_visa_destination_default( $i );
+		pll_register_string( "Visa destination $i name", get_theme_mod( "iflynepal_visa_destination_{$i}_name", $default['name'] ), 'iFlyNepal — Visa Services / Destinations' );
+	}
+
+	/* ------------------------------------------------------------ process */
+
+	pll_register_string( 'Visa process kicker', get_theme_mod( 'iflynepal_visa_process_kicker', IFLYNEPAL_VISA_PROCESS_KICKER_DEFAULT ), 'iFlyNepal — Visa Services / Process' );
+	pll_register_string( 'Visa process title', get_theme_mod( 'iflynepal_visa_process_title', IFLYNEPAL_VISA_PROCESS_TITLE_DEFAULT ), 'iFlyNepal — Visa Services / Process', true );
+
+	for ( $i = 1; $i <= IFLYNEPAL_VISA_STEP_MAX; $i++ ) {
+		$default = iflynepal_visa_step_default( $i );
+		pll_register_string( "Visa step $i title", get_theme_mod( "iflynepal_visa_step_{$i}_title", $default['title'] ), 'iFlyNepal — Visa Services / Process' );
+		pll_register_string( "Visa step $i description", get_theme_mod( "iflynepal_visa_step_{$i}_description", $default['description'] ), 'iFlyNepal — Visa Services / Process', true );
+	}
+
+	/* ----------------------------------------------------------- packages */
+
+	pll_register_string( 'Visa packages kicker', get_theme_mod( 'iflynepal_visa_packages_kicker', IFLYNEPAL_VISA_PACKAGES_KICKER_DEFAULT ), 'iFlyNepal — Visa Services / Packages' );
+	pll_register_string( 'Visa packages title', get_theme_mod( 'iflynepal_visa_packages_title', IFLYNEPAL_VISA_PACKAGES_TITLE_DEFAULT ), 'iFlyNepal — Visa Services / Packages', true );
+
+	for ( $i = 1; $i <= IFLYNEPAL_VISA_PACKAGE_MAX; $i++ ) {
+		$default = iflynepal_visa_package_default( $i );
+
+		pll_register_string( "Visa package $i name", get_theme_mod( "iflynepal_visa_package_{$i}_name", $default['name'] ), 'iFlyNepal — Visa Services / Packages' );
+		pll_register_string( "Visa package $i tagline", get_theme_mod( "iflynepal_visa_package_{$i}_tagline", $default['tagline'] ), 'iFlyNepal — Visa Services / Packages', true );
+
+		if ( '' !== $default['badge'] || '' !== get_theme_mod( "iflynepal_visa_package_{$i}_badge", '' ) ) {
+			pll_register_string( "Visa package $i badge", get_theme_mod( "iflynepal_visa_package_{$i}_badge", $default['badge'] ), 'iFlyNepal — Visa Services / Packages' );
+		}
+
+		if ( '' !== $default['carries'] || '' !== get_theme_mod( "iflynepal_visa_package_{$i}_carries", '' ) ) {
+			pll_register_string( "Visa package $i carries", get_theme_mod( "iflynepal_visa_package_{$i}_carries", $default['carries'] ), 'iFlyNepal — Visa Services / Packages' );
+		}
+
+		pll_register_string( "Visa package $i features", get_theme_mod( "iflynepal_visa_package_{$i}_features", $default['features'] ), 'iFlyNepal — Visa Services / Packages', true );
+	}
+
+	/* ------------------------------------------------------------- notice */
+
+	pll_register_string( 'Visa notice title', get_theme_mod( 'iflynepal_visa_notice_title', IFLYNEPAL_VISA_NOTICE_TITLE_DEFAULT ), 'iFlyNepal — Visa Services / Notice' );
+	pll_register_string( 'Visa notice body', get_theme_mod( 'iflynepal_visa_notice_body', IFLYNEPAL_VISA_NOTICE_BODY_DEFAULT ), 'iFlyNepal — Visa Services / Notice', true );
+
+	/* ------------------------------------------------------------- closing */
+
+	pll_register_string( 'Visa cta title', get_theme_mod( 'iflynepal_visa_cta_title', IFLYNEPAL_VISA_CTA_TITLE_DEFAULT ), 'iFlyNepal — Visa Services / Closing', true );
+	pll_register_string( 'Visa cta lead', get_theme_mod( 'iflynepal_visa_cta_lead', IFLYNEPAL_VISA_CTA_LEAD_DEFAULT ), 'iFlyNepal — Visa Services / Closing' );
+	pll_register_string( 'Visa cta button label', get_theme_mod( 'iflynepal_visa_cta_button_label', IFLYNEPAL_VISA_CTA_BUTTON_LABEL_DEFAULT ), 'iFlyNepal — Visa Services / Closing' );
+}
+add_action( 'admin_init', 'iflynepal_register_visa_pll_strings', 10 );
 
 /* ------------------------------------------------- selective-refresh render */
 

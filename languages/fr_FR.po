@@ -3624,7 +3624,7 @@ msgstr ""
 
 #: inc/customizer/sections/visa.php:587
 msgid "Packages"
-msgstr ""
+msgstr "Forfaits"
 
 #: inc/customizer/sections/packages.php:23
 msgid "Packages Archive"
