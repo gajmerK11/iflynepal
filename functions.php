@@ -44,3 +44,5 @@ require_once IFLYNEPAL_DIR . '/inc/contact-form.php';
 require_once IFLYNEPAL_DIR . '/inc/language-switcher.php';
 require_once IFLYNEPAL_DIR . '/inc/admin-translation-column.php';
 require_once IFLYNEPAL_DIR . '/inc/admin-translation-grouping.php';
+require_once IFLYNEPAL_DIR . '/inc/auto-translate-content.php';
+require_once IFLYNEPAL_DIR . '/inc/admin-bar-locale.php';

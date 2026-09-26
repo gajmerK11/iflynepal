@@ -875,11 +875,11 @@ msgstr "Pages de blog"
 
 #: inc/sections.php:329 inc/customizer/customizer.php:191
 msgid "Blogs"
-msgstr "Blogs"
+msgstr "Blogues"
 
 #: inc/authors.php:411
 msgid "blogs"
-msgstr "blogs"
+msgstr "blogues"
 
 #: inc/customizer/sections/footer.php:43
 msgid "Blurb"
