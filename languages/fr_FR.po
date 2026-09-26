@@ -148,7 +148,7 @@ msgstr "Remboursement de 50 %"
 
 #: inc/customizer/callbacks/footer.php:136
 msgid "9:00 AM to 5:00 PM"
-msgstr "9h00 à 17h00"
+msgstr "9:00 AM à 5:00 PM"
 
 #: inc/customizer/callbacks/explore.php:104
 msgid "<em>Retreats</em> in Nepal"
@@ -3415,7 +3415,7 @@ msgstr ""
 
 #: inc/customizer/callbacks/contact.php:41
 msgid "Office hours 9:00 AM to 5:00 PM, Nepal time."
-msgstr "Horaires du bureau : 9h00 à 17h00, heure du Népal."
+msgstr "Horaires du bureau : 9:00 AM à 5:00 PM, heure du Népal."
 
 #: inc/customizer/sections/contact.php:105
 msgid "Office label"
@@ -5609,7 +5609,7 @@ msgstr ""
 #: inc/customizer/callbacks/contact.php:34
 #: inc/customizer/callbacks/contact.php:45
 msgid "Time: 9:00 AM to 5:00 PM"
-msgstr "Horaires : 9h00 à 17h00"
+msgstr "Horaires : 9:00 AM à 5:00 PM"
 
 #: inc/customizer/sections/about-company.php:272
 #: inc/customizer/sections/about-company.php:403

@@ -538,6 +538,34 @@ function iflynepal_enqueue_people_rail() {
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_people_rail' );
 
 /**
+ * Enqueues the Team page's section-lead one-line fit.
+ *
+ * Kept out of the animation bundle for the same reason as the People rail's
+ * buttons: plain layout measurement, nothing GSAP-dependent.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_enqueue_team_lead_fit() {
+	if ( ! iflynepal_has_team() ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'iflynepal-team-lead-fit',
+		IFLYNEPAL_URI . '/assets/js/team/team-lead-fit.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/team/team-lead-fit.js' ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_team_lead_fit' );
+
+/**
  * Enqueues the Upcoming Journeys rail's month chips and prev/next buttons.
  *
  * No GSAP here either — the same reasoning as the People rail. The section

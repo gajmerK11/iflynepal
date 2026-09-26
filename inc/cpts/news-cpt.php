@@ -163,6 +163,118 @@ function iflynepal_register_news_cpt() {
 }
 add_action( 'init', 'iflynepal_register_news_cpt' );
 
+/* ------------------------------------------------------- translated archive slug */
+
+/**
+ * The URL slug for the News archive, per language.
+ *
+ * Free Polylang has no per-language slug for a post type's own rewrite —
+ * that is a Pro-only "Translate slugs" feature (see
+ * wp-content/plugins/polylang/src/modules/translate-slugs, a settings
+ * preview/upsell only) — so a French archive at /actualites/ instead of
+ * /news/ has to be hand-built, the same way the booking plugin's
+ * iflynepal_package_archive_slug() does for /packages/ vs /forfaits/.
+ *
+ * Individual story URLs are deliberately left at /news/{slug}/ in every
+ * language: only the archive slug was asked for. Extending this to singles
+ * too would need the same treatment as the package type paths.
+ *
+ * @since 1.0.0
+ *
+ * @param string $lang Language slug, empty for the current front-end language
+ *                      or when Polylang is inactive.
+ * @return string Slug, without leading or trailing slashes.
+ */
+function iflynepal_news_archive_slug( $lang = '' ) {
+	if ( '' === $lang && function_exists( 'pll_current_language' ) ) {
+		$lang = (string) pll_current_language();
+	}
+
+	if ( '' === $lang || ! function_exists( 'PLL' ) || ! PLL() || $lang === PLL()->options['default_lang'] ) {
+		return IFLYNEPAL_NEWS_POST_TYPE;
+	}
+
+	/**
+	 * Filters the per-language slugs for the News archive.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array<string,string> $slugs Language slug => URL slug.
+	 */
+	$slugs = (array) apply_filters(
+		'iflynepal_news_archive_slug_translations',
+		array( 'fr' => 'actualites' )
+	);
+
+	return isset( $slugs[ $lang ] ) ? $slugs[ $lang ] : IFLYNEPAL_NEWS_POST_TYPE;
+}
+
+/**
+ * Adds an archive-only rewrite rule for every translated News archive slug.
+ *
+ * No language prefix or `lang=` query var is added by hand: every rule below
+ * carries `post_type=news` in its query, which is exactly what
+ * PLL_Links_Directory::rewrite_rules() (hooked on this same
+ * 'rewrite_rules_array' filter, registered later — at 'wp_loaded' — so it
+ * always runs after this one) scans for and duplicates itself, prefixed with
+ * whichever language matches and `lang=$matches[1]` filled in. Adding a
+ * prefix here too would double it up.
+ *
+ * @since 1.0.0
+ *
+ * @param string[] $rules The generated rewrite rules.
+ * @return string[] Filtered rules.
+ */
+function iflynepal_news_archive_rewrite_rules( $rules ) {
+	$slugs = array( IFLYNEPAL_NEWS_POST_TYPE );
+
+	if ( function_exists( 'pll_languages_list' ) ) {
+		foreach ( (array) pll_languages_list() as $lang ) {
+			$slugs[] = iflynepal_news_archive_slug( $lang );
+		}
+	}
+
+	$new_rules = array();
+
+	foreach ( array_unique( $slugs ) as $slug ) {
+		// The native slug's own archive rule already exists; adding it again would only reorder it.
+		if ( IFLYNEPAL_NEWS_POST_TYPE === $slug ) {
+			continue;
+		}
+
+		$base = preg_quote( $slug, '#' );
+
+		$new_rules[ $base . '/page/([0-9]{1,})/?$' ] = 'index.php?post_type=' . IFLYNEPAL_NEWS_POST_TYPE . '&paged=$matches[1]';
+		$new_rules[ $base . '/?$' ]                  = 'index.php?post_type=' . IFLYNEPAL_NEWS_POST_TYPE;
+	}
+
+	return array_merge( $new_rules, $rules );
+}
+add_filter( 'rewrite_rules_array', 'iflynepal_news_archive_rewrite_rules' );
+
+/**
+ * Points the News archive link at the current language's translated slug.
+ *
+ * Polylang's own 'post_type_archive_link' filter (priority 20, after this
+ * one) adds the language prefix on top of whatever this returns — it never
+ * changes the slug text, so the translated slug has to be chosen here or it
+ * never appears at all.
+ *
+ * @since 1.0.0
+ *
+ * @param string $link      Archive link.
+ * @param string $post_type Post type slug.
+ * @return string Archive link.
+ */
+function iflynepal_news_archive_link( $link, $post_type ) {
+	if ( IFLYNEPAL_NEWS_POST_TYPE !== $post_type || ! get_option( 'permalink_structure' ) ) {
+		return $link;
+	}
+
+	return home_url( user_trailingslashit( iflynepal_news_archive_slug() ) );
+}
+add_filter( 'post_type_archive_link', 'iflynepal_news_archive_link', 10, 2 );
+
 /**
  * Whether the current user may write the meta above.
  *
