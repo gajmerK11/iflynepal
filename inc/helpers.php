@@ -260,6 +260,36 @@ function iflynepal_customizer_get_link( $id, $default = '' ) {
 }
 
 /**
+ * Reads a per-language, non-link Customizer setting for the current front-end language.
+ *
+ * Same fallback rule as iflynepal_customizer_get_link() — a per-language mod
+ * that was never saved falls back to the legacy, un-suffixed one — but for a
+ * plain scalar value like a chosen post ID rather than a sanitized link, e.g.
+ * a per-language "which post goes in this slot" select field.
+ *
+ * @since 1.0.0
+ *
+ * @param string $id      Base setting id.
+ * @param mixed  $default Default when nothing is stored at all.
+ * @return mixed
+ */
+function iflynepal_customizer_get_choice( $id, $default = 0 ) {
+	if ( iflynepal_customizer_is_multilingual() ) {
+		$lang = function_exists( 'pll_current_language' ) ? pll_current_language() : '';
+
+		if ( $lang ) {
+			$mod = get_theme_mod( $id . '_' . $lang, null );
+
+			if ( null !== $mod && '' !== $mod ) {
+				return $mod;
+			}
+		}
+	}
+
+	return get_theme_mod( $id, $default );
+}
+
+/**
  * Builds the attributes an `<a>` needs for a stored link field.
  *
  * A real URL prints as an ordinary `href`. An in-page anchor (`#id`) does not:

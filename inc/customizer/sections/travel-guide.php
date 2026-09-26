@@ -81,29 +81,82 @@ $wp_customize->add_control(
 	)
 );
 
-// Queried once and shared by all five dropdowns.
-$iflynepal_guide_choices = iflynepal_guide_post_choices();
+if ( ! iflynepal_customizer_is_multilingual() ) {
+	// Queried once and shared by all five dropdowns.
+	$iflynepal_guide_choices = iflynepal_guide_post_choices();
 
-for ( $iflynepal_guide = 1; $iflynepal_guide <= IFLYNEPAL_GUIDE_MAX; $iflynepal_guide++ ) {
-	$wp_customize->add_setting(
-		'iflynepal_guide_post_' . $iflynepal_guide,
-		array(
-			'default'           => 0,
-			'sanitize_callback' => 'absint',
-			'transport'         => 'postMessage',
-		)
-	);
-	$wp_customize->add_control(
-		'iflynepal_guide_post_' . $iflynepal_guide,
-		array(
-			/* translators: %d: guide number. */
-			'label'    => sprintf( __( 'Guide %d', 'iflynepal' ), $iflynepal_guide ),
-			'section'  => 'iflynepal_travel_guide',
-			'priority' => 30 + $iflynepal_guide,
-			'type'     => 'select',
-			'choices'  => $iflynepal_guide_choices,
-		)
-	);
+	for ( $iflynepal_guide = 1; $iflynepal_guide <= IFLYNEPAL_GUIDE_MAX; $iflynepal_guide++ ) {
+		$wp_customize->add_setting(
+			'iflynepal_guide_post_' . $iflynepal_guide,
+			array(
+				'default'           => 0,
+				'sanitize_callback' => 'absint',
+				'transport'         => 'postMessage',
+			)
+		);
+		$wp_customize->add_control(
+			'iflynepal_guide_post_' . $iflynepal_guide,
+			array(
+				/* translators: %d: guide number. */
+				'label'    => sprintf( __( 'Guide %d', 'iflynepal' ), $iflynepal_guide ),
+				'section'  => 'iflynepal_travel_guide',
+				'priority' => 30 + $iflynepal_guide,
+				'type'     => 'select',
+				'choices'  => $iflynepal_guide_choices,
+			)
+		);
+	}
+} else {
+	/*
+	 * One dropdown per guide slot per language, each listing only that
+	 * language's own posts (iflynepal_guide_post_choices( $lang )) — a slot
+	 * can otherwise be pointed at a post in the wrong language, since a plain
+	 * "select a post" dropdown has no idea some of its options don't belong
+	 * on this language's front end at all.
+	 *
+	 * Seeded from today's single legacy value via pll_get_post(), the same
+	 * migration this theme already uses for per-language link fields: the
+	 * language that already owns that post keeps it in its own dropdown, and
+	 * every other language starts from whichever post is linked as its own
+	 * translation, if any.
+	 */
+	foreach ( PLL()->model->get_languages_list() as $iflynepal_lang ) {
+		$iflynepal_guide_choices = iflynepal_guide_post_choices( $iflynepal_lang->slug );
+
+		for ( $iflynepal_guide = 1; $iflynepal_guide <= IFLYNEPAL_GUIDE_MAX; $iflynepal_guide++ ) {
+			$iflynepal_legacy_id = (int) get_theme_mod( 'iflynepal_guide_post_' . $iflynepal_guide, 0 );
+			$iflynepal_seed      = 0;
+
+			if ( $iflynepal_legacy_id ) {
+				if ( function_exists( 'pll_get_post_language' ) && pll_get_post_language( $iflynepal_legacy_id ) === $iflynepal_lang->slug ) {
+					$iflynepal_seed = $iflynepal_legacy_id;
+				} elseif ( function_exists( 'pll_get_post' ) ) {
+					$iflynepal_translated = pll_get_post( $iflynepal_legacy_id, $iflynepal_lang->slug );
+					$iflynepal_seed        = $iflynepal_translated ? (int) $iflynepal_translated : 0;
+				}
+			}
+
+			$wp_customize->add_setting(
+				'iflynepal_guide_post_' . $iflynepal_guide . '_' . $iflynepal_lang->slug,
+				array(
+					'default'           => $iflynepal_seed,
+					'sanitize_callback' => 'absint',
+					'transport'         => 'refresh',
+				)
+			);
+			$wp_customize->add_control(
+				'iflynepal_guide_post_' . $iflynepal_guide . '_' . $iflynepal_lang->slug,
+				array(
+					/* translators: 1: guide number, 2: language name. */
+					'label'    => sprintf( __( 'Guide %1$d (%2$s)', 'iflynepal' ), $iflynepal_guide, $iflynepal_lang->name ),
+					'section'  => 'iflynepal_travel_guide',
+					'priority' => 30 + $iflynepal_guide,
+					'type'     => 'select',
+					'choices'  => $iflynepal_guide_choices,
+				)
+			);
+		}
+	}
 }
 
 /* ------------------------------------------------------------------- link */

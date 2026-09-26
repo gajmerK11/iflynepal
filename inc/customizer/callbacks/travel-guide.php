@@ -39,42 +39,74 @@ const IFLYNEPAL_GUIDE_TITLE_DEFAULT = 'Plan with useful local context.';
 /**
  * Published posts, as options for the guide dropdowns.
  *
- * Built once and shared by all five controls rather than queried per control.
- * The query asks for IDs only and skips the meta and term caches, since the
- * title is all the dropdown shows.
+ * Built once per language and shared by that language's five controls rather
+ * than queried per control. The query asks for IDs only and skips the meta
+ * and term caches, since the title is all the dropdown shows.
+ *
+ * On a multilingual site $lang narrows the list to that language's own posts
+ * — the English dropdowns list only English posts, the French ones only
+ * French posts — since a slot pointed at the wrong language's post would
+ * silently show mixed-language guides on the front end. A non-default
+ * language's entries carry the linked default-language title as a hint
+ * (" — EN: ..."), because a French title alone does not say which English
+ * post it is the translation of.
  *
  * @since 1.0.0
  *
+ * @param string $lang Language slug, or '' for every language (non-multilingual site).
  * @return array Choices keyed by post ID, with 0 as the "none" option.
  */
-function iflynepal_guide_post_choices() {
-	static $choices = null;
+function iflynepal_guide_post_choices( $lang = '' ) {
+	static $choices = array();
 
-	if ( null !== $choices ) {
-		return $choices;
+	if ( isset( $choices[ $lang ] ) ) {
+		return $choices[ $lang ];
 	}
 
-	$choices = array( 0 => __( '— Select a guide —', 'iflynepal' ) );
-
-	$ids = get_posts(
-		array(
-			'post_type'              => 'post',
-			'post_status'            => 'publish',
-			'numberposts'            => -1,
-			'orderby'                => 'date',
-			'order'                  => 'DESC',
-			'fields'                 => 'ids',
-			'no_found_rows'          => true,
-			'update_post_meta_cache' => false,
-			'update_post_term_cache' => false,
-		)
+	$query_args = array(
+		'post_type'              => 'post',
+		'post_status'            => 'publish',
+		'numberposts'            => -1,
+		'orderby'                => 'date',
+		'order'                  => 'DESC',
+		'fields'                 => 'ids',
+		'no_found_rows'          => true,
+		'update_post_meta_cache' => false,
+		'update_post_term_cache' => false,
 	);
 
-	foreach ( $ids as $id ) {
-		$choices[ $id ] = get_the_title( $id );
+	$is_multilingual = iflynepal_customizer_is_multilingual();
+	$default_lang    = $is_multilingual ? PLL()->options['default_lang'] : '';
+
+	if ( '' !== $lang && $is_multilingual ) {
+		$query_args['lang'] = $lang;
 	}
 
-	return $choices;
+	$list = array( 0 => __( '— Select a guide —', 'iflynepal' ) );
+
+	foreach ( get_posts( $query_args ) as $id ) {
+		$title = get_the_title( $id );
+
+		if ( $is_multilingual && '' !== $lang && $lang !== $default_lang && function_exists( 'pll_get_post' ) ) {
+			$original = pll_get_post( $id, $default_lang );
+
+			if ( $original && (int) $original !== (int) $id ) {
+				$title = sprintf(
+					/* translators: 1: post title, 2: the default language's code (e.g. "EN"), 3: the same post's title in that language. */
+					__( '%1$s — %2$s: %3$s', 'iflynepal' ),
+					$title,
+					strtoupper( $default_lang ),
+					get_the_title( $original )
+				);
+			}
+		}
+
+		$list[ $id ] = $title;
+	}
+
+	$choices[ $lang ] = $list;
+
+	return $list;
 }
 
 /**
@@ -177,7 +209,7 @@ function iflynepal_guide_posts() {
 	$guides = array();
 
 	for ( $i = 1; $i <= IFLYNEPAL_GUIDE_MAX; $i++ ) {
-		$post_id = (int) get_theme_mod( 'iflynepal_guide_post_' . $i, 0 );
+		$post_id = (int) iflynepal_customizer_get_choice( 'iflynepal_guide_post_' . $i, 0 );
 
 		if ( ! $post_id || 'publish' !== get_post_status( $post_id ) ) {
 			continue;
