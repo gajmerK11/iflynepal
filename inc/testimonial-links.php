@@ -147,15 +147,41 @@ function iflynepal_testimonial_links() {
 /**
  * The handwritten note beside the buttons.
  *
+ * On a multilingual site the saved value is an array keyed by language slug
+ * (see the settings screen); a site with only one language still saves it as
+ * a plain string, and a site that had already saved the old plain string
+ * before going multilingual keeps showing it for every language that has not
+ * been given its own note yet — the same "falls back to the legacy value"
+ * rule the per-language Customizer fields use.
+ *
  * @since 1.0.0
  *
  * @return string Note text.
  */
 function iflynepal_testimonial_links_note() {
-	$saved = get_option( IFLYNEPAL_TESTIMONIAL_LINKS_OPTION, array() );
-	$note  = isset( $saved['note'] ) ? (string) $saved['note'] : '';
+	$saved     = get_option( IFLYNEPAL_TESTIMONIAL_LINKS_OPTION, array() );
+	$note_data = isset( $saved['note'] ) ? $saved['note'] : '';
+	$default   = __( 'Others have shared theirs too, right here', 'iflynepal' );
 
-	return '' !== trim( $note ) ? $note : __( 'Others have shared theirs too, right here', 'iflynepal' );
+	if ( is_array( $note_data ) ) {
+		$lang = function_exists( 'pll_current_language' ) ? pll_current_language() : '';
+
+		if ( $lang && ! empty( $note_data[ $lang ] ) ) {
+			return (string) $note_data[ $lang ];
+		}
+
+		$default_lang = function_exists( 'pll_default_language' ) ? pll_default_language() : '';
+
+		if ( $default_lang && ! empty( $note_data[ $default_lang ] ) ) {
+			return (string) $note_data[ $default_lang ];
+		}
+
+		return $default;
+	}
+
+	$note = trim( (string) $note_data );
+
+	return '' !== $note ? $note : $default;
 }
 
 /**
