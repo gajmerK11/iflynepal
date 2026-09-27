@@ -13,6 +13,18 @@
  * a crawler being redirected off the URL it asked for, which reads as
  * cloaking to a search engine.
  *
+ * The decision is made over AJAX, not while the page itself renders.
+ * Production runs a full-page cache (LiteSpeed) that serves the same cached
+ * HTML to every guest visitor for up to a week — a server-rendered decision
+ * based on one visitor's request headers would be computed once, cached, and
+ * then served to every visitor afterwards regardless of where they are
+ * actually browsing from. admin-ajax.php is excluded from every caching
+ * plugin's page cache by design (it has to be, or logged-in state, carts and
+ * the like would break the same way), so the country lookup and the
+ * "shown once" cookie both have to happen there instead. The page itself
+ * only ever ships a static, identical-for-everyone, hidden container — safe
+ * to cache — that this request fills in.
+ *
  * Nothing here runs at all when Polylang is inactive, when the site has only
  * one language, or off a request Cloudflare never touched (local development,
  * for one) — see iflynepal_geo_detected_country() for the one deliberate
@@ -27,11 +39,10 @@ defined( 'ABSPATH' ) || exit;
 /**
  * The cookie that remembers the banner has already been shown once.
  *
- * Set the moment the banner is decided on, not on a dismiss click — so it
- * shows exactly once ever for a given browser, whether that visit ends in a
- * dismiss, a click through to French, or the tab simply being closed. This is
- * also what "first visit only" means in practice: nothing here tracks visits,
- * only whether this one browser has been offered the choice before.
+ * Set from the AJAX handler, the moment a "yes, show it" decision is made —
+ * not on a dismiss click — so it shows exactly once ever for a given browser,
+ * whether that visit ends in a dismiss, a click through to French, or the tab
+ * simply being closed.
  *
  * @since 1.0.0
  */
@@ -141,63 +152,59 @@ function iflynepal_geo_is_bot() {
 }
 
 /**
- * Decides whether to show the banner on this request, once, and remembers it.
+ * Works out whether to offer the banner, and for which language and URL.
  *
- * Cached in a static so the decision is made exactly once per request and the
- * two hooks below — one early enough to still set a cookie, one late enough
- * to have something to print — always agree with each other. The cookie is
- * written here, on 'template_redirect', which runs well before any output;
- * writing it from 'wp_footer' instead would be past the point headers can
- * still be sent and would silently fail.
+ * Pure with respect to its $post_id argument — everything else it reads
+ * ($_SERVER, $_COOKIE) is the live request, which is exactly what makes this
+ * safe to call from the AJAX handler and unsafe to have called while the page
+ * itself renders (see the file docblock).
  *
  * @since 1.0.0
  *
- * @return array{show: bool, lang: string, url: string} Decision and, when showing, the target language and URL.
+ * @param int $post_id The post the visitor is actually reading, 0 when the
+ *                      request is not for a singular page (an archive, the
+ *                      blog index, and so on).
+ * @return array{show: bool, lang: string, url: string, language_name: string}
  */
-function iflynepal_geo_banner_decision() {
-	static $decision = null;
-
-	if ( null !== $decision ) {
-		return $decision;
-	}
-
-	$decision = array(
-		'show' => false,
-		'lang' => '',
-		'url'  => '',
+function iflynepal_geo_resolve_target( $post_id ) {
+	$result = array(
+		'show'          => false,
+		'lang'          => '',
+		'url'           => '',
+		'language_name' => '',
 	);
 
 	if ( ! function_exists( 'pll_languages_list' ) || ! function_exists( 'pll_current_language' ) ) {
-		return $decision;
+		return $result;
 	}
 
 	if ( count( pll_languages_list() ) < 2 ) {
-		return $decision;
+		return $result;
 	}
 
 	if ( ! empty( $_COOKIE[ IFLYNEPAL_GEO_BANNER_COOKIE ] ) ) {
-		return $decision;
+		return $result;
 	}
 
 	if ( iflynepal_geo_is_bot() ) {
-		return $decision;
+		return $result;
 	}
 
 	$country = iflynepal_geo_detected_country();
 
 	if ( '' === $country ) {
-		return $decision;
+		return $result;
 	}
 
 	$map  = iflynepal_geo_language_map();
 	$lang = isset( $map[ $country ] ) ? $map[ $country ] : '';
 
 	if ( '' === $lang || ! in_array( $lang, pll_languages_list(), true ) ) {
-		return $decision;
+		return $result;
 	}
 
 	if ( pll_current_language() === $lang ) {
-		return $decision;
+		return $result;
 	}
 
 	/*
@@ -209,8 +216,8 @@ function iflynepal_geo_banner_decision() {
 	 */
 	$url = '';
 
-	if ( is_singular() && function_exists( 'pll_get_post' ) ) {
-		$translated_id = pll_get_post( get_queried_object_id(), $lang );
+	if ( $post_id && function_exists( 'pll_get_post' ) ) {
+		$translated_id = pll_get_post( $post_id, $lang );
 
 		if ( $translated_id ) {
 			$url = (string) get_permalink( $translated_id );
@@ -222,14 +229,40 @@ function iflynepal_geo_banner_decision() {
 	}
 
 	if ( '' === $url ) {
-		return $decision;
+		return $result;
 	}
 
-	$decision['show'] = true;
-	$decision['lang'] = $lang;
-	$decision['url']  = $url;
+	$language = function_exists( 'PLL' ) && PLL() ? PLL()->model->get_language( $lang ) : null;
 
-	if ( ! headers_sent() ) {
+	$result['show']          = true;
+	$result['lang']          = $lang;
+	$result['url']           = $url;
+	$result['language_name'] = $language ? $language->name : __( 'French', 'iflynepal' );
+
+	return $result;
+}
+
+/**
+ * The AJAX endpoint the banner script calls once the (cached) page has loaded.
+ *
+ * Registered for both logged-in and logged-out requests — the banner is a
+ * guest-facing feature, and admin-ajax.php answers both the same way here.
+ * Sets the "seen" cookie itself, the moment it decides to say yes: this is
+ * the one point in the whole flow that is guaranteed never to be served from
+ * a cache, which a decision made while the page renders is not (see the file
+ * docblock).
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_ajax_geo_banner_check() {
+	check_ajax_referer( 'iflynepal_geo_banner', 'nonce' );
+
+	$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+	$result  = iflynepal_geo_resolve_target( $post_id );
+
+	if ( $result['show'] && ! headers_sent() ) {
 		setcookie(
 			IFLYNEPAL_GEO_BANNER_COOKIE,
 			'1',
@@ -244,47 +277,84 @@ function iflynepal_geo_banner_decision() {
 		);
 	}
 
-	return $decision;
+	wp_send_json_success( $result );
 }
-add_action( 'template_redirect', 'iflynepal_geo_banner_decision' );
+add_action( 'wp_ajax_iflynepal_geo_banner', 'iflynepal_ajax_geo_banner_check' );
+add_action( 'wp_ajax_nopriv_iflynepal_geo_banner', 'iflynepal_ajax_geo_banner_check' );
 
 /**
- * Prints the banner, if the decision above called for one.
+ * Whether the current request could possibly want the banner script at all.
  *
- * Printed in the footer rather than gated behind any script: the decision is
- * already made server-side, so there is nothing for JavaScript to decide —
- * only the dismiss button's own hide behaviour needs it, and that degrades to
- * "the banner stays up until the next page load" with JavaScript off, not to
- * "the banner never goes away".
+ * Gates both the enqueue below and the static container: a single-language
+ * install, or one with Polylang off, has nothing for the AJAX call to ever
+ * say yes to, so neither is worth shipping.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_geo_banner_active() {
+	return function_exists( 'pll_languages_list' ) && count( pll_languages_list() ) > 1;
+}
+
+/**
+ * Enqueues the banner script.
  *
  * @since 1.0.0
  *
  * @return void
  */
-function iflynepal_render_geo_language_banner() {
-	$decision = iflynepal_geo_banner_decision();
-
-	if ( ! $decision['show'] ) {
+function iflynepal_enqueue_geo_banner() {
+	if ( ! iflynepal_geo_banner_active() ) {
 		return;
 	}
 
-	$language = function_exists( 'PLL' ) && PLL() ? PLL()->model->get_language( $decision['lang'] ) : null;
-	$language_name = $language ? $language->name : __( 'French', 'iflynepal' );
+	wp_enqueue_script(
+		'iflynepal-geo-banner',
+		IFLYNEPAL_URI . '/assets/js/global/geo-banner.js',
+		array(),
+		iflynepal_asset_version( 'assets/js/global/geo-banner.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'iflynepal-geo-banner',
+		'iflynepalGeoBanner',
+		array(
+			'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
+			'nonce'      => wp_create_nonce( 'iflynepal_geo_banner' ),
+			'postId'     => is_singular() ? get_queried_object_id() : 0,
+			'cookieName' => IFLYNEPAL_GEO_BANNER_COOKIE,
+			'switchLabel' => __( 'Voir en français', 'iflynepal' ),
+			/* translators: %s: the suggested language's own name, e.g. "Français". */
+			'textTemplate' => __( 'Vous semblez naviguer depuis la France. Voir le site en %s ?', 'iflynepal' ),
+			'dismissLabel' => __( 'Dismiss', 'iflynepal' ),
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_geo_banner' );
+
+/**
+ * Prints the banner's static, hidden container.
+ *
+ * Identical for every visitor of a given URL — nothing in it depends on who
+ * is asking — which is exactly what makes it safe to sit inside a fully
+ * cached page. assets/js/global/geo-banner.js is what fills it in and reveals
+ * it, only for the one visitor the AJAX call actually says yes to.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_render_geo_banner_container() {
+	if ( ! iflynepal_geo_banner_active() ) {
+		return;
+	}
 	?>
-	<div class="iflynepal-geo-banner" id="iflynepal-geo-banner" role="region" aria-label="<?php esc_attr_e( 'Language suggestion', 'iflynepal' ); ?>">
-		<p class="iflynepal-geo-banner__text">
-			<?php
-			printf(
-				/* translators: %s: the suggested language's own name, e.g. "Français". */
-				esc_html__( 'Vous semblez naviguer depuis la France. Voir le site en %s ?', 'iflynepal' ),
-				esc_html( $language_name )
-			);
-			?>
-		</p>
+	<div class="iflynepal-geo-banner" id="iflynepal-geo-banner" role="region" aria-label="<?php esc_attr_e( 'Language suggestion', 'iflynepal' ); ?>" hidden>
+		<p class="iflynepal-geo-banner__text" id="iflynepal-geo-banner-text"></p>
 		<div class="iflynepal-geo-banner__actions">
-			<a class="iflynepal-geo-banner__switch" href="<?php echo esc_url( $decision['url'] ); ?>">
-				<?php esc_html_e( 'Voir en français', 'iflynepal' ); ?>
-			</a>
+			<a class="iflynepal-geo-banner__switch" id="iflynepal-geo-banner-switch" href="#"></a>
 			<button type="button" class="iflynepal-geo-banner__dismiss" data-iflynepal-geo-dismiss aria-label="<?php esc_attr_e( 'Dismiss', 'iflynepal' ); ?>">
 				&times;
 			</button>
@@ -310,6 +380,10 @@ function iflynepal_render_geo_language_banner() {
 			color: #fff;
 			font-family: var(--iflynepal-ui-font, system-ui, sans-serif);
 			box-shadow: 0 18px 50px rgba(4, 26, 64, 0.28);
+		}
+
+		.iflynepal-geo-banner[hidden] {
+			display: none;
 		}
 
 		.iflynepal-geo-banner__text {
@@ -376,23 +450,6 @@ function iflynepal_render_geo_language_banner() {
 			}
 		}
 	</style>
-	<script>
-		( function () {
-			var banner = document.getElementById( 'iflynepal-geo-banner' );
-
-			if ( ! banner ) {
-				return;
-			}
-
-			var dismiss = banner.querySelector( '[data-iflynepal-geo-dismiss]' );
-
-			if ( dismiss ) {
-				dismiss.addEventListener( 'click', function () {
-					banner.remove();
-				} );
-			}
-		} )();
-	</script>
 	<?php
 }
-add_action( 'wp_footer', 'iflynepal_render_geo_language_banner' );
+add_action( 'wp_footer', 'iflynepal_render_geo_banner_container' );
