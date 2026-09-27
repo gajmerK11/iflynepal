@@ -168,7 +168,28 @@ $wp_customize->add_control(
 		'iflynepal_hero_background_image',
 		array(
 			'label'       => __( 'Background image', 'iflynepal' ),
-			'description' => __( 'Used when the slideshow above is empty. Shown immediately, and behind the video. This is the largest element on the page.', 'iflynepal' ),
+			'description' => __( 'Used when the slideshow above is empty. Shown immediately, and behind the video. Shown on tablet and desktop widths; a mobile image set below takes over on a phone. This is the largest element on the page.', 'iflynepal' ),
+			'section'     => 'iflynepal_hero',
+			'mime_type'   => 'image',
+		)
+	)
+);
+
+$wp_customize->add_setting(
+	'iflynepal_hero_background_image_mobile',
+	array(
+		'default'           => 0,
+		'sanitize_callback' => 'absint',
+		'transport'         => 'refresh',
+	)
+);
+$wp_customize->add_control(
+	new WP_Customize_Media_Control(
+		$wp_customize,
+		'iflynepal_hero_background_image_mobile',
+		array(
+			'label'       => __( 'Background image (mobile)', 'iflynepal' ),
+			'description' => __( 'Optional. Shown in place of the image above on a phone-width screen — a portrait-oriented crop, so the largest element on the page is not the desktop photo cropped down to a sliver. Left empty, the image above is used at every width. Also shown behind the mobile video, if one is set, while it loads.', 'iflynepal' ),
 			'section'     => 'iflynepal_hero',
 			'mime_type'   => 'image',
 		)
@@ -189,7 +210,28 @@ $wp_customize->add_control(
 		'iflynepal_hero_background_video',
 		array(
 			'label'       => __( 'Background video', 'iflynepal' ),
-			'description' => __( 'Ignored while the slideshow above has any image in it.', 'iflynepal' ),
+			'description' => __( 'Ignored while the slideshow above has any image in it. Shown on tablet and desktop widths; a mobile video set below takes over on a phone.', 'iflynepal' ),
+			'section'     => 'iflynepal_hero',
+			'mime_type'   => 'video',
+		)
+	)
+);
+
+$wp_customize->add_setting(
+	'iflynepal_hero_background_video_mobile',
+	array(
+		'default'           => 0,
+		'sanitize_callback' => 'absint',
+		'transport'         => 'refresh',
+	)
+);
+$wp_customize->add_control(
+	new WP_Customize_Media_Control(
+		$wp_customize,
+		'iflynepal_hero_background_video_mobile',
+		array(
+			'label'       => __( 'Background video (mobile)', 'iflynepal' ),
+			'description' => __( 'Optional. A vertically-shot clip, shown in place of the video above on a phone-width screen, so the background is not a landscape clip cropped down to a sliver. Left empty, the video above is used at every width. Ignored while the slideshow has any image in it.', 'iflynepal' ),
 			'section'     => 'iflynepal_hero',
 			'mime_type'   => 'video',
 		)

@@ -1021,6 +1021,37 @@ function iflynepal_preload_hero_image() {
 		return;
 	}
 
+	/*
+	 * The front page's hero picks between a desktop and a mobile image with a
+	 * <picture><source media> pair (template-parts/home/hero-section.php), so
+	 * its preload has to offer the browser the same choice — a single,
+	 * unconditional preload would fetch the desktop image on a phone even
+	 * though the <picture> goes on to paint the mobile one, paying for both.
+	 * Every other template still has exactly one hero image and keeps the
+	 * plain, unconditional preload below.
+	 */
+	if ( is_front_page() && ! iflynepal_hero_has_slides() ) {
+		$mobile_url = iflynepal_hero_background_image_mobile_url();
+
+		if ( '' !== $mobile_url ) {
+			$desktop_url = iflynepal_hero_background_image_url();
+
+			printf(
+				'<link rel="preload" as="image" href="%s" media="(max-width: 760px)" fetchpriority="high">' . "\n",
+				esc_url( $mobile_url )
+			);
+
+			if ( '' !== $desktop_url ) {
+				printf(
+					'<link rel="preload" as="image" href="%s" media="(min-width: 761px)" fetchpriority="high">' . "\n",
+					esc_url( $desktop_url )
+				);
+			}
+
+			return;
+		}
+	}
+
 	$url = iflynepal_current_hero_image_url();
 
 	if ( '' === $url ) {

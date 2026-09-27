@@ -23,17 +23,20 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_slides     = iflynepal_hero_slides();
-$iflynepal_image      = $iflynepal_slides ? '' : iflynepal_hero_background_image_url();
-$iflynepal_image_size = iflynepal_hero_background_image_size();
-$iflynepal_video      = $iflynepal_slides ? '' : iflynepal_hero_background_video_url();
-$iflynepal_video_mime = iflynepal_hero_background_video_mime();
+$iflynepal_slides             = iflynepal_hero_slides();
+$iflynepal_image              = $iflynepal_slides ? '' : iflynepal_hero_background_image_url();
+$iflynepal_image_size         = iflynepal_hero_background_image_size();
+$iflynepal_image_mobile       = $iflynepal_slides ? '' : iflynepal_hero_background_image_mobile_url();
+$iflynepal_video              = $iflynepal_slides ? '' : iflynepal_hero_background_video_url();
+$iflynepal_video_mime         = iflynepal_hero_background_video_mime();
+$iflynepal_video_mobile       = $iflynepal_slides ? '' : iflynepal_hero_background_video_mobile_url();
+$iflynepal_video_mobile_mime  = iflynepal_hero_background_video_mobile_mime();
 $iflynepal_audio      = iflynepal_hero_audio_url();
 $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 ?>
 <section class="wp-block-cover iflynepal-hero">
 
-	<?php if ( $iflynepal_video ) : ?>
+	<?php if ( $iflynepal_video || $iflynepal_video_mobile ) : ?>
 		<video
 			class="wp-block-cover__video-background intrinsic-ignore"
 			id="iflynepal-hero-video"
@@ -45,7 +48,23 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 			data-object-fit="cover"
 			<?php echo $iflynepal_image ? 'poster="' . esc_url( $iflynepal_image ) . '"' : ''; ?>
 		>
-			<source src="<?php echo esc_url( $iflynepal_video ); ?>" type="<?php echo esc_attr( $iflynepal_video_mime ); ?>">
+			<?php
+			/*
+			 * The mobile clip's <source> is listed first and carries the media
+			 * condition: the browser's resource-selection algorithm reads these
+			 * top to bottom and uses the first one whose media query matches, so
+			 * order is what makes this work rather than anything in the query
+			 * itself. 760px matches the stylesheet's own mobile breakpoint
+			 * (input.css). Left empty, only the desktop source below exists and
+			 * nothing here changes from before this control existed.
+			 */
+			?>
+			<?php if ( $iflynepal_video_mobile ) : ?>
+				<source src="<?php echo esc_url( $iflynepal_video_mobile ); ?>" type="<?php echo esc_attr( $iflynepal_video_mobile_mime ); ?>" media="(max-width: 760px)">
+			<?php endif; ?>
+			<?php if ( $iflynepal_video ) : ?>
+				<source src="<?php echo esc_url( $iflynepal_video ); ?>" type="<?php echo esc_attr( $iflynepal_video_mime ); ?>">
+			<?php endif; ?>
 		</video>
 	<?php endif; ?>
 
@@ -85,18 +104,35 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 
 	<?php if ( $iflynepal_image ) : ?>
 		<div class="iflynepal-hero__media" aria-hidden="true">
-			<img
-				class="iflynepal-hero__still"
-				src="<?php echo esc_url( $iflynepal_image ); ?>"
-				alt=""
-				<?php if ( $iflynepal_image_size['width'] && $iflynepal_image_size['height'] ) : ?>
-					width="<?php echo esc_attr( $iflynepal_image_size['width'] ); ?>"
-					height="<?php echo esc_attr( $iflynepal_image_size['height'] ); ?>"
+			<picture>
+				<?php
+				/*
+				 * The mobile picture is a <source>, not a second <img>, so a
+				 * phone downloads only its own crop rather than both — the
+				 * same reasoning as the mobile video's <source media>, but
+				 * <picture> additionally re-evaluates on an actual resize,
+				 * which a <video>'s resource-selection algorithm does not.
+				 * 760px matches the stylesheet's own mobile breakpoint
+				 * (input.css). Left empty, this is a <picture> with a single
+				 * child and behaves exactly like the plain <img> it replaces.
+				 */
+				?>
+				<?php if ( $iflynepal_image_mobile ) : ?>
+					<source media="(max-width: 760px)" srcset="<?php echo esc_url( $iflynepal_image_mobile ); ?>">
 				<?php endif; ?>
-				fetchpriority="high"
-				loading="eager"
-				decoding="sync"
-			>
+				<img
+					class="iflynepal-hero__still"
+					src="<?php echo esc_url( $iflynepal_image ); ?>"
+					alt=""
+					<?php if ( $iflynepal_image_size['width'] && $iflynepal_image_size['height'] ) : ?>
+						width="<?php echo esc_attr( $iflynepal_image_size['width'] ); ?>"
+						height="<?php echo esc_attr( $iflynepal_image_size['height'] ); ?>"
+					<?php endif; ?>
+					fetchpriority="high"
+					loading="eager"
+					decoding="sync"
+				>
+			</picture>
 		</div>
 	<?php endif; ?>
 

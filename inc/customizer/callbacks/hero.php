@@ -191,6 +191,27 @@ function iflynepal_hero_background_image_size() {
 	);
 }
 
+/**
+ * Mobile background image URL.
+ *
+ * A separate, optional picture for a phone-width screen — see the note on the
+ * Customizer control. Empty when none is set, which is the common case: the
+ * desktop image then shows at every width, exactly as it always has.
+ *
+ * @since 1.0.0
+ *
+ * @return string Image URL, or an empty string when none is set.
+ */
+function iflynepal_hero_background_image_mobile_url() {
+	$attachment_id = (int) get_theme_mod( 'iflynepal_hero_background_image_mobile', 0 );
+
+	if ( ! $attachment_id ) {
+		return '';
+	}
+
+	return (string) wp_get_attachment_image_url( $attachment_id, 'full' );
+}
+
 /* ------------------------------------------------------ background slideshow */
 
 /**
@@ -319,6 +340,44 @@ function iflynepal_hero_background_video_url() {
  */
 function iflynepal_hero_background_video_mime() {
 	$attachment_id = (int) get_theme_mod( 'iflynepal_hero_background_video', 0 );
+
+	if ( ! $attachment_id ) {
+		return '';
+	}
+
+	return (string) get_post_mime_type( $attachment_id );
+}
+
+/**
+ * Mobile background video URL.
+ *
+ * A separate, optional clip shot for a phone-width screen — see the note on
+ * the Customizer control. Empty when none is set, which is the common case:
+ * the desktop video then plays at every width, exactly as it always has.
+ *
+ * @since 1.0.0
+ *
+ * @return string Video URL, or an empty string when none is set.
+ */
+function iflynepal_hero_background_video_mobile_url() {
+	$attachment_id = (int) get_theme_mod( 'iflynepal_hero_background_video_mobile', 0 );
+
+	if ( ! $attachment_id ) {
+		return '';
+	}
+
+	return (string) wp_get_attachment_url( $attachment_id );
+}
+
+/**
+ * MIME type of the mobile background video.
+ *
+ * @since 1.0.0
+ *
+ * @return string MIME type, or an empty string when no mobile video is set.
+ */
+function iflynepal_hero_background_video_mobile_mime() {
+	$attachment_id = (int) get_theme_mod( 'iflynepal_hero_background_video_mobile', 0 );
 
 	if ( ! $attachment_id ) {
 		return '';
