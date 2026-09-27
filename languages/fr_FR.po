@@ -2221,7 +2221,7 @@ msgstr ""
 
 #: inc/cookie.php:153
 msgid "Google Chrome"
-msgstr ""
+msgstr "Google Chrome"
 
 #: inc/customizer/sections/contact.php:117
 msgid "Google Maps embed URL"
@@ -3091,7 +3091,7 @@ msgstr ""
 
 #: inc/cookie.php:168
 msgid "Microsoft Edge"
-msgstr ""
+msgstr "Microsoft Edge"
 
 #: inc/customizer/callbacks/about-country.php:504
 msgid "Middle Hills and Valley People"
@@ -3154,7 +3154,7 @@ msgstr "Vols en montagne et météo"
 
 #: inc/cookie.php:158
 msgid "Mozilla Firefox"
-msgstr ""
+msgstr "Mozilla Firefox"
 
 #: inc/customizer/callbacks/about-country.php:464
 msgid "Mt. Everest, 8,848 m"
@@ -5813,19 +5813,19 @@ msgstr ""
 
 #: template-parts/cookie/types-section.php:44
 msgid "Type 01"
-msgstr ""
+msgstr "Type 01"
 
 #: template-parts/cookie/types-section.php:54
 msgid "Type 02"
-msgstr ""
+msgstr "Type 02"
 
 #: template-parts/cookie/types-section.php:64
 msgid "Type 03"
-msgstr ""
+msgstr "Type 03"
 
 #: template-parts/cookie/types-section.php:74
 msgid "Type 04"
-msgstr ""
+msgstr "Type 04"
 
 #: inc/customizer/sections/reasons.php:81
 msgid "Typed once and left in place, e.g. \"Featured \"."

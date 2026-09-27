@@ -82,7 +82,13 @@ function iflynepal_terms_hero_image_url() {
  * @return string Kicker HTML.
  */
 function iflynepal_render_terms_cta_kicker() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_terms_cta_kicker', IFLYNEPAL_TERMS_CTA_KICKER_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_terms_cta_kicker', IFLYNEPAL_TERMS_CTA_KICKER_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -93,7 +99,13 @@ function iflynepal_render_terms_cta_kicker() {
  * @return string Headline HTML.
  */
 function iflynepal_render_terms_cta_title() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_terms_cta_title', IFLYNEPAL_TERMS_CTA_TITLE_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_terms_cta_title', IFLYNEPAL_TERMS_CTA_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -104,7 +116,13 @@ function iflynepal_render_terms_cta_title() {
  * @return string Paragraph HTML.
  */
 function iflynepal_render_terms_cta_text() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_terms_cta_text', IFLYNEPAL_TERMS_CTA_TEXT_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_terms_cta_text', IFLYNEPAL_TERMS_CTA_TEXT_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -115,7 +133,13 @@ function iflynepal_render_terms_cta_text() {
  * @return string Script line HTML.
  */
 function iflynepal_render_terms_cta_script() {
-	return iflynepal_kses_text( get_theme_mod( 'iflynepal_terms_cta_script', IFLYNEPAL_TERMS_CTA_SCRIPT_DEFAULT ) );
+	$value = get_theme_mod( 'iflynepal_terms_cta_script', IFLYNEPAL_TERMS_CTA_SCRIPT_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$value = pll__( $value );
+	}
+
+	return iflynepal_kses_text( $value );
 }
 
 /**
@@ -175,7 +199,12 @@ function iflynepal_render_terms_cta_actions() {
 	$markup = '';
 
 	$contact_label = trim( (string) get_theme_mod( 'iflynepal_terms_cta_contact_label', IFLYNEPAL_TERMS_CTA_CONTACT_LABEL_DEFAULT ) );
-	$contact_url   = trim( iflynepal_customizer_get_link( 'iflynepal_terms_cta_contact_url', IFLYNEPAL_TERMS_CTA_CONTACT_URL_DEFAULT ) );
+
+	if ( function_exists( 'pll__' ) ) {
+		$contact_label = pll__( $contact_label );
+	}
+
+	$contact_url = trim( iflynepal_customizer_get_link( 'iflynepal_terms_cta_contact_url', IFLYNEPAL_TERMS_CTA_CONTACT_URL_DEFAULT ) );
 
 	if ( '' !== $contact_label ) {
 		$markup .= sprintf(
@@ -185,7 +214,12 @@ function iflynepal_render_terms_cta_actions() {
 		);
 	}
 
-	$whatsapp_label  = trim( (string) get_theme_mod( 'iflynepal_terms_cta_whatsapp_label', IFLYNEPAL_TERMS_CTA_WHATSAPP_LABEL_DEFAULT ) );
+	$whatsapp_label = trim( (string) get_theme_mod( 'iflynepal_terms_cta_whatsapp_label', IFLYNEPAL_TERMS_CTA_WHATSAPP_LABEL_DEFAULT ) );
+
+	if ( function_exists( 'pll__' ) ) {
+		$whatsapp_label = pll__( $whatsapp_label );
+	}
+
 	$whatsapp_number = trim( (string) get_theme_mod( 'iflynepal_terms_cta_whatsapp_number', '' ) );
 
 	if ( '' === $whatsapp_number ) {
@@ -221,6 +255,10 @@ function iflynepal_render_terms_cta_lines() {
 	$phone      = iflynepal_terms_cta_contact_field( 'phone' );
 	$phone_note = trim( (string) get_theme_mod( 'iflynepal_terms_cta_phone_note', IFLYNEPAL_TERMS_CTA_PHONE_NOTE_DEFAULT ) );
 
+	if ( function_exists( 'pll__' ) ) {
+		$phone_note = pll__( $phone_note );
+	}
+
 	if ( '' !== $phone ) {
 		$markup .= sprintf(
 			'<p class="iflynepal-legal-accept__line"><svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 3H5a2 2 0 0 0-2 2c0 8.84 7.16 16 16 16a2 2 0 0 0 2-2v-3l-5-1-1.5 2.5a13 13 0 0 1-8-8L9 8z"/></svg><a %1$s>%2$s</a></p>',
@@ -243,6 +281,11 @@ function iflynepal_render_terms_cta_lines() {
 	$hours_note = trim( (string) get_theme_mod( 'iflynepal_terms_cta_hours_note', IFLYNEPAL_TERMS_CTA_HOURS_NOTE_DEFAULT ) );
 	$hours_days = trim( (string) get_theme_mod( 'iflynepal_terms_cta_hours_days', IFLYNEPAL_TERMS_CTA_HOURS_DAYS_DEFAULT ) );
 
+	if ( function_exists( 'pll__' ) ) {
+		$hours_note = pll__( $hours_note );
+		$hours_days = pll__( $hours_days );
+	}
+
 	if ( '' !== $hours ) {
 		$line = $hours;
 
@@ -262,3 +305,37 @@ function iflynepal_render_terms_cta_lines() {
 
 	return $markup;
 }
+
+/* ---------------------------------------------------------- translations */
+
+/**
+ * Registers the Terms & Conditions closing card's Customizer text with Polylang.
+ *
+ * Pll_register_string() only takes effect in wp-admin, the same note as every
+ * other callback file's registrar in this theme. The clauses themselves are
+ * not Customizer text and are not registered here — see inc/terms.php — and
+ * the three contact fields (phone, email, hours) are data, not copy, so they
+ * are left out on the same reasoning as the Contact page's own office fields.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_register_terms_pll_strings() {
+	if ( ! function_exists( 'pll_register_string' ) ) {
+		return;
+	}
+
+	$group = 'iFlyNepal — Terms & Conditions / Closing CTA';
+
+	pll_register_string( 'Terms CTA kicker', get_theme_mod( 'iflynepal_terms_cta_kicker', IFLYNEPAL_TERMS_CTA_KICKER_DEFAULT ), $group );
+	pll_register_string( 'Terms CTA title', get_theme_mod( 'iflynepal_terms_cta_title', IFLYNEPAL_TERMS_CTA_TITLE_DEFAULT ), $group, true );
+	pll_register_string( 'Terms CTA text', get_theme_mod( 'iflynepal_terms_cta_text', IFLYNEPAL_TERMS_CTA_TEXT_DEFAULT ), $group, true );
+	pll_register_string( 'Terms CTA script', get_theme_mod( 'iflynepal_terms_cta_script', IFLYNEPAL_TERMS_CTA_SCRIPT_DEFAULT ), $group );
+	pll_register_string( 'Terms CTA contact button label', get_theme_mod( 'iflynepal_terms_cta_contact_label', IFLYNEPAL_TERMS_CTA_CONTACT_LABEL_DEFAULT ), $group );
+	pll_register_string( 'Terms CTA WhatsApp button label', get_theme_mod( 'iflynepal_terms_cta_whatsapp_label', IFLYNEPAL_TERMS_CTA_WHATSAPP_LABEL_DEFAULT ), $group );
+	pll_register_string( 'Terms CTA phone note', get_theme_mod( 'iflynepal_terms_cta_phone_note', IFLYNEPAL_TERMS_CTA_PHONE_NOTE_DEFAULT ), $group );
+	pll_register_string( 'Terms CTA hours note', get_theme_mod( 'iflynepal_terms_cta_hours_note', IFLYNEPAL_TERMS_CTA_HOURS_NOTE_DEFAULT ), $group );
+	pll_register_string( 'Terms CTA hours days', get_theme_mod( 'iflynepal_terms_cta_hours_days', IFLYNEPAL_TERMS_CTA_HOURS_DAYS_DEFAULT ), $group );
+}
+add_action( 'admin_init', 'iflynepal_register_terms_pll_strings' );
