@@ -6659,3 +6659,9 @@ msgstr "Votre demande"
 
 msgid "Dates, group size, anything you would like to know."
 msgstr "Dates, taille du groupe, tout ce que vous souhaitez savoir."
+
+msgid "Your Country"
+msgstr "Votre pays"
+
+msgid "Please enter your country."
+msgstr "Veuillez indiquer votre pays."
