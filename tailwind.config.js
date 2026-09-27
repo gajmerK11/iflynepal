@@ -13,7 +13,7 @@ module.exports = {
 		'./template-parts/**/*.php',
 		'./assets/js/**/*.js',
 	],
-	safelist: [ 'is-docked', 'is-open', 'is-live' ],
+	safelist: [ 'is-docked', 'is-open', 'is-live', 'iflynepal-contact-notice--success', 'iflynepal-contact-notice--error' ],
 
 	/*
 	 * Tailwind's own `.container` utility is off. The theme never uses it — its

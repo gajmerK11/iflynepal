@@ -25,24 +25,26 @@ function iflynepal_contact_form_redirect( $status ) {
 }
 
 /**
- * Validate and email one public enquiry.
+ * Validates, sends and reports one public enquiry, without redirecting.
  *
- * @return void
+ * Shared by the no-JS submission (which redirects with the result) and the
+ * AJAX one (which reports it straight back to the same page) so the two paths
+ * can never validate or notify differently.
+ *
+ * @since 1.0.0
+ *
+ * @return string One of 'invalid', 'error' or 'success'.
  */
-function iflynepal_handle_contact_form() {
-	if ( 'POST' !== strtoupper( isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '' ) ) {
-		iflynepal_contact_form_redirect( 'invalid' );
-	}
-
+function iflynepal_process_contact_submission() {
 	$nonce = isset( $_POST['iflynepal_contact_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['iflynepal_contact_nonce'] ) ) : '';
 
 	if ( ! wp_verify_nonce( $nonce, 'iflynepal_contact_submit' ) ) {
-		iflynepal_contact_form_redirect( 'invalid' );
+		return 'invalid';
 	}
 
-	// Quietly discard automated submissions that fill the hidden website field.
+	// Quietly accept automated submissions that fill the hidden website field.
 	if ( ! empty( $_POST['website'] ) ) {
-		iflynepal_contact_form_redirect( 'success' );
+		return 'success';
 	}
 
 	$name    = isset( $_POST['full_name'] ) ? sanitize_text_field( wp_unslash( $_POST['full_name'] ) ) : '';
@@ -52,7 +54,7 @@ function iflynepal_handle_contact_form() {
 	$message = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
 
 	if ( '' === $name || ! is_email( $email ) || '' === $country || '' === $message || ! preg_match( '/^\+?[0-9\s()\-]{7,20}$/', $phone ) ) {
-		iflynepal_contact_form_redirect( 'invalid' );
+		return 'invalid';
 	}
 
 	/*
@@ -72,7 +74,7 @@ function iflynepal_handle_contact_form() {
 	}
 
 	if ( ! is_email( $recipient ) ) {
-		iflynepal_contact_form_redirect( 'error' );
+		return 'error';
 	}
 
 	$subject = sprintf( __( 'Website enquiry from %s', 'iflynepal' ), $name );
@@ -89,12 +91,69 @@ function iflynepal_handle_contact_form() {
 		)
 	);
 	$headers = array( sprintf( 'Reply-To: %1$s <%2$s>', $name, $email ) );
-	$status  = wp_mail( $recipient, $subject, $body, $headers ) ? 'success' : 'error';
 
-	iflynepal_contact_form_redirect( $status );
+	return wp_mail( $recipient, $subject, $body, $headers ) ? 'success' : 'error';
+}
+
+/**
+ * The no-JS path: process the submission and redirect with the result.
+ *
+ * @return void
+ */
+function iflynepal_handle_contact_form() {
+	if ( 'POST' !== strtoupper( isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '' ) ) {
+		iflynepal_contact_form_redirect( 'invalid' );
+	}
+
+	iflynepal_contact_form_redirect( iflynepal_process_contact_submission() );
 }
 add_action( 'admin_post_iflynepal_contact_submit', 'iflynepal_handle_contact_form' );
 add_action( 'admin_post_nopriv_iflynepal_contact_submit', 'iflynepal_handle_contact_form' );
+
+/**
+ * The AJAX path: process the submission and report the result as JSON.
+ *
+ * Posts to the same body a real submit sends admin-post.php — the action
+ * field, the nonce, every form field — so contact.js can send the form
+ * exactly as the browser would have, just to a different endpoint, and the
+ * validation above never has to know which one asked.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function iflynepal_handle_contact_form_ajax() {
+	$status = iflynepal_process_contact_submission();
+	$notice = iflynepal_contact_notice_for_status( $status );
+
+	if ( 'error' === $notice['type'] ) {
+		wp_send_json_error( $notice );
+	}
+
+	wp_send_json_success( $notice );
+}
+add_action( 'wp_ajax_iflynepal_contact_submit', 'iflynepal_handle_contact_form_ajax' );
+add_action( 'wp_ajax_nopriv_iflynepal_contact_submit', 'iflynepal_handle_contact_form_ajax' );
+
+/**
+ * The notice text and type for one result status.
+ *
+ * @since 1.0.0
+ *
+ * @param string $status 'success', 'invalid' or 'error'.
+ * @return array{type:string,message:string}
+ */
+function iflynepal_contact_notice_for_status( $status ) {
+	if ( 'success' === $status ) {
+		return array( 'type' => 'success', 'message' => __( 'Thank you. Your message has been sent.', 'iflynepal' ) );
+	}
+
+	if ( 'invalid' === $status ) {
+		return array( 'type' => 'error', 'message' => __( 'Please check the required fields and try again.', 'iflynepal' ) );
+	}
+
+	return array( 'type' => 'error', 'message' => __( 'Your message could not be sent. Please email or call us instead.', 'iflynepal' ) );
+}
 
 /**
  * Current form notice, when redirected back from a submission.
@@ -104,18 +163,10 @@ add_action( 'admin_post_nopriv_iflynepal_contact_submit', 'iflynepal_handle_cont
 function iflynepal_contact_form_notice() {
 	$status = isset( $_GET['contact_status'] ) ? sanitize_key( wp_unslash( $_GET['contact_status'] ) ) : '';
 
-	if ( 'success' === $status ) {
-		return array( 'type' => 'success', 'message' => __( 'Thank you. Your message has been sent.', 'iflynepal' ) );
+	if ( '' === $status ) {
+		return null;
 	}
 
-	if ( 'invalid' === $status ) {
-		return array( 'type' => 'error', 'message' => __( 'Please check the required fields and try again.', 'iflynepal' ) );
-	}
-
-	if ( 'error' === $status ) {
-		return array( 'type' => 'error', 'message' => __( 'Your message could not be sent. Please email or call us instead.', 'iflynepal' ) );
-	}
-
-	return null;
+	return iflynepal_contact_notice_for_status( $status );
 }
 

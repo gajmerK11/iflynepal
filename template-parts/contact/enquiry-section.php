@@ -23,7 +23,47 @@ $iflynepal_notice = iflynepal_contact_form_notice();
 				<h2 id="iflynepal-contact-form-title"><?php echo esc_html( iflynepal_contact_plain( 'form_title' ) ); ?></h2>
 				<p class="iflynepal-contact-form-card__note" id="iflynepal-contact-form-note"><?php echo esc_html( iflynepal_contact_plain( 'form_note' ) ); ?></p>
 				<?php if ( $iflynepal_notice ) : ?>
-					<div class="iflynepal-contact-notice iflynepal-contact-notice--<?php echo esc_attr( $iflynepal_notice['type'] ); ?>" role="status"><?php echo esc_html( $iflynepal_notice['message'] ); ?></div>
+					<div class="iflynepal-contact-notice iflynepal-contact-notice--<?php echo esc_attr( $iflynepal_notice['type'] ); ?>" id="iflynepal-contact-notice" role="status"><?php echo esc_html( $iflynepal_notice['message'] ); ?></div>
+					<?php
+					/*
+					 * The status lives in the URL itself (see
+					 * iflynepal_contact_form_redirect()), so a plain reload — no new
+					 * submission, just the visitor pressing F5 — would ask the server
+					 * for the same URL and get the same notice back. Clearing the
+					 * query arg right away, without a navigation, means the next
+					 * reload asks for the page with nothing to report. The hash is
+					 * left alone: the browser is still in the middle of scrolling to
+					 * it when this runs, and clearing it here beats that scroll to the
+					 * punch, landing the visitor back at the top of the page instead
+					 * of at the form. The fade-out on top of that is for the visitor
+					 * who never reloads at all: the notice answers "did it send?" and
+					 * stops being needed once that has had time to sink in.
+					 */
+					?>
+					<script>
+					( function () {
+						var notice = document.getElementById( 'iflynepal-contact-notice' );
+
+						if ( ! notice ) {
+							return;
+						}
+
+						if ( window.history && window.history.replaceState ) {
+							var url = new URL( window.location.href );
+							url.searchParams.delete( 'contact_status' );
+							window.history.replaceState( null, '', url.toString() );
+						}
+
+						window.setTimeout( function () {
+							notice.style.transition = 'opacity .3s ease';
+							notice.style.opacity = '0';
+
+							window.setTimeout( function () {
+								notice.remove();
+							}, 300 );
+						}, 6000 );
+					} )();
+					</script>
 				<?php endif; ?>
 
 				<form class="iflynepal-contact-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" novalidate>

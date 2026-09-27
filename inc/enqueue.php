@@ -280,6 +280,16 @@ function iflynepal_enqueue_assets() {
 				'in_footer' => true,
 			)
 		);
+
+		wp_localize_script(
+			'iflynepal-contact-form',
+			'iflynepalContactForm',
+			array(
+				'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
+				'sendingLabel'   => __( 'Sending…', 'iflynepal' ),
+				'networkMessage' => __( 'Something went wrong. Please try again.', 'iflynepal' ),
+			)
+		);
 	}
 
 	/*
