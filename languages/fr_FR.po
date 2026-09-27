@@ -6668,3 +6668,15 @@ msgstr "Veuillez indiquer votre pays."
 
 msgid "Include your country code so we can reach you."
 msgstr "Indiquez votre indicatif pays pour que nous puissions vous joindre."
+
+msgid "Your name"
+msgstr "Votre nom"
+
+msgid "Email address"
+msgstr "Adresse e-mail"
+
+msgid "Your message"
+msgstr "Votre message"
+
+msgid "Tell us what you are planning — dates, group size, anything you would like to know."
+msgstr "Dites-nous ce que vous prévoyez — dates, taille du groupe, tout ce que vous souhaitez savoir."
