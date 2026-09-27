@@ -3167,7 +3167,7 @@ msgstr "Mon budget"
 #: inc/customizer/sections/contact.php:132
 #: inc/customizer/sections/sustainability.php:76
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: inc/contact-form.php:82
 #, php-format
@@ -6606,7 +6606,8 @@ msgstr "Trouver un voyage"
 msgid "Trips"
 msgstr "Voyages"
 
-#. %s: an ink-marked, "and"-joined list of package type names, e.g. "Retreat and Tour". Already escaped HTML.
+#. %s: an ink-marked, "and"-joined list of package type names, e.g. "Retreat
+#. and Tour". Already escaped HTML.
 #: ../plugins/ifn-booking/includes/frontend/type-explorer.php:409
 #, php-format
 msgid "Your %s trips"
@@ -6616,7 +6617,8 @@ msgstr "Vos voyages %s"
 msgid "Nothing matches, yet"
 msgstr "Rien ne correspond, pour l'instant"
 
-#. %s: an "and"-joined list of what was asked for, e.g. "10-14 days and USD 0-1,000".
+#. %s: an "and"-joined list of what was asked for, e.g. "10-14 days and USD
+#. 0-1,000".
 #: ../plugins/ifn-booking/includes/frontend/type-explorer.php:484
 #, php-format
 msgid "We do not have a trip matching %s just yet. Our team adds new departures often, so it is worth checking back, or get in touch and we will help you find one."
@@ -6633,3 +6635,27 @@ msgstr "Parcourir tous les forfaits"
 #: inc/enqueue.php
 msgid "No departures listed for %s"
 msgstr "Aucun départ prévu pour %s"
+
+msgid "Enter your name"
+msgstr "Entrez votre nom"
+
+msgid "Enter your WhatsApp number"
+msgstr "Entrez votre numéro WhatsApp"
+
+msgid "Your email"
+msgstr "Votre e-mail"
+
+msgid "Enter your email"
+msgstr "Entrez votre e-mail"
+
+msgid "Which package type would you like to know about?"
+msgstr "Sur quel type de forfait souhaitez-vous en savoir plus ?"
+
+msgid "Not sure yet — tell me about everything"
+msgstr "Pas encore sûr — parlez-moi de tout"
+
+msgid "Your enquiry"
+msgstr "Votre demande"
+
+msgid "Dates, group size, anything you would like to know."
+msgstr "Dates, taille du groupe, tout ce que vous souhaitez savoir."
