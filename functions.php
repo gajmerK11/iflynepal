@@ -43,6 +43,7 @@ require_once IFLYNEPAL_DIR . '/inc/customizer/customizer.php';
 require_once IFLYNEPAL_DIR . '/inc/contact-form.php';
 require_once IFLYNEPAL_DIR . '/inc/language-switcher.php';
 require_once IFLYNEPAL_DIR . '/inc/geo-language-banner.php';
+require_once IFLYNEPAL_DIR . '/inc/disable-comments.php';
 require_once IFLYNEPAL_DIR . '/inc/admin-translation-column.php';
 require_once IFLYNEPAL_DIR . '/inc/admin-translation-grouping.php';
 require_once IFLYNEPAL_DIR . '/inc/auto-translate-content.php';
