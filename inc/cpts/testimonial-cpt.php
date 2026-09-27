@@ -508,6 +508,29 @@ function iflynepal_testimonial_title_stem() {
  * @return string Title.
  */
 function iflynepal_testimonial_generated_title( $post_id ) {
+	/*
+	 * A translation of another review is named after it — "Testimonial 1 (fr)"
+	 * — rather than taking the next number in the sequence. The sequence is
+	 * for distinct reviews; a translation is the same review again, and a
+	 * fresh number would hide which English original it belongs to.
+	 */
+	if ( iflynepal_customizer_is_multilingual() && function_exists( 'pll_get_post_language' ) && function_exists( 'pll_default_language' ) && function_exists( 'pll_get_post' ) ) {
+		$lang         = pll_get_post_language( $post_id );
+		$default_lang = pll_default_language();
+
+		if ( $lang && $default_lang && $lang !== $default_lang ) {
+			$original_id = pll_get_post( $post_id, $default_lang );
+
+			if ( $original_id && (int) $original_id !== (int) $post_id ) {
+				$original_title = trim( (string) get_post_field( 'post_title', $original_id ) );
+
+				if ( '' !== $original_title ) {
+					return sprintf( '%s (%s)', $original_title, $lang );
+				}
+			}
+		}
+	}
+
 	$stem    = iflynepal_testimonial_title_stem();
 	$pattern = '/^' . preg_quote( $stem, '/' ) . ' (\d+)$/';
 	$current = (string) get_post_field( 'post_title', $post_id );
