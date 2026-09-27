@@ -6665,3 +6665,6 @@ msgstr "Votre pays"
 
 msgid "Please enter your country."
 msgstr "Veuillez indiquer votre pays."
+
+msgid "Include your country code so we can reach you."
+msgstr "Indiquez votre indicatif pays pour que nous puissions vous joindre."
