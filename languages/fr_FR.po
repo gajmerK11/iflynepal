@@ -5039,7 +5039,7 @@ msgstr "Les habitants du Teraï"
 #: template-parts/terms/hero-section.php:41
 #, php-format
 msgid "Terms & %s"
-msgstr "Conditions & %s"
+msgstr "Termes & %s"
 
 #. Name of the template
 #: page-terms-and-conditions.php:2 inc/sustainability.php:334
