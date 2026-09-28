@@ -136,7 +136,7 @@ msgstr "2. Frais à percevoir pour le renouvellement ou la régularisation du vi
 
 #: inc/customizer/callbacks/trust.php:176
 msgid "24/7 Personalized Support"
-msgstr "Assistance personnalisée 24h/24 et 7j/7"
+msgstr "Assistance personnalisée 24/7"
 
 #: template-parts/terms/clauses-section.php:86
 msgid "30+ days prior to departure"
