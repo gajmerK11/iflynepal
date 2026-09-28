@@ -1355,12 +1355,14 @@
 	/*
 	 * Matches .iflynepal-explore__title's size exactly (the "Adventure
 	 * outward. Journey inward." heading further down the page), so the two
-	 * read as the same weight of statement.
+	 * read as the same weight of statement. Left to wrap normally rather than
+	 * forced onto one line: the heading is free text set in the Customizer,
+	 * and a French (or any other) translation is not guaranteed to be the
+	 * same length as the English default.
 	 */
 	.iflynepal-partner__head .iflynepal-partner__title {
 		font-size: 50px;
 		line-height: 1.04;
-		white-space: nowrap;
 	}
 
 	.iflynepal-partner-card {
@@ -1459,16 +1461,9 @@
 	}
 
 	@media (max-width: 1100px) {
-		/*
-		 * Same shrink point and scale as .iflynepal-explore__title. The nowrap
-		 * above assumes the desktop-width column; a custom title typed in the
-		 * Customizer is not guaranteed to fit an unbroken line at tablet and
-		 * laptop widths too, so it is left free to wrap here rather than
-		 * running off the edge of the viewport.
-		 */
+		/* Same shrink point and scale as .iflynepal-explore__title. */
 		.iflynepal-partner__head .iflynepal-partner__title {
 			font-size: clamp(32px, 5.6vw, 54px);
-			white-space: normal;
 		}
 	}
 
