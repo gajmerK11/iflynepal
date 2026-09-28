@@ -1412,6 +1412,13 @@
 		letter-spacing: -0.02em;
 	}
 
+	/* Same gold, italic accent as .iflynepal-hero__title's em/hero-text-style. */
+	.iflynepal-partner__title .hero-text-style,
+	.iflynepal-partner__title em {
+		@apply inline-block font-accent font-semibold italic;
+		color: var(--iflynepal-gold);
+	}
+
 	.iflynepal-partner__desc {
 		@apply max-w-[560px];
 		color: var(--iflynepal-muted);
@@ -1452,16 +1459,15 @@
 	}
 
 	@media (max-width: 1100px) {
-		/* Same shrink point and scale as .iflynepal-explore__title. */
+		/*
+		 * Same shrink point and scale as .iflynepal-explore__title. The nowrap
+		 * above assumes the desktop-width column; a custom title typed in the
+		 * Customizer is not guaranteed to fit an unbroken line at tablet and
+		 * laptop widths too, so it is left free to wrap here rather than
+		 * running off the edge of the viewport.
+		 */
 		.iflynepal-partner__head .iflynepal-partner__title {
 			font-size: clamp(32px, 5.6vw, 54px);
-		}
-	}
-
-	@media (max-width: 640px) {
-		/* The single-line heading above wouldn't fit an unbroken second line at
-		 * a phone's width; let it wrap normally there instead of overflowing. */
-		.iflynepal-partner__head .iflynepal-partner__title {
 			white-space: normal;
 		}
 	}

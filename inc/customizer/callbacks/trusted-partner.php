@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  */
-const IFLYNEPAL_PARTNER_TITLE_DEFAULT = 'Your Trusted Partner for<br>Himalayan Trek, Tours &amp; Retreats';
+const IFLYNEPAL_PARTNER_TITLE_DEFAULT = 'Built By Explorers Who Call <em>Nepal</em> Home';
 
 /**
  * Paragraphs the card's copy column can carry.
