@@ -77,6 +77,11 @@ function iflynepal_process_contact_submission() {
 		return 'error';
 	}
 
+	$phone_digits = function_exists( 'iflynepal_booking_sanitize_setting' )
+		? iflynepal_booking_sanitize_setting( $phone, 'digits' )
+		: (string) preg_replace( '/[^0-9]/', '', $phone );
+	$chat_url     = '' === $phone_digits ? '' : 'https://wa.me/' . $phone_digits;
+
 	$subject = sprintf( __( 'Website enquiry from %s', 'iflynepal' ), $name );
 	$body    = implode(
 		"\n",
@@ -88,6 +93,9 @@ function iflynepal_process_contact_submission() {
 			'',
 			__( 'Message:', 'iflynepal' ),
 			$message,
+			'',
+			/* translators: %s: a WhatsApp click-to-chat link for the sender. */
+			sprintf( __( 'Reply on WhatsApp: %s', 'iflynepal' ), $chat_url ),
 		)
 	);
 	$headers = array( sprintf( 'Reply-To: %1$s <%2$s>', $name, $email ) );
