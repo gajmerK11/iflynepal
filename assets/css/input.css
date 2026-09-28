@@ -1330,6 +1330,170 @@
 	 * comes from the same rules "I want to" already uses, unmodified.
 	 */
 
+	/* --------------------------------------------------- trusted partner */
+
+	/*
+	 * The card between the hero and Explore Nepal: a photograph or video
+	 * beside a portion of the company's own story. Built on the same card
+	 * language as .iflynepal-csr-pillar (white ground, 30px corners, one
+	 * light border) so it reads as the same design system rather than a
+	 * one-off — the difference is a single row with a button, not a
+	 * repeating, alternating list.
+	 */
+	.iflynepal-partner {
+		@apply mx-auto;
+		width: min(calc(100% - 40px), var(--iflynepal-shell));
+		padding: 112px 0 88px;
+	}
+
+	.iflynepal-partner__head {
+		@apply mx-auto text-center;
+		max-width: 900px;
+		margin-bottom: 34px;
+	}
+
+	/*
+	 * Matches .iflynepal-explore__title's size exactly (the "Adventure
+	 * outward. Journey inward." heading further down the page), so the two
+	 * read as the same weight of statement.
+	 */
+	.iflynepal-partner__head .iflynepal-partner__title {
+		font-size: 50px;
+		line-height: 1.04;
+		white-space: nowrap;
+	}
+
+	.iflynepal-partner-card {
+		@apply grid items-stretch overflow-hidden bg-white;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+		border: 1px solid var(--iflynepal-line);
+		border-radius: 30px;
+		box-shadow: 0 15px 42px rgba(4, 26, 64, 0.08);
+	}
+
+	.iflynepal-partner__media {
+		@apply relative overflow-hidden bg-mist;
+		min-height: 500px;
+	}
+
+	.iflynepal-partner__image {
+		@apply absolute inset-0 h-full w-full object-cover;
+		transition: transform 0.8s var(--iflynepal-ease);
+	}
+
+	.iflynepal-partner-card:hover .iflynepal-partner__image {
+		transform: scale(1.04);
+	}
+
+	.iflynepal-partner__video {
+		@apply absolute inset-0 h-full w-full object-cover;
+		background: #000;
+	}
+
+	.iflynepal-partner__copy {
+		@apply flex flex-col;
+		padding: clamp(28px, 4.5vw, 48px);
+	}
+
+	/* The card's copy stretches to the media's height; the button sinks to the
+	 * bottom of that space instead of sitting flush under the last paragraph,
+	 * so a short paragraph count still fills the card the way a full one does. */
+	.iflynepal-partner__action {
+		@apply flex;
+		margin-top: auto;
+		padding-top: 18px;
+	}
+
+	.iflynepal-partner__title {
+		@apply m-0 font-display font-medium;
+		color: var(--iflynepal-navy-deep);
+		font-size: clamp(26px, 2.6vw, 36px);
+		line-height: 1.15;
+		letter-spacing: -0.02em;
+	}
+
+	.iflynepal-partner__desc {
+		@apply max-w-[560px];
+		color: var(--iflynepal-muted);
+		font-size: 18px;
+		line-height: 1.6;
+	}
+
+	.iflynepal-partner__desc p {
+		margin: 0;
+	}
+
+	.iflynepal-partner__desc p + p {
+		margin-top: 10px;
+	}
+
+	/*
+	 * Matches .iflynepal-hero__actions/.iflynepal-cta__actions exactly: same
+	 * shape, size, type and hover lift, so this button reads as the same
+	 * control as the hero's "Find a Retreat".
+	 */
+	.iflynepal-partner__action .wp-block-button__link {
+		@apply inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-full border border-transparent px-5 text-sm font-extrabold no-underline;
+		transition:
+			transform 0.35s var(--iflynepal-ease),
+			background 0.3s ease,
+			border-color 0.3s ease,
+			box-shadow 0.35s var(--iflynepal-ease);
+	}
+
+	.iflynepal-partner__action .wp-block-button__link:hover {
+		transform: translateY(-2px);
+	}
+
+	@media (max-width: 1080px) {
+		.iflynepal-partner {
+			padding: 72px 0;
+		}
+	}
+
+	@media (max-width: 1100px) {
+		/* Same shrink point and scale as .iflynepal-explore__title. */
+		.iflynepal-partner__head .iflynepal-partner__title {
+			font-size: clamp(32px, 5.6vw, 54px);
+		}
+	}
+
+	@media (max-width: 640px) {
+		/* The single-line heading above wouldn't fit an unbroken second line at
+		 * a phone's width; let it wrap normally there instead of overflowing. */
+		.iflynepal-partner__head .iflynepal-partner__title {
+			white-space: normal;
+		}
+	}
+
+	@media (max-width: 1024px) {
+		/* Tablet and small-laptop widths: image on top, copy underneath,
+		 * rather than a two-column row too narrow to read comfortably. */
+		.iflynepal-partner-card {
+			grid-template-columns: 1fr;
+		}
+
+		/* The paragraphs no longer have to share a narrow column beside the
+		 * photograph, so they can breathe rather than sitting tight together. */
+		.iflynepal-partner__desc {
+			@apply max-w-none;
+		}
+
+		.iflynepal-partner__desc p + p {
+			margin-top: 24px;
+		}
+
+		.iflynepal-partner__action {
+			padding-top: 32px;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-partner__media {
+			min-height: 280px;
+		}
+	}
+
 	/* ------------------------------------------------------- explore cards */
 
 	/*
@@ -9252,7 +9416,8 @@
 	}
 
 	.iflynepal-button:hover,
-	.iflynepal-hero__actions .wp-block-button__link:hover {
+	.iflynepal-hero__actions .wp-block-button__link:hover,
+	.iflynepal-partner__action .wp-block-button__link:hover {
 		transform: none;
 	}
 

@@ -16,6 +16,7 @@ get_header();
 <main id="primary" class="site-main">
 	<?php
 	get_template_part( 'template-parts/home/hero-section' );
+	get_template_part( 'template-parts/home/trusted-partner-section' );
 	get_template_part( 'template-parts/home/explore-section' );
 	get_template_part( 'template-parts/home/upcoming-journeys-section' );
 	get_template_part( 'template-parts/home/reasons-section' );

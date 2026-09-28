@@ -53,6 +53,7 @@ function iflynepal_enqueue_assets() {
 	 * of them pays nothing.
 	 */
 	$has_hero         = iflynepal_has_hero();
+	$has_partner      = iflynepal_has_trusted_partner();
 	$has_explore      = iflynepal_has_explore();
 	$has_trust        = iflynepal_has_trust();
 	$has_people       = iflynepal_has_people();
@@ -90,7 +91,7 @@ function iflynepal_enqueue_assets() {
 	$has_authors_archive = iflynepal_has_authors_archive();
 	$has_author          = iflynepal_has_author();
 
-	if ( ! $has_hero && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie && ! $has_privacy && ! $has_sustain && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story && ! $has_authors_archive && ! $has_author && ! $has_404 ) {
+	if ( ! $has_hero && ! $has_partner && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie && ! $has_privacy && ! $has_sustain && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story && ! $has_authors_archive && ! $has_author && ! $has_404 ) {
 		return;
 	}
 
@@ -159,6 +160,19 @@ function iflynepal_enqueue_assets() {
 			IFLYNEPAL_URI . '/assets/js/homepage/hero/slides.js',
 			array( 'iflynepal-gsap' ),
 			iflynepal_asset_version( 'assets/js/homepage/hero/slides.js' ),
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+	}
+
+	if ( $has_partner ) {
+		wp_enqueue_script(
+			'iflynepal-partner-reveal',
+			IFLYNEPAL_URI . '/assets/js/homepage/partner/reveal.js',
+			array( 'iflynepal-gsap', 'iflynepal-gsap-scrolltrigger' ),
+			iflynepal_asset_version( 'assets/js/homepage/partner/reveal.js' ),
 			array(
 				'strategy'  => 'defer',
 				'in_footer' => true,

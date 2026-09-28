@@ -13,6 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/hero.php';
+require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/trusted-partner.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/explore.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/upcoming-journeys.php';
 require_once IFLYNEPAL_DIR . '/inc/customizer/callbacks/reasons.php';
@@ -229,6 +230,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	 */
 	require_once IFLYNEPAL_DIR . '/inc/customizer/controls/class-ifly-nepal-customize-heading-control.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/hero.php';
+	require IFLYNEPAL_DIR . '/inc/customizer/sections/trusted-partner.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/explore.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/upcoming-journeys.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/reasons.php';
@@ -298,6 +300,30 @@ function iflynepal_customizer_controls_assets() {
 			),
 			/* translators: %d: trust point number. */
 			'removeLabel' => __( 'Remove trust point %d', 'iflynepal' ),
+		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-customizer-partner-description',
+		IFLYNEPAL_URI . '/assets/js/homepage/partner/description.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/homepage/partner/description.js' ),
+		true
+	);
+
+	wp_localize_script(
+		'iflynepal-customizer-partner-description',
+		'iflynepalPartnerDescription',
+		array(
+			'max'         => IFLYNEPAL_PARTNER_DESCRIPTION_MAX,
+			'addLabel'    => __( 'Add paragraph', 'iflynepal' ),
+			'maxMessage'  => sprintf(
+				/* translators: %d: maximum number of paragraphs. */
+				__( 'Maximum %d paragraphs allowed.', 'iflynepal' ),
+				IFLYNEPAL_PARTNER_DESCRIPTION_MAX
+			),
+			/* translators: %d: paragraph number. */
+			'removeLabel' => __( 'Remove paragraph %d', 'iflynepal' ),
 		)
 	);
 

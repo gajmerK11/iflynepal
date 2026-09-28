@@ -146,6 +146,17 @@ function iflynepal_has_hero() {
 }
 
 /**
+ * Whether the current request renders the Trusted Partner card.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_has_trusted_partner() {
+	return is_front_page();
+}
+
+/**
  * Whether the current request renders the Explore Cards section.
  *
  * @since 1.0.0
