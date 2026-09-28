@@ -41,10 +41,10 @@ const IFLYNEPAL_HERO_TRUST_MAX = 4;
  */
 function iflynepal_hero_trust_defaults() {
 	return array(
-		1 => __( 'Local Nepal team', 'iflynepal' ),
-		2 => __( 'Experienced guides', 'iflynepal' ),
-		3 => __( 'Private & small-group options', 'iflynepal' ),
-		4 => __( 'Support from arrival to departure', 'iflynepal' ),
+		1 => __( 'Exclusive<br>Retreats', 'iflynepal' ),
+		2 => __( '24/7<br>Personalised Support', 'iflynepal' ),
+		3 => __( 'Value for<br>Money', 'iflynepal' ),
+		4 => __( 'Sustainable &amp;<br>Responsible Travel', 'iflynepal' ),
 	);
 }
 
@@ -115,14 +115,37 @@ function iflynepal_hero_button( $index ) {
 }
 
 /**
- * Trust bullets that have text, in order.
- *
- * Emptying a slot is how the Customizer's Remove button deletes a bullet, so an
- * empty slot is skipped rather than rendered blank.
+ * Icon shown beside each trust bullet, by its slot rather than its text —
+ * the bullets are free text an editor can retype entirely, so the icon
+ * cannot be guessed from the words themselves. Slugs are keys into
+ * iflynepal_trust_icons() (inc/customizer/callbacks/trust.php), the same
+ * icon set the Why-trust section draws from, so a new icon is one line
+ * here rather than a second registry.
  *
  * @since 1.0.0
  *
- * @return string[] Bullet labels.
+ * @return array<int,string> Icon slug per slot, indexed from 1.
+ */
+function iflynepal_hero_trust_icons() {
+	return array(
+		1 => 'mountain',
+		2 => 'clock',
+		3 => 'check',
+		4 => 'leaf-outline',
+	);
+}
+
+/**
+ * Trust bullets that have text, in order.
+ *
+ * Emptying a slot is how the Customizer's Remove button deletes a bullet, so an
+ * empty slot is skipped rather than rendered blank. Each slot keeps its own
+ * number so the icon stays matched to the slot even once earlier ones are
+ * skipped.
+ *
+ * @since 1.0.0
+ *
+ * @return array[] Bullets, each with 'index' and 'text'.
  */
 function iflynepal_hero_trust_points() {
 	$defaults = iflynepal_hero_trust_defaults();
@@ -137,7 +160,10 @@ function iflynepal_hero_trust_points() {
 				$value = pll__( $value );
 			}
 
-			$points[] = $value;
+			$points[] = array(
+				'index' => $i,
+				'text'  => $value,
+			);
 		}
 	}
 
@@ -515,10 +541,25 @@ function iflynepal_render_hero_actions() {
  * @return string Markup.
  */
 function iflynepal_render_hero_trust_points() {
-	$markup = '';
+	$icon_slugs = iflynepal_hero_trust_icons();
+	$icons      = function_exists( 'iflynepal_trust_icons' ) ? iflynepal_trust_icons() : array();
+	$markup     = '';
 
 	foreach ( iflynepal_hero_trust_points() as $point ) {
-		$markup .= '<p>' . esc_html( $point ) . '</p>';
+		$slug = isset( $icon_slugs[ $point['index'] ] ) ? $icon_slugs[ $point['index'] ] : 'shield';
+		$icon = isset( $icons[ $slug ] ) ? $icons[ $slug ] : null;
+
+		$glyph = $icon ? sprintf(
+			'<svg class="iflynepal-hero__proof-glyph%1$s" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="%2$s"/></svg>',
+			$icon['fill'] ? ' iflynepal-hero__proof-glyph--fill' : '',
+			esc_attr( $icon['path'] )
+		) : '';
+
+		$markup .= sprintf(
+			'<p><span class="iflynepal-hero__proof-icon">%1$s</span><span class="iflynepal-hero__proof-text">%2$s</span></p>',
+			$glyph,
+			iflynepal_kses_text( $point['text'] )
+		);
 	}
 
 	return $markup;
@@ -682,7 +723,7 @@ function iflynepal_register_hero_pll_strings() {
 
 	for ( $i = 1; $i <= IFLYNEPAL_HERO_TRUST_MAX; $i++ ) {
 		$default = isset( $trust_defaults[ $i ] ) ? $trust_defaults[ $i ] : '';
-		pll_register_string( 'Hero trust point ' . $i, get_theme_mod( 'iflynepal_hero_trust_' . $i, $default ), 'iFlyNepal — Homepage / Hero' );
+		pll_register_string( 'Hero trust point ' . $i, get_theme_mod( 'iflynepal_hero_trust_' . $i, $default ), 'iFlyNepal — Homepage / Hero', true );
 	}
 }
 add_action( 'admin_init', 'iflynepal_register_hero_pll_strings', 10 );

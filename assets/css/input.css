@@ -768,7 +768,14 @@
 	.iflynepal-hero .wp-block-cover__inner-container {
 		width: min(calc(100% - 40px), var(--iflynepal-shell));
 		@apply relative mx-auto;
-		padding: 150px 0 90px;
+		/*
+		 * Top padding trimmed from 150px so the title/actions/finder stack
+		 * sits a little higher, keeping pace with the proof row below moving
+		 * up off the hero's bottom edge rather than opening a gap above —
+		 * the hero's height is not shrinking to match, so every pixel cut
+		 * here closes the same amount of empty space above the headline.
+		 */
+		padding: 50px 0 90px;
 	}
 
 	/*
@@ -988,25 +995,79 @@
 		}
 	}
 
+	/*
+	 * The proof bar, matching the reference site's row under its own search
+	 * box: a bare line icon beside a light two-line label, spread edge to
+	 * edge across the same 1030px the finder occupies rather than clustered
+	 * in the middle. Pinned near the hero's own bottom edge rather than
+	 * flowing under the finder with the rest of the copy — a gap is left
+	 * below it so it reads as sitting inside the photograph, not stuck to
+	 * its border.
+	 */
 	.iflynepal-hero__proof {
-		@apply mt-[38px] flex flex-wrap justify-center gap-x-7 gap-y-3.5 text-sm font-semibold;
-		color: rgba(255, 255, 255, 0.8);
-		letter-spacing: 0.01em;
+		/*
+		 * z-index: -1 rather than leaving it auto — explicit and unambiguous,
+		 * definitely under .wp-block-cover__inner-container's z-index:1 (the
+		 * finder and its dropdown live inside that), and still above the
+		 * background media's own -3/-2. This row is decoration, nothing in
+		 * it is ever clicked, so pointer-events: none removes it from hit
+		 * testing entirely — whatever is visually on top of it (the open
+		 * dropdown's list, its own options) gets every hover and click with
+		 * nothing here to intercept a stray one at the pixel where they meet.
+		 */
+		@apply absolute inset-x-0 mx-auto flex flex-wrap justify-center gap-x-10 gap-y-5 pointer-events-none;
+		bottom: 150px;
+		max-width: 1030px;
+		z-index: -1;
+	}
+
+	@media (min-width: 761px) {
+		.iflynepal-hero__proof {
+			@apply flex-nowrap justify-between;
+		}
 	}
 
 	.iflynepal-hero__proof p {
-		@apply m-0 flex items-center gap-2.5;
-		transition: color 0.25s ease;
+		@apply m-0 flex items-center gap-3;
 	}
 
-	.iflynepal-hero__proof p:hover {
-		@apply text-white;
+	.iflynepal-hero__proof-icon {
+		@apply flex shrink-0 items-center justify-center;
 	}
 
-	.iflynepal-hero__proof p::before {
-		content: '';
-		@apply block h-[7px] w-[7px] shrink-0 rounded-full;
-		background: var(--iflynepal-gold);
+	.iflynepal-hero__proof-glyph {
+		@apply h-9 w-9;
+		stroke: #fff;
+		fill: none;
+		stroke-width: 1.3;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.iflynepal-hero__proof-glyph--fill {
+		fill: #fff;
+		stroke: none;
+	}
+
+	.iflynepal-hero__proof-text {
+		@apply text-left text-sm font-light text-white;
+		line-height: 1.3;
+		letter-spacing: 0.01em;
+	}
+
+	@media (max-width: 760px) {
+		.iflynepal-hero__proof {
+			@apply gap-x-6 gap-y-4;
+			bottom: 56px;
+		}
+
+		.iflynepal-hero__proof-glyph {
+			@apply h-7 w-7;
+		}
+
+		.iflynepal-hero__proof-text {
+			@apply text-xs;
+		}
 	}
 
 	/*
@@ -1301,6 +1362,14 @@
 		@apply absolute inset-x-0 top-full z-10 mt-2 flex max-h-[280px] flex-col gap-1 overflow-y-auto rounded-xl bg-white p-2;
 		border: 1px solid var(--iflynepal-line);
 		box-shadow: var(--iflynepal-shadow);
+		/*
+		 * Only overflow-y was ever set, which leaves overflow-x at its
+		 * default (visible) in the box model even though the rounded corner
+		 * makes it look clipped — the proof row's own text could still show
+		 * through in the sliver along the scrollbar track that visible
+		 * overflow-x leaves unclipped. Matching it to hidden closes that.
+		 */
+		overflow-x: hidden;
 	}
 
 	.iflynepal-hero__finder-option {

@@ -94,7 +94,7 @@ for ( $iflynepal_i = 1; $iflynepal_i <= IFLYNEPAL_HERO_TRUST_MAX; $iflynepal_i++
 		'iflynepal_hero_trust_' . $iflynepal_i,
 		array(
 			'default'           => isset( $iflynepal_trust_defaults[ $iflynepal_i ] ) ? $iflynepal_trust_defaults[ $iflynepal_i ] : '',
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => 'iflynepal_kses_text',
 			'transport'         => 'postMessage',
 		)
 	);
@@ -102,9 +102,10 @@ for ( $iflynepal_i = 1; $iflynepal_i <= IFLYNEPAL_HERO_TRUST_MAX; $iflynepal_i++
 		'iflynepal_hero_trust_' . $iflynepal_i,
 		array(
 			/* translators: %d: trust point number. */
-			'label'   => sprintf( __( 'Trust point %d', 'iflynepal' ), $iflynepal_i ),
-			'section' => 'iflynepal_hero',
-			'type'    => 'text',
+			'label'       => sprintf( __( 'Trust point %d', 'iflynepal' ), $iflynepal_i ),
+			'description' => __( 'Accepts &lt;br&gt; to control where the two-line label wraps.', 'iflynepal' ),
+			'section'     => 'iflynepal_hero',
+			'type'        => 'textarea',
 		)
 	);
 }

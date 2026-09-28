@@ -153,13 +153,6 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 				?>
 			</div>
 
-			<div class="wp-block-group iflynepal-hero__proof" id="iflynepal-hero-proof">
-				<?php
-				// Bullet text is escaped inside the render callback.
-				echo iflynepal_render_hero_trust_points();
-				?>
-			</div>
-
 			<?php if ( iflynepal_has_hero_finder() ) : ?>
 				<?php
 				/*
@@ -336,6 +329,13 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 			<?php endif; ?>
 
 		</div>
+	</div>
+
+	<div class="wp-block-group iflynepal-hero__proof" id="iflynepal-hero-proof">
+		<?php
+		// Bullet text is escaped and the icon markup built inside the render callback.
+		echo iflynepal_render_hero_trust_points();
+		?>
 	</div>
 
 	<?php if ( $iflynepal_audio ) : ?>
