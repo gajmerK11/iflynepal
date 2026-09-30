@@ -31,6 +31,25 @@
 		control.classList.toggle( 'is-valid', valid );
 	}
 
+	/*
+	 * The mobile number takes digits only, plus the "+", spaces, brackets and
+	 * dashes people type around them. Anything else — letters included, typed
+	 * or pasted — is dropped as it arrives, and a "+" is kept only as the first
+	 * character. The pattern on the field and the server check the same rule,
+	 * so this is a convenience, not the only guard.
+	 */
+	var phone = form.querySelector( 'input[name="phone"]' );
+
+	if ( phone ) {
+		phone.addEventListener( 'input', function () {
+			var cleaned = phone.value.replace( /[^0-9+\s()\-]/g, '' ).replace( /(?!^)\+/g, '' );
+
+			if ( cleaned !== phone.value ) {
+				phone.value = cleaned;
+			}
+		} );
+	}
+
 	Array.prototype.forEach.call( controls, function ( control ) {
 		control.addEventListener( 'blur', function () { validate( control ); } );
 		control.addEventListener( 'change', function () { validate( control ); } );

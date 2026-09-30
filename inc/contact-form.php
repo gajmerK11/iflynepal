@@ -33,7 +33,7 @@ function iflynepal_contact_form_redirect( $status ) {
  *
  * @since 1.0.0
  *
- * @return string One of 'invalid', 'error' or 'success'.
+ * @return string One of 'invalid', 'invalid_phone', 'error' or 'success'.
  */
 function iflynepal_process_contact_submission() {
 	$nonce = isset( $_POST['iflynepal_contact_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['iflynepal_contact_nonce'] ) ) : '';
@@ -53,8 +53,13 @@ function iflynepal_process_contact_submission() {
 	$phone   = isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '';
 	$message = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
 
-	if ( '' === $name || ! is_email( $email ) || '' === $country || '' === $message || ! preg_match( '/^\+?[0-9\s()\-]{7,20}$/', $phone ) ) {
+	if ( '' === $name || ! is_email( $email ) || '' === $country || '' === $message ) {
 		return 'invalid';
+	}
+
+	// Reported apart from the rest so the visitor is told which field to fix.
+	if ( ! preg_match( '/^\+?[0-9\s()\-]{7,20}$/', $phone ) ) {
+		return 'invalid_phone';
 	}
 
 	/*
@@ -148,7 +153,7 @@ add_action( 'wp_ajax_nopriv_iflynepal_contact_submit', 'iflynepal_handle_contact
  *
  * @since 1.0.0
  *
- * @param string $status 'success', 'invalid' or 'error'.
+ * @param string $status 'success', 'invalid', 'invalid_phone' or 'error'.
  * @return array{type:string,message:string}
  */
 function iflynepal_contact_notice_for_status( $status ) {
@@ -158,6 +163,13 @@ function iflynepal_contact_notice_for_status( $status ) {
 
 	if ( 'invalid' === $status ) {
 		return array( 'type' => 'error', 'message' => __( 'Please check the required fields and try again.', 'iflynepal' ) );
+	}
+
+	if ( 'invalid_phone' === $status ) {
+		return array(
+			'type'    => 'error',
+			'message' => __( 'Please enter a proper mobile number. Only numbers are allowed.', 'iflynepal' ),
+		);
 	}
 
 	return array( 'type' => 'error', 'message' => __( 'Your message could not be sent. Please email or call us instead.', 'iflynepal' ) );
