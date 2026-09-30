@@ -562,7 +562,8 @@ function iflynepal_enqueue_people_rail() {
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_people_rail' );
 
 /**
- * Enqueues the Team page's section-lead one-line fit.
+ * Enqueues the section-lead one-line fit for the Team page and the About page's
+ * Executive Team roster.
  *
  * Kept out of the animation bundle for the same reason as the People rail's
  * buttons: plain layout measurement, nothing GSAP-dependent.
@@ -572,7 +573,7 @@ add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_people_rail' );
  * @return void
  */
 function iflynepal_enqueue_team_lead_fit() {
-	if ( ! iflynepal_has_team() ) {
+	if ( ! iflynepal_has_team() && ! iflynepal_has_about() ) {
 		return;
 	}
 
