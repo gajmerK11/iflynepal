@@ -4750,6 +4750,34 @@
 		transform: translateY(-3px);
 	}
 
+	/*
+	 * Mobile S and M (up to 480px): four icons per row exactly. The default
+	 * flex-wrap leaves an uneven last row at these widths (6+2 at 320px,
+	 * 7+1 at 375px) since eight icons at a fixed 40px do not divide evenly
+	 * into the available width. A four-column grid instead, so each icon
+	 * scales up to fill its row rather than leaving dead space — eight
+	 * icons split into two even rows of four.
+	 */
+	@media (max-width: 480px) {
+		.iflynepal-footer__social-list {
+			@apply grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 10px;
+		}
+
+		.iflynepal-footer__social {
+			width: 100%;
+			height: auto;
+			aspect-ratio: 1 / 1;
+		}
+
+		.iflynepal-footer__social svg {
+			@apply h-auto w-auto;
+			width: 38%;
+			height: 38%;
+		}
+	}
+
 	/* --------------------------------------------------------- legal bar */
 
 	.iflynepal-footer__bottom {
@@ -4935,6 +4963,24 @@
 
 		.iflynepal-footer__reviews {
 			@apply justify-start;
+		}
+	}
+
+	/*
+	 * Laptop (1021–1199px): the brand row is still two columns, but the right
+	 * one can no longer hold "Recommended on" beside three chips — the label
+	 * ran into the blurb. It stacks instead, the label above the chips and
+	 * starting on the first chip's left edge. The column is sized to the chips
+	 * (auto) rather than a fixed minimum, so it never outgrows the blurb's share.
+	 */
+	@media (min-width: 1021px) and (max-width: 1199px) {
+		.iflynepal-footer__brand-row {
+			grid-template-columns: minmax(0, 1fr) auto;
+		}
+
+		.iflynepal-footer__reviews {
+			@apply flex-col items-start justify-center;
+			gap: 12px;
 		}
 	}
 
