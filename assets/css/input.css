@@ -1366,10 +1366,10 @@
 	}
 
 	/*
-	 * The label/value pair may shrink below its text. Left at the flex default
-	 * (min-width: auto) it refuses to, so in a narrow field the row grew past
-	 * the field and the chevron landed on the divider. With this the value's
-	 * own truncate does the shortening instead.
+	 * The label/value pair may shrink below its text width so a long value
+	 * wraps inside its field. Left at the flex default (min-width: auto) it
+	 * refused to, the row grew past the field and the chevron landed on the
+	 * divider.
 	 */
 	.iflynepal-hero__finder-row > span:first-child {
 		@apply min-w-0 flex-1;
