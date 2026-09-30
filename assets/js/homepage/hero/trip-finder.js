@@ -35,6 +35,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 	}
 
 	var selectedLabel = ( window.iflynepalHeroFinder && window.iflynepalHeroFinder.selected ) || '%d selected';
+	var pickOneMessage = ( window.iflynepalHeroFinder && window.iflynepalHeroFinder.pickAtLeastOne ) || 'Select at least one of the three filters.';
 
 	pickers.forEach( function ( picker ) {
 		var valueEl   = picker.querySelector( '.iflynepal-hero__finder-value' );
@@ -204,5 +205,41 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			},
 			{ passive: true }
 		);
+	} );
+
+	/*
+	 * At least one of the three pickers has to be set before the form is
+	 * allowed to submit — otherwise "Find My Trip" would send an empty
+	 * query and land on the unfiltered catalogue, which is not what
+	 * clicking it looks like it will do.
+	 */
+	var notice = document.getElementById( 'iflynepal-hero-finder-notice' );
+	var noticeTimer;
+
+	form.addEventListener( 'submit', function ( event ) {
+		var hasSelection = Array.prototype.some.call(
+			form.querySelectorAll( 'input[type="checkbox"], input[type="radio"]' ),
+			function ( input ) {
+				return input.checked;
+			}
+		);
+
+		if ( hasSelection ) {
+			return;
+		}
+
+		event.preventDefault();
+
+		if ( ! notice ) {
+			return;
+		}
+
+		notice.textContent = pickOneMessage;
+		notice.classList.add( 'is-visible' );
+
+		window.clearTimeout( noticeTimer );
+		noticeTimer = window.setTimeout( function () {
+			notice.classList.remove( 'is-visible' );
+		}, 3000 );
 	} );
 } );

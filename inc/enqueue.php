@@ -735,7 +735,8 @@ function iflynepal_enqueue_hero_trip_finder() {
 		'iflynepalHeroFinder',
 		array(
 			/* translators: %d: how many trip types are checked. */
-			'selected' => __( '%d selected', 'iflynepal' ),
+			'selected'    => __( '%d selected', 'iflynepal' ),
+			'pickAtLeastOne' => __( 'Select at least one of the three filters.', 'iflynepal' ),
 		)
 	);
 }

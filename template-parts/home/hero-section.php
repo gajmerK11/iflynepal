@@ -220,8 +220,7 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 						<summary class="iflynepal-hero__finder-trigger">
 							<span class="iflynepal-hero__finder-row">
 								<span>
-									<span class="iflynepal-hero__finder-label"><?php esc_html_e( 'I want to', 'iflynepal' ); ?></span>
-									<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Explore Nepal', 'iflynepal' ); ?>"><?php esc_html_e( 'Explore Nepal', 'iflynepal' ); ?></span>
+									<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Types of Retreats', 'iflynepal' ); ?>"><?php esc_html_e( 'Types of Retreats', 'iflynepal' ); ?></span>
 								</span>
 								<button type="button" class="iflynepal-hero__finder-clear" data-iflynepal-finder-clear aria-label="<?php esc_attr_e( 'Clear this filter', 'iflynepal' ); ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg></button>
 								<svg class="iflynepal-hero__finder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -254,8 +253,7 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 							<summary class="iflynepal-hero__finder-trigger">
 								<span class="iflynepal-hero__finder-row">
 									<span>
-										<span class="iflynepal-hero__finder-label"><?php esc_html_e( 'I have', 'iflynepal' ); ?></span>
-										<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Not sure yet', 'iflynepal' ); ?>"><?php esc_html_e( 'Not sure yet', 'iflynepal' ); ?></span>
+										<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Desired Duration', 'iflynepal' ); ?>"><?php esc_html_e( 'Desired Duration', 'iflynepal' ); ?></span>
 									</span>
 									<button type="button" class="iflynepal-hero__finder-clear" data-iflynepal-finder-clear aria-label="<?php esc_attr_e( 'Clear this filter', 'iflynepal' ); ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg></button>
 									<svg class="iflynepal-hero__finder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -301,8 +299,7 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 							<summary class="iflynepal-hero__finder-trigger">
 								<span class="iflynepal-hero__finder-row">
 									<span>
-										<span class="iflynepal-hero__finder-label"><?php esc_html_e( 'My budget', 'iflynepal' ); ?></span>
-										<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Any price', 'iflynepal' ); ?>"><?php esc_html_e( 'Any price', 'iflynepal' ); ?></span>
+										<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Budget', 'iflynepal' ); ?>"><?php esc_html_e( 'Budget', 'iflynepal' ); ?></span>
 									</span>
 									<button type="button" class="iflynepal-hero__finder-clear" data-iflynepal-finder-clear aria-label="<?php esc_attr_e( 'Clear this filter', 'iflynepal' ); ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg></button>
 									<svg class="iflynepal-hero__finder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -325,6 +322,8 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 						<?php esc_html_e( 'Find My Trip', 'iflynepal' ); ?>
 						<svg class="iflynepal-ico iflynepal-ico-arr" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
 					</button>
+
+					<p class="iflynepal-hero__finder-notice" id="iflynepal-hero-finder-notice" role="alert" aria-live="assertive"></p>
 				</form>
 			<?php endif; ?>
 

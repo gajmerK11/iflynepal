@@ -985,9 +985,19 @@
 	}
 
 	@media (max-width: 760px) {
+		/*
+		 * Smaller and tucked into the corner, so it stays clear of the trust
+		 * bullets above it: its top edge (12px + 34px) now sits under the
+		 * 56px of space the last bullet leaves at the hero's foot.
+		 */
 		.iflynepal-hero__audio {
-			right: 16px;
-			bottom: 16px;
+			@apply h-[34px] w-[34px];
+			right: 12px;
+			bottom: 12px;
+		}
+
+		.iflynepal-hero__audio .iflynepal-ico {
+			@apply h-[15px] w-[15px];
 		}
 	}
 
@@ -1020,6 +1030,13 @@
 	@media (min-width: 761px) {
 		.iflynepal-hero__proof {
 			@apply flex-nowrap justify-between;
+			/*
+			 * The same 20px gutter the finder above keeps (the hero's inner
+			 * container is min(100% - 40px, shell)), capped at the row's own
+			 * 1030px. Without a width the row ran edge to edge on a tablet,
+			 * because left/right are both 0.
+			 */
+			width: min(calc(100% - 40px), 1030px);
 		}
 	}
 
@@ -1052,9 +1069,33 @@
 	}
 
 	@media (max-width: 760px) {
+		/*
+		 * On a phone the bullets stop being pinned to the hero's foot and sit in
+		 * a two-by-two grid straight below the finder's submit button. The hero
+		 * becomes a column so the proof list follows the copy in the flow rather
+		 * than floating over it; the copy's own bottom padding comes in so the
+		 * list sits close to the button. Only a hero that has the list is turned
+		 * into a column — the inner-page heroes have none and are left alone.
+		 */
+		.iflynepal-hero.wp-block-cover:has(.iflynepal-hero__proof) {
+			@apply flex-col justify-center;
+		}
+
+		.iflynepal-hero.wp-block-cover:has(.iflynepal-hero__proof) .wp-block-cover__inner-container {
+			padding-bottom: 28px;
+		}
+
 		.iflynepal-hero__proof {
-			@apply gap-x-6 gap-y-4;
-			bottom: 56px;
+			@apply static mx-auto grid gap-x-4 gap-y-5;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			width: min(calc(100% - 28px), var(--iflynepal-shell));
+			bottom: auto;
+			z-index: auto;
+			padding-bottom: 56px;
+		}
+
+		.iflynepal-hero__proof p {
+			@apply gap-2.5;
 		}
 
 		.iflynepal-hero__proof-glyph {
@@ -1167,15 +1208,31 @@
 
 		.iflynepal-hero__finder-field,
 		.iflynepal-hero__finder-field--select {
-			padding: 5px 10px;
+			padding: 5px 12px;
 		}
 
-		.iflynepal-hero__finder-label {
-			font-size: 9px;
+		/*
+		 * Each field gets a floor wide enough for its whole placeholder plus the
+		 * chevron ("Types of Retreats", "Desired Duration"), so nothing is cut
+		 * short; the fractions still share out whatever is left. The three-field
+		 * floors, the button and the gaps add up to about 650px, under the
+		 * 713px the row has at the narrowest width this block covers (761px).
+		 */
+		.iflynepal-hero__finder--fields-3 {
+			grid-template-columns: minmax(186px, 1.2fr) minmax(186px, 0.8fr) minmax(112px, 0.8fr) auto;
+		}
+
+		.iflynepal-hero__finder--fields-2 {
+			grid-template-columns: minmax(186px, 1.2fr) minmax(186px, 0.8fr) auto;
 		}
 
 		.iflynepal-hero__finder-value {
 			font-size: 14px;
+		}
+
+		/* Less air between the value and its chevron, so both fit the field. */
+		.iflynepal-hero__finder .iflynepal-hero__finder-row {
+			@apply gap-1.5;
 		}
 
 		.iflynepal-hero__finder-submit.iflynepal-button {
@@ -1232,6 +1289,12 @@
 			width: 100%;
 			padding-top: 16px;
 			padding-bottom: 16px;
+		}
+
+		.iflynepal-hero__finder-notice {
+			max-width: calc(100% - 24px);
+			white-space: normal;
+			text-align: center;
 		}
 	}
 
@@ -1302,20 +1365,23 @@
 		@apply flex w-full items-center justify-between gap-3;
 	}
 
-	/* .search-field label */
-	.iflynepal-hero__finder-label {
-		@apply block uppercase;
-		display: block;
-		margin-bottom: 2px;
-		font-size: 10px;
-		font-weight: 800;
-		letter-spacing: 0.12em;
-		color: var(--iflynepal-muted);
+	/*
+	 * The label/value pair may shrink below its text. Left at the flex default
+	 * (min-width: auto) it refuses to, so in a narrow field the row grew past
+	 * the field and the chevron landed on the divider. With this the value's
+	 * own truncate does the shortening instead.
+	 */
+	.iflynepal-hero__finder-row > span:first-child {
+		@apply min-w-0 flex-1;
 	}
 
 	/* .search-field select (the value text shares its typography either way) */
 	.iflynepal-hero__finder-value {
-		@apply block w-full truncate;
+		/*
+		 * Never cut off with an ellipsis: a long choice wraps onto another
+		 * line and the field grows to hold it instead.
+		 */
+		@apply block w-full whitespace-normal break-words;
 		padding: 4px 0;
 		font-weight: 750;
 	}
@@ -1379,6 +1445,29 @@
 
 	.iflynepal-hero__finder-submit.iflynepal-button {
 		@apply min-h-0 self-stretch;
+	}
+
+	/*
+	 * Absolutely positioned under the finder strip rather than in normal
+	 * flow: it appears and disappears on its own timer, and the panel above
+	 * it (proof points, hero copy) cannot be allowed to jump every time it
+	 * shows or hides.
+	 */
+	.iflynepal-hero__finder-notice {
+		@apply pointer-events-none absolute left-1/2 z-[3] rounded-full font-bold opacity-0;
+		top: calc(100% + 12px);
+		transform: translate(-50%, -4px);
+		padding: 9px 18px;
+		background: #b3261e;
+		color: #fff;
+		font-size: 13px;
+		white-space: nowrap;
+		transition: opacity 0.2s ease, transform 0.2s ease;
+	}
+
+	.iflynepal-hero__finder-notice.is-visible {
+		@apply opacity-100;
+		transform: translate(-50%, 0);
 	}
 
 	/*
