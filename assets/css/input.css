@@ -356,8 +356,15 @@
 	.iflynepal-nav-panel {
 		@apply invisible absolute left-1/2 z-40 grid list-none opacity-0;
 		top: calc(100% + 14px);
-		width: 268px;
-		gap: 2px 18px;
+		/*
+		 * Every panel is one column, so it is as wide as its longest link with a
+		 * floor, rather than a fixed width that leaves dead space beside short
+		 * labels. The cap keeps a long label from stretching it across the bar.
+		 */
+		width: max-content;
+		min-width: 190px;
+		max-width: 300px;
+		gap: 2px;
 		padding: 14px;
 		border: 1px solid rgba(255, 255, 255, 0.16);
 		border-radius: 16px;
@@ -372,18 +379,6 @@
 			transform 0.3s var(--iflynepal-ease);
 	}
 
-	/*
-	 * Past the split point the panel goes two-up. `grid-auto-flow: column`
-	 * with the row count set inline by the walker is what fills the first
-	 * column top to bottom before starting the second — the default row-first
-	 * flow would deal the links left, right, left, right instead.
-	 */
-	.iflynepal-nav-panel--split {
-		@apply grid-flow-col;
-		width: 520px;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
-
 	/* The little pointer up at the trigger. */
 	.iflynepal-nav-panel::before {
 		content: '';
@@ -395,17 +390,8 @@
 		transform: translateX(-50%) rotate(45deg);
 	}
 
-	/* The rule between the columns, drawn only when there are two. */
-	.iflynepal-nav-panel--split::after {
-		content: '';
-		@apply absolute left-1/2 w-px;
-		top: 20px;
-		bottom: 20px;
-		background: rgba(255, 255, 255, 0.12);
-	}
-
 	.iflynepal-nav-panel a {
-		@apply relative z-10 flex items-center no-underline opacity-100;
+		@apply relative z-10 flex items-center whitespace-nowrap no-underline opacity-100;
 		min-height: 42px;
 		padding: 9px 13px;
 		border-left: 2px solid transparent;
@@ -444,14 +430,19 @@
 	 * Pointer devices open on hover. The bridge is a transparent strip across
 	 * the 14px gap between the trigger and the panel, so the cursor can travel
 	 * down into the panel without passing over dead space and closing it.
+	 *
+	 * It is only as wide as its own item plus a little slack. It used to span
+	 * the whole 540px panel, which reached under the neighbouring items, so
+	 * moving down off "Explore" landed on it and opened About's panel.
 	 */
 	@media (min-width: 900px) {
 		.iflynepal-nav-item::after {
 			content: '';
-			@apply absolute left-1/2 w-[540px];
+			@apply absolute;
 			top: 100%;
+			left: -12px;
+			right: -12px;
 			height: 20px;
-			transform: translateX(-50%);
 		}
 
 		.iflynepal-nav-item:hover > .iflynepal-nav-panel,
@@ -5171,6 +5162,8 @@
 
 		.iflynepal-nav-panel {
 			@apply static grid w-full translate-x-0 grid-flow-row opacity-0;
+			min-width: 0;
+			max-width: none;
 			margin-top: 0;
 			padding: 0 0 0 12px;
 			border: 0;
@@ -5201,9 +5194,8 @@
 				margin-top 0.7s var(--iflynepal-ease);
 		}
 
-		/* Both are the floating panel's furniture. */
-		.iflynepal-nav-panel::before,
-		.iflynepal-nav-panel--split::after {
+		/* The pointer is the floating panel's furniture. */
+		.iflynepal-nav-panel::before {
 			content: none;
 		}
 

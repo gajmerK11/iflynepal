@@ -20,19 +20,6 @@ defined( 'ABSPATH' ) || exit;
 class IFly_Nepal_Nav_Walker extends Walker_Nav_Menu {
 
 	/**
-	 * How many children the item currently being opened has.
-	 *
-	 * The panel's shape depends on how many links go in it, and start_lvl()
-	 * has no access to the parent it belongs to — so the count is taken in
-	 * display_element(), which does see the tree, and parked here for the two
-	 * methods that run next.
-	 *
-	 * @since 1.0.0
-	 * @var int
-	 */
-	private $children = 0;
-
-	/**
 	 * Records how many children an item has before rendering it.
 	 *
 	 * @since 1.0.0
@@ -58,11 +45,8 @@ class IFly_Nepal_Nav_Walker extends Walker_Nav_Menu {
 	/**
 	 * Opens a dropdown panel.
 	 *
-	 * Past IFLYNEPAL_NAV_PANEL_SPLIT_AT links the panel goes to two columns,
-	 * filled top to bottom rather than left to right — `grid-auto-flow: column`
-	 * with an explicit row count, so the first half reads down the first column
-	 * the way a written list does. The row count is the one thing here that
-	 * depends on the number of links, so it is the one thing set inline.
+	 * Always a single column, however many links it holds; the stylesheet
+	 * sizes it to its longest label.
 	 *
 	 * @since 1.0.0
 	 *
@@ -76,18 +60,7 @@ class IFly_Nepal_Nav_Walker extends Walker_Nav_Menu {
 			return;
 		}
 
-		$classes = 'iflynepal-nav-panel';
-		$style   = '';
-
-		if ( $this->children > IFLYNEPAL_NAV_PANEL_SPLIT_AT ) {
-			$classes .= ' iflynepal-nav-panel--split';
-			$style    = sprintf(
-				' style="grid-template-rows:repeat(%d,minmax(0,auto))"',
-				(int) ceil( $this->children / 2 )
-			);
-		}
-
-		$output .= '<ul class="' . esc_attr( $classes ) . '"' . $style . '>';
+		$output .= '<ul class="iflynepal-nav-panel">';
 	}
 
 	/**
@@ -134,8 +107,7 @@ class IFly_Nepal_Nav_Walker extends Walker_Nav_Menu {
 		$classes = array_filter( (array) $item->classes );
 
 		if ( 0 === $depth && $children ) {
-			$this->children = $children;
-			$classes[]      = 'iflynepal-nav-item';
+			$classes[] = 'iflynepal-nav-item';
 		}
 
 		$output .= '<li class="' . esc_attr( implode( ' ', $classes ) ) . '">';
