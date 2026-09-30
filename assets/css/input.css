@@ -4751,30 +4751,26 @@
 	}
 
 	/*
-	 * Mobile S and M (up to 480px): four icons per row exactly. The default
-	 * flex-wrap leaves an uneven last row at these widths (6+2 at 320px,
-	 * 7+1 at 375px) since eight icons at a fixed 40px do not divide evenly
-	 * into the available width. A four-column grid instead, so each icon
-	 * scales up to fill its row rather than leaving dead space — eight
-	 * icons split into two even rows of four.
+	 * Mobile S (320px) and Mobile M (375px) only — Mobile L (425px) and up
+	 * keep the default flex-wrap at the full 40px size. All eight in one
+	 * row here instead: each icon shrinks to share the row evenly rather
+	 * than wrapping to a second, uneven one (6+2 at 320px, 7+1 at 375px).
 	 */
-	@media (max-width: 480px) {
+	@media (max-width: 424px) {
 		.iflynepal-footer__social-list {
-			@apply grid;
-			grid-template-columns: repeat(4, 1fr);
-			gap: 10px;
+			@apply flex-nowrap;
+			gap: 6px;
 		}
 
 		.iflynepal-footer__social {
-			width: 100%;
-			height: auto;
+			@apply h-auto w-auto grow;
 			aspect-ratio: 1 / 1;
 		}
 
 		.iflynepal-footer__social svg {
 			@apply h-auto w-auto;
-			width: 38%;
-			height: 38%;
+			width: 42%;
+			height: 42%;
 		}
 	}
 
