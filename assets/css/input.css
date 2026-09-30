@@ -1040,6 +1040,32 @@
 		}
 	}
 
+	/*
+	 * Desktop: the row is pinned to the hero's foot, but the hero is only as
+	 * tall as the window. On a full-height monitor (about 930px) the 150px
+	 * leaves a comfortable gap under the finder; on a laptop (about 780px) the
+	 * same 150px sat the row almost against it. So the offset shrinks with the
+	 * window — 0.45px for every pixel of height under 930px — and is held
+	 * between 80px and the original 150px. At 930px and taller nothing changes.
+	 */
+	@media (min-width: 1081px) {
+		.iflynepal-hero__proof {
+			bottom: clamp(80px, calc(150px - (930px - 100vh) * 0.45), 150px);
+			bottom: clamp(80px, calc(150px - (930px - 100dvh) * 0.45), 150px);
+		}
+	}
+
+	/*
+	 * Tablet: the hero is shorter than on a desktop, so at the desktop's 150px
+	 * the row sat right under the finder and its open lists. Dropped 40px
+	 * nearer the hero's foot, which opens the same breathing room above it.
+	 */
+	@media (min-width: 761px) and (max-width: 1080px) {
+		.iflynepal-hero__proof {
+			bottom: 110px;
+		}
+	}
+
 	.iflynepal-hero__proof p {
 		@apply m-0 flex items-center gap-3;
 	}
@@ -1421,7 +1447,15 @@
 	}
 
 	.iflynepal-hero__finder-list {
-		@apply absolute inset-x-0 top-full z-10 mt-2 flex max-h-[280px] flex-col gap-1 overflow-y-auto rounded-xl bg-white p-2;
+		@apply absolute left-0 top-full z-10 mt-2 flex max-h-[280px] flex-col gap-1 overflow-y-auto rounded-xl bg-white p-2;
+		/*
+		 * At least as wide as its field, and wider when an option needs it, so
+		 * a choice such as "USD 0–1,000" is never broken over two lines. The
+		 * cap only stops it running off a very narrow screen.
+		 */
+		width: max-content;
+		min-width: 100%;
+		max-width: min(92vw, 380px);
 		border: 1px solid var(--iflynepal-line);
 		box-shadow: var(--iflynepal-shadow);
 		/*
@@ -1435,8 +1469,18 @@
 	}
 
 	.iflynepal-hero__finder-option {
-		@apply flex cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium;
+		@apply flex cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-lg px-3 py-2.5 text-sm font-medium;
 		color: var(--iflynepal-ink);
+	}
+
+	/*
+	 * The last field sits beside the button, so its list opens towards the
+	 * left instead: growing rightwards it would run under the button and past
+	 * the edge of the strip.
+	 */
+	.iflynepal-hero__finder-fields > :last-child .iflynepal-hero__finder-list {
+		left: auto;
+		right: 0;
 	}
 
 	.iflynepal-hero__finder-option:hover {
