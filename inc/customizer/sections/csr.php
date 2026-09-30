@@ -128,6 +128,28 @@ $wp_customize->add_control(
 	)
 );
 
+$wp_customize->add_setting(
+	'iflynepal_csr_hero_image_mobile',
+	array(
+		'default'           => 0,
+		'sanitize_callback' => 'absint',
+		'transport'         => 'refresh',
+	)
+);
+$wp_customize->add_control(
+	new WP_Customize_Media_Control(
+		$wp_customize,
+		'iflynepal_csr_hero_image_mobile',
+		array(
+			'label'       => __( 'Hero background image (mobile)', 'iflynepal' ),
+			'description' => __( 'Optional. Shown in place of the image above on a phone-width screen, so a portrait-oriented crop can be used. Left empty, the image above is used at every width.', 'iflynepal' ),
+			'section'     => 'iflynepal_csr',
+			'priority'    => 15,
+			'mime_type'   => 'image',
+		)
+	)
+);
+
 /* ------------------------------------------------------------ commitment */
 
 $wp_customize->add_control(

@@ -62,7 +62,6 @@ function iflynepal_enqueue_assets() {
 	$has_cta          = iflynepal_has_cta();
 	$has_about        = iflynepal_has_about();
 	$has_country      = iflynepal_has_about_country();
-	$has_team         = iflynepal_has_team();
 	$has_csr          = iflynepal_has_csr();
 	$has_contact      = iflynepal_has_contact();
 	$has_terms        = iflynepal_has_terms();
@@ -91,7 +90,7 @@ function iflynepal_enqueue_assets() {
 	$has_authors_archive = iflynepal_has_authors_archive();
 	$has_author          = iflynepal_has_author();
 
-	if ( ! $has_hero && ! $has_partner && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_team && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie && ! $has_privacy && ! $has_sustain && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story && ! $has_authors_archive && ! $has_author && ! $has_404 ) {
+	if ( ! $has_hero && ! $has_partner && ! $has_explore && ! $has_trust && ! $has_people && ! $has_testimonials && ! $has_guides && ! $has_cta && ! $has_about && ! $has_country && ! $has_csr && ! $has_contact && ! $has_terms && ! $has_cookie && ! $has_privacy && ! $has_sustain && ! $has_articles && ! $has_article && ! $has_news && ! $has_news_story && ! $has_authors_archive && ! $has_author && ! $has_404 ) {
 		return;
 	}
 
@@ -249,11 +248,11 @@ function iflynepal_enqueue_assets() {
 
 	/*
 	 * The generic, markup-driven motion file. Sections opt in with
-	 * data-iflynepal-motion; the About, About Nepal, Team, CSR, Contact and
+	 * data-iflynepal-motion; the About, About Nepal, CSR, Contact and
 	 * legal templates all do. They share the one file rather than each growing
 	 * a reveal script of their own.
 	 */
-	if ( $has_about || $has_country || $has_team || $has_csr || $has_contact || $has_terms || $has_cookie || $has_privacy || $has_sustain || $has_404 ) {
+	if ( $has_about || $has_country || $has_csr || $has_contact || $has_terms || $has_cookie || $has_privacy || $has_sustain || $has_404 ) {
 		wp_enqueue_script(
 			'iflynepal-sections-motion',
 			IFLYNEPAL_URI . '/assets/js/sections/motion.js',
@@ -562,8 +561,8 @@ function iflynepal_enqueue_people_rail() {
 add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_people_rail' );
 
 /**
- * Enqueues the section-lead one-line fit for the Team page and the About page's
- * Executive Team roster.
+ * Enqueues the section-lead one-line fit for the About page's Executive Team
+ * roster.
  *
  * Kept out of the animation bundle for the same reason as the People rail's
  * buttons: plain layout measurement, nothing GSAP-dependent.
@@ -573,7 +572,7 @@ add_action( 'wp_enqueue_scripts', 'iflynepal_enqueue_people_rail' );
  * @return void
  */
 function iflynepal_enqueue_team_lead_fit() {
-	if ( ! iflynepal_has_team() && ! iflynepal_has_about() ) {
+	if ( ! iflynepal_has_about() ) {
 		return;
 	}
 
@@ -1080,6 +1079,27 @@ function iflynepal_preload_hero_image() {
 	$url = iflynepal_current_hero_image_url();
 
 	if ( '' === $url ) {
+		return;
+	}
+
+	/*
+	 * The About, About Nepal and CSR heroes take an optional phone-width picture
+	 * through the same <picture><source media> pair as the front page, so they
+	 * get the same split preload rather than fetching the desktop image on a
+	 * phone as well.
+	 */
+	$mobile_url = iflynepal_current_hero_image_mobile_url();
+
+	if ( '' !== $mobile_url ) {
+		printf(
+			'<link rel="preload" as="image" href="%s" media="(max-width: 760px)" fetchpriority="high">' . "\n",
+			esc_url( $mobile_url )
+		);
+		printf(
+			'<link rel="preload" as="image" href="%s" media="(min-width: 761px)" fetchpriority="high">' . "\n",
+			esc_url( $url )
+		);
+
 		return;
 	}
 

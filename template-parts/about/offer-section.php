@@ -43,5 +43,21 @@ defined( 'ABSPATH' ) || exit;
 			?>
 		</div>
 
+		<?php
+		/*
+		 * The footnote closes the list rather than any one card, so it sits
+		 * after the rows and follows them however many there are. An empty
+		 * paragraph would leave a gap, so it is printed only when it has text.
+		 */
+		?>
+		<?php if ( '' !== trim( wp_strip_all_tags( iflynepal_about_offer_footnote() ) ) ) : ?>
+			<p class="iflynepal-about-offers__footnote" id="iflynepal-about-offer-footnote" data-iflynepal-reveal>
+				<?php
+				// Sanitized by iflynepal_kses_text() on save and again on read.
+				echo iflynepal_render_about_offer_footnote();
+				?>
+			</p>
+		<?php endif; ?>
+
 	</div>
 </section>

@@ -3937,6 +3937,14 @@
 		letter-spacing: -0.025em;
 	}
 
+	/*
+	 * The About card's heading is longer than the homepage's, so it gets a wider
+	 * measure: "Come to Nepal. Slow Down." has to stay on one line.
+	 */
+	.iflynepal-cta__title--wide {
+		max-width: 1040px;
+	}
+
 	/* The gold mark, so the stroke reads against the photograph behind it. */
 	.iflynepal-cta__title .underline::after {
 		background-image: var(--iflynepal-underline-light);
@@ -4135,6 +4143,34 @@
 	}
 
 	.iflynepal-about-offers__inner {
+		/*
+		 * Declared here rather than on the rows: the footnote under them lines up
+		 * with the photographs' outer edge and needs the same number.
+		 */
+		/*
+		 * How far the photograph runs out past the copy - a share of the gutter
+		 * between the shell and the viewport, never the whole of it. 30px of that
+		 * gutter is reserved so the picture always lands on the page rather than
+		 * against the screen edge.
+		 *
+		 * max()/min() rather than clamp(): the reserve sends the low end
+		 * negative, and clamp() with a lower bound above its upper bound returns
+		 * the lower one - which would pin the bleed at 0 exactly where it should
+		 * be easing in. Below about 1290px the gutter is smaller than the
+		 * reserve, so the bleed resolves to 0 and the photograph squares up with
+		 * the shell.
+		 */
+		--iflynepal-offer-bleed: max(
+			0px,
+			min(calc((100vw - min(100vw - 40px, var(--iflynepal-shell))) / 2 - 30px), 110px)
+		);
+
+		/*
+		 * The step comes down with the column width, or a narrow desktop spends
+		 * most of the row on the offset rather than on the picture.
+		 */
+		--iflynepal-offer-step: clamp(52px, 6.6vw, 96px);
+
 		@apply mx-auto;
 		width: min(calc(100% - 40px), var(--iflynepal-shell));
 	}
@@ -4175,30 +4211,6 @@
 	 * staircase rather than a ladder.
 	 */
 	.iflynepal-about-offers__rows {
-		/*
-		 * How far the photograph runs out past the copy - a share of the gutter
-		 * between the shell and the viewport, never the whole of it. 30px of that
-		 * gutter is reserved so the picture always lands on the page rather than
-		 * against the screen edge.
-		 *
-		 * max()/min() rather than clamp(): the reserve sends the low end
-		 * negative, and clamp() with a lower bound above its upper bound returns
-		 * the lower one - which would pin the bleed at 0 exactly where it should
-		 * be easing in. Below about 1290px the gutter is smaller than the
-		 * reserve, so the bleed resolves to 0 and the photograph squares up with
-		 * the shell.
-		 */
-		--iflynepal-offer-bleed: max(
-			0px,
-			min(calc((100vw - min(100vw - 40px, var(--iflynepal-shell))) / 2 - 30px), 110px)
-		);
-
-		/*
-		 * The step comes down with the column width, or a narrow desktop spends
-		 * most of the row on the offset rather than on the picture.
-		 */
-		--iflynepal-offer-step: clamp(52px, 6.6vw, 96px);
-
 		@apply grid;
 		margin-top: 10px;
 		gap: clamp(48px, 5.5vw, 88px);
@@ -4312,6 +4324,19 @@
 		color: var(--iflynepal-muted);
 		font-size: 14.5px;
 		line-height: 1.72;
+	}
+
+	/*
+	 * The footnote under the list. A sibling of the rows, not part of any card,
+	 * so it lands below the last one however many rows there are. It shifts out
+	 * by the photographs' bleed so it starts on their left edge.
+	 */
+	.iflynepal-about-offers__footnote {
+		@apply font-accent font-semibold italic;
+		margin: 28px 0 0 calc(var(--iflynepal-offer-bleed) * -1);
+		color: var(--iflynepal-navy);
+		font-size: 19px;
+		line-height: 1.4;
 	}
 
 	@media (max-width: 1020px) {

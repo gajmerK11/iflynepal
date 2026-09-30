@@ -159,6 +159,28 @@ $wp_customize->add_control(
 	)
 );
 
+$wp_customize->add_setting(
+	'iflynepal_about_hero_image_mobile',
+	array(
+		'default'           => 0,
+		'sanitize_callback' => 'absint',
+		'transport'         => 'refresh',
+	)
+);
+$wp_customize->add_control(
+	new WP_Customize_Media_Control(
+		$wp_customize,
+		'iflynepal_about_hero_image_mobile',
+		array(
+			'label'       => __( 'Hero background image (mobile)', 'iflynepal' ),
+			'description' => __( 'Optional. Shown in place of the image above on a phone-width screen, so a portrait-oriented crop can be used. Left empty, the image above is used at every width.', 'iflynepal' ),
+			'section'     => 'iflynepal_about_company',
+			'priority'    => 21,
+			'mime_type'   => 'image',
+		)
+	)
+);
+
 /* --------------------------------------------------------------- overview */
 
 $wp_customize->add_control(
@@ -582,6 +604,158 @@ for ( $iflynepal_offer = 1; $iflynepal_offer <= IFLYNEPAL_ABOUT_OFFER_MAX; $ifly
 	);
 }
 
+$wp_customize->add_setting(
+	'iflynepal_about_offer_footnote',
+	array(
+		'default'           => IFLYNEPAL_ABOUT_OFFER_FOOTNOTE_DEFAULT,
+		'sanitize_callback' => 'iflynepal_kses_text',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_about_offer_footnote',
+	array(
+		'label'       => __( 'Footnote', 'iflynepal' ),
+		'description' => __( 'A line printed under the last offering card, however many there are. Start it with an asterisk if it is a footnote. Emptying it hides it.', 'iflynepal' ),
+		'section'     => 'iflynepal_about_company',
+		'priority'    => 190,
+		'type'        => 'textarea',
+	)
+);
+
+/* -------------------------------------------------------------------- cta */
+
+$wp_customize->add_control(
+	new IFly_Nepal_Customize_Heading_Control(
+		$wp_customize,
+		'iflynepal_about_cta_heading',
+		array(
+			'label'    => __( 'Closing card', 'iflynepal' ),
+			'section'  => 'iflynepal_about_company',
+			'priority' => 600,
+			'settings' => array(),
+		)
+	)
+);
+
+$wp_customize->add_setting(
+	'iflynepal_about_cta_title',
+	array(
+		'default'           => IFLYNEPAL_ABOUT_CTA_TITLE_DEFAULT,
+		'sanitize_callback' => 'iflynepal_kses_text',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_about_cta_title',
+	array(
+		'label'       => __( 'Heading', 'iflynepal' ),
+		'description' => __( 'Accepts &lt;br&gt; to control where the line wraps, and &lt;span class="underline"&gt;word&lt;/span&gt; to draw the hand-inked underline under a phrase. Emptying this hides the whole card.', 'iflynepal' ),
+		'section'     => 'iflynepal_about_company',
+		'priority'    => 601,
+		'type'        => 'textarea',
+	)
+);
+
+$wp_customize->add_setting(
+	'iflynepal_about_cta_description',
+	array(
+		'default'           => IFLYNEPAL_ABOUT_CTA_DESCRIPTION_DEFAULT,
+		'sanitize_callback' => 'iflynepal_kses_text',
+		'transport'         => 'postMessage',
+	)
+);
+$wp_customize->add_control(
+	'iflynepal_about_cta_description',
+	array(
+		'label'       => __( 'Paragraph', 'iflynepal' ),
+		'description' => __( 'The line under the heading. Accepts &lt;br&gt;, &lt;em&gt; and &lt;strong&gt;.', 'iflynepal' ),
+		'section'     => 'iflynepal_about_company',
+		'priority'    => 602,
+		'type'        => 'textarea',
+	)
+);
+
+$iflynepal_about_cta_button_labels = array(
+	1 => __( 'Button 1 — the gold action', 'iflynepal' ),
+	2 => __( 'Button 2 — the outlined action', 'iflynepal' ),
+);
+
+for ( $iflynepal_button = 1; $iflynepal_button <= IFLYNEPAL_ABOUT_CTA_BUTTONS; $iflynepal_button++ ) {
+	// A 10-wide band apiece, leaving room for the heading, label and link.
+	$iflynepal_cta_priority = 610 + ( ( $iflynepal_button - 1 ) * 10 );
+
+	$wp_customize->add_control(
+		new IFly_Nepal_Customize_Heading_Control(
+			$wp_customize,
+			'iflynepal_about_cta_button_' . $iflynepal_button . '_heading',
+			array(
+				'label'    => $iflynepal_about_cta_button_labels[ $iflynepal_button ],
+				'section'  => 'iflynepal_about_company',
+				'priority' => $iflynepal_cta_priority,
+				'settings' => array(),
+			)
+		)
+	);
+
+	$wp_customize->add_setting(
+		'iflynepal_about_cta_button_' . $iflynepal_button . '_label',
+		array(
+			'default'           => '',
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'postMessage',
+		)
+	);
+	$wp_customize->add_control(
+		'iflynepal_about_cta_button_' . $iflynepal_button . '_label',
+		array(
+			'label'       => __( 'Label', 'iflynepal' ),
+			'description' => __( 'Optional, and translatable per language. Emptying this removes the button.', 'iflynepal' ),
+			'section'     => 'iflynepal_about_company',
+			'priority'    => $iflynepal_cta_priority + 1,
+			'type'        => 'text',
+		)
+	);
+
+	iflynepal_customizer_add_link_field(
+		$wp_customize,
+		'iflynepal_about_cta_button_' . $iflynepal_button . '_url',
+		array(
+			'default'           => '',
+			'sanitize_callback' => 'iflynepal_sanitize_link',
+		),
+		array(
+			'label'       => __( 'Link', 'iflynepal' ),
+			'description' => __( 'A full URL, or an on-page anchor such as #offer.', 'iflynepal' ),
+			'section'     => 'iflynepal_about_company',
+			'priority'    => $iflynepal_cta_priority + 2,
+			'type'        => 'text',
+		)
+	);
+}
+
+$wp_customize->add_setting(
+	'iflynepal_about_cta_image',
+	array(
+		'default'           => 0,
+		'sanitize_callback' => 'absint',
+		'transport'         => 'refresh',
+	)
+);
+$wp_customize->add_control(
+	new WP_Customize_Media_Control(
+		$wp_customize,
+		'iflynepal_about_cta_image',
+		array(
+			'label'       => __( 'Background image', 'iflynepal' ),
+			'description' => __( 'Fills the card behind a dark scrim, so a wide landscape works best. At least 2000px wide.', 'iflynepal' ),
+			'section'     => 'iflynepal_about_company',
+			'priority'    => 605,
+			'mime_type'   => 'image',
+		)
+	)
+);
+
 /* --------------------------------------------------------------- partials */
 
 if ( isset( $wp_customize->selective_refresh ) ) {
@@ -598,6 +772,9 @@ if ( isset( $wp_customize->selective_refresh ) ) {
 		'offer_kicker'      => 'iflynepal-about-offer-kicker',
 		'offer_title'       => 'iflynepal-about-offer-title',
 		'offer_lead'        => 'iflynepal-about-offer-lead',
+		'offer_footnote'    => 'iflynepal-about-offer-footnote',
+		'cta_title'         => 'iflynepal-about-cta-title',
+		'cta_description'   => 'iflynepal-about-cta-description',
 	);
 
 	foreach ( $iflynepal_about_partials as $iflynepal_field => $iflynepal_selector ) {
@@ -659,12 +836,29 @@ if ( isset( $wp_customize->selective_refresh ) ) {
 		$iflynepal_offer_settings[] = 'iflynepal_about_offer_' . $iflynepal_offer . '_description';
 	}
 
+
 	$wp_customize->selective_refresh->add_partial(
 		'iflynepal_about_offers',
 		array(
 			'selector'        => '#iflynepal-about-offers',
 			'settings'        => $iflynepal_offer_settings,
 			'render_callback' => 'iflynepal_render_about_offers',
+		)
+	);
+
+	$iflynepal_cta_button_settings = array();
+
+	for ( $iflynepal_button = 1; $iflynepal_button <= IFLYNEPAL_ABOUT_CTA_BUTTONS; $iflynepal_button++ ) {
+		$iflynepal_cta_button_settings[] = 'iflynepal_about_cta_button_' . $iflynepal_button . '_label';
+		$iflynepal_cta_button_settings[] = 'iflynepal_about_cta_button_' . $iflynepal_button . '_url';
+	}
+
+	$wp_customize->selective_refresh->add_partial(
+		'iflynepal_about_cta_actions',
+		array(
+			'selector'        => '#iflynepal-about-cta-actions',
+			'settings'        => $iflynepal_cta_button_settings,
+			'render_callback' => 'iflynepal_render_about_cta_actions',
 		)
 	);
 }

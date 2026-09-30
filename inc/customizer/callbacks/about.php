@@ -174,6 +174,27 @@ function iflynepal_about_hero_image_url() {
 	return IFLYNEPAL_ABOUT_HERO_IMAGE_DEFAULT;
 }
 
+/**
+ * Mobile hero photograph URL.
+ *
+ * A separate, optional picture for a phone-width screen. Empty when none is
+ * set, which is the common case: the desktop photograph then shows at every
+ * width, exactly as it always has.
+ *
+ * @since 1.0.0
+ *
+ * @return string Image URL, or an empty string when none is set.
+ */
+function iflynepal_about_hero_image_mobile_url() {
+	$attachment_id = (int) get_theme_mod( 'iflynepal_about_hero_image_mobile', 0 );
+
+	if ( ! $attachment_id ) {
+		return '';
+	}
+
+	return (string) wp_get_attachment_image_url( $attachment_id, 'full' );
+}
+
 /* --------------------------------------------------------------- overview */
 
 /**
@@ -469,6 +490,13 @@ const IFLYNEPAL_ABOUT_OFFER_TITLE_DEFAULT = 'Six ways we put a <span class="unde
  * @since 1.0.0
  */
 const IFLYNEPAL_ABOUT_OFFER_LEAD_DEFAULT = 'Set itineraries and fully customized journeys, across Nepal and beyond.';
+
+/**
+ * Default footnote closing the What We Offer list.
+ *
+ * @since 1.0.0
+ */
+const IFLYNEPAL_ABOUT_OFFER_FOOTNOTE_DEFAULT = '*Trekking and volunteering are also available on request.';
 
 /**
  * Default rows, as the approved design has them.
@@ -912,6 +940,37 @@ function iflynepal_render_about_offer_lead() {
 }
 
 /**
+ * The footnote printed under the What We Offer list.
+ *
+ * @since 1.0.0
+ *
+ * @return string Footnote HTML. Empty hides it.
+ */
+function iflynepal_about_offer_footnote() {
+	$footnote = (string) get_theme_mod( 'iflynepal_about_offer_footnote', IFLYNEPAL_ABOUT_OFFER_FOOTNOTE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$footnote = pll__( $footnote );
+	}
+
+	return iflynepal_kses_text( $footnote );
+}
+
+/**
+ * Renders the footnote under the offer list.
+ *
+ * Its own fragment, outside every card: it closes the list rather than any
+ * one row, so it sits below the last card however many there are.
+ *
+ * @since 1.0.0
+ *
+ * @return string Markup.
+ */
+function iflynepal_render_about_offer_footnote() {
+	return iflynepal_about_offer_footnote();
+}
+
+/**
  * Renders the whole list of offer rows.
  *
  * One partial for the list rather than one per row: the rows alternate sides
@@ -943,6 +1002,179 @@ function iflynepal_render_about_offers() {
 			'' === $number ? '' : '<span class="iflynepal-about-offer__num">' . esc_html( $number ) . '</span>',
 			iflynepal_kses_text( $row['title'] ),
 			iflynepal_kses_text( $row['description'] )
+		);
+	}
+
+	return $markup;
+}
+
+/* --------------------------------------------------------------------- cta */
+
+/**
+ * Default closing-card heading, with the inked underline on the last phrase.
+ *
+ * @since 1.0.0
+ */
+const IFLYNEPAL_ABOUT_CTA_TITLE_DEFAULT = 'Come to Nepal. Slow Down.<br><span class="underline">Go deeper.</span>';
+
+/**
+ * Default closing-card paragraph.
+ *
+ * @since 1.0.0
+ */
+const IFLYNEPAL_ABOUT_CTA_DESCRIPTION_DEFAULT = 'Local journeys and meaningful retreats in Nepal.';
+
+/**
+ * Closing-card heading.
+ *
+ * @since 1.0.0
+ *
+ * @return string Heading HTML. Empty hides the whole card.
+ */
+function iflynepal_about_cta_title() {
+	$title = get_theme_mod( 'iflynepal_about_cta_title', IFLYNEPAL_ABOUT_CTA_TITLE_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$title = pll__( $title );
+	}
+
+	return iflynepal_kses_text( $title );
+}
+
+/**
+ * Closing-card paragraph.
+ *
+ * @since 1.0.0
+ *
+ * @return string Paragraph HTML.
+ */
+function iflynepal_about_cta_description() {
+	$description = get_theme_mod( 'iflynepal_about_cta_description', IFLYNEPAL_ABOUT_CTA_DESCRIPTION_DEFAULT );
+
+	if ( function_exists( 'pll__' ) ) {
+		$description = pll__( $description );
+	}
+
+	return iflynepal_kses_text( $description );
+}
+
+/**
+ * Buttons the closing card carries.
+ *
+ * @since 1.0.0
+ */
+const IFLYNEPAL_ABOUT_CTA_BUTTONS = 2;
+
+/**
+ * One closing-card button's label and link.
+ *
+ * Off by default: the design's copy carries no action, so the card is a
+ * statement until an editor gives a button a label. The label goes through
+ * Polylang like every other string; the link is stored once per setting, so a
+ * translated site points it at the translated page there.
+ *
+ * @since 1.0.0
+ *
+ * @param int $index Button number, 1 or 2.
+ * @return array{label: string, url: string} Label and link. Label is empty when the button is off.
+ */
+function iflynepal_about_cta_button( $index ) {
+	$label = (string) get_theme_mod( 'iflynepal_about_cta_button_' . $index . '_label', '' );
+
+	if ( function_exists( 'pll__' ) ) {
+		$label = pll__( $label );
+	}
+
+	return array(
+		'label' => $label,
+		'url'   => iflynepal_customizer_get_link( 'iflynepal_about_cta_button_' . $index . '_url', '' ),
+	);
+}
+
+/**
+ * Closing-card photograph URL.
+ *
+ * @since 1.0.0
+ *
+ * @return string Image URL, falling back to the homepage CTA's stand-in.
+ */
+function iflynepal_about_cta_image_url() {
+	$attachment_id = (int) get_theme_mod( 'iflynepal_about_cta_image', 0 );
+
+	if ( $attachment_id ) {
+		$url = wp_get_attachment_image_url( $attachment_id, 'full' );
+
+		if ( $url ) {
+			return $url;
+		}
+	}
+
+	return IFLYNEPAL_CTA_IMAGE_DEFAULT;
+}
+
+/**
+ * Whether the closing card is shown.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function iflynepal_about_has_cta() {
+	return '' !== trim( wp_strip_all_tags( iflynepal_about_cta_title() ) );
+}
+
+/**
+ * Renders the closing-card heading.
+ *
+ * @since 1.0.0
+ *
+ * @return string Markup.
+ */
+function iflynepal_render_about_cta_title() {
+	return iflynepal_about_cta_title();
+}
+
+/**
+ * Renders the closing-card paragraph.
+ *
+ * @since 1.0.0
+ *
+ * @return string Markup.
+ */
+function iflynepal_render_about_cta_description() {
+	return iflynepal_about_cta_description();
+}
+
+/**
+ * Renders the closing-card buttons, skipping any with no label.
+ *
+ * The first is the gold action and the second the outlined one, as on the
+ * homepage card.
+ *
+ * @since 1.0.0
+ *
+ * @return string Markup.
+ */
+function iflynepal_render_about_cta_actions() {
+	$modifiers = array(
+		1 => 'iflynepal-btn--primary',
+		2 => 'iflynepal-btn--ghost',
+	);
+
+	$markup = '';
+
+	foreach ( $modifiers as $index => $modifier ) {
+		$button = iflynepal_about_cta_button( $index );
+
+		if ( '' === trim( $button['label'] ) ) {
+			continue;
+		}
+
+		$markup .= sprintf(
+			'<div class="wp-block-button %1$s"><a class="wp-block-button__link wp-element-button" %2$s>%3$s</a></div>',
+			esc_attr( $modifier ),
+			iflynepal_anchor_attr( $button['url'] ),
+			esc_html( $button['label'] )
 		);
 	}
 
@@ -1008,6 +1240,12 @@ function iflynepal_register_about_pll_strings() {
 	pll_register_string( 'About offer kicker', get_theme_mod( 'iflynepal_about_offer_kicker', IFLYNEPAL_ABOUT_OFFER_KICKER_DEFAULT ), $group );
 	pll_register_string( 'About offer title', get_theme_mod( 'iflynepal_about_offer_title', IFLYNEPAL_ABOUT_OFFER_TITLE_DEFAULT ), $group, true );
 	pll_register_string( 'About offer lead', get_theme_mod( 'iflynepal_about_offer_lead', IFLYNEPAL_ABOUT_OFFER_LEAD_DEFAULT ), $group );
+	pll_register_string( 'About offer footnote', get_theme_mod( 'iflynepal_about_offer_footnote', IFLYNEPAL_ABOUT_OFFER_FOOTNOTE_DEFAULT ), $group );
+
+	pll_register_string( 'About CTA title', get_theme_mod( 'iflynepal_about_cta_title', IFLYNEPAL_ABOUT_CTA_TITLE_DEFAULT ), $group, true );
+	pll_register_string( 'About CTA description', get_theme_mod( 'iflynepal_about_cta_description', IFLYNEPAL_ABOUT_CTA_DESCRIPTION_DEFAULT ), $group );
+	pll_register_string( 'About CTA button 1 label', get_theme_mod( 'iflynepal_about_cta_button_1_label', '' ), $group );
+	pll_register_string( 'About CTA button 2 label', get_theme_mod( 'iflynepal_about_cta_button_2_label', '' ), $group );
 
 	for ( $i = 1; $i <= IFLYNEPAL_ABOUT_OFFER_MAX; $i++ ) {
 		$default = iflynepal_about_offer_default( $i );

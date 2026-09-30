@@ -1,13 +1,11 @@
 /**
- * Team: the Customizer's two add/remove lists.
+ * Executive Team: the Customizer's add/remove list on the About page.
  *
- * The rosters — global representatives and the executive team — differ only in
- * which settings they cover and what the buttons say, so they are described in
- * PHP and walked here rather than getting a file each. Same arrangement as the
- * About Nepal page's eleven lists.
+ * The roster is described in PHP and walked here, the same arrangement as the
+ * About Nepal page's lists.
  *
  * The slots themselves are registered in PHP
- * (inc/customizer/sections/team.php); this only decides how many of them the
+ * (inc/customizer/sections/about-executive.php); this only decides how many of them the
  * panel shows. The counts are passed in rather than hard-coded, so they stay in
  * step with the IFLYNEPAL_TEAM_* constants.
  *

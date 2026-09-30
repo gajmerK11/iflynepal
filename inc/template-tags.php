@@ -125,7 +125,7 @@ function iflynepal_the_packages_hero() {
  * @return bool
  */
 function iflynepal_has_hero() {
-	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_team() || iflynepal_has_csr() || iflynepal_has_visa() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie() || iflynepal_has_privacy() || iflynepal_has_sustainability() || iflynepal_has_articles() || iflynepal_has_article() || iflynepal_has_blogs() || iflynepal_has_blog() || iflynepal_has_news() || iflynepal_has_news_story() || iflynepal_has_authors_archive() || iflynepal_has_packages_archive();
+	$has_hero = is_front_page() || iflynepal_has_about() || iflynepal_has_about_country() || iflynepal_has_csr() || iflynepal_has_visa() || iflynepal_has_contact() || iflynepal_has_terms() || iflynepal_has_cookie() || iflynepal_has_privacy() || iflynepal_has_sustainability() || iflynepal_has_articles() || iflynepal_has_article() || iflynepal_has_blogs() || iflynepal_has_blog() || iflynepal_has_news() || iflynepal_has_news_story() || iflynepal_has_authors_archive() || iflynepal_has_packages_archive();
 
 	/**
 	 * Filters whether this request renders a hero.
@@ -272,17 +272,6 @@ function iflynepal_has_about_country() {
 }
 
 /**
- * Whether the current request renders the Team page template.
- *
- * @since 1.0.0
- *
- * @return bool
- */
-function iflynepal_has_team() {
-	return is_page_template( 'page-team.php' );
-}
-
-/**
  * Whether the current request renders the CSR page template.
  *
  * @since 1.0.0
@@ -399,8 +388,7 @@ function iflynepal_has_sustainability() {
 /**
  * The background image of whichever hero this request renders.
  *
- * The front page, the About page, the About Nepal page and the Team page each
- * have their own, and each is the LCP element of its template — so the
+ * The front page, the About page and the About Nepal page each have their own, and each is the LCP element of its template — so the
  * preconnect and the preload in inc/enqueue.php have to resolve the one
  * actually on the page rather than always reaching for the front page's.
  *
@@ -478,10 +466,6 @@ function iflynepal_current_hero_image_url() {
 		return iflynepal_csr_hero_image_url();
 	}
 
-	if ( iflynepal_has_team() ) {
-		return iflynepal_team_hero_image_url();
-	}
-
 	if ( iflynepal_has_about_country() ) {
 		return iflynepal_country_hero_image_url();
 	}
@@ -493,6 +477,34 @@ function iflynepal_current_hero_image_url() {
 	if ( is_front_page() ) {
 		// The slideshow's first frame when there is one — see the getter.
 		return iflynepal_hero_first_image_url();
+	}
+
+	return '';
+}
+
+/**
+ * The mobile background image of whichever inner-page hero this request renders.
+ *
+ * Only the About, About Nepal and CSR heroes have a phone-width picture of their
+ * own, and it is optional — so this is empty far more often than not. The
+ * preload in inc/enqueue.php reads it to offer the browser the same
+ * desktop/mobile choice the hero's <picture> makes.
+ *
+ * @since 1.0.0
+ *
+ * @return string Image URL, or an empty string when there is none.
+ */
+function iflynepal_current_hero_image_mobile_url() {
+	if ( iflynepal_has_csr() ) {
+		return iflynepal_csr_hero_image_mobile_url();
+	}
+
+	if ( iflynepal_has_about_country() ) {
+		return iflynepal_country_hero_image_mobile_url();
+	}
+
+	if ( iflynepal_has_about() ) {
+		return iflynepal_about_hero_image_mobile_url();
 	}
 
 	return '';

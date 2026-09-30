@@ -28,6 +28,7 @@ get_header();
 	get_template_part( 'template-parts/about/vision-section' );
 	get_template_part( 'template-parts/about/offer-section' );
 	get_template_part( 'template-parts/team/executive-section' );
+	get_template_part( 'template-parts/about/cta-section' );
 	?>
 </main><!-- #primary -->
 

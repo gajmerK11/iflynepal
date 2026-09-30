@@ -19,20 +19,26 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$iflynepal_country_hero_image = iflynepal_country_hero_image_url();
+$iflynepal_country_hero_image        = iflynepal_country_hero_image_url();
+$iflynepal_country_hero_image_mobile = iflynepal_country_hero_image_mobile_url();
 ?>
 <section class="wp-block-cover iflynepal-hero iflynepal-hero--page">
 
 	<?php if ( $iflynepal_country_hero_image ) : ?>
 		<div class="iflynepal-hero__media" aria-hidden="true">
-			<img
-				class="iflynepal-hero__still"
-				src="<?php echo esc_url( $iflynepal_country_hero_image ); ?>"
-				alt=""
-				fetchpriority="high"
-				loading="eager"
-				decoding="sync"
-			>
+			<picture>
+				<?php if ( $iflynepal_country_hero_image_mobile ) : ?>
+					<source media="(max-width: 760px)" srcset="<?php echo esc_url( $iflynepal_country_hero_image_mobile ); ?>">
+				<?php endif; ?>
+				<img
+					class="iflynepal-hero__still"
+					src="<?php echo esc_url( $iflynepal_country_hero_image ); ?>"
+					alt=""
+					fetchpriority="high"
+					loading="eager"
+					decoding="sync"
+				>
+			</picture>
 		</div>
 	<?php endif; ?>
 

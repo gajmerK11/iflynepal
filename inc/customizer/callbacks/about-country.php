@@ -143,6 +143,27 @@ function iflynepal_country_hero_image_url() {
 	return IFLYNEPAL_COUNTRY_HERO_IMAGE_DEFAULT;
 }
 
+/**
+ * Mobile hero photograph URL.
+ *
+ * A separate, optional picture for a phone-width screen. Empty when none is
+ * set, which is the common case: the desktop photograph then shows at every
+ * width, exactly as it always has.
+ *
+ * @since 1.0.0
+ *
+ * @return string Image URL, or an empty string when none is set.
+ */
+function iflynepal_country_hero_image_mobile_url() {
+	$attachment_id = (int) get_theme_mod( 'iflynepal_country_hero_image_mobile', 0 );
+
+	if ( ! $attachment_id ) {
+		return '';
+	}
+
+	return (string) wp_get_attachment_image_url( $attachment_id, 'full' );
+}
+
 /* --------------------------------------------------------------- chapters */
 
 /**
