@@ -7542,48 +7542,6 @@
 		font-size: 14px;
 	}
 
-	.iflynepal-contact-rep__country {
-		@apply absolute z-10 font-black uppercase;
-		top: 16px;
-		left: 16px;
-		padding: 7px 14px;
-		border-radius: 999px;
-		background: rgba(255, 255, 255, 0.94);
-		color: var(--iflynepal-navy);
-		font-size: 10px;
-		letter-spacing: 0.13em;
-	}
-
-	.iflynepal-contact-rep__phone {
-		@apply inline-flex items-center justify-center font-bold;
-		gap: 9px;
-		margin-top: 14px;
-		padding: 10px 17px;
-		border: 1px solid var(--iflynepal-line);
-		border-radius: 999px;
-		background: #f0f5ff;
-		color: var(--iflynepal-navy);
-		font-size: 14px;
-		transition: background 0.22s ease, color 0.22s ease, transform 0.22s ease;
-	}
-
-	.iflynepal-contact-rep__phone:hover {
-		background: var(--iflynepal-navy);
-		color: #fff;
-		transform: translateY(-2px);
-	}
-
-	.iflynepal-contact-rep__phone .iflynepal-ico {
-		width: 16px;
-		height: 16px;
-	}
-
-	.iflynepal-contact-rep__channel {
-		margin: 11px 0 0;
-		color: var(--iflynepal-muted);
-		font-size: 12px;
-	}
-
 	@media (max-width: 1080px) {
 		.iflynepal-contact-hero .iflynepal-contact-hero__inner {
 			grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);

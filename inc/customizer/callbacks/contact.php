@@ -8,8 +8,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const IFLYNEPAL_CONTACT_REPRESENTATIVE_MAX = 6;
-
 define( 'IFLYNEPAL_CONTACT_HERO_IMAGE_DEFAULT', IFLYNEPAL_URI . '/assets/images/contact/hero-contact-office-v2.jpg' );
 
 /**
@@ -21,11 +19,11 @@ function iflynepal_contact_defaults() {
 	return array(
 		'hero_kicker'          => __( 'Get in touch', 'iflynepal' ),
 		'hero_title'           => __( 'Contact <em>Us</em>', 'iflynepal' ),
-		'hero_lead'            => __( 'Write to our Kathmandu head office, or speak with our worldwide representative closest to you.', 'iflynepal' ),
+		'hero_lead'            => __( 'Write to our Kathmandu head office.', 'iflynepal' ),
 		'hero_primary_label'   => __( 'Send a message', 'iflynepal' ),
 		'hero_primary_url'     => '#enquiry',
-		'hero_secondary_label' => __( 'Speak with a representative', 'iflynepal' ),
-		'hero_secondary_url'   => '#representatives',
+		'hero_secondary_label' => '',
+		'hero_secondary_url'   => '',
 		'hero_script'          => __( 'we reply personally', 'iflynepal' ),
 		'hero_scroll_label'    => __( 'Write to us', 'iflynepal' ),
 		'office_label'         => __( 'Head Office', 'iflynepal' ),
@@ -45,9 +43,6 @@ function iflynepal_contact_defaults() {
 		'map_hours'            => __( 'Time: 9:00 AM to 5:00 PM', 'iflynepal' ),
 		'map_button_label'     => __( 'Get directions', 'iflynepal' ),
 		'map_button_url'       => 'https://maps.google.com/?q=iFly+Nepal+Kathmandu',
-		'reps_kicker'          => __( 'Across the world', 'iflynepal' ),
-		'reps_title'           => __( 'Speak with our worldwide <span class="accent">representative</span>', 'iflynepal' ),
-		'reps_lead'            => __( 'Your local point of contact, connected directly with our Nepal-based team. Every number below reaches us on Mobile and WhatsApp.', 'iflynepal' ),
 	);
 }
 
@@ -113,114 +108,6 @@ function iflynepal_contact_hero_image_url() {
 	return IFLYNEPAL_CONTACT_HERO_IMAGE_DEFAULT;
 }
 
-/**
- * Default representative cards.
- *
- * @return array[]
- */
-function iflynepal_contact_representative_defaults() {
-	return array(
-		1 => array( 'name' => 'Prem', 'country' => 'Nepal', 'phone' => '+9779851075128', 'phone_label' => '+977-9851075128', 'channel' => '(Mobile/WhatsApp)', 'image' => IFLYNEPAL_URI . '/assets/images/team/member-01-prem-chief-executive.jpg' ),
-		2 => array( 'name' => 'Gyanu', 'country' => 'USA', 'phone' => '+15416784853', 'phone_label' => '+1 (541) 678-4853', 'channel' => '(Mobile/WhatsApp)', 'image' => IFLYNEPAL_URI . '/assets/images/team/member-05-gyanu-business-development-usa.jpg' ),
-		3 => array( 'name' => 'Raju', 'country' => 'France', 'phone' => '+33605738953', 'phone_label' => '+33-605738953', 'channel' => '(Mobile/WhatsApp)', 'image' => IFLYNEPAL_URI . '/assets/images/team/representative-03-raju-france.jpg' ),
-		4 => array( 'name' => 'Vijay', 'country' => 'Italy', 'phone' => '+393471728275', 'phone_label' => '+39 347 172 8275', 'channel' => '(Mobile/WhatsApp)', 'image' => IFLYNEPAL_URI . '/assets/images/team/representative-04-vijay-italy.jpg' ),
-		5 => array( 'name' => 'Suraj', 'country' => 'Australia', 'phone' => '+61449996267', 'phone_label' => '+61 449 996 267', 'channel' => '(Mobile/WhatsApp)', 'image' => IFLYNEPAL_URI . '/assets/images/team/representative-05-suraj-australia.jpg' ),
-		6 => array( 'name' => 'Ayush', 'country' => 'Japan', 'phone' => '+9779841771010', 'phone_label' => __( 'Reach via head office', 'iflynepal' ), 'channel' => '+977 9841771010', 'image' => IFLYNEPAL_URI . '/assets/images/team/representative-06-ayush-japan.jpg' ),
-	);
-}
-
-/**
- * One representative's defaults.
- *
- * @param int $index Card number.
- * @return array
- */
-function iflynepal_contact_representative_default( $index ) {
-	$defaults = iflynepal_contact_representative_defaults();
-
-	return isset( $defaults[ $index ] ) ? $defaults[ $index ] : array( 'name' => '', 'country' => '', 'phone' => '', 'phone_label' => '', 'channel' => '', 'image' => '' );
-}
-
-/**
- * Representative cards with a name.
- *
- * @return array[]
- */
-function iflynepal_contact_representatives() {
-	$cards = array();
-
-	for ( $i = 1; $i <= IFLYNEPAL_CONTACT_REPRESENTATIVE_MAX; $i++ ) {
-		$default = iflynepal_contact_representative_default( $i );
-		$name    = trim( (string) get_theme_mod( 'iflynepal_contact_rep_' . $i . '_name', $default['name'] ) );
-
-		if ( '' === $name ) {
-			continue;
-		}
-
-		$cards[] = array(
-			'index'       => $i,
-			'name'        => $name,
-			'country'     => trim( (string) get_theme_mod( 'iflynepal_contact_rep_' . $i . '_country', $default['country'] ) ),
-			'phone'       => preg_replace( '/[^0-9+]/', '', (string) get_theme_mod( 'iflynepal_contact_rep_' . $i . '_phone', $default['phone'] ) ),
-			'phone_label' => trim( (string) get_theme_mod( 'iflynepal_contact_rep_' . $i . '_phone_label', $default['phone_label'] ) ),
-			'channel'     => trim( (string) get_theme_mod( 'iflynepal_contact_rep_' . $i . '_channel', $default['channel'] ) ),
-		);
-	}
-
-	return $cards;
-}
-
-/**
- * Representative photograph URL.
- *
- * @param int $index Card number.
- * @return string
- */
-function iflynepal_contact_representative_image_url( $index ) {
-	$attachment_id = (int) get_theme_mod( 'iflynepal_contact_rep_' . $index . '_image', 0 );
-
-	if ( $attachment_id ) {
-		$url = wp_get_attachment_image_url( $attachment_id, 'large' );
-
-		if ( $url ) {
-			return $url;
-		}
-	}
-
-	$default = iflynepal_contact_representative_default( $index );
-
-	return $default['image'];
-}
-
-/**
- * Representative photograph alt text.
- *
- * @param array $card Representative data.
- * @return string
- */
-function iflynepal_contact_representative_image_alt( $card ) {
-	$attachment_id = (int) get_theme_mod( 'iflynepal_contact_rep_' . $card['index'] . '_image', 0 );
-
-	if ( $attachment_id ) {
-		$alt = trim( (string) get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) );
-
-		if ( '' !== $alt ) {
-			return $alt;
-		}
-	}
-
-	return sprintf( __( '%1$s, representative in %2$s', 'iflynepal' ), $card['name'], $card['country'] );
-}
-
-/**
- * Whether the representative section has content.
- *
- * @return bool
- */
-function iflynepal_contact_has_representatives() {
-	return '' !== trim( wp_strip_all_tags( iflynepal_contact_text( 'reps_title' ) ) ) && (bool) iflynepal_contact_representatives();
-}
-
 /* ------------------------------------------------------ render callbacks */
 
 /**
@@ -239,9 +126,6 @@ function iflynepal_render_contact_field( $partial ) {
 		'enquiry_kicker',
 		'enquiry_title',
 		'enquiry_lead',
-		'reps_kicker',
-		'reps_title',
-		'reps_lead',
 	);
 
 	if ( in_array( $field, $html_fields, true ) ) {
@@ -350,51 +234,6 @@ function iflynepal_render_contact_map_button() {
 		esc_html( iflynepal_contact_plain( 'map_button_label' ) ),
 		iflynepal_contact_icon( 'arrow-right' )
 	);
-}
-
-/**
- * One representative card.
- *
- * @param array $card Representative data.
- * @return string Markup.
- */
-function iflynepal_contact_representative_card_markup( $card ) {
-	$channel = '';
-
-	if ( '' !== $card['channel'] ) {
-		$channel = '<p class="iflynepal-contact-rep__channel">' . esc_html( $card['channel'] ) . '</p>';
-	}
-
-	return sprintf(
-		'<article id="iflynepal-contact-rep-%1$d" class="iflynepal-team-card iflynepal-contact-rep" data-iflynepal-reveal><div class="iflynepal-team-card__photo"><img src="%2$s" alt="%3$s" loading="lazy"><span class="iflynepal-contact-rep__country">%4$s</span></div><div class="iflynepal-team-card__body"><h3 class="iflynepal-team-card__name">%5$s</h3><a class="iflynepal-contact-rep__phone" %6$s>%7$s%8$s</a>%9$s</div></article>',
-		(int) $card['index'],
-		esc_url( iflynepal_contact_representative_image_url( $card['index'] ) ),
-		esc_attr( iflynepal_contact_representative_image_alt( $card ) ),
-		esc_html( $card['country'] ),
-		esc_html( $card['name'] ),
-		iflynepal_anchor_attr( 'tel:' . $card['phone'] ),
-		iflynepal_contact_icon( 'phone' ),
-		esc_html( $card['phone_label'] ),
-		$channel
-	);
-}
-
-/**
- * Renders a representative card for selective refresh.
- *
- * @param WP_Customize_Partial $partial Partial being rendered.
- * @return string Markup.
- */
-function iflynepal_render_contact_representative( $partial ) {
-	$index = (int) str_replace( 'iflynepal_contact_representative_', '', $partial->id );
-
-	foreach ( iflynepal_contact_representatives() as $card ) {
-		if ( $index === (int) $card['index'] ) {
-			return iflynepal_contact_representative_card_markup( $card );
-		}
-	}
-
-	return '';
 }
 
 /**

@@ -108,7 +108,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 		'iflynepal_contact',
 		array(
 			'title'       => __( 'Contact Us', 'iflynepal' ),
-			'description' => __( 'Content for the Contact Us page template, from the hero through the worldwide representatives.', 'iflynepal' ),
+			'description' => __( 'Content for the Contact Us page template, from the hero through the enquiry form and map.', 'iflynepal' ),
 			'priority'    => 34,
 		)
 	);

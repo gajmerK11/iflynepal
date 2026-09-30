@@ -30,16 +30,6 @@ $wp_customize->add_section(
 	)
 );
 
-$wp_customize->add_section(
-	'iflynepal_contact_representatives',
-	array(
-		'title'       => __( 'Worldwide Representatives', 'iflynepal' ),
-		'description' => __( 'The regional contacts shown below the enquiry form. Empty a name to hide its card.', 'iflynepal' ),
-		'panel'       => 'iflynepal_contact',
-		'priority'    => 30,
-	)
-);
-
 /**
  * Add one ordinary Contact setting and control.
  *
@@ -147,50 +137,6 @@ $iflynepal_contact_add_field( 'map_hours', __( 'Map office hours', 'iflynepal' )
 $iflynepal_contact_add_field( 'map_button_label', __( 'Directions button label', 'iflynepal' ), 'iflynepal_contact_enquiry', 110 );
 $iflynepal_contact_add_field( 'map_button_url', __( 'Directions button link', 'iflynepal' ), 'iflynepal_contact_enquiry', 120, 'url', 'esc_url_raw' );
 
-$iflynepal_contact_add_field( 'reps_kicker', __( 'Kicker', 'iflynepal' ), 'iflynepal_contact_representatives', 10, 'text', 'iflynepal_kses_text' );
-$iflynepal_contact_add_field( 'reps_title', __( 'Heading', 'iflynepal' ), 'iflynepal_contact_representatives', 20, 'textarea', 'iflynepal_kses_text' );
-$iflynepal_contact_add_field( 'reps_lead', __( 'Introduction', 'iflynepal' ), 'iflynepal_contact_representatives', 30, 'textarea', 'iflynepal_kses_text' );
-
-for ( $iflynepal_rep = 1; $iflynepal_rep <= IFLYNEPAL_CONTACT_REPRESENTATIVE_MAX; $iflynepal_rep++ ) {
-	$iflynepal_default  = iflynepal_contact_representative_default( $iflynepal_rep );
-	$iflynepal_priority = 100 + ( ( $iflynepal_rep - 1 ) * 10 );
-	$iflynepal_labels   = array(
-		'name'        => __( 'Name', 'iflynepal' ),
-		'country'     => __( 'Country', 'iflynepal' ),
-		'phone'       => __( 'Telephone link', 'iflynepal' ),
-		'phone_label' => __( 'Displayed phone', 'iflynepal' ),
-		'channel'     => __( 'Contact note', 'iflynepal' ),
-	);
-
-	$wp_customize->add_control(
-		new IFly_Nepal_Customize_Heading_Control(
-			$wp_customize,
-			'iflynepal_contact_rep_' . $iflynepal_rep . '_heading',
-			array(
-				'label'    => sprintf( __( 'Representative %d', 'iflynepal' ), $iflynepal_rep ),
-				'section'  => 'iflynepal_contact_representatives',
-				'priority' => $iflynepal_priority,
-				'settings' => array(),
-			)
-		)
-	);
-
-	foreach ( array( 'name', 'country', 'phone', 'phone_label', 'channel' ) as $iflynepal_field ) {
-		$iflynepal_id = 'iflynepal_contact_rep_' . $iflynepal_rep . '_' . $iflynepal_field;
-		$wp_customize->add_setting( $iflynepal_id, array( 'default' => $iflynepal_default[ $iflynepal_field ], 'sanitize_callback' => 'sanitize_text_field', 'transport' => 'refresh' ) );
-		$wp_customize->add_control( $iflynepal_id, array( 'label' => $iflynepal_labels[ $iflynepal_field ], 'section' => 'iflynepal_contact_representatives', 'priority' => ++$iflynepal_priority, 'type' => 'text' ) );
-	}
-
-	$wp_customize->add_setting( 'iflynepal_contact_rep_' . $iflynepal_rep . '_image', array( 'default' => 0, 'sanitize_callback' => 'absint', 'transport' => 'refresh' ) );
-	$wp_customize->add_control(
-		new WP_Customize_Media_Control(
-			$wp_customize,
-			'iflynepal_contact_rep_' . $iflynepal_rep . '_image',
-			array( 'label' => __( 'Photograph', 'iflynepal' ), 'section' => 'iflynepal_contact_representatives', 'priority' => ++$iflynepal_priority, 'mime_type' => 'image' )
-		)
-	);
-}
-
 /* --------------------------------------------------------------- partials */
 
 if ( isset( $wp_customize->selective_refresh ) ) {
@@ -212,9 +158,6 @@ if ( isset( $wp_customize->selective_refresh ) ) {
 		'map_label'      => '#iflynepal-contact-map-label',
 		'map_title'      => '#iflynepal-contact-map-title',
 		'map_hours'      => '#iflynepal-contact-map-hours',
-		'reps_kicker'    => '#iflynepal-contact-reps-kicker',
-		'reps_title'     => '#iflynepal-contact-representatives-title',
-		'reps_lead'      => '#iflynepal-contact-reps-lead',
 	);
 
 	foreach ( $iflynepal_contact_fields as $iflynepal_field => $iflynepal_selector ) {
@@ -292,22 +235,4 @@ if ( isset( $wp_customize->selective_refresh ) ) {
 			'container_inclusive' => true,
 		)
 	);
-
-	for ( $iflynepal_rep = 1; $iflynepal_rep <= IFLYNEPAL_CONTACT_REPRESENTATIVE_MAX; $iflynepal_rep++ ) {
-		$iflynepal_rep_settings = array();
-
-		foreach ( array( 'name', 'country', 'phone', 'phone_label', 'channel', 'image' ) as $iflynepal_field ) {
-			$iflynepal_rep_settings[] = 'iflynepal_contact_rep_' . $iflynepal_rep . '_' . $iflynepal_field;
-		}
-
-		$wp_customize->selective_refresh->add_partial(
-			'iflynepal_contact_representative_' . $iflynepal_rep,
-			array(
-				'selector'            => '#iflynepal-contact-rep-' . $iflynepal_rep,
-				'settings'            => $iflynepal_rep_settings,
-				'render_callback'     => 'iflynepal_render_contact_representative',
-				'container_inclusive' => true,
-			)
-		);
-	}
 }
