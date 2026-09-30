@@ -2603,6 +2603,13 @@
 		}
 	}
 
+	@media (max-width: 600px) {
+		/* One person fills the rail, so the next card never peeks in beside it. */
+		.iflynepal-people__card {
+			flex-basis: 100%;
+		}
+	}
+
 	@media (max-width: 760px) {
 		/* The mockup narrows the gutter here, from 20px a side to 14px. */
 		.iflynepal-people__inner {
@@ -3018,9 +3025,16 @@
 	}
 
 	@media (max-width: 600px) {
+		/*
+		 * One card fills the rail, so no part of the next one shows beside it.
+		 * The card's 373:600 ratio would make it far too tall at the wide end of
+		 * this range, so it is given a height that follows the screen instead.
+		 */
 		.iflynepal-departures__card {
-			flex-basis: 78vw;
-			max-width: 320px;
+			flex-basis: 100%;
+			max-width: none;
+			aspect-ratio: auto;
+			height: clamp(500px, 150vw, 640px);
 		}
 
 		.iflynepal-departures__reveal {
