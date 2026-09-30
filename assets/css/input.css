@@ -505,10 +505,11 @@
 	 * something outside the site, and the brand colour is what says so before
 	 * the glyph is read.
 	 *
-	 * It "floats" by shadow rather than by position — a fixed element over a
-	 * fixed header would need its own stacking and would still have to move
-	 * with the bar as it docks. Sitting in the flex row costs nothing and
-	 * docks for free.
+	 * It "floats" by shadow rather than by position on desktop — a fixed
+	 * element over a fixed header would need its own stacking and would
+	 * still have to move with the bar as it docks. Sitting in the flex row
+	 * costs nothing and docks for free. Mobile overrides this below: it
+	 * genuinely floats there, off the bar and pinned to the corner.
 	 */
 	.iflynepal-nav-wa {
 		@apply relative grid h-11 w-11 shrink-0 place-items-center rounded-full text-white;
@@ -612,6 +613,10 @@
 	.iflynepal-lang-switch__toggle:hover,
 	.iflynepal-lang-switch__toggle:focus-visible {
 		@apply border-white/50 bg-white/20;
+	}
+
+	.iflynepal-lang-switch__short {
+		@apply hidden uppercase;
 	}
 
 	.iflynepal-lang-switch__toggle .iflynepal-ico {
@@ -1951,13 +1956,17 @@
 
 	.iflynepal-trust__icon {
 		@apply grid h-14 w-14 shrink-0 place-items-center bg-mist;
+		border: 1px solid rgba(5, 69, 167, 0.18);
 		border-radius: 15px;
 		color: var(--iflynepal-navy);
-		transition: background 0.25s ease;
+		transition:
+			background 0.25s ease,
+			border-color 0.25s ease;
 	}
 
 	.iflynepal-trust__feature:hover .iflynepal-trust__icon {
 		@apply bg-sand;
+		border-color: rgba(5, 69, 167, 0.3);
 	}
 
 	/*
@@ -5237,6 +5246,56 @@
 
 		.iflynepal-nav-wa__ico {
 			@apply h-5 w-5;
+		}
+	}
+
+	/*
+	 * Mobile only (matches the off-canvas menu breakpoint above): the
+	 * WhatsApp action leaves the header bar for a floating bubble pinned to
+	 * the bottom-left of the screen — the floating-chat-button pattern
+	 * mobile visitors already expect, and one that stays reachable over the
+	 * off-canvas menu instead of scrolling away inside it. Bottom-left
+	 * rather than bottom-right so it never shares a corner with
+	 * .iflynepal-back-to-top, which keeps that corner to itself. The
+	 * language switcher needs no rule of its own to take the freed spot —
+	 * it already sits before the WhatsApp action in the markup, so
+	 * removing that action from the flex row leaves it there next to the
+	 * menu toggle.
+	 */
+	@media (max-width: 899px) {
+		.iflynepal-nav-wa {
+			@apply fixed h-[52px] w-[52px];
+			top: auto;
+			right: auto;
+			left: 16px;
+			bottom: 32px;
+			z-index: 40;
+		}
+
+		.iflynepal-nav-wa__ico {
+			@apply h-6 w-6;
+		}
+
+		/* Short code instead of the full name — see iflynepal_render_language_switcher(). */
+		.iflynepal-lang-switch__full {
+			@apply hidden;
+		}
+
+		.iflynepal-lang-switch__short {
+			@apply block;
+		}
+
+		.iflynepal-lang-switch__toggle {
+			@apply px-3;
+		}
+
+		.iflynepal-lang-switch__list {
+			@apply min-w-0 p-1;
+			width: 60px;
+		}
+
+		.iflynepal-lang-switch__link {
+			@apply px-2 py-1.5 text-center text-[12px];
 		}
 	}
 

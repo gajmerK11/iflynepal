@@ -84,10 +84,12 @@ function iflynepal_render_language_switcher() {
 		}
 	}
 
-	$iflynepal_current = '';
+	$iflynepal_current      = '';
+	$iflynepal_current_slug = '';
 	foreach ( $iflynepal_languages as $iflynepal_lang ) {
 		if ( ! empty( $iflynepal_lang['current_lang'] ) ) {
-			$iflynepal_current = $iflynepal_lang['name'];
+			$iflynepal_current      = $iflynepal_lang['name'];
+			$iflynepal_current_slug = $iflynepal_lang['slug'];
 			break;
 		}
 	}
@@ -100,7 +102,17 @@ function iflynepal_render_language_switcher() {
 			aria-haspopup="true"
 			aria-controls="iflynepal-lang-switch-list"
 		>
-			<?php echo esc_html( $iflynepal_current ); ?>
+			<?php
+			/*
+			 * Two labels, one shown at a time by CSS: the full name on
+			 * desktop, the short language code (Polylang's own slug, e.g.
+			 * "en", "fr") on mobile — the header bar there is too tight
+			 * for "ENGLISH" next to the floating WhatsApp bubble's old
+			 * seat and the menu toggle.
+			 */
+			?>
+			<span class="iflynepal-lang-switch__full"><?php echo esc_html( $iflynepal_current ); ?></span>
+			<span class="iflynepal-lang-switch__short"><?php echo esc_html( $iflynepal_current_slug ); ?></span>
 			<svg class="iflynepal-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg>
 		</button>
 		<ul id="iflynepal-lang-switch-list" class="iflynepal-lang-switch__list" hidden>
@@ -112,7 +124,8 @@ function iflynepal_render_language_switcher() {
 						class="iflynepal-lang-switch__link<?php echo ! empty( $iflynepal_lang['current_lang'] ) ? ' is-current' : ''; ?>"
 						<?php echo ! empty( $iflynepal_lang['current_lang'] ) ? 'aria-current="true"' : ''; ?>
 					>
-						<?php echo esc_html( $iflynepal_lang['name'] ); ?>
+						<span class="iflynepal-lang-switch__full"><?php echo esc_html( $iflynepal_lang['name'] ); ?></span>
+						<span class="iflynepal-lang-switch__short"><?php echo esc_html( $iflynepal_lang['slug'] ); ?></span>
 					</a>
 				</li>
 			<?php endforeach; ?>

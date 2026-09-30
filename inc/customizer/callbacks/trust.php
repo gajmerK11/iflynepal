@@ -154,6 +154,21 @@ function iflynepal_trust_icons() {
 			'path'  => 'M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z',
 			'fill'  => true,
 		),
+		'dollar-outline' => array(
+			'label' => __( 'Dollar sign (outline)', 'iflynepal' ),
+			'path'  => 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM14.8 9.2c-.3-1-1.3-1.6-2.8-1.6-1.6 0-2.7.8-2.7 2 0 1.3 1.2 1.7 2.7 2.1 1.6.4 2.9.9 2.9 2.3 0 1.3-1.2 2.1-2.9 2.1-1.6 0-2.7-.6-3-1.8M12 6v1.6M12 16.4V18',
+			'fill'  => false,
+		),
+		'badge-outline' => array(
+			'label' => __( 'Award badge (outline)', 'iflynepal' ),
+			'path'  => 'M12 14.4a5.4 5.4 0 1 0 0-10.8 5.4 5.4 0 0 0 0 10.8zM8.6 13.4 7 20.4l5-2.6 5 2.6-1.6-7M12 6.4l.9 1.8 2 .3-1.4 1.4.3 2-1.8-.9-1.8.9.3-2-1.4-1.4 2-.3z',
+			'fill'  => false,
+		),
+		'phone-outline' => array(
+			'label' => __( 'Phone (outline)', 'iflynepal' ),
+			'path'  => 'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z',
+			'fill'  => false,
+		),
 		'leaf'       => array(
 			'label' => __( 'Leaf', 'iflynepal' ),
 			'path'  => 'M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.39 9.32 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05z',
@@ -178,32 +193,32 @@ function iflynepal_trust_icons() {
 function iflynepal_trust_feature_defaults() {
 	return array(
 		1 => array(
-			'icon'        => 'chat-solid',
+			'icon'        => 'chat',
 			'title'       => __( '24/7 Personalized Support', 'iflynepal' ),
 			'description' => __( 'A Kathmandu-based expert is a message away, day or night, before and during your trip.', 'iflynepal' ),
 		),
 		2 => array(
-			'icon'        => 'tag',
-			'title'       => __( 'Experienced Local Guides', 'iflynepal' ),
-			'description' => __( 'Every trek and tour is led by licensed guides who know the trails, culture and language.', 'iflynepal' ),
+			'icon'        => 'mountain',
+			'title'       => __( 'Exclusive Retreats', 'iflynepal' ),
+			'description' => __( 'Small-group and private retreats in quiet corners of Nepal, hosted by local teachers and guides.', 'iflynepal' ),
 		),
 		3 => array(
-			'icon'        => 'dollar',
+			'icon'        => 'dollar-outline',
 			'title'       => __( 'Value for Money', 'iflynepal' ),
 			'description' => __( 'Transparent pricing with no hidden costs, so what you agree to is what you pay.', 'iflynepal' ),
 		),
 		4 => array(
-			'icon'        => 'badge',
+			'icon'        => 'badge-outline',
 			'title'       => __( 'Licensed & Certified', 'iflynepal' ),
 			'description' => __( 'Listed with Nepal Tourism Board, TAAN, NMA and KEEP — memberships you can check.', 'iflynepal' ),
 		),
 		5 => array(
-			'icon'        => 'phone',
+			'icon'        => 'phone-outline',
 			'title'       => __( 'Safety First, Ethical Practices', 'iflynepal' ),
 			'description' => __( 'Vetted operators, briefed guides and clear protocols on every trip we run.', 'iflynepal' ),
 		),
 		6 => array(
-			'icon'        => 'leaf',
+			'icon'        => 'leaf-outline',
 			'title'       => __( 'Sustainable & Inclusive Travel', 'iflynepal' ),
 			'description' => __( 'Trips planned to respect local communities, culture and the environment they pass through.', 'iflynepal' ),
 		),
