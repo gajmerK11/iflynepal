@@ -5066,7 +5066,13 @@
 			color 0.15s ease,
 			background-color 0.15s ease,
 			border-color 0.15s ease,
-			box-shadow 0.15s ease;
+			box-shadow 0.15s ease,
+			opacity 0.25s ease;
+	}
+
+	/* Dimmed while the page is being scrolled; back-to-top.js toggles it. */
+	.iflynepal-back-to-top.is-scrolling:not(:hover):not(:focus) {
+		opacity: 0.5;
 	}
 
 	.iflynepal-back-to-top[hidden] {

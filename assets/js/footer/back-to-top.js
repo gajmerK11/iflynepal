@@ -35,6 +35,7 @@
 	 */
 	var showAfterViewports = 1.5;
 	var ticking = false;
+	var idleTimer;
 
 	/**
 	 * Shows or hides the button for the current scroll position.
@@ -49,6 +50,13 @@
 	window.addEventListener(
 		'scroll',
 		function () {
+			// Dim while scrolling; restore once scrolling has paused.
+			button.classList.add( 'is-scrolling' );
+			window.clearTimeout( idleTimer );
+			idleTimer = window.setTimeout( function () {
+				button.classList.remove( 'is-scrolling' );
+			}, 180 );
+
 			if ( ticking ) {
 				return;
 			}
