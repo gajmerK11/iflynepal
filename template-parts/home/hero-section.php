@@ -220,7 +220,7 @@ $iflynepal_audio_mime = iflynepal_hero_audio_mime();
 						<summary class="iflynepal-hero__finder-trigger">
 							<span class="iflynepal-hero__finder-row">
 								<span>
-									<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Types of Retreats', 'iflynepal' ); ?>"><?php esc_html_e( 'Types of Retreats', 'iflynepal' ); ?></span>
+									<span class="iflynepal-hero__finder-value" data-placeholder="<?php esc_attr_e( 'Activities', 'iflynepal' ); ?>"><?php esc_html_e( 'Activities', 'iflynepal' ); ?></span>
 								</span>
 								<button type="button" class="iflynepal-hero__finder-clear" data-iflynepal-finder-clear aria-label="<?php esc_attr_e( 'Clear this filter', 'iflynepal' ); ?>"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/></svg></button>
 								<svg class="iflynepal-hero__finder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>

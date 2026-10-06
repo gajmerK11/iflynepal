@@ -1239,7 +1239,7 @@
 
 		/*
 		 * Each field gets a floor wide enough for its whole placeholder plus the
-		 * chevron ("Types of Retreats", "Desired Duration"), so nothing is cut
+		 * chevron ("Activities", "Desired Duration"), so nothing is cut
 		 * short; the fractions still share out whatever is left. The three-field
 		 * floors, the button and the gaps add up to about 650px, under the
 		 * 713px the row has at the narrowest width this block covers (761px).
