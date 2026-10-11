@@ -417,3 +417,86 @@ function iflynepal_schema_legal_name( $graph ) {
 	return $graph;
 }
 add_filter( 'wpseo_schema_graph', 'iflynepal_schema_legal_name', 20 );
+
+/**
+ * Adds the homepage's team members and customer reviews to the graph.
+ *
+ * Both are read from the same getters that print the visible sections, so the
+ * names, roles and quotes match the page. No rating is stated: the site stores
+ * none, and an invented one is against Google's review guidelines.
+ *
+ * @since 1.0.0
+ *
+ * @param array $graph Graph pieces.
+ * @return array
+ */
+function iflynepal_schema_home_people_reviews( $graph ) {
+	if ( ! is_front_page() ) {
+		return $graph;
+	}
+
+	$org_id = iflynepal_schema_piece_id( $graph, 'Organization' );
+	$base   = trailingslashit( home_url( '/' ) );
+
+	if ( function_exists( 'iflynepal_team_members' ) ) {
+		foreach ( iflynepal_team_members() as $card ) {
+			$name = trim( wp_strip_all_tags( $card['name'] ) );
+			$role = trim( wp_strip_all_tags( $card['role'] ) );
+
+			$person = array(
+				'@type' => 'Person',
+				'@id'   => $base . '#team-' . $card['index'],
+				'name'  => $name,
+			);
+
+			if ( '' !== $role ) {
+				$person['jobTitle'] = $role;
+			}
+
+			$image = iflynepal_team_member_image_url( $card['index'] );
+
+			if ( '' !== $image ) {
+				$person['image'] = esc_url_raw( $image );
+			}
+
+			if ( $org_id ) {
+				$person['worksFor'] = array( '@id' => $org_id );
+			}
+
+			$graph[] = $person;
+		}
+	}
+
+	if ( function_exists( 'iflynepal_get_testimonials' ) ) {
+		foreach ( iflynepal_get_testimonials() as $testimonial ) {
+			$review = array(
+				'@type'      => 'Review',
+				'@id'        => $base . '#review-' . $testimonial['id'],
+				'reviewBody' => trim( wp_strip_all_tags( $testimonial['body'] ) ),
+			);
+
+			$headline = trim( wp_strip_all_tags( $testimonial['headline'] ) );
+			$author   = trim( wp_strip_all_tags( $testimonial['name'] ) );
+
+			if ( '' !== $headline ) {
+				$review['name'] = $headline;
+			}
+
+			if ( '' !== $author ) {
+				$review['author'] = array(
+					'@type' => 'Person',
+					'name'  => $author,
+				);
+			}
+
+			if ( $org_id ) {
+				$review['itemReviewed'] = array( '@id' => $org_id );
+			}
+
+			$graph[] = $review;
+		}
+	}
+
+	return $graph;
+}
+add_filter( 'wpseo_schema_graph', 'iflynepal_schema_home_people_reviews' );
