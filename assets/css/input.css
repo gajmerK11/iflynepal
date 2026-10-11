@@ -4699,6 +4699,26 @@
 	 * by it every time the query matches.
 	 */
 	@media (min-width: 1021px) {
+		/*
+		 * Fluid row: however many menus are assigned (one to five, plus Head
+		 * Office), the columns share the width equally with a fixed gap, and
+		 * Head Office keeps its wider 1.6 share.
+		 */
+		.iflynepal-footer__primary {
+			@apply flex;
+			gap: 28px;
+		}
+
+		.iflynepal-footer__col {
+			@apply min-w-0;
+			flex: 1 1 0;
+		}
+
+		.iflynepal-footer__office {
+			@apply min-w-0;
+			flex: 1.6 1 0;
+		}
+
 		.iflynepal-footer__col a {
 			white-space: nowrap;
 		}
