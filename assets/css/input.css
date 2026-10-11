@@ -5420,16 +5420,26 @@
 	 */
 	@media (max-width: 899px) {
 		.iflynepal-nav-wa {
-			@apply fixed h-[52px] w-[52px];
-			top: auto;
-			right: auto;
-			left: 16px;
-			bottom: 32px;
-			z-index: 40;
+			@apply fixed h-[50px] w-[50px];
+			/*
+			 * Docked to the right edge as the half-pill twin of the Connect Us
+			 * tab (ifn-booking connect.css: fixed, right 0, top 45%, 50px tall,
+			 * radius 999px 0 0 999px), stacked directly above it with an 8px gap.
+			 */
+			top: calc(45% - 58px);
+			right: 0;
+			left: auto;
+			bottom: auto;
+			border-radius: 999px 0 0 999px;
+			z-index: 2500;
+		}
+
+		.iflynepal-nav-wa__pulse {
+			border-radius: 999px 0 0 999px;
 		}
 
 		.iflynepal-nav-wa__ico {
-			@apply h-6 w-6;
+			@apply h-[26px] w-[26px];
 		}
 
 		/* Short code instead of the full name — see iflynepal_render_language_switcher(). */
