@@ -145,8 +145,8 @@ function iflynepal_schema_memberships() {
 		array(
 			'Nepal Tourism Board' => 'https://ntb.gov.np/',
 			'TAAN'                => 'https://taan.org.np/',
-			'NMA'                 => '',
-			'KEEP'                => '',
+			'Nepal Mountaineering Association'       => 'https://www.nepalmountaineering.org/',
+			'Kathmandu Environmental Education Project' => 'https://keepnepal.org/',
 		)
 	);
 
@@ -178,6 +178,15 @@ function iflynepal_schema_memberships() {
  */
 function iflynepal_schema_organization( $data ) {
 	$data['@type'] = array( 'Organization', 'TravelAgency' );
+
+	/**
+	 * Filters the registered company name, as on the registration certificate.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $legal_name Legal name.
+	 */
+	$data['legalName'] = apply_filters( 'iflynepal_schema_legal_name', 'iFly Nepal Pvt. Ltd.' );
 
 	$address = iflynepal_schema_postal_address();
 
@@ -363,3 +372,26 @@ function iflynepal_schema_home_graph( $graph ) {
 	return $graph;
 }
 add_filter( 'wpseo_schema_graph', 'iflynepal_schema_home_graph' );
+
+/**
+ * Types the Contact Us page as a ContactPage and ties it to the Organization.
+ *
+ * Yoast prints every page as a plain WebPage. The page is found by its template
+ * so the translated copy is typed the same way.
+ *
+ * @since 1.0.0
+ *
+ * @param array $data WebPage piece.
+ * @return array
+ */
+function iflynepal_schema_contact_page( $data ) {
+	if ( ! is_page_template( 'page-contact-us.php' ) ) {
+		return $data;
+	}
+
+	$data['@type']      = 'ContactPage';
+	$data['mainEntity'] = array( '@id' => trailingslashit( home_url( '/' ) ) . '#organization' );
+
+	return $data;
+}
+add_filter( 'wpseo_schema_webpage', 'iflynepal_schema_contact_page' );
