@@ -144,7 +144,7 @@ function iflynepal_schema_memberships() {
 		'iflynepal_schema_memberships',
 		array(
 			'Nepal Tourism Board' => 'https://ntb.gov.np/',
-			'TAAN'                => 'https://taan.org.np/',
+			"Trekking Agencies' Association of Nepal (TAAN)" => 'https://taan.org.np/',
 			'Nepal Mountaineering Association'       => 'https://www.nepalmountaineering.org/',
 			'Kathmandu Environmental Education Project' => 'https://keepnepal.org/',
 		)
@@ -178,15 +178,6 @@ function iflynepal_schema_memberships() {
  */
 function iflynepal_schema_organization( $data ) {
 	$data['@type'] = array( 'Organization', 'TravelAgency' );
-
-	/**
-	 * Filters the registered company name, as on the registration certificate.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $legal_name Legal name.
-	 */
-	$data['legalName'] = apply_filters( 'iflynepal_schema_legal_name', 'iFly Nepal Pvt. Ltd.' );
 
 	$address = iflynepal_schema_postal_address();
 
@@ -395,3 +386,34 @@ function iflynepal_schema_contact_page( $data ) {
 	return $data;
 }
 add_filter( 'wpseo_schema_webpage', 'iflynepal_schema_contact_page' );
+
+/**
+ * Sets the Organization's legal name on the finished graph.
+ *
+ * Yoast fills legalName from its own settings after the organization filter has
+ * run, so the value is set here, once the whole graph is built.
+ *
+ * @since 1.0.0
+ *
+ * @param array $graph Graph pieces.
+ * @return array
+ */
+function iflynepal_schema_legal_name( $graph ) {
+	/**
+	 * Filters the registered company name, as on the registration certificate.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $legal_name Legal name.
+	 */
+	$legal_name = apply_filters( 'iflynepal_schema_legal_name', 'iFly Nepal Pvt. Ltd.' );
+
+	foreach ( $graph as $key => $piece ) {
+		if ( isset( $piece['@type'] ) && in_array( 'Organization', (array) $piece['@type'], true ) ) {
+			$graph[ $key ]['legalName'] = $legal_name;
+		}
+	}
+
+	return $graph;
+}
+add_filter( 'wpseo_schema_graph', 'iflynepal_schema_legal_name', 20 );
