@@ -388,6 +388,26 @@ function iflynepal_schema_contact_page( $data ) {
 add_filter( 'wpseo_schema_webpage', 'iflynepal_schema_contact_page' );
 
 /**
+ * Puts CollectionPage first in the blog page's type list.
+ *
+ * Yoast prints the blog page as [ WebPage, CollectionPage ]. The page is a
+ * listing, so the specific type leads and WebPage follows.
+ *
+ * @since 1.0.0
+ *
+ * @param array $data WebPage graph piece.
+ * @return array
+ */
+function iflynepal_schema_blog_page( $data ) {
+	if ( is_home() && ! is_front_page() ) {
+		$data['@type'] = array( 'CollectionPage', 'WebPage' );
+	}
+
+	return $data;
+}
+add_filter( 'wpseo_schema_webpage', 'iflynepal_schema_blog_page' );
+
+/**
  * Sets the Organization's legal name on the finished graph.
  *
  * Yoast fills legalName from its own settings after the organization filter has
