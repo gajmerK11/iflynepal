@@ -408,6 +408,22 @@ function iflynepal_schema_blog_page( $data ) {
 add_filter( 'wpseo_schema_webpage', 'iflynepal_schema_blog_page' );
 
 /**
+ * Types a single blog article as a BlogPosting.
+ *
+ * Yoast prints it as a plain Article. BlogPosting is the schema.org type for one
+ * post; Blog itself is the container type for the whole blog, so it is not used.
+ *
+ * @since 1.0.0
+ *
+ * @param string|string[] $type Article type.
+ * @return string|string[]
+ */
+function iflynepal_schema_article_type( $type ) {
+	return is_singular( IFLYNEPAL_ARTICLE_POST_TYPE ) ? 'BlogPosting' : $type;
+}
+add_filter( 'wpseo_schema_article_type', 'iflynepal_schema_article_type' );
+
+/**
  * Sets the Organization's legal name on the finished graph.
  *
  * Yoast fills legalName from its own settings after the organization filter has
