@@ -690,7 +690,8 @@
 	}
 
 	.iflynepal-hero .wp-block-cover__video-background {
-		z-index: -2;
+		/* !important: core cover CSS (loaded on live) sets this to 0 at higher specificity, which paints the video over the trust points. */
+		z-index: -2 !important;
 	}
 
 	/*
