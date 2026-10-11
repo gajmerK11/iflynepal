@@ -419,7 +419,7 @@ add_filter( 'wpseo_schema_webpage', 'iflynepal_schema_blog_page' );
  * @return string|string[]
  */
 function iflynepal_schema_article_type( $type ) {
-	return is_singular( IFLYNEPAL_ARTICLE_POST_TYPE ) ? 'BlogPosting' : $type;
+	return is_singular( array( 'post', IFLYNEPAL_ARTICLE_POST_TYPE ) ) ? 'BlogPosting' : $type;
 }
 add_filter( 'wpseo_schema_article_type', 'iflynepal_schema_article_type' );
 
