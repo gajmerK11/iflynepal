@@ -5360,30 +5360,12 @@
 	 * Mobile S (320px) only — the two-column row at mobile M and up (375px,
 	 * from the 1020px rule above) still reads fine there, but a lone leftover
 	 * column (Head Office, the sixth item) in the last row looks stranded
-	 * against the left edge at this width. One column, and every column
-	 * centred rather than left-aligned, since a single centred stack is what
-	 * the design's narrowest tier uses everywhere else on the site.
+	 * against the left edge at this width. One column, left-aligned like the
+	 * rest of the footer on mobile.
 	 */
 	@media (max-width: 374px) {
 		.iflynepal-footer__primary {
 			grid-template-columns: 1fr;
-			justify-items: center;
-		}
-
-		.iflynepal-footer__col {
-			text-align: center;
-		}
-
-		.iflynepal-footer__col a {
-			@apply mx-auto;
-		}
-
-		.iflynepal-footer__office {
-			text-align: center;
-		}
-
-		.iflynepal-footer__contact {
-			@apply justify-center;
 		}
 	}
 
