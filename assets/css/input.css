@@ -5007,9 +5007,8 @@
 			grid-column: 1 / -1;
 			grid-row: 3;
 			gap: 14px 0;
-			padding: 34px 0 30px;
-			margin-inline: auto;
-			width: min(100%, 960px);
+			padding: 34px calc((100% - min(100%, 960px)) / 2) 30px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 		}
 
 		.iflynepal-footer__legal a {
@@ -5022,13 +5021,13 @@
 		.iflynepal-footer__bottom > span {
 			grid-column: 1;
 			grid-row: 4;
-			padding: 0 0 28px;
+			padding: 28px 0;
 		}
 
 		.iflynepal-footer__follow {
 			grid-column: 2;
 			grid-row: 4;
-			padding: 0 0 28px;
+			padding: 28px 0;
 		}
 
 		.iflynepal-footer__follow .iflynepal-footer__row-label {
@@ -5231,6 +5230,36 @@
 	}
 
 	/*
+	 * Tablet (768–1020px): the legal links take the desktop arrangement — their
+	 * own centred rows, six to a row, extras wrapping onto the next — with the
+	 * copyright underneath.
+	 */
+	@media (min-width: 768px) and (max-width: 1020px) {
+		.iflynepal-footer__bottom {
+			@apply flex-wrap justify-start;
+			gap: 0;
+			padding: 0 0 25px;
+		}
+
+		.iflynepal-footer__legal {
+			@apply justify-center;
+			order: -1;
+			width: 100%;
+			gap: 14px 0;
+			padding: 30px 0;
+			margin-bottom: 25px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+		}
+
+		.iflynepal-footer__legal a {
+			@apply text-center;
+			flex: 0 0 calc(100% / 6);
+			padding: 0 6px;
+			color: rgba(255, 255, 255, 0.92);
+		}
+	}
+
+	/*
 	 * Mobile M and L (375–767px). Widening column 2 to fit Head Office (the
 	 * earlier fix here) solved the wrap, but it reserved that width for the
 	 * whole column — Trek and Resources, which share column 2 and only ever
@@ -5288,6 +5317,42 @@
 		.iflynepal-footer__legal {
 			@apply justify-start;
 			gap: 14px 22px;
+		}
+	}
+
+	/*
+	 * Mobile (up to 767px): the same centred legal rows and divider as tablet
+	 * and desktop, but two links to a row (three from 480px) — six would be
+	 * ~55px each on a phone. Sits after the 760px rule so it wins over its
+	 * left-aligned legal list.
+	 */
+	@media (max-width: 767px) {
+		.iflynepal-footer__bottom {
+			padding: 0 0 25px;
+			gap: 0;
+		}
+
+		.iflynepal-footer__legal {
+			@apply justify-center;
+			order: -1;
+			width: 100%;
+			gap: 14px 0;
+			padding: 28px 0;
+			margin-bottom: 25px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+		}
+
+		.iflynepal-footer__legal a {
+			@apply text-center;
+			flex: 0 0 50%;
+			padding: 0 6px;
+			color: rgba(255, 255, 255, 0.92);
+		}
+	}
+
+	@media (min-width: 480px) and (max-width: 767px) {
+		.iflynepal-footer__legal a {
+			flex-basis: calc(100% / 3);
 		}
 	}
 
