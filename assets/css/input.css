@@ -4994,6 +4994,26 @@
 			grid-column: 1 / -1;
 		}
 
+		/*
+		 * Fluid columns: whatever menus are assigned (3, 4, 5…) plus Head
+		 * Office share the full row, Head Office keeping its 1.6 share, so
+		 * fewer columns widen to fill the footer instead of leaving the
+		 * empty slots of a fixed six-column grid.
+		 */
+		.iflynepal-footer__primary {
+			display: flex;
+			gap: 56px;
+		}
+
+		.iflynepal-footer__primary > * {
+			flex: 1 1 0;
+			min-width: 0;
+		}
+
+		.iflynepal-footer__primary > .iflynepal-footer__office {
+			flex-grow: 1.6;
+		}
+
 		.iflynepal-footer__primary { grid-row: 1; }
 		.iflynepal-footer__brand-row { grid-row: 2; }
 		.iflynepal-footer__wordmark { grid-row: 5; }
