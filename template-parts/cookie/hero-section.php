@@ -35,20 +35,14 @@ defined( 'ABSPATH' ) || exit;
 		<div class="wp-block-group iflynepal-hero__copy">
 
 			<h1 class="wp-block-heading iflynepal-hero__title">
-				<?php
-				printf(
-					/* translators: %s: the word "Policy", set in the accent face. */
-					esc_html__( 'Cookie %s', 'iflynepal' ),
-					'<em>' . esc_html__( 'Policy', 'iflynepal' ) . '</em>'
-				);
-				?>
+				<?php echo iflynepal_legal_head( 'cookie', 'hero_title' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized by iflynepal_kses_text(). ?>
 			</h1>
 
 		</div>
 	</div>
 
 	<a class="iflynepal-legal-hero__scroll" <?php echo iflynepal_anchor_attr( '#types' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>>
-		<?php esc_html_e( 'Types of cookies', 'iflynepal' ); ?>
+		<?php echo esc_html( wp_strip_all_tags( iflynepal_legal_head( 'cookie', 'hero_pill' ) ) ); ?>
 		<span aria-hidden="true">&#8595;</span>
 	</a>
 

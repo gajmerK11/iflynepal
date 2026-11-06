@@ -22,6 +22,7 @@ require_once IFLYNEPAL_DIR . '/inc/terms.php';
 require_once IFLYNEPAL_DIR . '/inc/cookie.php';
 require_once IFLYNEPAL_DIR . '/inc/privacy.php';
 require_once IFLYNEPAL_DIR . '/inc/sustainability.php';
+require_once IFLYNEPAL_DIR . '/inc/legal-content.php';
 require_once IFLYNEPAL_DIR . '/inc/cpts/article-cpt.php';
 require_once IFLYNEPAL_DIR . '/inc/sections.php';
 require_once IFLYNEPAL_DIR . '/inc/articles.php';

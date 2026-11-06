@@ -1,19 +1,17 @@
 <?php
 /**
- * Sustainability Policy: the six promises, above the policy itself.
+ * Sustainability Policy: the promises, above the policy itself.
  *
- * The page's summary, the way the Cookie Policy opens on its four cookie
- * types: a reader who wants the gist should have it before a numbered policy.
- * The cards are generated from inc/sustainability.php.
- *
- * Not editable, for the same reason the clauses are not; see
- * inc/sustainability.php.
+ * Editable like the rest of the page: the heading and each card are
+ * Customizer fields, and the cards are the add/remove list under Sustainability Policy > Our commitment. See inc/legal-content.php.
  *
  * @package IFly_Nepal
  * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
+
+$iflynepal_kicker = iflynepal_legal_extra( 'sustainability', 'kicker' );
 ?>
 <section
 	class="wp-block-group iflynepal-legal"
@@ -24,20 +22,22 @@ defined( 'ABSPATH' ) || exit;
 	<div class="iflynepal-legal__inner">
 
 		<div class="iflynepal-legal-head" data-iflynepal-reveal>
-			<p class="iflynepal-legal-head__kicker">
-				<?php esc_html_e( 'Our commitment', 'iflynepal' ); ?>
-			</p>
+			<?php if ( '' !== $iflynepal_kicker ) : ?>
+				<p class="iflynepal-legal-head__kicker">
+					<?php echo $iflynepal_kicker; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized by iflynepal_kses_text(). ?>
+				</p>
+			<?php endif; ?>
 			<h2 class="wp-block-heading iflynepal-legal-head__title" id="iflynepal-sustain-pledge-title">
-				<?php echo wp_kses_post( __( 'Six promises we <span class="underline">hold ourselves to</span>', 'iflynepal' ) ); ?>
+				<?php echo iflynepal_legal_extra( 'sustainability', 'title' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized by iflynepal_kses_text(). ?>
 			</h2>
 			<p class="iflynepal-legal-head__lead">
-				<?php esc_html_e( 'Sustainability is not just an environmental concern — it is an integrated approach involving ethical business, community empowerment, cultural respect and climate-conscious travel.', 'iflynepal' ); ?>
+				<?php echo iflynepal_legal_extra( 'sustainability', 'lead' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized by iflynepal_kses_text(). ?>
 			</p>
 		</div>
 
 		<div class="iflynepal-sustain-pledges">
 			<?php
-			// Titles and text are escaped inside the render callback.
+			// Every part is escaped inside the render callback.
 			echo iflynepal_render_sustainability_pledges();
 			?>
 		</div>

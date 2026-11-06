@@ -124,7 +124,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 		'iflynepal_terms',
 		array(
 			'title'       => __( 'Terms and Conditions', 'iflynepal' ),
-			'description' => __( 'The hero photograph and the closing card on the Terms & Conditions page. The clauses themselves are part of the document and are edited in the theme.', 'iflynepal' ),
+			'description' => __( 'Everything on the Terms & Conditions page: the hero, the headings, each clause and the closing card.', 'iflynepal' ),
 			'priority'    => 35,
 		)
 	);
@@ -138,7 +138,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 		'iflynepal_cookie',
 		array(
 			'title'       => __( 'Cookie Policy', 'iflynepal' ),
-			'description' => __( 'The hero photograph on the Cookie Policy page. The policy itself is part of the document and is edited in the theme.', 'iflynepal' ),
+			'description' => __( 'Everything on the Cookie Policy page: the hero, the headings, the cookie types and each clause.', 'iflynepal' ),
 			'priority'    => 36,
 		)
 	);
@@ -148,7 +148,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 		'iflynepal_privacy',
 		array(
 			'title'       => __( 'Privacy Policy', 'iflynepal' ),
-			'description' => __( 'The hero photograph on the Privacy Policy page. The policy itself is part of the document and is edited in the theme.', 'iflynepal' ),
+			'description' => __( 'Everything on the Privacy Policy page: the hero, the headings and each clause.', 'iflynepal' ),
 			'priority'    => 37,
 		)
 	);
@@ -161,7 +161,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 		'iflynepal_sustainability',
 		array(
 			'title'       => __( 'Sustainability Policy', 'iflynepal' ),
-			'description' => __( 'The hero photograph and the Sustainability Coordinator card on the Sustainability Policy page. The policy itself is part of the document and is edited in the theme.', 'iflynepal' ),
+			'description' => __( 'Everything on the Sustainability Policy page: the hero, the headings, the promises, each clause and the Sustainability Coordinator card.', 'iflynepal' ),
 			'priority'    => 38,
 		)
 	);
@@ -247,6 +247,7 @@ function iflynepal_customize_register( WP_Customize_Manager $wp_customize ) {
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/cookie.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/privacy.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/sustainability.php';
+	iflynepal_legal_register_customizer( $wp_customize );
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/articles.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/blogs.php';
 	require IFLYNEPAL_DIR . '/inc/customizer/sections/news.php';
@@ -652,6 +653,21 @@ function iflynepal_customizer_controls_assets() {
 				),
 			),
 		)
+	);
+
+	wp_enqueue_script(
+		'iflynepal-customizer-legal',
+		IFLYNEPAL_URI . '/assets/js/legal/customizer.js',
+		array( 'iflynepal-customizer-repeater' ),
+		iflynepal_asset_version( 'assets/js/legal/customizer.js' ),
+		true
+	);
+
+	// The Sustainability Policy's "On this page" and "Our commitment" lists.
+	wp_localize_script(
+		'iflynepal-customizer-legal',
+		'iflynepalLegalLists',
+		array( 'lists' => iflynepal_sustainability_list_config() )
 	);
 
 	wp_enqueue_script(

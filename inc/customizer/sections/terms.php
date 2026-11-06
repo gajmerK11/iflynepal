@@ -22,7 +22,7 @@ $wp_customize->add_section(
 	'iflynepal_terms_hero',
 	array(
 		'title'       => __( 'Hero', 'iflynepal' ),
-		'description' => __( 'The photograph at the top of the Terms & Conditions page. The headline itself is part of the document and is not editable here.', 'iflynepal' ),
+		'description' => __( 'The photograph at the top of the Terms & Conditions page.', 'iflynepal' ),
 		'panel'       => 'iflynepal_terms',
 		'priority'    => 10,
 	)

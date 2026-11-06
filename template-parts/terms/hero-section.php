@@ -35,20 +35,14 @@ defined( 'ABSPATH' ) || exit;
 		<div class="wp-block-group iflynepal-hero__copy">
 
 			<h1 class="wp-block-heading iflynepal-hero__title">
-				<?php
-				printf(
-					/* translators: %s: the word "Conditions", set in the accent face. */
-					esc_html__( 'Terms & %s', 'iflynepal' ),
-					'<em>' . esc_html__( 'Conditions', 'iflynepal' ) . '</em>'
-				);
-				?>
+				<?php echo iflynepal_legal_head( 'terms', 'hero_title' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitized by iflynepal_kses_text(). ?>
 			</h1>
 
 		</div>
 	</div>
 
 	<a class="iflynepal-legal-hero__scroll" <?php echo iflynepal_anchor_attr( '#terms' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>>
-		<?php esc_html_e( 'Read the terms', 'iflynepal' ); ?>
+		<?php echo esc_html( wp_strip_all_tags( iflynepal_legal_head( 'terms', 'hero_pill' ) ) ); ?>
 		<span aria-hidden="true">&#8595;</span>
 	</a>
 

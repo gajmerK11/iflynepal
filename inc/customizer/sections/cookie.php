@@ -21,7 +21,7 @@ $wp_customize->add_section(
 	'iflynepal_cookie_hero',
 	array(
 		'title'       => __( 'Hero', 'iflynepal' ),
-		'description' => __( 'The photograph at the top of the Cookie Policy page. The headline is part of the document and is not editable here.', 'iflynepal' ),
+		'description' => __( 'The photograph at the top of the Cookie Policy page.', 'iflynepal' ),
 		'panel'       => 'iflynepal_cookie',
 		'priority'    => 10,
 	)

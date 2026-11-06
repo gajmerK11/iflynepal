@@ -8681,6 +8681,12 @@
 		height: 24px;
 	}
 
+	.iflynepal-sustain-pledge__img {
+		width: 28px;
+		height: 28px;
+		object-fit: contain;
+	}
+
 	.iflynepal-sustain-pledge__title {
 		@apply m-0 font-display font-bold;
 		margin-top: 18px;
