@@ -4823,7 +4823,8 @@
 	}
 
 	.iflynepal-footer__brand .custom-logo {
-		@apply block h-auto w-[94px] max-w-none;
+		/* Wider than the header mark (78px tall, about 101px wide) at every width. */
+		@apply block h-auto w-[150px] max-w-none;
 		filter: brightness(0) invert(1);
 	}
 
